@@ -1,0 +1,106 @@
+
+  
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+  /* Sidebar Styles */
+    .sidebar {
+        width: 250px;
+        background: linear-gradient(135deg,rgb(7, 184, 228),rgb(13, 141, 205));
+        color: #000;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+        padding: 10px;
+        position: fixed;
+        height: 100%;
+        overflow-y: auto;
+        font-weight: bold; /* Make all sidebar text bold */
+    }
+
+    .sidebar img {
+        display: block;
+        width: 150px;
+        margin: 20px auto 10px;
+        border-radius: 50%;
+        background: #fff;
+        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .sidebar p {
+        text-align: center;
+        color: #000;
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: bold; /* Bold heading text */
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar ul li {
+        margin-bottom: 8px;
+    }
+
+    .sidebar ul li a,
+    .sidebar ul li {
+        display: block;
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 6px;
+        color: #000;
+        transition: background 0.3s ease, transform 0.2s ease;
+        font-weight: bold; /* Bold link text */
+    }
+
+    .sidebar ul li a i {
+        margin-right: 10px;
+        color: #000;
+    }
+
+    .sidebar ul li:hover,
+    .sidebar ul li.active {
+        background: rgb(246, 246, 246);
+        color: #fff; /* Hover text white for contrast */
+    }
+
+    .content {
+      margin-left: 270px;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+    }
+
+    table thead {
+      background: #3498db;
+      color: #fff;
+    }
+
+    table th, table td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    table tbody tr:nth-child(even) {
+      background: #f2f2f2;
+    }
+  

@@ -1,0 +1,43 @@
+
+        body {
+            background-image: url('/images/Logos.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(3px); 
+            z-index: -1;
+        }
+
+        @media screen and (max-width: 768px) {
+            body.android .relative {
+                max-width: 90%;
+                height: auto;
+                min-height: 40vh; /* Adjusted height to fit the text */
+                padding: 16px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                transform: scale(0.9); /* Makes it visually smaller */
+            }
+
+            body.android h1 {
+                text-align: center;
+            }
+        }
+
+        .hide {
+            display: none;
+        }
+  
