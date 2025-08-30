@@ -36,7 +36,21 @@
   <!-- MAIN CONTENT -->
   <main class="main-content">
     <h1>Student List</h1>
-    <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Create Student Info</button>
+
+    <!-- Toolbar: search (left) and create button (right) -->
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin: 12px 0;">
+      <input
+        id="tableSearch"
+        type="search"
+        placeholder="Search students (name, address, contact)..."
+        style="padding:8px 10px; width:360px; border:1px solid #ccc; border-radius:6px;"
+        aria-label="Search students"
+      >
+
+      <button class="btn-primary" id="openModalBtn" style="white-space:nowrap;">
+        <i class="fas fa-plus"></i> Create Student Info
+      </button>
+    </div>
 
     <!-- Table -->
     <table id="studentTable">
@@ -207,6 +221,19 @@ const infoModal = document.getElementById('infoModal');
 const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
 const sendSMSBtn = document.getElementById('sendSMSBtn');
 
+// TABLE SEARCH (LIVE) - filters student table rows only
+const tableSearch = document.getElementById('tableSearch');
+if (tableSearch) {
+  tableSearch.addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+      // only check cell text, not attributes — matches visible table content
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  });
+}
+
 // OPEN / CLOSE MODALS
 openModalBtn.addEventListener('click', () => modal.style.display = 'flex');
 closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
@@ -259,7 +286,7 @@ document.querySelectorAll('.info').forEach(button => {
   });
 });
 
-// LIVE SEARCH PARENT
+// LIVE SEARCH PARENT (Create)
 document.getElementById('parent_search').addEventListener('keyup', function() {
   let query = this.value;
   if(query.length < 2){
@@ -267,12 +294,14 @@ document.getElementById('parent_search').addEventListener('keyup', function() {
     document.getElementById('parentList').innerHTML = '';
     return;
   }
-  fetch(`{{ route('adviser.parentsearch') }}?query=${query}`)
+  fetch(`{{ route('adviser.parentsearch') }}?query=${encodeURIComponent(query)}`)
     .then(res => res.json())
     .then(data => {
       let results = '';
       data.forEach(parent => {
-        results += `<div class="dropdown-results-item" onclick="selectParent(${parent.parent_id}, '${parent.parent_name}')">${parent.parent_name}</div>`;
+        // sanitize name when injecting
+        const name = parent.parent_name.replace(/'/g, "\\'");
+        results += `<div class="dropdown-results-item" onclick="selectParent(${parent.parent_id}, '${name}')">${parent.parent_name}</div>`;
       });
       document.getElementById('parentList').innerHTML = results;
       document.getElementById('parentList').style.display = 'block';
@@ -293,12 +322,13 @@ document.getElementById('edit_parent_search').addEventListener('keyup', function
     document.getElementById('editParentList').innerHTML = '';
     return;
   }
-  fetch(`{{ route('adviser.parentsearch') }}?query=${query}`)
+  fetch(`{{ route('adviser.parentsearch') }}?query=${encodeURIComponent(query)}`)
     .then(res => res.json())
     .then(data => {
       let results = '';
       data.forEach(parent => {
-        results += `<div class="dropdown-results-item" onclick="selectEditParent(${parent.parent_id}, '${parent.parent_name}')">${parent.parent_name}</div>`;
+        const name = parent.parent_name.replace(/'/g, "\\'");
+        results += `<div class="dropdown-results-item" onclick="selectEditParent(${parent.parent_id}, '${name}')">${parent.parent_name}</div>`;
       });
       document.getElementById('editParentList').innerHTML = results;
       document.getElementById('editParentList').style.display = 'block';

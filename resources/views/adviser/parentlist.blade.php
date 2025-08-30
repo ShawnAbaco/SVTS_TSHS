@@ -6,6 +6,64 @@
   <title>Parent List</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/adviser/parents.css') }}">
+  <style>
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .header h1 { font-size: 22px; margin: 0; }
+    .header .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .search-box input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      min-width: 200px;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td {
+      padding: 10px; text-align: center; border: 1px solid #ddd;
+    }
+    thead { background: #343a40; color: #fff; }
+    .btn {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn i { margin-right: 5px; }
+    .btn-danger { background: #dc3545; color: #fff; }
+    .btn-edit { background: #ffc107; color: #000; }
+    .btn-info { background: #17a2b8; color: #fff; }
+    .btn:hover { opacity: 0.9; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px; width: 100%;
+      position: relative;
+    }
+    .modal-content .close {
+      position: absolute; top: 10px; right: 15px;
+      cursor: pointer; font-size: 20px;
+    }
+    .modal-content input {
+      width: 100%; margin-bottom: 10px;
+      padding: 8px; border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
   <!-- SIDEBAR -->
@@ -35,10 +93,17 @@
   <div class="main-content">
     <div class="header">
       <h1>Parent List</h1>
-      <button class="btn" onclick="openAddModal()"><i class="fas fa-plus-circle"></i> Add Parent/Guardian</button>
+      <div class="actions">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search parent...">
+        </div>
+        <button class="btn btn-info" onclick="openAddModal()">
+          <i class="fas fa-plus-circle"></i> Add Parent/Guardian
+        </button>
+      </div>
     </div>
 
-    <table>
+    <table id="parentTable">
       <thead>
         <tr>
           <th>Parent/Guardian Name</th>
@@ -47,7 +112,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="parentTable">
+      <tbody>
         @foreach($parents as $parent)
         <tr data-id="{{ $parent->parent_id }}" 
             data-students='@json(
@@ -61,14 +126,12 @@
           <td>{{ $parent->parent_birthdate }}</td>
           <td>{{ $parent->parent_contactinfo }}</td>
           <td class="actions">
-            <button class="btn" onclick="showInfo(
+            <button class="btn btn-info" onclick="showInfo(
               '{{ $parent->parent_fname }} {{ $parent->parent_lname }}',
               '{{ $parent->parent_birthdate }}',
               '{{ $parent->parent_contactinfo }}',
               this.closest('tr').dataset.students
-            )">
-              <i class="fas fa-info-circle"></i> Info
-            </button>
+            )"><i class="fas fa-info-circle"></i> Info</button>
             <button class="btn btn-edit" onclick="editGuardian(this)">
               <i class="fas fa-edit"></i> Edit
             </button>
@@ -87,24 +150,22 @@
   </div>
 
   <!-- ADD / EDIT MODAL -->
-<div class="modal" id="addModal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('addModal')">&times;</span>
-    <h2>Add Parent/Guardian</h2>
-<form id="addParentForm" method="POST" action="{{ route('parents.store') }}">
-  @csrf
-  <input type="hidden" name="parent_id" id="parent_id" value="">
-  <input type="text" name="parent_fname" id="parent_fname" placeholder="First Name" required>
-  <input type="text" name="parent_lname" id="parent_lname" placeholder="Last Name" required>
-  <input type="date" name="parent_birthdate" id="parent_birthdate" placeholder="Birthdate" required>
-  <input type="text" name="parent_contactinfo" id="parent_contactinfo" placeholder="Contact Number" required>
-  <!-- Placeholder for dynamic PUT method -->
-  <span id="methodField"></span>
-  <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> Save</button>
-</form>
-
+  <div class="modal" id="addModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('addModal')">&times;</span>
+      <h2 id="modalTitle">Add Parent/Guardian</h2>
+      <form id="addParentForm" method="POST" action="{{ route('parents.store') }}">
+        @csrf
+        <input type="hidden" name="parent_id" id="parent_id" value="">
+        <input type="text" name="parent_fname" id="parent_fname" placeholder="First Name" required>
+        <input type="text" name="parent_lname" id="parent_lname" placeholder="Last Name" required>
+        <input type="date" name="parent_birthdate" id="parent_birthdate" required>
+        <input type="text" name="parent_contactinfo" id="parent_contactinfo" placeholder="Contact Number" required>
+        <span id="methodField"></span>
+        <button type="submit" class="btn btn-info"><i class="fas fa-save"></i> Save</button>
+      </form>
+    </div>
   </div>
-</div>
 
   <!-- INFO MODAL -->
   <div class="modal" id="infoModal">
@@ -121,7 +182,21 @@
   </div>
 
   <script>
+    // live search
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+      const filter = this.value.toLowerCase();
+      const rows = document.querySelectorAll("#parentTable tbody tr");
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    });
+
     function openAddModal() {
+      document.getElementById('addParentForm').reset();
+      document.getElementById('methodField').innerHTML = '';
+      document.getElementById('modalTitle').innerText = 'Add Parent/Guardian';
+      document.querySelector('#addParentForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
       document.getElementById('addModal').style.display = 'flex';
     }
 
@@ -137,17 +212,9 @@
 
       const childrenList = document.getElementById('infoChildren');
       childrenList.innerHTML = '';
-
       let students = [];
-      try {
-        students = JSON.parse(studentsJson);
-      } catch(e) {
-        students = [];
-      }
-
-      // Filter children for logged-in adviser
+      try { students = JSON.parse(studentsJson); } catch(e) { students = []; }
       const filtered = students.filter(s => s.adviser_id == loggedAdviserId);
-
       if(filtered.length > 0) {
         filtered.forEach(student => {
           const li = document.createElement('li');
@@ -155,47 +222,36 @@
           childrenList.appendChild(li);
         });
       } else {
-        const li = document.createElement('li');
-        li.textContent = 'No children under your supervision';
-        childrenList.appendChild(li);
+        childrenList.innerHTML = '<li>No children under your supervision</li>';
       }
-
       document.getElementById('smsBtn').onclick = function() {
-        const message = `Hello ${name}, regarding your child(ren): ${filtered.map(s => s.name).join(', ')}.`;
-        alert(`SMS to ${contact}: ${message}`);
+        const msg = `Hello ${name}, regarding your child(ren): ${filtered.map(s => s.name).join(', ')}.`;
+        alert(`SMS to ${contact}: ${msg}`);
       };
-
       document.getElementById('infoModal').style.display = 'flex';
     }
-function editGuardian(button) {
-  const row = button.closest('tr');
-  const cells = row.cells;
 
-  const fullName = cells[0].innerText.trim();
-  const lastSpaceIndex = fullName.lastIndexOf(' ');
-  const firstName = fullName.slice(0, lastSpaceIndex).trim();
-  const lastName = fullName.slice(lastSpaceIndex + 1).trim();
+    function editGuardian(button) {
+      const row = button.closest('tr');
+      const cells = row.cells;
+      const fullName = cells[0].innerText.trim();
+      const lastSpaceIndex = fullName.lastIndexOf(' ');
+      const firstName = fullName.slice(0, lastSpaceIndex).trim();
+      const lastName = fullName.slice(lastSpaceIndex + 1).trim();
 
-  document.getElementById('parent_id').value = row.dataset.id;
-  document.getElementById('parent_fname').value = firstName;
-  document.getElementById('parent_lname').value = lastName;
-  document.getElementById('parent_birthdate').value = cells[1].innerText.trim();
-  document.getElementById('parent_contactinfo').value = cells[2].innerText.trim();
+      document.getElementById('parent_id').value = row.dataset.id;
+      document.getElementById('parent_fname').value = firstName;
+      document.getElementById('parent_lname').value = lastName;
+      document.getElementById('parent_birthdate').value = cells[1].innerText.trim();
+      document.getElementById('parent_contactinfo').value = cells[2].innerText.trim();
 
-  const form = document.getElementById('addParentForm');
-
-  // Set form action to update route
-form.action = `/adviser/adviser/parents/${row.dataset.id}`;
-
-  // Add PUT method field
-  document.getElementById('methodField').innerHTML = '@method("PUT")';
-
-  // Change button text to Update
-  form.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update';
-
-  openAddModal();
-}
-
+      const form = document.getElementById('addParentForm');
+      form.action = `/adviser/adviser/parents/${row.dataset.id}`;
+      document.getElementById('methodField').innerHTML = '@method("PUT")';
+      form.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update';
+      document.getElementById('modalTitle').innerText = 'Edit Parent/Guardian';
+      document.getElementById('addModal').style.display = 'flex';
+    }
 
     function logout() {
       if(confirm('Are you sure you want to log out?')){

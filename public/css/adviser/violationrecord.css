@@ -243,3 +243,37 @@ h2 {
 .live-results li:hover {
   background-color: #f0f0f0;
 }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+.header .actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.search-box input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 200px;
+}
+.btn-info {
+  background: #17a2b8;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-info:hover {
+  opacity: 0.9;
+}

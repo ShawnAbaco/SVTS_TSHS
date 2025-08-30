@@ -128,30 +128,37 @@ public function destroyParent($id)
     }
 }
  // Store a new violation
-    public function storeViolation(Request $request)
-    {
-        $request->validate([
-            'student_id' => 'required|exists:tbl_student,student_id',
-            'offense_sanc_id' => 'required|exists:tbl_offenses_with_sanction,offense_sanc_id',
-            'violation_incident' => 'required|string',
-            'violation_date' => 'required|date',
-            'violation_time' => 'required',
-        ]);
+public function storeViolation(Request $request)
+{
+    $request->validate([
+        'student_id' => 'required|exists:tbl_student,student_id',
+        'offense_sanc_id' => 'required|exists:tbl_offenses_with_sanction,offense_sanc_id',
+        'violation_incident' => 'required|string',
+        'violation_date' => 'required|date',
+        'violation_time' => 'required',
+    ]);
 
-        $adviserId = Auth::guard('adviser')->id();
+    $violation = ViolationRecord::create([
+        'violator_id' => $request->student_id,
+        'prefect_id' => 1, 
+        'offense_sanc_id' => $request->offense_sanc_id,
+        'violation_incident' => $request->violation_incident,
+        'violation_date' => $request->violation_date,
+        'violation_time' => $request->violation_time,
+    ]);
 
-        $violation = ViolationRecord::create([
-            'student_id' => $request->student_id,
-            'adviser_id' => $adviserId,
-            'prefect_id' => null,
-            'offense_sanc_id' => $request->offense_sanc_id,
-            'violation_incident' => $request->violation_incident,
-            'violation_date' => $request->violation_date,
-            'violation_time' => $request->violation_time,
-        ]);
+    // 🔥 Reload violation with relationships so frontend gets complete data
+    $violation = ViolationRecord::with([
+        'student.parent', 
+        'offense'
+    ])->find($violation->violation_id);
 
-        return response()->json(['success' => true, 'violation' => $violation]);
-    }
+    return response()->json([
+        'success' => true,
+        'violation' => $violation
+    ]);
+}
+
 
     // Update a violation
     public function updateViolation(Request $request, $id)

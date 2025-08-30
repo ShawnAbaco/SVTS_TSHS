@@ -69,7 +69,7 @@ Route::get('/student/search', [AdviserController::class, 'studentSearch']);
 Route::get('/offense/search', [AdviserController::class, 'offenseSearch']);
 
     // Violation CRUD
-    Route::post('/violations', [AdviserCRUDController::class, 'storeViolation'])->name('adviser.violations.store');
+    Route::post('/violations', [AdviserCRUDController::class, 'storeViolation'])->name('adviser.storeViolation');
     Route::put('/violations/{id}', [AdviserCRUDController::class, 'updateViolation'])->name('adviser.violations.update');
     Route::delete('/violations/{id}', [AdviserCRUDController::class, 'destroyViolation'])->name('adviser.violations.destroy');
 
