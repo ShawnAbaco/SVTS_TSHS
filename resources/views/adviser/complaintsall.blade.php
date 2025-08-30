@@ -34,7 +34,12 @@
   <!-- Main content -->
   <div class="main-content">
     <h2>Complaints</h2>
+
+     <!-- Top Controls: Search + Create Button -->
+  <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom: 15px;">
+    <input type="text" id="searchInput" placeholder="Search complaints..." style="padding:5px; margin-right:10px;">
     <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Add Complaint</button>
+  </div>
 
     <!-- Table -->
     <table id="complaintsTable">
@@ -105,83 +110,117 @@
       </div>
     </div>
   </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // --- Live Search ---
+  const searchInput = document.getElementById('searchInput');
+  const tableBody = document.querySelector('#complaintsTable tbody');
 
-  <script>
-    const menuLinks = document.querySelectorAll('.sidebar a');
-    const activeLink = localStorage.getItem('activeMenu');
-    if (activeLink) menuLinks.forEach(link => { if(link.href===activeLink) link.classList.add('active'); });
-    menuLinks.forEach(link=>{link.addEventListener('click', function(){ menuLinks.forEach(i=>i.classList.remove('active')); this.classList.add('active'); if(!this.href.includes('profile.settings')) localStorage.setItem('activeMenu', this.href); });});
-    function logout(){ alert('Logging out...'); }
-
-    const modal = document.getElementById("complaintModal");
-    const openBtn = document.getElementById("openModalBtn");
-    const closeBtn = document.getElementById("closeModalBtn");
-    const form = document.getElementById('complaintForm');
-    const tableBody = document.querySelector('#complaintsTable tbody');
-    let editingRow = null;
-
-    openBtn.onclick = () => { modal.style.display = "block"; document.getElementById('modalTitle').textContent = "Create Complaint"; editingRow = null; form.reset(); };
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if(e.target==modal) modal.style.display="none"; }
-
-    function createActionButtons(row){
-      const actionsCell = row.insertCell(-1);
-      const editBtn = document.createElement('button');
-      editBtn.className = 'btn-orange';
-      editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
-      editBtn.onclick = () => editRow(row);
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'btn-red';
-      deleteBtn.style.marginLeft = '5px';
-      deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
-      deleteBtn.onclick = () => row.remove();
-
-      actionsCell.appendChild(editBtn);
-      actionsCell.appendChild(deleteBtn);
-    }
-
-    document.querySelectorAll('.btn-edit').forEach((btn, i)=>{
-      btn.onclick = ()=> editRow(tableBody.rows[i]);
+  function filterTable(){
+    const filter = searchInput.value.toLowerCase();
+    Array.from(tableBody.rows).forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(filter) ? '' : 'none';
     });
+  }
 
-    function editRow(row){
-      editingRow = row;
-      modal.style.display = "block";
-      document.getElementById('modalTitle').textContent = "Edit Complaint";
-      form.complainant.value = row.cells[0].textContent;
-      form.respondent.value = row.cells[1].textContent;
-      form.offense.value = row.cells[2].textContent;
-      form.sanction.value = row.cells[3].textContent;
-      form.incident.value = row.cells[4].textContent;
-      form.date.value = row.cells[5].textContent;
-      form.time.value = row.cells[6].textContent;
-    }
+  searchInput.addEventListener('keyup', filterTable);
 
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      if(editingRow){
-        editingRow.cells[0].textContent = form.complainant.value;
-        editingRow.cells[1].textContent = form.respondent.value;
-        editingRow.cells[2].textContent = form.offense.value;
-        editingRow.cells[3].textContent = form.sanction.value;
-        editingRow.cells[4].textContent = form.incident.value;
-        editingRow.cells[5].textContent = form.date.value;
-        editingRow.cells[6].textContent = form.time.value;
-      } else {
-        const row = tableBody.insertRow();
-        row.insertCell(0).textContent = form.complainant.value;
-        row.insertCell(1).textContent = form.respondent.value;
-        row.insertCell(2).textContent = form.offense.value;
-        row.insertCell(3).textContent = form.sanction.value;
-        row.insertCell(4).textContent = form.incident.value;
-        row.insertCell(5).textContent = form.date.value;
-        row.insertCell(6).textContent = form.time.value;
-        createActionButtons(row);
-      }
-      modal.style.display = 'none';
-      form.reset();
+  // --- Sidebar Active Menu & Logout ---
+  const menuLinks = document.querySelectorAll('.sidebar a');
+  const activeLink = localStorage.getItem('activeMenu');
+  if (activeLink) {
+    menuLinks.forEach(link => { if(link.href === activeLink) link.classList.add('active'); });
+  }
+  menuLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      menuLinks.forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+      if(!this.href.includes('profile.settings')) localStorage.setItem('activeMenu', this.href);
     });
-  </script>
+  });
+  function logout() { alert('Logging out...'); }
+
+  // --- Modal & Form Handling ---
+  const modal = document.getElementById("complaintModal");
+  const openBtn = document.getElementById("openModalBtn");
+  const closeBtn = document.getElementById("closeModalBtn");
+  const form = document.getElementById('complaintForm');
+  let editingRow = null;
+
+  openBtn.onclick = () => {
+    modal.style.display = "block";
+    document.getElementById('modalTitle').textContent = "Create Complaint";
+    editingRow = null;
+    form.reset();
+  };
+
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if(e.target == modal) modal.style.display = "none"; }
+
+  function createActionButtons(row){
+    const actionsCell = row.insertCell(-1);
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn-orange';
+    editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
+    editBtn.onclick = () => editRow(row);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn-red';
+    deleteBtn.style.marginLeft = '5px';
+    deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+    deleteBtn.onclick = () => row.remove();
+
+    actionsCell.appendChild(editBtn);
+    actionsCell.appendChild(deleteBtn);
+  }
+
+  document.querySelectorAll('.btn-edit').forEach((btn, i) => {
+    btn.onclick = () => editRow(tableBody.rows[i]);
+  });
+
+  function editRow(row){
+    editingRow = row;
+    modal.style.display = "block";
+    document.getElementById('modalTitle').textContent = "Edit Complaint";
+    form.complainant.value = row.cells[0].textContent;
+    form.respondent.value = row.cells[1].textContent;
+    form.offense.value = row.cells[2].textContent;
+    form.sanction.value = row.cells[3].textContent;
+    form.incident.value = row.cells[4].textContent;
+    form.date.value = row.cells[5].textContent;
+    form.time.value = row.cells[6].textContent;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(editingRow){
+      editingRow.cells[0].textContent = form.complainant.value;
+      editingRow.cells[1].textContent = form.respondent.value;
+      editingRow.cells[2].textContent = form.offense.value;
+      editingRow.cells[3].textContent = form.sanction.value;
+      editingRow.cells[4].textContent = form.incident.value;
+      editingRow.cells[5].textContent = form.date.value;
+      editingRow.cells[6].textContent = form.time.value;
+    } else {
+      const row = tableBody.insertRow();
+      row.insertCell(0).textContent = form.complainant.value;
+      row.insertCell(1).textContent = form.respondent.value;
+      row.insertCell(2).textContent = form.offense.value;
+      row.insertCell(3).textContent = form.sanction.value;
+      row.insertCell(4).textContent = form.incident.value;
+      row.insertCell(5).textContent = form.date.value;
+      row.insertCell(6).textContent = form.time.value;
+      createActionButtons(row);
+    }
+    modal.style.display = 'none';
+    form.reset();
+    filterTable(); // ensure new rows are filtered
+  });
+});
+</script>
+
+
 </body>
 </html>

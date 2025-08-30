@@ -105,7 +105,9 @@ class AdviserController extends Controller
             ->whereHas('violation.student', fn($q) => $q->where('adviser_id', $adviserId))
             ->get();
 
-        return view('adviser.violationanecdotal', compact('anecdotal'));
+        $students = \App\Models\Student::with('violations')->where('adviser_id', $adviserId)->get();
+
+        return view('adviser.violationanecdotal', compact('anecdotal', 'students'));
     }
 
 public function complaintsall()

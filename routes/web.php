@@ -64,6 +64,7 @@ Route::prefix('adviser')->group(function () {
 // Adviser Violation CRUD
 
 
+
     // Live search
 Route::get('/student/search', [AdviserController::class, 'studentSearch']);
 Route::get('/offense/search', [AdviserController::class, 'offenseSearch']);
@@ -75,6 +76,15 @@ Route::get('/offense/search', [AdviserController::class, 'offenseSearch']);
 
 Route::get('/adviser/reports/data/{reportId}', [ReportController::class, 'getReportData']);
 
+
+
+    // Violation Anecdotal
+    Route::get('/violation-anecdotal', [AdviserCRUDController::class, 'anecdotalIndex'])->name('violation.anecdotal');
+    Route::post('/violation-anecdotal', [AdviserCRUDController::class, 'anecdotalStore'])->name('violation.anecdotal.store');
+
+    // Optional edit/delete routes
+    Route::put('/violation-anecdotal/{id}', [AdviserCRUDController::class, 'anecdotalUpdate'])->name('violation.anecdotal.update');
+    Route::delete('/violation-anecdotal/{id}', [AdviserCRUDController::class, 'anecdotalDelete'])->name('violation.anecdotal.delete');
 
 
 

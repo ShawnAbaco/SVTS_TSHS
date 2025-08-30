@@ -30,17 +30,19 @@
     </ul>
   </nav>
 
-  <div class="main-content">
+<div class="main-content">
+  <div class="crud-container">
     <h2>Offense & Sanction</h2>
 
-    <!-- Search + Print -->
-    <div style="margin-bottom: 1rem; display:flex; justify-content: space-between; align-items: center;">
-      <input type="text" id="searchInput" placeholder="Search offenses..." style="padding: 6px; width: 250px;">
-      <button id="printBtn" class="btn btn-blue">Print / Export</button>
+    <!-- Toolbar: all items on the right -->
+    <div class="toolbar" style="justify-content: flex-end; gap: 8px; margin-bottom: 1rem;">
+      <input type="text" id="searchInput" placeholder="Search offenses..." style="padding: 6px; width: 200px; border:1px solid #ccc; border-radius:4px;">
+      <button id="printBtn" class="btn btn-warning"><i class="fa fa-print"></i> Print</button>
+      <button id="exportBtn" class="btn btn-danger"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
 
     <!-- Table -->
-    <table>
+    <table id="offenseTable" style="width:100%; border-collapse: collapse;">
       <thead>
         <tr>
           <th>ID</th>
@@ -65,49 +67,72 @@
       </tbody>
     </table>
   </div>
+</div>
 
-  <!-- Scripts -->
-  <script>
-    // Search filter
-    document.getElementById("searchInput").addEventListener("keyup", function () {
-      const value = this.value.toLowerCase();
-      const rows = document.querySelectorAll("tbody tr");
-
-      rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(value) ? "" : "none";
-      });
+<script>
+  // Live Search
+  document.getElementById("searchInput").addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#offenseTable tbody tr");
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(value) ? "" : "none";
     });
+  });
 
-    // Print / Export
-    document.getElementById("printBtn").addEventListener("click", function () {
-      const table = document.querySelector("table").outerHTML;
-      const style = `
-        <style>
-          table { width: 100%; border-collapse: collapse; }
-          table, th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-          th { background: #f1f1f1; }
-        </style>
-      `;
-      const win = window.open("", "", "height=700,width=900");
-      win.document.write("<html><head><title>Offenses & Sanctions</title>");
-      win.document.write(style);
-      win.document.write("</head><body>");
-      win.document.write("<h2>Offenses & Sanctions</h2>");
-      win.document.write(table);
-      win.document.write("</body></html>");
-      win.document.close();
-      win.print();
-    });
+  // Print
+  document.getElementById("printBtn").addEventListener("click", () => {
+    const table = document.getElementById("offenseTable").cloneNode(true);
+    const style = `
+      <style>
+        body { font-family: Arial, sans-serif; padding: 16px; }
+        h2 { margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+        thead th { background: #f1f1f1; }
+      </style>
+    `;
+    const win = window.open("", "", "height=800,width=1000");
+    win.document.write("<html><head><title>Offenses & Sanctions</title>");
+    win.document.write(style);
+    win.document.write("</head><body>");
+    win.document.write("<h2>Offenses & Sanctions</h2>");
+    win.document.body.appendChild(table);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.focus();
+    win.print();
+  });
 
-    // Logout
-    function logout() {
-      fetch('/logout', {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-      }).then(() => window.location.href='/prefect/login')
-        .catch(error => console.error('Logout failed:', error));
-    }
-  </script>
+  // Export CSV
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const table = document.getElementById("offenseTable");
+    const rows = Array.from(table.querySelectorAll("tr"));
+    const csv = rows.map((row, idx) => {
+      const cells = Array.from(row.querySelectorAll(idx === 0 ? "th" : "td"));
+      return cells.map(c => `"${c.textContent.replace(/"/g, '""')}"`).join(",");
+    }).join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "offenses_sanctions.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // Logout
+  function logout() {
+    fetch('/logout', {
+      method: 'POST',
+      headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+    }).then(() => window.location.href='/adviser/login')
+      .catch(error => console.error('Logout failed:', error));
+  }
+</script>
+
 </body>
 </html>

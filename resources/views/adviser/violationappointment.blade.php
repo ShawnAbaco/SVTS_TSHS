@@ -7,6 +7,32 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/adviser/violationappointment.css') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <style>
+    .table-actions button {
+      margin: 0 2px;
+      padding: 5px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-edit { background: #3498db; color: white; }
+    .btn-delete { background: #e74c3c; color: white; }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    #searchInput {
+      padding: 7px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      flex: 1;
+      max-width: 250px;
+    }
+  </style>
 </head>
 <body>
 
@@ -37,17 +63,18 @@
   <div class="main-content">
     <h1>Violation Appointments</h1>
 
-    <div style="margin-bottom: 20px;">
+    <div class="toolbar">
       <button class="btn-primary" onclick="openModal('createModal')">
         <i class="fas fa-plus"></i> Create Appointment
       </button>
+      <input type="text" id="searchInput" placeholder="Search appointments...">
     </div>
 
     <!-- Appointment Table -->
     <div class="card">
       <div class="card-header">Scheduled Appointments</div>
       <div class="card-body">
-        <table>
+        <table id="appointmentTable">
           <thead>
             <tr>
               <th>#</th>
@@ -59,6 +86,7 @@
               <th>Date</th>
               <th>Time</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="appointmentList">
@@ -73,6 +101,10 @@
               <td>{{ $app->violation_app_date }}</td>
               <td>{{ \Carbon\Carbon::parse($app->violation_app_time)->format('h:i A') }}</td>
               <td>{{ $app->violation_app_status }}</td>
+              <td class="table-actions">
+                <button class="btn-edit"><i class="fas fa-edit"></i></button>
+                <button class="btn-delete"><i class="fas fa-trash"></i></button>
+              </td>
             </tr>
             @endforeach
           </tbody>
@@ -134,6 +166,15 @@
       }).then(() => window.location.href = '/admin/login')
         .catch(error => console.error('Logout failed:', error));
     }
+
+    // Live search filter
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+      let filter = this.value.toLowerCase();
+      document.querySelectorAll("#appointmentTable tbody tr").forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+      });
+    });
   </script>
 
 </body>

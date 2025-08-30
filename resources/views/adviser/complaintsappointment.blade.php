@@ -183,18 +183,22 @@
     </ul>
   </nav>
 
-  <!-- Main content -->
+    <!-- Main content -->
   <div class="main-content">
     <h1>Complaints Appointments</h1>
-    <button class="btn-primary" id="openModalBtn">Create Appointment</button>
+
+    <!-- Top controls: search + create button -->
+    <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom: 15px;">
+      <input type="text" id="searchInput" placeholder="Search appointments..." style="padding:5px; margin-right:10px;">
+      <button class="btn-primary" id="openModalBtn">Create Appointment</button>
+    </div>
 
     <!-- Appointment Modal -->
     <div id="appointmentModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Create Appointment</h2>
-        <form id="appointmentForm" action="{{ route('complaints.appointment.store') }}" method="POST">
-          @csrf
+        <form id="appointmentForm">
           <label for="complaint">Complaint:</label>
           <input list="complaintList" id="complaint" name="complaint_id" required>
           <datalist id="complaintList">
@@ -226,51 +230,135 @@
 
     <!-- Appointment Table -->
     <table id="appointmentTable">
-    <thead>
+      <thead>
         <tr>
-            <th>ID</th>
-            <th>Complainant</th>
-            <th>Respondent</th>
-            <th>Incident</th>
-            <th>Offense</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
+          <th>ID</th>
+          <th>Complainant</th>
+          <th>Respondent</th>
+          <th>Incident</th>
+          <th>Offense</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Actions</th>
         </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
         @foreach($comp_appointments as $comp_appointment)
         <tr>
-            <td>{{ $comp_appointment->comp_app_id }}</td>
-            <td>{{ $comp_appointment->complaint->complainant->student_fname ?? 'N/A' }} {{ $comp_appointment->complaint->complainant->student_lname ?? '' }}</td>
-            <td>{{ $comp_appointment->complaint->respondent->student_fname ?? 'N/A' }} {{ $comp_appointment->complaint->respondent->student_lname ?? '' }}</td>
-            <td>{{ $comp_appointment->complaint->complaints_incident ?? 'N/A' }}</td>
-            <td>{{ $comp_appointment->complaint->offense->offense_type ?? 'N/A' }}</td>
-            <td>{{ $comp_appointment->comp_app_date }}</td>
-            <td>{{ $comp_appointment->comp_app_time }}</td>
-            <td>{{ $comp_appointment->comp_app_status }}</td>
+          <td>{{ $comp_appointment->comp_app_id }}</td>
+          <td>{{ $comp_appointment->complaint->complainant->student_fname ?? 'N/A' }} {{ $comp_appointment->complaint->complainant->student_lname ?? '' }}</td>
+          <td>{{ $comp_appointment->complaint->respondent->student_fname ?? 'N/A' }} {{ $comp_appointment->complaint->respondent->student_lname ?? '' }}</td>
+          <td>{{ $comp_appointment->complaint->complaints_incident ?? 'N/A' }}</td>
+          <td>{{ $comp_appointment->complaint->offense->offense_type ?? 'N/A' }}</td>
+          <td>{{ $comp_appointment->comp_app_date }}</td>
+          <td>{{ $comp_appointment->comp_app_time }}</td>
+          <td>{{ $comp_appointment->comp_app_status }}</td>
+          <td>
+            <button class="btn-orange btn-edit"><i class="fas fa-edit"></i> Edit</button>
+            <button class="btn-red btn-delete"><i class="fas fa-trash"></i> Delete</button>
+          </td>
         </tr>
         @endforeach
-    </tbody>
-</table>
-
+      </tbody>
+    </table>
   </div>
 
   <script>
+    // Sidebar active link
     const menuLinks = document.querySelectorAll('.sidebar a');
     const activeLink = localStorage.getItem('activeMenu');
     if (activeLink) menuLinks.forEach(link => { if(link.href===activeLink) link.classList.add('active'); });
-    menuLinks.forEach(link=>{link.addEventListener('click', function(){ menuLinks.forEach(i=>i.classList.remove('active')); this.classList.add('active'); if(!this.href.includes('profile.settings')) localStorage.setItem('activeMenu', this.href); });});
+    menuLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        menuLinks.forEach(i=>i.classList.remove('active'));
+        this.classList.add('active');
+        if(!this.href.includes('profile.settings')) localStorage.setItem('activeMenu', this.href);
+      });
+    });
     function logout(){ alert('Logging out...'); }
 
-    // Modal logic
+    // --- Live Search ---
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.querySelector('#appointmentTable tbody');
+
+    searchInput.addEventListener('keyup', function() {
+      const filter = this.value.toLowerCase();
+      Array.from(tableBody.rows).forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    });
+
+    // --- Modal & Form Logic ---
     const modal = document.getElementById("appointmentModal");
     const openModalBtn = document.getElementById("openModalBtn");
     const closeModal = document.querySelector(".close");
+    const form = document.getElementById('appointmentForm');
+    let editingRow = null;
 
-    openModalBtn.onclick = () => modal.style.display = "block";
+    openModalBtn.onclick = () => {
+      modal.style.display = "block";
+      form.reset();
+      editingRow = null;
+    };
     closeModal.onclick = () => modal.style.display = "none";
-    window.onclick = (event) => { if(event.target == modal) modal.style.display = "none"; };
+    window.onclick = e => { if(e.target == modal) modal.style.display="none"; }
+
+    // --- Edit/Delete Buttons ---
+    function createActionButtons(row) {
+      const actionsCell = row.insertCell(-1);
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn-orange';
+      editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
+      editBtn.onclick = () => editRow(row);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn-red';
+      deleteBtn.style.marginLeft = '5px';
+      deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+      deleteBtn.onclick = () => row.remove();
+
+      actionsCell.appendChild(editBtn);
+      actionsCell.appendChild(deleteBtn);
+    }
+
+    document.querySelectorAll('.btn-edit').forEach((btn,i)=>{
+      btn.onclick = () => editRow(tableBody.rows[i]);
+    });
+
+    function editRow(row){
+      editingRow = row;
+      modal.style.display = "block";
+      form.complaint.value = row.cells[0].textContent; // you may adjust mapping
+      form.date.value = row.cells[5].textContent;
+      form.time.value = row.cells[6].textContent;
+      form.status.value = row.cells[7].textContent;
+    }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(editingRow){
+        editingRow.cells[0].textContent = form.complaint.value;
+        editingRow.cells[5].textContent = form.date.value;
+        editingRow.cells[6].textContent = form.time.value;
+        editingRow.cells[7].textContent = form.status.value;
+      } else {
+        const row = tableBody.insertRow();
+        row.insertCell(0).textContent = form.complaint.value;
+        row.insertCell(1).textContent = 'Complainant'; // placeholder
+        row.insertCell(2).textContent = 'Respondent'; // placeholder
+        row.insertCell(3).textContent = 'Incident'; // placeholder
+        row.insertCell(4).textContent = 'Offense'; // placeholder
+        row.insertCell(5).textContent = form.date.value;
+        row.insertCell(6).textContent = form.time.value;
+        row.insertCell(7).textContent = form.status.value;
+        createActionButtons(row);
+      }
+      modal.style.display = "none";
+      form.reset();
+    });
   </script>
 </body>
 </html>
