@@ -52,7 +52,22 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody id="appointmentList"></tbody>
+       <tbody id="appointmentList">
+@foreach($violation_appointments as $index => $app)
+<tr>
+    <td>{{ $index + 1 }}</td>
+    <td>{{ $app->violation->student->student_fname }} {{ $app->violation->student->student_lname }}</td>
+    <td>{{ $app->violation->student->parent->parent_fname }} {{ $app->violation->student->parent->parent_lname }}</td>
+    <td>{{ $app->violation->student->parent->parent_contactinfo }}</td>
+    <td>{{ $app->violation->violation_incident }}</td>
+    <td>{{ $app->violation->offense->offense_type }}</td>
+    <td>{{ $app->violation_app_date }}</td>
+    <td>{{ \Carbon\Carbon::parse($app->violation_app_time)->format('h:i A') }}</td>
+    <td>{{ $app->violation_app_status }}</td>
+</tr>
+@endforeach
+</tbody>
+
       </table>
     </div>
   </div>
@@ -63,121 +78,44 @@
   <div class="modal-content">
     <span class="close" onclick="closeModal('createModal')">&times;</span>
     <h2>Create Schedule Appointment</h2>
-    <form id="createAppointmentForm">
-      <div class="form-group">
-        <label for="studentSearch">Search Student</label>
-        <input type="text" id="studentSearch" placeholder="Search by name" onkeyup="filterStudents()">
-        <select id="studentSelect"></select>
-      </div>
-      <div class="form-group">
-        <label for="date">Date</label>
-        <input type="date" id="date">
-      </div>
-      <div class="form-group">
-        <label for="time">Time</label>
-        <input type="time" id="time">
-      </div>
-      <div class="form-group">
-        <label for="status">Status</label>
-        <select id="status">
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Completed">Completed</option>
+<form id="createAppointmentForm" method="POST" action="{{ route('violation.appointments.store') }}">
+    @csrf
+    <div class="form-group">
+        <label for="studentSelect">Select Student</label>
+        <select id="studentSelect" name="violation_id" required>
+            <option value="">-- Select Student --</option>
+            @foreach($violations as $violation)
+                <option value="{{ $violation->violation_id }}">
+                    {{ $violation->student->student_fname }} {{ $violation->student->student_lname }} — {{ $violation->violation_incident }}
+                </option>
+            @endforeach
         </select>
-      </div>
-      <button type="button" class="btn-primary" onclick="saveAppointment()">Save Appointment</button>
-    </form>
+    </div>
+    <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" name="date" required>
+    </div>
+    <div class="form-group">
+        <label for="time">Time</label>
+        <input type="time" name="time" required>
+    </div>
+    <div class="form-group">
+        <label for="status">Status</label>
+        <select name="status" required>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+    <button type="submit" class="btn-primary">Save Appointment</button>
+</form>
+
   </div>
 </div>
 
 <script>
-const students = [
-  {id:1, name:'John Doe', parent:'Mary Doe', contact:'09123456789', incident:'Bullying', offense:'Major'},
-  {id:2, name:'Jane Smith', parent:'Robert Smith', contact:'09234567890', incident:'Late Submission', offense:'Minor'},
-  {id:3, name:'Mark Johnson', parent:'Anna Johnson', contact:'09345678901', incident:'Fighting', offense:'Major'}
-];
-
-let appointments = [];
-
-function populateStudentSelect(filter="") {
-  const select = document.getElementById('studentSelect');
-  select.innerHTML = "";
-  students
-    .filter(s => s.name.toLowerCase().includes(filter.toLowerCase()))
-    .forEach(s => {
-      const opt = document.createElement('option');
-      opt.value = s.id;
-      opt.textContent = s.name;
-      select.appendChild(opt);
-    });
-}
-populateStudentSelect();
-
-function filterStudents() {
-  const search = document.getElementById('studentSearch').value;
-  populateStudentSelect(search);
-}
-
 function openModal(id) { document.getElementById(id).style.display = 'flex'; }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-function formatTimeToAMPM(time) {
-  let [hour, minute] = time.split(':');
-  hour = parseInt(hour);
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  hour = hour % 12 || 12;
-  return `${hour}:${minute} ${ampm}`;
-}
-
-function saveAppointment() {
-  const studentId = document.getElementById('studentSelect').value;
-  const date = document.getElementById('date').value;
-  const time = document.getElementById('time').value;
-  const status = document.getElementById('status').value;
-
-  if(!studentId || !date || !time) {
-    alert("Please fill all fields.");
-    return;
-  }
-
-  const student = students.find(s => s.id == studentId);
-  appointments.push({
-    id: Date.now(),
-    studentName: student.name,
-    parentName: student.parent,
-    contact: student.contact,
-    incident: student.incident,
-    offense: student.offense,
-    date,
-    time: formatTimeToAMPM(time),
-    status
-  });
-
-  renderAppointments();
-  document.getElementById('createAppointmentForm').reset();
-  populateStudentSelect();
-  closeModal('createModal');
-}
-
-function renderAppointments() {
-  const tbody = document.getElementById('appointmentList');
-  tbody.innerHTML = "";
-  appointments.forEach((a, index) => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${index+1}</td>
-        <td>${a.studentName}</td>
-        <td>${a.parentName}</td>
-        <td>${a.contact}</td>
-        <td>${a.incident}</td>
-        <td>${a.offense}</td>
-        <td>${a.date}</td>
-        <td>${a.time}</td>
-        <td>${a.status}</td>
-      </tr>
-    `;
-  });
-}
 
 function logout() {
   fetch('/logout', {

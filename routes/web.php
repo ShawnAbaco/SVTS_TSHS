@@ -27,6 +27,34 @@ Route::prefix('prefect')->group(function () {
   Route::get('/complaintsanecdotals', [AdminController::class, 'complaintsanecdotals'])->name('complaints.anecdotals');
    Route::get('/offensesandsanctions', [AdminController::class, 'offensesandsanctions'])->name('offenses.sanctions');
     Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData']);
+    Route::delete('/students/{student}', [AdminController::class, 'destroy'])->name('student.delete');
+
+
+// Store new appointment
+    Route::post('/complaints-appointments', [AdminController::class, 'complaintAppointmentStore'])->name('complaints.appointments.store');
+
+    // Delete appointment
+    Route::delete('/complaints-appointments/{id}', [AdminController::class, 'complaintAppointmentDestroy'])->name('complaints.appointments.destroy');
+
+
+    // Edit complaint
+    Route::get('/complaints/{id}/edit', [AdminController::class, 'complaintEdit'])->name('complaints.edit');
+
+    // Update complaint
+    Route::put('/complaints/{id}', [AdminController::class, 'complaintUpdate'])->name('complaints.update');
+
+    // Delete complaint
+    Route::delete('/complaints/{id}', [AdminController::class, 'complaintDestroy'])->name('complaints.destroy');
+
+
+    Route::get('/parents/create', [AdminController::class, 'parentCreate'])->name('parent.create');
+Route::post('/parents', [AdminController::class, 'parentStore'])->name('parent.store');
+Route::get('/parents/{parent}/edit', [AdminController::class, 'parentEdit'])->name('parent.edit');
+Route::put('/parents/{parent}', [AdminController::class, 'parentUpdate'])->name('parent.update');
+Route::delete('/parents/{parent}', [AdminController::class, 'parentDestroy'])->name('parent.destroy');
+    Route::post('violation-appointments/store', [AdminController::class, 'storeViolationAppointment'])
+        ->name('violation.appointments.store');
+
 
 
     // Use 'auth:admin' guard for admin authentication
