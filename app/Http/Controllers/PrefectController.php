@@ -19,7 +19,7 @@ use App\Models\ComplaintsAnecdotal;
 
 use App\Models\Complaints;
 
-class AdminController extends Controller
+class PrefectController extends Controller
 {
     public function showLoginForm()
     {

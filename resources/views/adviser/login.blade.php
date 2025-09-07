@@ -24,7 +24,7 @@
     <div class="flex flex-col items-center justify-center flex-grow px-4 md:px-0">
         <div class="relative shadow-2xl border border-gray-300 rounded-lg flex flex-col md:flex-row w-full max-w-md md:max-w-lg bg-gray-400">
             <!-- Admin Login Button for Form -->
-            <a href="/admin/login" 
+            <a href="/prefect/login" 
                class="absolute top-4 right-4 bg-blue-500 text-white px-2 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-blue-600 transition duration-300 admin-login-right hidden">
                 Admin Login
             </a>
