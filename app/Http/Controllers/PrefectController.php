@@ -34,7 +34,7 @@ class PrefectController extends Controller
     $credentials = [
         'prefect_email' => $credentials['email'],
         'password'      => $credentials['password'],
-    ];
+    ]; 
 
     if (Auth::guard('prefect')->attempt($credentials)) {
     return redirect('/prefect/dashboard');

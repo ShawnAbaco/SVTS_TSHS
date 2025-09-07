@@ -49,7 +49,7 @@ public function store(Request $request)
             ->get();
 
         return response()->json($parents);
-    }
+    } 
 
     public function update(Request $request, $id)
     {

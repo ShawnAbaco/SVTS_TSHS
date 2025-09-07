@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
-
+ 
 
 public function getReportData($reportId)
 {

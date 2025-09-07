@@ -9,7 +9,7 @@ use App\Models\ComplaintsAppointment;
 abstract class ComplaintAppointmentController
 {
 public function storeComplaintsAppointment(Request $request)
-{
+{ 
     $request->validate([
         'complaint_id' => 'required|exists:complaints,id',
         'comp_app__date' => 'required|date',

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class PrefectReportController extends Controller
 {
 public function fetchReportData($reportId)
-{
+{ 
     $data = collect(); // default empty collection
 
     switch($reportId) {

@@ -15,8 +15,7 @@ use App\Http\Controllers\ViolationAnecdotalController;
 
 Route::get('/', function () {
     return view('adviser.login');
-});
-
+}); 
 // Admin routes
 Route::prefix('prefect')->group(function () {
     Route::get('/login', [PrefectController::class, 'showLoginForm'])->name('prefect.login');

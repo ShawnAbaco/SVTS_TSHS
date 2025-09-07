@@ -35,7 +35,7 @@ abstract class ViolationAnecdotalController
         $record = ViolationAnecdotal::findOrFail($id);
         $record->update($request->all());
         return redirect()->back()->with('success', 'Record updated.');
-    }
+    }  
 
     // Optional: Delete
     public function anecdotalDelete($id)

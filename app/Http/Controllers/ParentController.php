@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 abstract class ParentController
-{
+{ 
    public function parentStore(Request $request)
 {
     $request->validate([

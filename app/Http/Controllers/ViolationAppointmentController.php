@@ -25,5 +25,5 @@ public function storeViolationAppointment(Request $request)
     ]);
 
     return redirect()->route('violation.appointment')->with('success', 'Appointment created successfully.');
-}
+} 
 }

@@ -38,7 +38,7 @@ public function storeViolation(Request $request)
         'success' => true,
         'violation' => $violation
     ]);
-}
+} 
 
 
     // Update a violation

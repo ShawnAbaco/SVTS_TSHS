@@ -158,7 +158,7 @@ public function complaintsappointment()
         ->get();
 
     return view('adviser.complaintsanecdotal', compact('anecdotal'));
-}
+} 
 
     public function offensesanction()
     {
