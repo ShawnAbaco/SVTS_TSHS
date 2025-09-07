@@ -1,14 +1,17 @@
 <?php
 
+use App\Http\Controllers\ViolationAppointmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\AdviserCRUDController;
+use App\Http\Controllers\ComplaintAppointmentController;
 use App\Http\Controllers\PrefectController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PrefectReportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\ViolationAnecdotalController;
 
 Route::get('/', function () {
     return view('adviser.login');
@@ -51,10 +54,10 @@ Route::prefix('prefect')->group(function () {
 
 
     Route::get('/parents/create', [PrefectController::class, 'parentCreate'])->name('parent.create');
-Route::post('/parents', [PrefectController::class, 'parentStore'])->name('parent.store');
-Route::get('/parents/{parent}/edit', [PrefectController::class, 'parentEdit'])->name('parent.edit');
-Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
-Route::delete('/parents/{parent}', [PrefectController::class, 'parentDestroy'])->name('parent.destroy');
+    Route::post('/parents', [PrefectController::class, 'parentStore'])->name('parent.store');
+    Route::get('/parents/{parent}/edit', [PrefectController::class, 'parentEdit'])->name('parent.edit');
+    Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
+    Route::delete('/parents/{parent}', [PrefectController::class, 'parentDestroy'])->name('parent.destroy');
     Route::post('violation-appointments/store', [PrefectController::class, 'storeViolationAppointment'])
         ->name('violation.appointments.store');
 
@@ -110,12 +113,12 @@ Route::get('/adviser/reports/data/{reportId}', [ReportController::class, 'getRep
 
 
     // Violation Anecdotal
-    Route::get('/violation-anecdotal', [AdviserCRUDController::class, 'anecdotalIndex'])->name('violation.anecdotal');
-    Route::post('/violation-anecdotal', [AdviserCRUDController::class, 'anecdotalStore'])->name('violation.anecdotal.store');
+    //Route::get('/violation-anecdotal', [ViolationAnecdotalController::class, 'anecdotalIndex'])->name('violation.anecdotal');
+    Route::post('/violation-anecdotal', [ViolationAnecdotalController::class, 'anecdotalStore'])->name('violation.anecdotal.store');
 
     // Optional edit/delete routes
-    Route::put('/violation-anecdotal/{id}', [AdviserCRUDController::class, 'anecdotalUpdate'])->name('violation.anecdotal.update');
-    Route::delete('/violation-anecdotal/{id}', [AdviserCRUDController::class, 'anecdotalDelete'])->name('violation.anecdotal.delete');
+    Route::put('/violation-anecdotal/{id}', [ViolationAnecdotalController::class, 'anecdotalUpdate'])->name('violation.anecdotal.update');
+    Route::delete('/violation-anecdotal/{id}', [ViolationAnecdotalController::class, 'anecdotalDelete'])->name('violation.anecdotal.delete');
 
 
 
@@ -133,11 +136,11 @@ Route::get('/adviser/reports/data/{reportId}', [ReportController::class, 'getRep
     Route::middleware('auth:adviser')->group(function () {
         Route::get('/dashboard', [AdviserController::class, 'dashboard'])->name('adviser.dashboard');
         Route::get('/reports/data/{reportId}', [ReportController::class, 'getReportData'])->name('adviser.reports.data');
-        Route::post('/complaints/appointment/store', [AdviserCRUDController::class, 'storeComplaintsAppointment'])
+        Route::post('/complaints/appointment/store', [ComplaintAppointmentController::class, 'storeComplaintsAppointment'])
      ->name('complaints.appointment.store')                                                                                                                                                                                                                                                                                                                                                                                         
      ->middleware('auth:adviser');
 
-        Route::post('/adviser/violation/appointment/store', [AdviserCRUDController::class, 'storeViolationAppointment'])
+        Route::post('/adviser/violation/appointment/store', [ViolationAppointmentController::class, 'storeViolationAppointment'])
      ->name('violation.appointment.store');
 
     });
