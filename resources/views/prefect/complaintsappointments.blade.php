@@ -35,7 +35,12 @@
     <h1>Complaints Appointments</h1>
     <button class="btn btn-primary" onclick="openAppointmentModal()">Create Appointment</button>
 
-    <table>
+    <!-- Search Bar -->
+    <div style="margin: 15px 0;">
+      <input type="text" id="searchInput" placeholder="Search by ID or Complaint..." onkeyup="searchTable()" style="padding:5px; width: 250px;">
+    </div>
+
+    <table id="appointmentsTable">
       <thead>
         <tr>
           <th>ID</th>
@@ -55,7 +60,11 @@
             <td>{{ $appointment->comp_app_time }}</td>
             <td>{{ $appointment->comp_app_status }}</td>
             <td>
-              <form action="{{ route('complaints.appointments.destroy', $appointment->comp_app_id) }}" method="POST">
+              <!-- Edit Button -->
+              <button class="btn btn-warning btn-sm" onclick="openEditModal({{ $appointment->comp_app_id }}, '{{ $appointment->complaints_id }}', '{{ $appointment->comp_app_date }}', '{{ $appointment->comp_app_time }}', '{{ $appointment->comp_app_status }}')">Edit</button>
+
+              <!-- Delete Button -->
+              <form action="{{ route('complaints.appointments.destroy', $appointment->comp_app_id) }}" method="POST" style="display:inline-block;">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
@@ -68,7 +77,7 @@
   </div>
 </div>
 
-<!-- Appointment Modal -->
+<!-- Create Appointment Modal -->
 <div id="appointmentModal" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">Create Appointment</div>
@@ -106,7 +115,47 @@
   </div>
 </div>
 
+<!-- Edit Appointment Modal -->
+<div id="editModal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">Edit Appointment</div>
+    <form id="editForm" method="POST">
+      @csrf
+      @method('PUT')
+      <div class="modal-body">
+        <label for="editComplaint">Complaint</label>
+        <select id="editComplaint" name="complaints_id" required>
+          <option value="">Select Complaint</option>
+          @foreach($complaints as $complaint)
+            <option value="{{ $complaint->complaints_id }}">
+              {{ $complaint->complaints_incident }}
+            </option>
+          @endforeach
+        </select>
+
+        <label for="editDate">Date</label>
+        <input type="date" id="editDate" name="comp_app_date" required>
+
+        <label for="editTime">Time</label>
+        <input type="time" id="editTime" name="comp_app_time" required>
+
+        <label for="editStatus">Status</label>
+        <select id="editStatus" name="comp_app_status" required>
+          <option value="Pending">Pending</option>
+          <option value="Confirmed">Confirmed</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+  // Open Create Modal
   function openAppointmentModal() {
     document.getElementById('appointmentModal').style.display = 'flex';
   }
@@ -114,6 +163,38 @@
   function closeAppointmentModal() {
     document.getElementById('appointmentModal').style.display = 'none';
   }
+
+  // Open Edit Modal
+  function openEditModal(id, complaintId, date, time, status) {
+    document.getElementById('editModal').style.display = 'flex';
+    document.getElementById('editForm').action = '/complaints/appointments/' + id;
+    document.getElementById('editComplaint').value = complaintId;
+    document.getElementById('editDate').value = date;
+    document.getElementById('editTime').value = time;
+    document.getElementById('editStatus').value = status;
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  // Search Table
+  function searchTable() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let table = document.getElementById('appointmentsTable');
+    let rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+      let idCell = rows[i].getElementsByTagName('td')[0];
+      let complaintCell = rows[i].getElementsByTagName('td')[1];
+      if (idCell && complaintCell) {
+        let idText = idCell.textContent || idCell.innerText;
+        let complaintText = complaintCell.textContent || complaintCell.innerText;
+        rows[i].style.display = (idText.toLowerCase().includes(input) || complaintText.toLowerCase().includes(input)) ? '' : 'none';
+      }
+    }
+  }
 </script>
+
 </body>
 </html>

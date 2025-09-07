@@ -10,24 +10,35 @@
 <body>
 
  <!-- Sidebar -->
-    <div class="sidebar">
-        <p>PREFECT DASHBOARD</p>
-        <ul>
-          <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-            <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List </a></li>
-            <li><a href="{{ route('parent.lists') }}"><i class="fas fa-user-graduate"></i> Parent List </a></li>
-            <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-            <li><a href="{{ route('violation.records') }}"><i class="fas fa-gavel"></i> Violation Record </a></li>
-            <li><a href="{{ route('violation.appointments') }}"><i class="fas fa-bell"></i> Violation Appointments </a></li>
-            <li><a href="{{ route('violation.anecdotals') }}"><i class="fas fa-chart-line"></i> Violation Anecdotal </a></li>
-            <li><a href="{{ route('people.complaints') }}"><i class="fas fa-users"></i> Complaints</a></li>
-            <li><a href="{{ route('complaints.appointments') }}"><i class="fas fa-cogs"></i> Complaints Appointments</a></li>
-            <li><a href="{{ route('complaints.anecdotals') }}"><i class="fas fa-book"></i> Complaints Anecdotal</a></li>
-            <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense&Sanctions </a></li>
-             <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports </a></li>
-            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-        </ul>
-    </div>
+  <div class="sidebar">
+    <h2>PREFECT DASHBOARD</h2>
+    <ul>
+      <div class="section-title">Main</div>
+
+      <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+      <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
+       <li class="active"><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
+
+      <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
+        <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
+        <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+      </ul>
+
+      <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
+        <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
+        <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
+      </ul>
+
+      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+      <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+    </ul>
+  </div>
 
 <!-- Main Content -->
 <main>
@@ -125,6 +136,18 @@
 </div>
 
 <script>
+    
+  // Dropdown functionality
+    const dropdowns = document.querySelectorAll('.dropdown-btn');
+    dropdowns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        const container = btn.nextElementSibling;
+        container.style.display = container.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+
+
 function openModal() { document.getElementById("createAdviserModal").style.display = "flex"; }
 function closeModal() { document.getElementById("createAdviserModal").style.display = "none"; }
 

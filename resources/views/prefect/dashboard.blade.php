@@ -1,345 +1,517 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OVERVIEW</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="{{ asset('css/admin/DASHBOARD.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prefect Dashboard - Bold Text</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      transition: all 0.2s ease-in-out;
+    }
+
+    body {
+      display: flex;
+      background: #f9f9f9;
+      color: #111;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(180deg, #111, #222);
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 20px;
+      letter-spacing: 1px;
+      color:rgb(255, 255, 255);
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      padding: 12px 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #fff;
+      transition: 0.3s;
+      position: relative;
+    }
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+    }
+    .sidebar ul li:hover {
+      background:rgb(0, 247, 58);
+      color: #111;
+    }
+    .sidebar ul li:hover i {
+      color: #111;
+    }
+    .sidebar ul li.active {
+      background:rgb(11, 255, 68);
+      color: #111;
+    }
+    .sidebar ul li.active i {
+      color: #111;
+    }
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+    .section-title {
+      margin: 15px 10px 5px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    /* Dropdown */
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 20px;
+      transition: max-height 0.3s ease;
+    }
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .dropdown-container li:hover {
+      background:rgb(255, 255, 255);
+      color: #111;
+    }
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Scrollbar */
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background:rgb(255, 255, 255);
+      border-radius: 3px;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: 220px;
+      padding: 20px;
+      width: calc(100% - 220px);
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .topbar h1 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    .topbar p {
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* User Info (Profile) */
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .user-info img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    .user-info span {
+      font-weight: bold;
+      color: #111;
+    }
+    .user-info:hover {
+      opacity: 0.7;
+    }
+
+    /* Stats Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .card {
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.02);
+    }
+    .card h3 {
+      font-size: 12px;
+      color: #000;
+    }
+    .card p {
+      font-size: 20px;
+      margin: 4px 0;
+      color: #000;
+    }
+    .card i {
+      font-size: 20px;
+      color: #000;
+    }
+    .card:nth-child(1) { background-color: #cce5ff; } /* Blue */
+    .card:nth-child(2) { background-color: #f8d7da; } /* Red */
+    .card:nth-child(3) { background-color: #d4edda; } /* Green */
+
+    /* Grid (Chart + Table) */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .grid .card {
+      flex-direction: column;
+      align-items: flex-start;
+      background: #fff;
+      border: 1px solid #ddd;
+    }
+    .grid .card-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .grid .card-header h3 {
+      font-size: 14px;
+      color: #111;
+    }
+    .grid .card-header a {
+      font-size: 12px;
+      color: #000;
+      text-decoration: none;
+    }
+    .grid .card-header a:hover {
+      text-decoration: underline;
+    }
+
+    /* Table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table th, .table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+      font-size: 13px;
+    }
+    .table tr:hover {
+      background: #f2f2f2;
+      cursor: pointer;
+    }
+
+    /* Solid Status Badges */
+    .status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      color: #fff;
+      font-weight: bold;
+    }
+    .pending { background-color: #fd7e14; }   /* Orange */
+    .resolved { background-color: #28a745; }  /* Green */
+    .escalated { background-color: #dc3545; } /* Red */
+
+    /* Appointments */
+    .appointments {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    .appt-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .appt-card:hover {
+      background: #f0f0f0;
+      transform: scale(1.01);
+    }
+    .appt-card h4 {
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #111;
+    }
+    .appt-card .time {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .appt-card .status {
+      float: right;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #fd7e14;
+    }
+
+    /* Chart */
+    #violationChart {
+      max-width: 220px;
+      max-height: 220px;
+      margin: 0 auto;
+    }
+  </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <p>PREFECT DASHBOARD</p>
-        <ul>
-          <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-            <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List </a></li>
-            <li><a href="{{ route('parent.lists') }}"><i class="fas fa-user-graduate"></i> Parent List </a></li>
-            <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-            <li><a href="{{ route('violation.records') }}"><i class="fas fa-gavel"></i> Violation Record </a></li>
-            <li><a href="{{ route('violation.appointments') }}"><i class="fas fa-bell"></i> Violation Appointments </a></li>
-            <li><a href="{{ route('violation.anecdotals') }}"><i class="fas fa-chart-line"></i> Violation Anecdotal </a></li>
-            <li><a href="{{ route('people.complaints') }}"><i class="fas fa-users"></i> Complaints</a></li>
-            <li><a href="{{ route('complaints.appointments') }}"><i class="fas fa-cogs"></i> Complaints Appointments</a></li>
-            <li><a href="{{ route('complaints.anecdotals') }}"><i class="fas fa-book"></i> Complaints Anecdotal</a></li>
-            <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense&Sanctions </a></li>
-             <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports </a></li>
-            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-        </ul>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>PREFECT DASHBOARD</h2>
+    <ul>
+      <div class="section-title">Main</div>
+      <li class="active"><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+      <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
+      <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
+
+      <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
+        <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
+        <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+      </ul>
+
+      <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
+        <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
+        <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
+      </ul>
+
+      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+      <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Welcome back, Admin</p>
+      </div>
+      <div class="user-info">
+        <img id="profileImage" src="https://i.pravatar.cc/35" alt="Profile" onclick="changeProfileImage()" />
+        <span onclick="changeProfileName()">Angel</span>
+        <input type="file" id="imageInput" accept="image/*" style="display:none" />
+      </div>
     </div>
 
-    <!-- Main Content -->
-    <main>
-        <section id="dashboard-overview" class="content-section">
-            <h2>Dashboard Overview</h2>
-            
-            <!-- Boxes -->
-            <div style="display: flex; justify-content: space-between; gap: 20px; margin-bottom: 20px; font-weight:bold;">
-                
-                <!-- Violations Box -->
-                <div style="flex: 1; background:rgb(255, 5, 5); color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; cursor:pointer;" 
-                    onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.2)'" 
-                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.1)'" 
-                    onclick="openViolationModal()">
-                    <h3>Students Violations</h3>
-                    <p>Total Violations</p>
-                </div>
-
-                <!-- Reports Box -->
-                <div style="flex: 1; background:rgb(0, 102, 246); color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; cursor:pointer;" 
-                    onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.2)'" 
-                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.1)'"
-                    onclick="openReportModal()">
-                    <h3>Reports</h3>
-                    <p>Total Reports</p>
-                </div>
-
-                <!-- Students Box -->
-                <div style="flex: 1; background:rgb(0, 0, 0); color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; cursor:pointer;" 
-                    onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.2)'" 
-                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.1)'"
-                    onclick="openStudentModal()">
-                    <h3>Students</h3>
-                    <p>Total Students</p>
-                </div>
-            </div>
-
-            <!-- Line Graph Section -->
-            <div style="background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <h3>Performance Overview</h3>
-                <div style="max-width: 1500px; margin: 0 auto;">
-                    <canvas id="lineGraph" width="400" height="360"></canvas>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Violation Modal -->
-    <div id="violationModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeViolationModal()">&times;</span>
-            <h2>Student Violations</h2>
-            <div class="btn-actions">
-                <button onclick="printTable()">🖨 Print</button>
-            </div>
-            <table id="violationTable">
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Grade</th>
-                        <th>Violation</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Juan Dela Cruz</td><td>Grade 11</td><td>Littering</td><td>2025-08-01</td></tr>
-                    <tr><td>Maria Santos</td><td>Grade 12</td><td>Cutting Classes</td><td>2025-08-02</td></tr>
-                </tbody>
-            </table>
+    <!-- Stats Cards -->
+    <div class="cards">
+      <div class="card" onclick="menuClick('Total Students')">
+        <div>
+          <h3>Total Students</h3>
+          <p>1,248</p>
         </div>
-    </div>
-
-    <!-- Students Modal -->
-    <div id="studentModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeStudentModal()">&times;</span>
-            <h2>Student List</h2>
-            <div class="btn-actions">
-                <button onclick="showGrade11()">Grade 11 (3 Students)</button>
-                <button onclick="showGrade12()">Grade 12 (3 Students)</button>
-                <button onclick="printStudentTable()">🖨 Print</button>
-            </div>
-            <table id="studentTable">
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <i class="fas fa-user-graduate"></i>
+      </div>
+      <div class="card" onclick="menuClick('Violations')">
+        <div>
+          <h3>Violations</h3>
+          <p>42</p>
         </div>
-    </div>
-
-    <!-- Reports Modal -->
-    <div id="reportModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeReportModal()">&times;</span>
-            <h2>Reports</h2>
-            <div class="btn-actions">
-                <button onclick="printReportTable()">🖨 Print</button>
-            </div>
-            <table id="reportTable">
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Violation</th>
-                        <th>Adviser</th>
-                        <th>Grade</th>
-                        <th>Date of Violation</th>
-                        <th>Parents</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Juan Dela Cruz</td>
-                        <td>Littering</td>
-                        <td>Mr. Reyes</td>
-                        <td>Grade 11</td>
-                        <td>2025-08-01</td>
-                        <td>Maria Dela Cruz</td>
-                    </tr>
-                    <tr>
-                        <td>Maria Santos</td>
-                        <td>Cutting Classes</td>
-                        <td>Mrs. Villanueva</td>
-                        <td>Grade 12</td>
-                        <td>2025-08-02</td>
-                        <td>Carlos Santos</td>
-                    </tr>
-                </tbody>
-            </table>
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="card" onclick="menuClick('Complaints')">
+        <div>
+          <h3>Complaints</h3>
+          <p>18</p>
         </div>
+        <i class="fas fa-comments"></i>
+      </div>
     </div>
 
-    <!-- Chart Info Modal -->
-    <div id="chartModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:999;">
-        <div style="background:#fff; padding:20px; border-radius:10px; width:400px; text-align:center; position:relative;">
-            <span onclick="closeChartModal()" style="position:absolute; top:10px; right:15px; font-size:20px; cursor:pointer;">&times;</span>
-            <h2 id="chartMonth" style="margin-bottom:10px;"></h2>
-            <p><strong>Total Violations:</strong> <span id="chartTotal"></span></p>
-            <p><strong>Most Violations:</strong> <span id="chartHighest"></span></p>
-            <button onclick="closeChartModal()" style="margin-top:15px; padding:10px 20px; background:#007bff; color:white; border:none; border-radius:5px; cursor:pointer;">Close</button>
+    <!-- Chart + Table -->
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <h3>Violation Types</h3>
         </div>
+        <canvas id="violationChart"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Recent Violations</h3>
+          <a href="#" onclick="menuClick('View All Violations')">View All</a>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Violation Type</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr onclick="rowClick('Alex Johnson')">
+              <td>Alex Johnson</td>
+              <td>Attendance</td>
+              <td>Jan 15, 2025</td>
+              <td><span class="status pending">Pending</span></td>
+            </tr>
+            <tr onclick="rowClick('Sarah Miller')">
+              <td>Sarah Miller</td>
+              <td>Behavior</td>
+              <td>Jan 12, 2025</td>
+              <td><span class="status resolved">Resolved</span></td>
+            </tr>
+            <tr onclick="rowClick('Mike Thompson')">
+              <td>Mike Thompson</td>
+              <td>Dress Code</td>
+              <td>Jan 10, 2025</td>
+              <td><span class="status escalated">Escalated</span></td>
+            </tr>
+            <tr onclick="rowClick('Emily Wilson')">
+              <td>Emily Wilson</td>
+              <td>Attendance</td>
+              <td>Jan 8, 2025</td>
+              <td><span class="status resolved">Resolved</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Chart.js Line Graph
-        const ctx = document.getElementById('lineGraph').getContext('2d');
+    <!-- Appointments -->
+    <h3 style="margin-bottom: 10px;">Upcoming Appointments</h3>
+    <div class="appointments">
+      <div class="appt-card" onclick="menuClick('Violation Discussion')">
+        <h4>Violation Discussion</h4>
+        <p class="time">Jan 18, 2025 - 10:00 AM</p>
+        <p>Alex Johnson <br><small>with Mr. Peterson</small></p>
+        <span class="status pending">Scheduled</span>
+      </div>
+      <div class="appt-card" onclick="menuClick('Complaint Review')">
+        <h4>Complaint Review</h4>
+        <p class="time">Jan 19, 2025 - 2:30 PM</p>
+        <p>Sarah Miller <br><small>with Mrs. Johnson</small></p>
+        <span class="status pending">Scheduled</span>
+      </div>
+      <div class="appt-card" onclick="menuClick('Parent Conference')">
+        <h4>Parent Conference</h4>
+        <p class="time">Jan 20, 2025 - 11:15 AM</p>
+        <p>Mike Thompson <br><small>with Principal Davis</small></p>
+        <span class="status pending">Pending</span>
+      </div>
+    </div>
+  </div>
 
-        const grade11Data = [80, 85, 82, 90, 88, 92, 95, 97, 93, 96, 94, 98];
-        const grade12Data = [75, 78, 80, 85, 87, 90, 92, 94, 91, 95, 93, 97];
+  <!-- JS -->
+  <script>
+    // Chart.js
+    const ctx = document.getElementById('violationChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Attendance', 'Behavior', 'Dress Code', 'Other'],
+        datasets: [{
+          data: [40, 25, 20, 15],
+          backgroundColor: ['#ff4d4d', '#4d79ff', '#28a745', '#ffc107'],
+          borderWidth: 1
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
 
-        const months = [
-            'January', 'February', 'March', 'April', 'May', 'June', 
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: 'Grade 11',
-                        data: grade11Data,
-                        borderColor: 'red',
-                        borderWidth: 3,
-                        fill: false,
-                        tension: 0.3,
-                        pointBackgroundColor: 'red',
-                        pointHoverRadius: 8
-                    },
-                    {
-                        label: 'Grade 12',
-                        data: grade12Data,
-                        borderColor: 'blue',
-                        borderWidth: 3,
-                        fill: false,
-                        tension: 0.3,
-                        pointBackgroundColor: 'blue',
-                        pointHoverRadius: 8
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { font: { weight: 'bold' }, color: 'black' }
-                    },
-                    tooltip: {
-                        enabled: true
-                    }
-                },
-                scales: {
-                    x: { ticks: { font: { weight: 'bold', size: 14 }, color: 'black' } },
-                    y: { ticks: { font: { weight: 'bold', size: 14 }, color: 'black' } }
-                },
-                onClick: (evt) => {
-                    const points = chart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-                    if (points.length) {
-                        const index = points[0].index;
-                        const month = months[index];
-                        const grade11Value = grade11Data[index];
-                        const grade12Value = grade12Data[index];
-
-                        const total = grade11Value + grade12Value;
-                        const highestGrade = grade11Value > grade12Value ? 'Grade 11' : 'Grade 12';
-
-                        // Update modal content
-                        document.getElementById('chartMonth').innerText = `📅 Month: ${month}`;
-                        document.getElementById('chartTotal').innerText = total;
-                        document.getElementById('chartHighest').innerText = highestGrade;
-
-                        // Show modal
-                        document.getElementById('chartModal').style.display = 'flex';
-                    }
-                }
-            }
-        });
-
-        // Modal functions for Violation
-        function openViolationModal() { document.getElementById('violationModal').style.display = 'flex'; }
-        function closeViolationModal() { document.getElementById('violationModal').style.display = 'none'; }
-
-        // Modal functions for Student
-        function openStudentModal() { document.getElementById('studentModal').style.display = 'flex'; showGrade11(); }
-        function closeStudentModal() { document.getElementById('studentModal').style.display = 'none'; }
-
-        // Modal functions for Report
-        function openReportModal() { document.getElementById('reportModal').style.display = 'flex'; }
-        function closeReportModal() { document.getElementById('reportModal').style.display = 'none'; }
-
-        // Chart modal close
-        function closeChartModal() {
-            document.getElementById('chartModal').style.display = 'none';
+    // Dropdown functionality
+    const dropdowns = document.querySelectorAll('.dropdown-btn');
+    dropdowns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        const container = btn.nextElementSibling;
+        if (container.style.display === "block") {
+          container.style.display = "none";
+        } else {
+          container.style.display = "block";
         }
+      });
+    });
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target === document.getElementById('violationModal')) closeViolationModal();
-            if (event.target === document.getElementById('studentModal')) closeStudentModal();
-            if (event.target === document.getElementById('reportModal')) closeReportModal();
-            if (event.target === document.getElementById('chartModal')) closeChartModal();
+    // Interactivity functions
+    function menuClick(name) { alert("Clicked: " + name); }
+    function rowClick(student) { alert("Opening details for " + student); }
+    function logout() { alert("Logging out..."); }
+
+    // Change profile image
+    function changeProfileImage() {
+      document.getElementById('imageInput').click();
+    }
+
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('profileImage').src = e.target.result;
         }
+        reader.readAsDataURL(file);
+      }
+    });
 
-        // Student Data
-        const grade11Students = [
-            { name: 'Juan Dela Cruz', grade: 'Grade 11' },
-            { name: 'Pedro Santos', grade: 'Grade 11' },
-            { name: 'Maria Lopez', grade: 'Grade 11' }
-        ];
-        const grade12Students = [
-            { name: 'Ana Reyes', grade: 'Grade 12' },
-            { name: 'Jose Bautista', grade: 'Grade 12' },
-            { name: 'Carla Mendoza', grade: 'Grade 12' }
-        ];
-
-        function showGrade11() {
-            const tbody = document.querySelector('#studentTable tbody');
-            tbody.innerHTML = '';
-            grade11Students.forEach(student => {
-                tbody.innerHTML += `<tr><td>${student.name}</td><td>${student.grade}</td></tr>`;
-            });
-        }
-
-        function showGrade12() {
-            const tbody = document.querySelector('#studentTable tbody');
-            tbody.innerHTML = '';
-            grade12Students.forEach(student => {
-                tbody.innerHTML += `<tr><td>${student.name}</td><td>${student.grade}</td></tr>`;
-            });
-        }
-
-        // Print Violation Table
-        function printTable() {
-            const tableContent = document.getElementById('violationTable').outerHTML;
-            const newWin = window.open('');
-            newWin.document.write('<html><head><title>Print</title></head><body>');
-            newWin.document.write('<h2>Student Violations</h2>');
-            newWin.document.write(tableContent);
-            newWin.document.write('</body></html>');
-            newWin.document.close();
-            newWin.print();
-        }
-
-        // Print Student Table
-        function printStudentTable() {
-            const tableContent = document.getElementById('studentTable').outerHTML;
-            const newWin = window.open('');
-            newWin.document.write('<html><head><title>Print Student List</title></head><body>');
-            newWin.document.write('<h2>Student List</h2>');
-            newWin.document.write(tableContent);
-            newWin.document.write('</body></html>');
-            newWin.document.close();
-            newWin.print();
-        }
-
-        // Print Report Table
-        function printReportTable() {
-            const tableContent = document.getElementById('reportTable').outerHTML;
-            const newWin = window.open('');
-            newWin.document.write('<html><head><title>Print Reports</title></head><body>');
-            newWin.document.write('<h2>Reports</h2>');
-            newWin.document.write(tableContent);
-            newWin.document.write('</body></html>');
-            newWin.document.close();
-            newWin.print();
-        }
-    </script>
+    // Change profile name
+    function changeProfileName() {
+      const newName = prompt("Enter new name:");
+      if(newName) document.querySelector('.user-info span').innerText = newName;
+    }
+  </script>
 </body>
 </html>

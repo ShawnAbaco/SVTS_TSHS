@@ -30,7 +30,28 @@ a { text-decoration: none; color: inherit; }
 
 .main-content { margin-left: 260px; padding: 20px; }
 .crud-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-.crud-container h2 { margin-bottom: 20px; font-size: 24px; }
+.crud-container h2 { margin-bottom: 20px; font-size: 24px; display: flex; justify-content: space-between; align-items: center; }
+
+.search-create {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.search-create input {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.search-create .btn-create {
+    background-color: #28a745;
+    color: #fff;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.search-create .btn-create i { margin-right: 5px; }
 
 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
 th, td { padding: 10px; text-align: center; border: 1px solid #ccc; }
@@ -75,7 +96,14 @@ thead { background-color: #343a40; color: white; }
 <div class="main-content">
     <div class="crud-container">
         <h2>Student Violations</h2>
-        <table>
+
+        <!-- Search + Create Button -->
+        <div class="search-create">
+            <input type="text" id="searchInput" placeholder="Search student name...">
+            <button class="btn-create"><i class="fas fa-plus"></i> Create Violation</button>
+        </div>
+
+        <table id="violationTable">
             <thead>
                 <tr>
                     <th>#</th>
@@ -148,6 +176,16 @@ window.onclick = function(event) {
         document.getElementById('infoModal').classList.remove('show');
     }
 }
+
+// Search Functionality
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#violationTable tbody tr");
+    rows.forEach(row => {
+        let studentName = row.cells[1].textContent.toLowerCase();
+        row.style.display = studentName.includes(filter) ? "" : "none";
+    });
+});
 </script>
 
 </body>

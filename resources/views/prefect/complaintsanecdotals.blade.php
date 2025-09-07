@@ -33,6 +33,12 @@
 <div class="content">
   <h1>Complaints Anecdotals</h1>
 
+  <!-- Create Button and Search Bar -->
+  <div style="margin: 15px 0;">
+    <button class="btn btn-primary" onclick="openCreateModal()">Create</button>
+    <input type="text" id="searchInput" placeholder="Search by Complainant Name..." onkeyup="searchTable()" style="padding:5px; width:250px; margin-left:10px;">
+  </div>
+
   <table>
     <thead>
       <tr>
@@ -70,6 +76,26 @@
       }
     }).then(() => window.location.href = '/prefect/login')
       .catch(error => console.error('Logout failed:', error));
+  }
+
+  // Search Table Function
+  function searchTable() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let table = document.querySelector('table');
+    let rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) { // skip header
+      let complainantCell = rows[i].getElementsByTagName('td')[1];
+      if (complainantCell) {
+        let text = complainantCell.textContent || complainantCell.innerText;
+        rows[i].style.display = text.toLowerCase().includes(input) ? '' : 'none';
+      }
+    }
+  }
+
+  // Dummy Create Modal function
+  function openCreateModal() {
+    alert('Open create modal here');
   }
 </script>
 

@@ -22,65 +22,101 @@ a {
 a:focus {
     outline: 2px dashed #007BFF;
 }
+/* Sidebar container */
+.sidebar {
+  width: 200px;
+  background: #000;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  padding: 20px 10px;
+}
 
- /* Sidebar Styles */
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(135deg,rgb(7, 184, 228),rgb(13, 141, 205));
-            color: #000; /* Sidebar text color solid black */
-            box-shadow: 2px 0 8px rgba(0,0,0,0.15);
-            padding: 10px;
-            position: fixed;
-            height: 100%;
-            overflow-y: auto;
-        }
+/* Sidebar title */
+.sidebar h2 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 25px;
+  color: #fff;
+}
 
-        .sidebar img {
-            display: block;
-            width: 150px;
-            margin: 20px auto 10px;
-            border-radius: 50%;
-            background: #fff;
-            padding: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
+/* Sidebar list */
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
 
-        .sidebar p {
-            text-align: center;
-            color: #000; /* Heading text black */
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
+/* List items */
+.sidebar ul li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #fff;
+}
 
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
+/* Hover effect */
+.sidebar ul li:hover {
+  background: #fff;
+  color: #000;
+}
 
-        .sidebar ul li {
-            margin-bottom: 8px;
-        }
+/* Icon styling */
+.sidebar ul li i {
+  margin-right: 8px;
+  color: #fff;
+}
 
-        .sidebar ul li a,
-        .sidebar ul li {
-            display: block;
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 6px;
-            color: #000; /* Sidebar links black */
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
+/* Links inside list items */
+.sidebar ul li a {
+  text-decoration: none;
+  color: #fff;
+  flex: 1;
+}
 
-        .sidebar ul li a i {
-            margin-right: 10px;
-            color: #000; /* Sidebar icons black */
-        }
+/* Link hover */
+.sidebar ul li a:hover {
+  color: #000;
+}
 
-        .sidebar ul li:hover,
-        .sidebar ul li.active {
-            background:rgb(246, 246, 246);
-            color: #fff; /* Hover text white for contrast */
-        }
+/* Section titles inside sidebar */
+.section-title {
+  font-size: 11px;
+  color: #aaa;
+  text-transform: uppercase;
+  margin: 15px 10px 5px;
+}
+
+/* Dropdown container (hidden by default) */
+.dropdown-container {
+  display: none;
+  list-style: none;
+  padding-left: 15px;
+}
+
+/* Dropdown items */
+.dropdown-container li {
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Dropdown hover */
+.dropdown-container li:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Active dropdown button */
+.dropdown-btn.active {
+  background: #fff;
+  color: #000;
+}
+
 
 /* Main Content Styles */
 main {

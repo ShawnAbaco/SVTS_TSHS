@@ -6,6 +6,22 @@
 <title>Complaints Management</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <link rel="stylesheet" href="{{ asset('css/admin/COMPLAINTS.css') }}">
+<style>
+/* Search bar styling */
+.search-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.search-container input {
+  padding: 8px 12px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+</style>
 </head>
 <body>
 
@@ -34,7 +50,12 @@
   <h1>Complaints Management</h1>
   <button class="btn-primary" onclick="openModal()">+ Add Complainant</button>
 
-  <table>
+  <!-- Search Bar -->
+  <div class="search-container">
+    <input type="text" id="searchInput" onkeyup="searchComplainant()" placeholder="Search Complainant Name...">
+  </div>
+
+  <table id="complaintsTable">
     <thead>
       <tr>
         <th>ID</th>
@@ -77,6 +98,21 @@ function logout() {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
     }).then(() => window.location.href = '/prefect/login');
+}
+
+// Search function for complainant name
+function searchComplainant() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let table = document.getElementById("complaintsTable");
+    let tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        let td = tr[i].getElementsByTagName("td")[1]; // Complainant column
+        if (td) {
+            let textValue = td.textContent || td.innerText;
+            tr[i].style.display = textValue.toLowerCase().includes(input) ? "" : "none";
+        }
+    }
 }
 </script>
 

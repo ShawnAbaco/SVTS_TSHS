@@ -35,6 +35,11 @@
     <button class="btn-primary" onclick="openModal('createModal')">Create Appointment</button>
   </div>
 
+  <!-- Search bar -->
+  <div style="margin-bottom: 15px;">
+    <input type="text" id="searchInput" placeholder="Search student or parent name..." style="padding:8px; width: 300px;">
+  </div>
+
   <div class="card">
     <div class="card-header">Scheduled Appointments</div>
     <div class="card-body">
@@ -67,7 +72,6 @@
 </tr>
 @endforeach
 </tbody>
-
       </table>
     </div>
   </div>
@@ -109,7 +113,6 @@
     </div>
     <button type="submit" class="btn-primary">Save Appointment</button>
 </form>
-
   </div>
 </div>
 
@@ -125,6 +128,22 @@ function logout() {
     window.location.href = '/prefect/login';
   }).catch(error => console.error('Logout failed:', error));
 }
+
+// 🔍 Search filter for student/parent
+document.getElementById('searchInput').addEventListener('keyup', function() {
+  let filter = this.value.toLowerCase();
+  let rows = document.querySelectorAll('#appointmentList tr');
+
+  rows.forEach(row => {
+    let student = row.cells[1].textContent.toLowerCase();
+    let parent = row.cells[2].textContent.toLowerCase();
+    if (student.includes(filter) || parent.includes(filter)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+});
 </script>
 
 </body>
