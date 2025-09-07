@@ -17,7 +17,7 @@
     <!-- Admin Login Button (Global, Top-Left) -->
     <a href="/prefect/login" 
        class="fixed top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-600 transition duration-300 admin-login-left">
-        Admin Login
+        Prefect Login
     </a>
 
     <!-- Login Section -->
@@ -26,7 +26,7 @@
             <!-- Admin Login Button for Form -->
             <a href="/prefect/login" 
                class="absolute top-4 right-4 bg-blue-500 text-white px-2 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-blue-600 transition duration-300 admin-login-right hidden">
-                Admin Login
+                Prefect Login
             </a>
 
             <!-- Logo Section -->
