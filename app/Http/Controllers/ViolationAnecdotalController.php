@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\ViolationAnecdotal;
 
-abstract class ViolationAnecdotalController
+class ViolationAnecdotalController extends Controller
 {
  public function anecdotalStore(Request $request)
     {

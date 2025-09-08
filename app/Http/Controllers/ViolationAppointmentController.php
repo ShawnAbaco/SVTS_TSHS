@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\ViolationAppointment;
 
-abstract class ViolationAppointmentController
+class ViolationAppointmentController extends Controller
 {
 public function storeViolationAppointment(Request $request)
 {

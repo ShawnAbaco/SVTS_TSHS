@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Complaints;
 
-abstract class ComplaintController
+class ComplaintController extends Controller
 {
     public function storeComplaint(Request $request)
 {

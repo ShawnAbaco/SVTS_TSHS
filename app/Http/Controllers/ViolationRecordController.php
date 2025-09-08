@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\ViolationRecord;
 
-abstract class ViolationRecordController
+class ViolationRecordController extends Controller
 {
  // Store a new violation
 public function storeViolation(Request $request)

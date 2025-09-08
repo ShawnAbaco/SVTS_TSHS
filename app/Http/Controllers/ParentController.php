@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-abstract class ParentController
+class ParentController extends Controller
 { 
    public function parentStore(Request $request)
 {

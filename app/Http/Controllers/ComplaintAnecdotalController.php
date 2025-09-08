@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use app\Models\ComplaintsAnecdotal;
 
-abstract class ComplaintAnecdotalController
+class ComplaintAnecdotalController extends Controller
 {
 public function storeComplaintAnecdotal(Request $request)
 {

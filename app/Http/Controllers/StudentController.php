@@ -9,7 +9,7 @@ use App\Models\Student;
 
 
 
-abstract class StudentController
+class StudentController extends Controller
 {
 public function store(Request $request)
 {
