@@ -26,4 +26,22 @@ public function storeComplaintsAppointment(Request $request)
 
     return redirect()->back()->with('success', 'Appointment created successfully!');
 }
+public function updateComplaintAppointment(Request $request, $id)
+{
+   
+    $validated = $request->validate([
+        'complaint_id'     => 'required|exists:complaints,id',
+        'comp_app_date'    => 'required|date',
+        'comp_app_time'    => 'required',
+        'comp_app_status'  => 'required|string',
+    ]);
+
+    $appointment = ComplaintsAppointment::findOrFail($id);
+
+
+    $appointment->update($validated);
+
+    return redirect()->route('complaint.appointment')
+                     ->with('success', 'Complaint appointment updated successfully.');
+}
 }

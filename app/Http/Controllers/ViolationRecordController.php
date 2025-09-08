@@ -28,7 +28,7 @@ public function storeViolation(Request $request)
         'violation_time' => $request->violation_time,
     ]);
 
-    // 🔥 Reload violation with relationships so frontend gets complete data
+    
     $violation = ViolationRecord::with([
         'student.parent', 
         'offense'
