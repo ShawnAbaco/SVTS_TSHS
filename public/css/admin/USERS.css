@@ -17,15 +17,15 @@
 
     /* Sidebar */
     .sidebar {
-      width: 220px;
-      background: linear-gradient(180deg, #111, #222);
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-      overflow-y: auto;
+    width: 220px;
+    background:rgb(0, 0, 0); 
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    padding: 25px 15px;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+
     }
     .sidebar h2 {
       margin-bottom: 30px;
@@ -54,7 +54,7 @@
       min-width: 20px;
     }
     .sidebar ul li:hover {
-      background:rgb(30, 255, 9);
+      background:rgb(9, 218, 255);
       color: #111;
     }
     .sidebar ul li:hover i {
@@ -84,7 +84,7 @@
       cursor: pointer;
     }
     .dropdown-container li:hover {
-      background:rgb(5, 255, 47);
+      background:rgb(5, 238, 255);
       color: #111;
     }
     .dropdown-btn .arrow {
@@ -105,7 +105,7 @@
     }
 /* Active sidebar item styling */
   .sidebar ul li.active {
-    background: rgb(30, 255, 9);
+    background: rgb(9, 239, 255);
     color: #111;
   }
   .sidebar ul li.active i {
@@ -113,7 +113,7 @@
   }
   /* Prevent hover from overriding active item */
   .sidebar ul li.active:hover {
-    background: rgb(30, 255, 9);
+    background: rgb(9, 218, 255);
     color: #111;
   }
   .sidebar ul li.active:hover i {

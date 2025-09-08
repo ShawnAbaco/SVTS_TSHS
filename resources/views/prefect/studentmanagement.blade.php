@@ -22,18 +22,16 @@
       color: #111;
     }
 
-    /* Sidebar */
     .sidebar {
-      width: 220px;
-      background: linear-gradient(180deg, #111, #222);
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-      overflow-y: auto;
-    }
+    width: 220px;
+    background:rgb(0, 0, 0); 
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    padding: 25px 15px;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+}
     .sidebar h2 {
       margin-bottom: 30px;
       text-align: center;
@@ -61,14 +59,14 @@
       min-width: 20px;
     }
     .sidebar ul li:hover {
-      background: rgb(0, 247, 58);
+      background: rgb(0, 221, 255);
       color: #111;
     }
     .sidebar ul li:hover i {
       color: #111;
     }
     .sidebar ul li.active {
-      background: rgb(11, 255, 68);
+      background: rgb(11, 222, 255);
       color: #111;
     }
     .sidebar ul li.active i {
@@ -358,57 +356,71 @@
     </div>
   </div>
 
-  <script>
-    // Dropdown functionality
-    const dropdowns = document.querySelectorAll('.dropdown-btn');
-    dropdowns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('active');
-        const container = btn.nextElementSibling;
-        container.style.display = container.style.display === 'block' ? 'none' : 'block';
+ <script>
+  // Dropdown functionality: only one open at a time
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
+
+      // Close other dropdowns
+      dropdowns.forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
+        }
       });
+
+      // Toggle current dropdown
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
+  });
 
-    // Logout
-    function logout() { alert("Logging out..."); }
+  // Logout
+  function logout() { alert("Logging out..."); }
 
-    // Modal functions
-    function showFullInfo(studentId) {
-      const row = Array.from(document.querySelectorAll('#studentTable tbody tr'))
-        .find(tr => tr.children[0].innerText == studentId).children;
+  // Modal functions
+  function showFullInfo(studentId) {
+    const row = Array.from(document.querySelectorAll('#studentTable tbody tr'))
+      .find(tr => tr.children[0].innerText == studentId).children;
 
-      document.getElementById('infoModalTitle').textContent = `Info: ${row[1].innerText}`;
-      document.getElementById('infoModalBody').innerHTML = `
-        <p><strong>Grade Level:</strong> ${row[2].innerText}</p>
-        <p><strong>Section:</strong> ${row[3].innerText}</p>
-      `;
-      document.getElementById('infoModal').classList.add('show-modal');
-    }
+    document.getElementById('infoModalTitle').textContent = `Info: ${row[1].innerText}`;
+    document.getElementById('infoModalBody').innerHTML = `
+      <p><strong>Grade Level:</strong> ${row[2].innerText}</p>
+      <p><strong>Section:</strong> ${row[3].innerText}</p>
+    `;
+    document.getElementById('infoModal').classList.add('show-modal');
+  }
 
-    function closeInfoModal() {
-      document.getElementById('infoModal').classList.remove('show-modal');
-    }
+  function closeInfoModal() {
+    document.getElementById('infoModal').classList.remove('show-modal');
+  }
 
-    // Delete confirmation
-    function confirmDelete() {
-      return confirm("Are you sure you want to delete this student?");
-    }
+  // Delete confirmation
+  function confirmDelete() {
+    return confirm("Are you sure you want to delete this student?");
+  }
 
-    // Search and filter
-    const searchInput = document.getElementById('searchInput');
-    const sectionFilter = document.getElementById('sectionFilter');
-    function filterTable() {
-      const query = searchInput.value.toLowerCase();
-      const section = sectionFilter.value;
-      document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-        const name = row.children[1].innerText.toLowerCase();
-        const sec = row.children[3].innerText;
-        row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
-      });
-    }
-    searchInput.addEventListener('input', filterTable);
-    sectionFilter.addEventListener('change', filterTable);
-  </script>
+  // Search and filter
+  const searchInput = document.getElementById('searchInput');
+  const sectionFilter = document.getElementById('sectionFilter');
+
+  function filterTable() {
+    const query = searchInput.value.toLowerCase();
+    const section = sectionFilter.value;
+    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+      const name = row.children[1].innerText.toLowerCase();
+      const sec = row.children[3].innerText;
+      row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
+    });
+  }
+
+  searchInput.addEventListener('input', filterTable);
+  sectionFilter.addEventListener('change', filterTable);
+</script>
+
 
 </body>
 </html>

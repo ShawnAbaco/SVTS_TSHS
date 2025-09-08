@@ -136,16 +136,32 @@
 </div>
 
 <script>
-    
-  // Dropdown functionality
-    const dropdowns = document.querySelectorAll('.dropdown-btn');
-    dropdowns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('active');
-        const container = btn.nextElementSibling;
-        container.style.display = container.style.display === 'block' ? 'none' : 'block';
+   // Dropdown functionality with sidebar scroll and only one open at a time
+  const sidebar = document.querySelector('.sidebar');
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
+
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
+
+      // Close other dropdowns
+      dropdowns.forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
+        }
       });
+
+      // Toggle current dropdown
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
+
+      // Sidebar scrollable when at least 1 dropdown is open
+      const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
+      sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
     });
+  });
 
 
 function openModal() { document.getElementById("createAdviserModal").style.display = "flex"; }

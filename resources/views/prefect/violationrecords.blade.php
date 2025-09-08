@@ -6,27 +6,133 @@
 <title>Violation Records</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Roboto', Arial, sans-serif; background-color: #f4f6f9; color: #333; line-height: 1.6; }
-a { text-decoration: none; color: inherit; }
+ /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      transition: all 0.2s ease-in-out;
+    }
 
-/* Sidebar Styles */
-.sidebar {
-    width: 250px;
-    background: linear-gradient(135deg,rgb(7, 184, 228),rgb(13, 141, 205));
-    color: #000;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
-    padding: 10px;
+    body {
+      display: flex;
+      background: #f9f9f9;
+      color: #111;
+    }
+
+ /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background:rgb(0, 0, 0); 
+    color: #fff;
+    height: 100vh;
     position: fixed;
-    height: 100%;
-    overflow-y: auto;
-    font-weight: bold;
+    padding: 25px 15px;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
 }
-.sidebar p { text-align: center; color: #000; margin-bottom: 20px; font-size: 18px; font-weight: bold; }
-.sidebar ul { list-style: none; padding: 0; }
-.sidebar ul li { margin-bottom: 8px; }
-.sidebar ul li a, .sidebar ul li { display: block; padding: 10px 15px; font-size: 16px; border-radius: 6px; color: #000; transition: background 0.3s ease; font-weight: bold; }
-.sidebar ul li:hover, .sidebar ul li.active { background: rgb(246, 246, 246); }
+
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 20px;
+      letter-spacing: 1px;
+      color:rgb(255, 255, 255);
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      padding: 12px 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #fff;
+      transition: 0.3s;
+      position: relative;
+    }
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+    }
+    .sidebar ul li:hover {
+      background:rgb(0, 247, 239);
+      color: #111;
+    }
+    .sidebar ul li:hover i {
+      color: #111;
+    }
+    .sidebar ul li.active {
+      background:rgb(11, 255, 235);
+      color: #111;
+    }
+    .sidebar ul li.active i {
+      color: #111;
+    }
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+    .section-title {
+      margin: 15px 10px 5px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+    /* Dropdown */
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 20px;
+    }
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .dropdown-container li:hover {
+      background:rgb(5, 238, 255);
+      color: #111;
+    }
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Scrollbar */
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background:rgb(255, 255, 255);
+      border-radius: 3px;
+    }
+/* Active sidebar item styling */
+  .sidebar ul li.active {
+    background: rgb(9, 239, 255);
+    color: #111;
+  }
+  .sidebar ul li.active i {
+    color: #111;
+  }
+  /* Prevent hover from overriding active item */
+  .sidebar ul li.active:hover {
+    background: rgb(9, 218, 255);
+    color: #111;
+  }
+  .sidebar ul li.active:hover i {
+    color: #111;
+  }
 
 .main-content { margin-left: 260px; padding: 20px; }
 .crud-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
@@ -73,25 +179,35 @@ thead { background-color: #343a40; color: white; }
 <body>
 
 <!-- Sidebar -->
-<div class="sidebar">
-    <p>PREFECT DASHBOARD</p>
+  <div class="sidebar">
+    <h2>PREFECT DASHBOARD</h2>
     <ul>
-        <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-        <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List </a></li>
-        <li><a href="{{ route('parent.list') }}"><i class="fas fa-users"></i> Parent List </a></li>
-        <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-        <li><a href="{{ route('violation.records') }}" class="active"><i class="fas fa-gavel"></i> Violation Record </a></li>
-        <li><a href="{{ route('violation.appointments') }}"><i class="fas fa-bell"></i> Violation Appointments </a></li>
-        <li><a href="{{ route('violation.anecdotals') }}"><i class="fas fa-chart-line"></i> Violation Anecdotal </a></li>
-        <li><a href="{{ route('people.complaints') }}"><i class="fas fa-users"></i> Complaints</a></li>
-        <li><a href="{{ route('complaints.appointments') }}"><i class="fas fa-cogs"></i> Complaints Appointments</a></li>
-        <li><a href="{{ route('complaints.anecdotals') }}"><i class="fas fa-book"></i> Complaints Anecdotal</a></li>
-        <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense&Sanctions </a></li>
-        <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports </a></li>
-        <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-    </ul>
-</div>
+      <div class="section-title">Main</div>
 
+      <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+      <li ><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
+      <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
+
+      <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li class="active"><a href="{{ route('violation.records') }}">Violation Record</a></li>
+        <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
+        <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+      </ul>
+
+      <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
+        <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
+        <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
+      </ul>
+
+      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+      <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+    </ul>
+  </div>
 <!-- Main Content -->
 <div class="main-content">
     <div class="crud-container">
@@ -156,37 +272,35 @@ thead { background-color: #343a40; color: white; }
 </div>
 
 <script>
-function showInfo(student, parent, number, adviser) {
-    document.getElementById('modalStudent').textContent = student;
-    document.getElementById('modalParent').textContent = parent;
-    document.getElementById('modalNumber').textContent = number;
-    document.getElementById('modalAdviser').textContent = adviser;
-    document.getElementById('infoModal').classList.add('show');
-}
+ // Dropdown functionality with sidebar scroll and only one open at a time
+  const sidebar = document.querySelector('.sidebar');
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
 
-function logout() {
-    fetch('/logout', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } })
-    .then(() => window.location.href = '/prefect/login')
-    .catch(err => console.error('Logout failed:', err));
-}
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
 
-// Close modal on outside click
-window.onclick = function(event) {
-    if(event.target == document.getElementById('infoModal')) {
-        document.getElementById('infoModal').classList.remove('show');
-    }
-}
+      // Close other dropdowns
+      dropdowns.forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
+        }
+      });
 
-// Search Functionality
-document.getElementById('searchInput').addEventListener('keyup', function() {
-    let filter = this.value.toLowerCase();
-    let rows = document.querySelectorAll("#violationTable tbody tr");
-    rows.forEach(row => {
-        let studentName = row.cells[1].textContent.toLowerCase();
-        row.style.display = studentName.includes(filter) ? "" : "none";
+      // Toggle current dropdown
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
+
+      // Sidebar scrollable when at least 1 dropdown is open
+      const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
+      sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
     });
-});
+  });
 </script>
+
+
 
 </body>
 </html>

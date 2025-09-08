@@ -24,15 +24,15 @@
 
     /* Sidebar */
     .sidebar {
-      width: 220px;
-      background: linear-gradient(180deg, #111, #222);
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-      overflow-y: auto;
+    width: 220px;
+    background:rgb(0, 0, 0); 
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    padding: 25px 15px;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+
     }
     .sidebar h2 {
       margin-bottom: 30px;
@@ -61,7 +61,7 @@
       min-width: 20px;
     }
     .sidebar ul li:hover {
-      background:rgb(30, 255, 9);
+      background:rgb(9, 206, 255);
       color: #111;
     }
     .sidebar ul li:hover i {
@@ -80,7 +80,7 @@
     }
     /* Active sidebar item styling */
   .sidebar ul li.active {
-    background: rgb(30, 255, 9);
+    background: rgb(9, 214, 255);
     color: #111;
   }
   .sidebar ul li.active i {
@@ -88,7 +88,7 @@
   }
   /* Prevent hover from overriding active item */
   .sidebar ul li.active:hover {
-    background: rgb(30, 255, 9);
+    background: rgb(0, 208, 255);
     color: #111;
   }
   .sidebar ul li.active:hover i {
@@ -287,30 +287,43 @@
   </div>
 
   <script>
-    // Dropdown functionality
-    const dropdowns = document.querySelectorAll('.dropdown-btn');
-    dropdowns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.classList.toggle('active');
-            const container = btn.nextElementSibling;
-            container.style.display = container.style.display === "block" ? "none" : "block";
-        });
+  // Dropdown functionality: only one open at a time
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
+
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
+
+      // Close other dropdowns
+      dropdowns.forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
+        }
+      });
+
+      // Toggle current dropdown
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
+  });
 
-    function showInfo(student, adviser, parent) {
-      document.getElementById("studentName").innerHTML = student;
-      document.getElementById("adviserName").innerHTML = adviser;
-      document.getElementById("parentName").textContent = parent;
-      document.getElementById("infoModal").classList.add("show");
-    }
+  function showInfo(student, adviser, parent) {
+    document.getElementById("studentName").innerHTML = student;
+    document.getElementById("adviserName").innerHTML = adviser;
+    document.getElementById("parentName").textContent = parent;
+    document.getElementById("infoModal").classList.add("show");
+  }
 
-    function logout() {
-      fetch('/logout', {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-      }).then(() => window.location.href='/prefect/login')
-        .catch(error => console.error('Logout failed:', error));
-    }
-  </script>
+  function logout() {
+    fetch('/logout', {
+      method: 'POST',
+      headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+    }).then(() => window.location.href='/prefect/login')
+      .catch(error => console.error('Logout failed:', error));
+  }
+</script>
+
 </body>
 </html>

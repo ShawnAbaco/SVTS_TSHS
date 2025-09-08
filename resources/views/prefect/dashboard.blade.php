@@ -23,18 +23,17 @@
       color: #111;
     }
 
-    /* Sidebar */
-    .sidebar {
-      width: 220px;
-      background: linear-gradient(45deg, #800000, #2E2E2E);
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-      overflow-y: auto;
-    }
+   .sidebar {
+    width: 220px;
+    background:rgb(0, 0, 0); 
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    padding: 25px 15px;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+}
+
     .sidebar h2 {
       margin-bottom: 30px;
       text-align: center;
@@ -62,14 +61,14 @@
       min-width: 20px;
     }
     .sidebar ul li:hover {
-      background:rgb(0, 247, 58);
+      background:rgb(0, 247, 239);
       color: #111;
     }
     .sidebar ul li:hover i {
       color: #111;
     }
     .sidebar ul li.active {
-      background:rgb(11, 255, 68);
+      background:rgb(11, 255, 235);
       color: #111;
     }
     .sidebar ul li.active i {
@@ -197,9 +196,9 @@
       font-size: 20px;
       color: #000;
     }
-    .card:nth-child(1) { background-color: #cce5ff; } /* Blue */
-    .card:nth-child(2) { background-color: #f8d7da; } /* Red */
-    .card:nth-child(3) { background-color: #d4edda; } /* Green */
+    .card:nth-child(1) { background-color:rgb(0, 145, 255); } /* Blue */
+    .card:nth-child(2) { background-color:rgb(246, 3, 3); } /* Red */
+    .card:nth-child(3) { background-color:rgb(0, 255, 60); } /* Green */
 
     /* Grid (Chart + Table) */
     .grid {
@@ -257,9 +256,9 @@
       color: #fff;
       font-weight: bold;
     }
-    .pending { background-color: #fd7e14; }   /* Orange */
-    .resolved { background-color: #28a745; }  /* Green */
-    .escalated { background-color: #dc3545; } /* Red */
+    .pending { background-color:rgb(0, 0, 0); }   /* Orange */
+    .resolved { background-color:rgb(1, 255, 60); }  /* Green */
+    .escalated { background-color:rgb(255, 0, 25); } /* Red */
 
     /* Appointments */
     .appointments {
@@ -296,7 +295,7 @@
       border-radius: 10px;
       font-weight: bold;
       color: #fff;
-      background-color: #fd7e14;
+      background-color:rgb(0, 0, 0);
     }
 
     /* Chart */
@@ -304,6 +303,24 @@
       max-width: 220px;
       max-height: 220px;
       margin: 0 auto;
+    }
+
+    /* Welcome Modal */
+    #welcomeModal {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color:rgb(14, 14, 14);
+      color: #fff;
+      padding: 20px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      z-index: 9999;
+      display: none;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
   </style>
 </head>
@@ -455,63 +472,93 @@
     </div>
   </div>
 
-  <!-- JS -->
-  <script>
-    // Chart.js
-    const ctx = document.getElementById('violationChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Attendance', 'Behavior', 'Dress Code', 'Other'],
-        datasets: [{
-          data: [40, 25, 20, 15],
-          backgroundColor: ['#ff4d4d', '#4d79ff', '#28a745', '#ffc107'],
-          borderWidth: 1
-        }]
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
+  <!-- Welcome Modal -->
+  <div id="welcomeModal">
+    Welcome back, Admin!
+  </div>
 
-    // Dropdown functionality
-    const dropdowns = document.querySelectorAll('.dropdown-btn');
-    dropdowns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('active');
-        const container = btn.nextElementSibling;
-        if (container.style.display === "block") {
-          container.style.display = "none";
-        } else {
-          container.style.display = "block";
+  <!-- JS -->
+ <script>
+  // Chart.js
+  const ctx = document.getElementById('violationChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Attendance', 'Behavior', 'Dress Code', 'Other'],
+      datasets: [{
+        data: [40, 25, 20, 15],
+        backgroundColor: ['#00ff00', '#ff0000', '#0000ff', '#ffff00'],
+        borderWidth: 1
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Dropdown functionality: only one open at a time
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
+
+      // Close other dropdowns
+      dropdowns.forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
         }
       });
+
+      // Toggle current dropdown
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
+  });
 
-    // Interactivity functions
-    function menuClick(name) { alert("Clicked: " + name); }
-    function rowClick(student) { alert("Opening details for " + student); }
-    function logout() { alert("Logging out..."); }
+  // Interactivity functions
+  function menuClick(name) { alert("Clicked: " + name); }
+  function rowClick(student) { alert("Opening details for " + student); }
 
-    // Change profile image
-    function changeProfileImage() {
-      document.getElementById('imageInput').click();
+  // Logout function with confirmation
+  function logout() {
+    const confirmLogout = confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      window.location.href = "{{ route('prefect.login') }}"; // Adjust to your login page route
     }
+  }
 
-    document.getElementById('imageInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if(file){
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('profileImage').src = e.target.result;
-        }
-        reader.readAsDataURL(file);
+  // Change profile image
+  function changeProfileImage() {
+    document.getElementById('imageInput').click();
+  }
+  document.getElementById('imageInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('profileImage').src = e.target.result;
       }
-    });
-
-    // Change profile name
-    function changeProfileName() {
-      const newName = prompt("Enter new name:");
-      if(newName) document.querySelector('.user-info span').innerText = newName;
+      reader.readAsDataURL(file);
     }
-  </script>
+  });
+
+  // Change profile name
+  function changeProfileName() {
+    const newName = prompt("Enter new name:");
+    if(newName) document.querySelector('.user-info span').innerText = newName;
+  }
+
+  // Show welcome modal on login success
+  window.addEventListener('DOMContentLoaded', () => {
+    const welcomeModal = document.getElementById('welcomeModal');
+    if(welcomeModal){
+      welcomeModal.style.display = 'block';
+      setTimeout(() => {
+        welcomeModal.style.display = 'none';
+      }, 3000); // hide after 3 seconds
+    }
+  });
+</script>
+
 </body>
 </html>

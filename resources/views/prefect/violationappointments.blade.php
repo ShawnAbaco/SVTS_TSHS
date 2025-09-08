@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -9,25 +9,36 @@
 </head>
 <body>
 
- <!-- Sidebar -->
-    <div class="sidebar">
-        <p>PREFECT DASHBOARD</p>
-        <ul>
-            <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-            <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List </a></li>
-            <li><a href="{{ route('parent.lists') }}"><i class="fas fa-user-graduate"></i> Parent List </a></li>
-            <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-            <li><a href="{{ route('violation.records') }}"><i class="fas fa-gavel"></i> Violation Record </a></li>
-            <li><a href="{{ route('violation.appointments') }}"><i class="fas fa-bell"></i> Violation Appointments </a></li>
-            <li><a href="{{ route('violation.anecdotals') }}"><i class="fas fa-chart-line"></i> Violation Anecdotal </a></li>
-            <li><a href="{{ route('people.complaints') }}"><i class="fas fa-users"></i> Complaints</a></li>
-            <li><a href="{{ route('complaints.appointments') }}"><i class="fas fa-cogs"></i> Complaints Appointments</a></li>
-            <li><a href="{{ route('complaints.anecdotals') }}"><i class="fas fa-book"></i> Complaints Anecdotal</a></li>
-            <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense&Sanctions </a></li>
-             <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports </a></li>
-            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-        </ul>
-    </div>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2>PREFECT DASHBOARD</h2>
+    <ul>
+      <div class="section-title">Main</div>
+
+      <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+      <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
+      <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
+
+      <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
+        <li class="active"><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
+        <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+      </ul>
+
+      <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
+        <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
+        <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
+      </ul>
+
+      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+      <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+    </ul>
+  </div>
 
 <div class="container">
   <h1>VIOLATION APPOINTMENTS</h1>
@@ -117,8 +128,40 @@
 </div>
 
 <script>
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+ // Dropdown functionality with sidebar scroll and only one open at a time
+  const sidebar = document.querySelector('.sidebar');
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
+
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
+
+      // Close other dropdowns
+      dropdowns.forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
+        }
+      });
+
+      // Toggle current dropdown
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
+
+      // Sidebar scrollable when at least 1 dropdown is open
+      const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
+      sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
+    });
+  });
+
+function openModal(id) { 
+  document.getElementById(id).style.display = 'flex'; 
+}
+
+function closeModal(id) { 
+  document.getElementById(id).style.display = 'none'; 
+}
 
 function logout() {
   fetch('/logout', {
@@ -137,14 +180,11 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
   rows.forEach(row => {
     let student = row.cells[1].textContent.toLowerCase();
     let parent = row.cells[2].textContent.toLowerCase();
-    if (student.includes(filter) || parent.includes(filter)) {
-      row.style.display = '';
-    } else {
-      row.style.display = 'none';
-    }
+    row.style.display = (student.includes(filter) || parent.includes(filter)) ? '' : 'none';
   });
 });
 </script>
+
 
 </body>
 </html>

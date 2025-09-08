@@ -1,141 +1,230 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Prefect Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background-image: url('/images/lugo.png');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Prefect Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: inherit;
-            filter: blur(3px);
-            z-index: -1;
-        }
+    body {
+      background-image: url('/images/lugo.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        @media screen and (max-width: 768px) {
-            body.android .flex-grow {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: inherit;
+      filter: blur(3px);
+      z-index: -1;
+    }
 
-            body.android .flex-grow > div {
-                transform: scale(0.85); /* Scale down the container */
-                max-width: 90%; /* Ensure the width does not exceed the screen size */
-            }
+    .page-header { background: white; color: #111; text-align: center; padding: 15px; font-weight: bold; font-size: 22px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-            body.android .page-footer {
-                display: none; /* Hide footer on Android devices */
-            }
+    .adviser-login-left, .adviser-login-right {
+      position: fixed; top: 15px; padding: 8px 16px; background: white; color: #111; font-weight: bold; border-radius: 6px;
+      text-decoration: none; transition: background 0.3s ease; border: 1px solid #ccc; z-index: 10;
+    }
+    .adviser-login-left { left: 15px; }
+    .adviser-login-right { right: 15px; display: none; }
+    .adviser-login-left:hover, .adviser-login-right:hover { background: #f0f0f0; }
 
-            body.android h1.text-xl {
-                text-align: center; /* Center text for Android devices */
-            }
-        }
+    .container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
 
-        .hide {
-            display: none;
-        }
-    </style>
+    .login-box { display: flex; flex-direction: column; max-width: 350px; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 18px rgba(0,0,0,0.2); background: white; }
+
+    .logo-section { text-align: center; padding: 0; }
+    .logo-section img { width: 220px; height: auto; object-fit: contain; }
+    .logo-section p { font-size: 13px; margin-top: 8px; font-weight: 600; color: #111; }
+
+    .form-section { padding: 20px; background: white; color: #111; }
+    .form-section h1 { font-size: 18px; margin-bottom: 15px; text-align: center; }
+    .form-group { margin-bottom: 18px; position: relative; }
+    .form-section label { font-size: 13px; display: block; margin-bottom: 6px; }
+
+    .input-icon-wrapper { position: relative; }
+    .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: #999; }
+    .input-icon-wrapper i.fa-envelope, .input-icon-wrapper i.fa-lock { left: 10px; }
+
+    .input-icon-wrapper input { width: 100%; padding: 10px 12px; padding-left: 35px; padding-right: 35px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; color: #111; background: #fff; }
+    .input-icon-wrapper input:focus { border-color: #999; outline: none; }
+    .toggle-password { right: 10px; cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%); color: #999; }
+
+    .warning { font-size: 12px; color: #B91C1C; margin-top: 5px; display: none; }
+
+    .form-section button { width: 100%; padding: 10px; background: white; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold; color: #111; cursor: pointer; transition: background 0.3s ease; }
+    .form-section button:hover { background: #f0f0f0; }
+
+    .page-footer { background: white; color: #111; text-align: center; padding: 10px; font-size: 13px; font-weight: bold; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+
+    /* Modals */
+    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
+    .modal-content { background: white; padding: 20px; border-radius: 8px; max-width: 320px; width: 90%; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+    .modal-content h2 { color: #B91C1C; margin-bottom: 10px; font-size: 16px; }
+    .modal-content p { color: #333; font-size: 13px; margin-bottom: 15px; }
+    .modal-content button { background: white; border: 1px solid #ccc; color: #111; padding: 6px 14px; border-radius: 5px; font-size: 13px; cursor: pointer; }
+    .modal-content button:hover { background: #f0f0f0; }
+  </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body>
 
-    <!-- Page Header -->
-    <div class="text-center py-4 bg-blue-600 text-white">
-        <h1 class="text-2xl font-bold">TAGOLOAN SENIOR HIGH SCHOOL</h1>
-    </div>
+  <div class="page-header">TAGOLOAN SENIOR HIGH SCHOOL</div>
 
-    <!-- Adviser Login Button -->
-    <a href="/adviser/login" 
-       class="fixed top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-600 transition duration-300 adviser-login-left">
-        Adviser Login
-    </a>
+  <a href="/adviser/login" class="adviser-login-left">Adviser Login</a>
+  <a href="/adviser/login" class="adviser-login-right">Adviser Login</a>
 
-    <!-- Main Content -->
-    <div class="flex items-center justify-center flex-grow px-4 md:px-0">
-        <div class="relative shadow-2xl border border-gray-300 rounded-lg flex flex-col md:flex-row w-full max-w-md md:max-w-lg bg-gray-400">
-            <!-- Adviser Login Button for Form -->
-            <a href="/adviser/login" 
-               class="absolute top-4 right-4 bg-black text-white px-2 py-1 rounded-md text-xs sm:text-sm font-semibold hover:bg-gray-800 transition duration-300 adviser-login-right hidden">
-                Adviser Login
-            </a>
-
-            <!-- Logo Section -->
-            <div class="bg-blue-600 flex flex-col items-center justify-center md:w-1/2 rounded-t-lg md:rounded-l-lg text-white p-4">
-                <img src="/images/Logo.png" alt="TSHS Logo" class="w-32 h-32 md:w-48 md:h-48 object-contain">
-                <p class="text-sm font-semibold text-center mt-4 px-4">
-                    DEVELOPMENT OF STUDENT VIOLATION TRACKING SYSTEM
-                </p>
+  <div class="container">
+    <div class="login-box">
+      <div class="logo-section">
+        <img src="/images/Logo.png" alt="TSHS Logo">
+        <p>DEVELOPMENT OF STUDENT VIOLATION TRACKING SYSTEM</p>
+      </div>
+      <div class="form-section">
+        <h1>Prefect Login</h1>
+        <form action="{{ route('prefect.login') }}" method="POST" id="loginForm">
+          @csrf
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-icon-wrapper">
+              <i class="fa fa-envelope"></i>
+              <input type="email" id="email" name="email" placeholder="Enter your email">
             </div>
+            <div class="warning" id="emailWarning">Please enter a valid email.</div>
+          </div>
 
-            <!-- Login Form -->
-            <div class="p-6 md:p-8 w-full md:w-1/2 bg-black-600 text-white rounded-b-lg md:rounded-r-lg">
-                <h1 class="text-xl font-bold mb-4">Prefect Login</h1>
-                <form action="/prefect/login" method="POST" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label for="email" class="block text-sm font-medium">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" 
-                               class="w-full mt-1 px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-green-900" 
-                               required>
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" 
-                               class="w-full mt-1 px-4 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-green-900" 
-                               required>
-                    </div>
-                    <div class="flex items-center">
-                        <input type="checkbox" id="show-password" class="mr-2">
-                        <label for="show-password" class="text-sm">Show Password</label>
-                    </div>
-                    @if ($errors->any())
-                        <p class="text-sm text-red-500 mt-2">{{ $errors->first() }}</p>
-                    @endif
-                    <button type="submit" 
-                            class="w-full bg-red-500 text-white py-2 rounded-md font-semibold hover:bg-red-600 transition duration-300">
-                        Login
-                    </button>
-                </form>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-icon-wrapper">
+              <i class="fa fa-lock"></i>
+              <input type="password" id="password" name="password" placeholder="Enter your password">
+              <i class="fa fa-eye toggle-password" onclick="togglePassword()"></i>
             </div>
-        </div>
-    </div>
+            <div class="warning" id="passwordWarning">Password is required.</div>
+          </div>
 
-    <!-- Page Footer -->
-    <div class="text-center py-4 bg-blue-600 text-white page-footer">
-        <p class="text-lg font-semibold">&copy; 2025 DEVELOPMENT OF STUDENT VIOLATION TRACKING SYSTEM</p>
+          <button type="submit" id="loginBtn">Login</button>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Detect Android devices and add a class to the body
-        if (/android/i.test(navigator.userAgent)) {
-            document.body.classList.add('android');
-            // Hide the left-side adviser login button on Android devices
-            document.querySelector('.adviser-login-left').style.display = 'none';
-            // Show the right-side adviser login button for Android
-            document.querySelector('.adviser-login-right').classList.remove('hidden');
+  <div class="page-footer">&copy; 2025 DEVELOPMENT OF STUDENT VIOLATION TRACKING SYSTEM</div>
+
+  <!-- Invalid credentials modal -->
+  <div id="errorModal" class="modal">
+    <div class="modal-content">
+      <h2>Error</h2>
+      <p id="errorMessage">Invalid credentials. Please try again.</p>
+      <button onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <!-- Too many attempts modal -->
+  <div id="attemptModal" class="modal">
+    <div class="modal-content">
+      <h2>Too Many Attempts</h2>
+      <p>Please wait <span id="countdown">10</span> seconds before trying again.</p>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailWarning = document.getElementById('emailWarning');
+    const passwordWarning = document.getElementById('passwordWarning');
+    const errorModal = document.getElementById('errorModal');
+    const attemptModal = document.getElementById('attemptModal');
+    const countdownSpan = document.getElementById('countdown');
+
+    let attemptCount = 0;
+    const maxAttempts = 3;
+    const lockoutTime = 10; // seconds
+
+    loginForm.addEventListener('submit', function(e) {
+      // Client-side validation
+      let valid = true;
+      if (!emailInput.value || !/\S+@\S+\.\S+/.test(emailInput.value)) {
+        emailWarning.style.display = 'block';
+        emailInput.style.borderColor = '#B91C1C';
+        valid = false;
+      } else {
+        emailWarning.style.display = 'none';
+        emailInput.style.borderColor = '#ccc';
+      }
+      if (!passwordInput.value) {
+        passwordWarning.style.display = 'block';
+        passwordInput.style.borderColor = '#B91C1C';
+        valid = false;
+      } else {
+        passwordWarning.style.display = 'none';
+        passwordInput.style.borderColor = '#ccc';
+      }
+      if (!valid) { e.preventDefault(); return; }
+
+      // Only increment attempts if Laravel returns an error
+      @if ($errors->any())
+        e.preventDefault(); // prevent default form submission
+        attemptCount++;
+
+        if(attemptCount >= maxAttempts) {
+          loginBtn.disabled = true;
+          attemptModal.style.display = 'flex';
+          let timeLeft = lockoutTime;
+          countdownSpan.innerText = timeLeft;
+          loginBtn.innerText = `Wait (${timeLeft}s)`;
+
+          const countdownInterval = setInterval(() => {
+            timeLeft--;
+            countdownSpan.innerText = timeLeft;
+            loginBtn.innerText = `Wait (${timeLeft}s)`;
+            if(timeLeft <= 0){
+              clearInterval(countdownInterval);
+              attemptModal.style.display = 'none';
+              loginBtn.disabled = false;
+              loginBtn.innerText = 'Login';
+              attemptCount = 0;
+            }
+          }, 1000);
         }
 
-        // Toggle password visibility
-        document.getElementById('show-password').addEventListener('change', function () {
-            const passwordField = document.getElementById('password');
-            passwordField.type = this.checked ? 'text' : 'password';
-        });
-    </script>
+        // Show invalid credentials modal
+        const errorMsg = "{{ $errors->first() }}";
+        document.getElementById('errorMessage').innerText = errorMsg.includes('email') || errorMsg.includes('password') ? "Invalid credentials. Please try again." : errorMsg;
+        errorModal.style.display = 'flex';
+      @endif
+    });
+
+    function togglePassword() {
+      const eyeIcon = document.querySelector('.toggle-password');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+
+    function closeModal() { errorModal.style.display = 'none'; }
+
+    if (/android/i.test(navigator.userAgent)) {
+      document.querySelector('.adviser-login-left').style.display = 'none';
+      document.querySelector('.adviser-login-right').style.display = 'block';
+    }
+  </script>
 </body>
 </html>

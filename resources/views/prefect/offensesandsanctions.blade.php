@@ -16,25 +16,35 @@
   </style>
 </head>
 <body>
-   <!-- Sidebar -->
-   <div class="sidebar">
-        <p>PREFECT DASHBOARD</p>
-        <ul>
-           <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-           <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List </a></li>
-           <li><a href="{{ route('parent.lists') }}"><i class="fas fa-user-graduate"></i> Parent List </a></li>
-           <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-           <li><a href="{{ route('violation.records') }}"><i class="fas fa-gavel"></i> Violation Record </a></li>
-           <li><a href="{{ route('violation.appointments') }}"><i class="fas fa-bell"></i> Violation Appointments </a></li>
-           <li><a href="{{ route('violation.anecdotals') }}"><i class="fas fa-chart-line"></i> Violation Anecdotal </a></li>
-           <li><a href="{{ route('people.complaints') }}"><i class="fas fa-users"></i> Complaints</a></li>
-           <li><a href="{{ route('complaints.appointments') }}"><i class="fas fa-cogs"></i> Complaints Appointments</a></li>
-           <li><a href="{{ route('complaints.anecdotals') }}"><i class="fas fa-book"></i> Complaints Anecdotal</a></li>
-           <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense&Sanctions </a></li>
-           <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports </a></li>
-           <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-        </ul>
-   </div>
+  <!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <h2>PREFECT DASHBOARD</h2>
+  <ul>
+    <div class="section-title">Main</div>
+    <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+    <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+    <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
+    <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
+
+    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+    <ul class="dropdown-container">
+      <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
+      <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
+      <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+    </ul>
+
+    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+    <ul class="dropdown-container">
+      <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
+      <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
+      <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
+    </ul>
+
+    <li class="active"><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+    <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+  </ul>
+</div>
 
   <!-- Main Content -->
   <div class="main-content">
@@ -109,182 +119,194 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script>
-    const openModalBtn = document.getElementById("openModalBtn");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const modal = document.getElementById("violationModal");
-    const tableBody = document.querySelector("#offenseTable tbody");
-    const form = document.getElementById("violationForm");
-    const searchInput = document.getElementById("searchInput");
-    const printBtn = document.getElementById("printBtn");
-    const exportBtn = document.getElementById("exportBtn");
-    let editingRow = null;
+// Dropdown functionality with sidebar scroll and only one open at a time
+  const sidebar = document.querySelector('.sidebar');
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
 
-    // Open modal for Add
-    openModalBtn.addEventListener("click", () => {
-      form.reset();
-      document.getElementById("modalTitle").textContent = "Add Offense & Sanction";
-      document.getElementById("saveBtn").textContent = "Save";
-      modal.classList.add("show");
-      editingRow = null;
-    });
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
 
-    // Close modal
-    closeModalBtn.addEventListener("click", () => modal.classList.remove("show"));
-    window.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
-
-    // Live search
-    searchInput.addEventListener("keyup", () => {
-      const filter = searchInput.value.toLowerCase();
-      document.querySelectorAll("#offenseTable tbody tr").forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(filter) ? "" : "none";
-      });
-    });
-
-    // Edit & Delete (robust against icon clicks)
-    tableBody.addEventListener("click", (e) => {
-      const editBtn = e.target.closest(".edit-btn");
-      const deleteBtn = e.target.closest(".delete-btn");
-
-      if (editBtn) {
-        editingRow = editBtn.closest("tr");
-        const cells = editingRow.querySelectorAll("td");
-        document.getElementById("editId").value = cells[0].textContent.trim();
-        document.getElementById("offenseType").value = cells[1].textContent.trim();
-        document.getElementById("description").value = cells[2].textContent.trim();
-        document.getElementById("consequences").value = cells[3].textContent.trim();
-        document.getElementById("modalTitle").textContent = "Edit Offense & Sanction";
-        document.getElementById("saveBtn").textContent = "Update";
-        modal.classList.add("show");
-      }
-
-      if (deleteBtn) {
-        deleteBtn.closest("tr").remove();
-      }
-    });
-
-    // Save (Add/Update)
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const type = document.getElementById("offenseType").value.trim();
-      const desc = document.getElementById("description").value.trim();
-      const cons = document.getElementById("consequences").value.trim();
-
-      if (!type || !desc || !cons) return;
-
-      if (editingRow) {
-        const cells = editingRow.querySelectorAll("td");
-        cells[1].textContent = type;
-        cells[2].textContent = desc;
-        cells[3].textContent = cons;
-      } else {
-        const id = nextRowId();
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${id}</td>
-          <td>${escapeHtml(type)}</td>
-          <td>${escapeHtml(desc)}</td>
-          <td>${escapeHtml(cons)}</td>
-          <td>
-            <button class="btn btn-warning edit-btn"><i class="fa fa-edit"></i> Edit</button>
-            <button class="btn btn-danger delete-btn"><i class="fa fa-trash"></i> Delete</button>
-          </td>
-        `;
-        tableBody.appendChild(row);
-      }
-
-      modal.classList.remove("show");
-      form.reset();
-      editingRow = null;
-    });
-
-    // Print
-    printBtn.addEventListener("click", () => {
-      const table = document.getElementById("offenseTable").cloneNode(true);
-      // drop Actions column for print
-      table.querySelectorAll("tr").forEach(tr => tr.lastElementChild && tr.lastElementChild.remove());
-
-      const style = `
-        <style>
-          body { font-family: Arial, sans-serif; padding: 16px; }
-          h2 { margin-bottom: 12px; }
-          table { width: 100%; border-collapse: collapse; }
-          th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-          thead th { background: #f1f1f1; }
-        </style>
-      `;
-      const win = window.open("", "", "height=800,width=1000");
-      win.document.write("<html><head><title>Offenses & Sanctions</title>");
-      win.document.write(style);
-      win.document.write("</head><body>");
-      win.document.write("<h2>Offenses & Sanctions</h2>");
-      win.document.body.appendChild(table);
-      win.document.write("</body></html>");
-      win.document.close();
-      win.focus();
-      win.print();
-    });
-
-    // Export CSV (client-side)
-    exportBtn.addEventListener("click", () => {
-      const csv = tableToCSV(document.getElementById("offenseTable"));
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "offenses_sanctions.csv";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
-
-    function tableToCSV(table) {
-      const rows = Array.from(table.querySelectorAll("tr"));
-      return rows.map((row, idx) => {
-        const cells = Array.from(row.querySelectorAll(idx === 0 ? "th" : "td"));
-        // drop last cell (Actions)
-        if (cells.length && cells[cells.length - 1].textContent.trim().match(/^(Actions|Edit|Delete)/i)) {
-          cells.pop();
+      // Close other dropdowns
+      dropdowns.forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
         }
-        return cells.map(c => csvEscape(c.textContent.trim())).join(",");
-      }).join("\n");
-    }
+      });
 
-    function csvEscape(text) {
-      const needsQuote = /[",\n]/.test(text);
-      const escaped = text.replace(/"/g, '""');
-      return needsQuote ? `"${escaped}"` : escaped;
-    }
+      // Toggle current dropdown
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
 
-    function nextRowId() {
-      // take the highest numeric ID in first column + 1 (fallback to length+1)
-      const ids = Array.from(tableBody.querySelectorAll("tr td:first-child"))
-        .map(td => parseInt(td.textContent.trim(), 10))
-        .filter(n => !isNaN(n));
-      const max = ids.length ? Math.max(...ids) : 0;
-      return max + 1;
-    }
+      // Sidebar scrollable when at least 1 dropdown is open
+      const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
+      sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
+    });
+  });
 
-    function escapeHtml(str) {
-      return str
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
+// ✅ Modal, Table, Print, Export, and Edit/Add logic
+const openModalBtn = document.getElementById("openModalBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const modal = document.getElementById("violationModal");
+const tableBody = document.querySelector("#offenseTable tbody");
+const form = document.getElementById("violationForm");
+const searchInput = document.getElementById("searchInput");
+const printBtn = document.getElementById("printBtn");
+const exportBtn = document.getElementById("exportBtn");
+let editingRow = null;
 
-    // Logout
-    function logout() {
-      fetch('/logout', {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-      }).then(() => window.location.href='/prefect/login')
-        .catch(error => console.error('Logout failed:', error));
-    }
-  </script>
+// Open modal for Add
+openModalBtn.addEventListener("click", () => {
+  form.reset();
+  document.getElementById("modalTitle").textContent = "Add Offense & Sanction";
+  document.getElementById("saveBtn").textContent = "Save";
+  modal.classList.add("show");
+  editingRow = null;
+});
+
+// Close modal
+closeModalBtn.addEventListener("click", () => modal.classList.remove("show"));
+window.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+
+// Live search
+searchInput.addEventListener("keyup", () => {
+  const filter = searchInput.value.toLowerCase();
+  document.querySelectorAll("#offenseTable tbody tr").forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(filter) ? "" : "none";
+  });
+});
+
+// Edit & Delete
+tableBody.addEventListener("click", (e) => {
+  const editBtn = e.target.closest(".edit-btn");
+  const deleteBtn = e.target.closest(".delete-btn");
+
+  if (editBtn) {
+    editingRow = editBtn.closest("tr");
+    const cells = editingRow.querySelectorAll("td");
+    document.getElementById("editId").value = cells[0].textContent.trim();
+    document.getElementById("offenseType").value = cells[1].textContent.trim();
+    document.getElementById("description").value = cells[2].textContent.trim();
+    document.getElementById("consequences").value = cells[3].textContent.trim();
+    document.getElementById("modalTitle").textContent = "Edit Offense & Sanction";
+    document.getElementById("saveBtn").textContent = "Update";
+    modal.classList.add("show");
+  }
+
+  if (deleteBtn) {
+    deleteBtn.closest("tr").remove();
+  }
+});
+
+// Save (Add/Update)
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const type = document.getElementById("offenseType").value.trim();
+  const desc = document.getElementById("description").value.trim();
+  const cons = document.getElementById("consequences").value.trim();
+
+  if (!type || !desc || !cons) return;
+
+  if (editingRow) {
+    const cells = editingRow.querySelectorAll("td");
+    cells[1].textContent = type;
+    cells[2].textContent = desc;
+    cells[3].textContent = cons;
+  } else {
+    const id = nextRowId();
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${id}</td>
+      <td>${escapeHtml(type)}</td>
+      <td>${escapeHtml(desc)}</td>
+      <td>${escapeHtml(cons)}</td>
+      <td>
+        <button class="btn btn-warning edit-btn"><i class="fa fa-edit"></i> Edit</button>
+        <button class="btn btn-danger delete-btn"><i class="fa fa-trash"></i> Delete</button>
+      </td>
+    `;
+    tableBody.appendChild(row);
+  }
+
+  modal.classList.remove("show");
+  form.reset();
+  editingRow = null;
+});
+
+// Print
+printBtn.addEventListener("click", () => {
+  const table = document.getElementById("offenseTable").cloneNode(true);
+  table.querySelectorAll("tr").forEach(tr => tr.lastElementChild && tr.lastElementChild.remove());
+  const style = `<style>body{font-family:Arial;padding:16px;}h2{margin-bottom:12px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #000;padding:8px;text-align:left;}thead th{background:#f1f1f1;}</style>`;
+  const win = window.open("", "", "height=800,width=1000");
+  win.document.write("<html><head><title>Offenses & Sanctions</title>");
+  win.document.write(style);
+  win.document.write("</head><body>");
+  win.document.write("<h2>Offenses & Sanctions</h2>");
+  win.document.body.appendChild(table);
+  win.document.write("</body></html>");
+  win.document.close();
+  win.focus();
+  win.print();
+});
+
+// Export CSV
+exportBtn.addEventListener("click", () => {
+  const csv = tableToCSV(document.getElementById("offenseTable"));
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "offenses_sanctions.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+function tableToCSV(table) {
+  const rows = Array.from(table.querySelectorAll("tr"));
+  return rows.map((row, idx) => {
+    const cells = Array.from(row.querySelectorAll(idx === 0 ? "th" : "td"));
+    if (cells.length && cells[cells.length - 1].textContent.trim().match(/^(Actions|Edit|Delete)/i)) cells.pop();
+    return cells.map(c => csvEscape(c.textContent.trim())).join(",");
+  }).join("\n");
+}
+
+function csvEscape(text) {
+  const needsQuote = /[",\n]/.test(text);
+  const escaped = text.replace(/"/g, '""');
+  return needsQuote ? `"${escaped}"` : escaped;
+}
+
+function nextRowId() {
+  const ids = Array.from(tableBody.querySelectorAll("tr td:first-child"))
+    .map(td => parseInt(td.textContent.trim(), 10))
+    .filter(n => !isNaN(n));
+  return ids.length ? Math.max(...ids) + 1 : 1;
+}
+
+function escapeHtml(str) {
+  return str.replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+}
+
+// ✅ Logout
+function logout() {
+  fetch('/logout', {
+    method: 'POST',
+    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+  }).then(() => window.location.href='/prefect/login')
+    .catch(error => console.error('Logout failed:', error));
+}
+</script>
+
 </body>
 </html>
