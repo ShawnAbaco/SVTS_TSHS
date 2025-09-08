@@ -42,6 +42,7 @@
                 <h1 class="text-lg md:text-xl font-bold mb-4 md:mb-6">Adviser Login</h1>
                 <form action="/adviser/login" method="POST" class="space-y-4">
                     @csrf
+                    
                     <div>
                         <label for="email" class="block text-sm font-medium">Email</label>
                         <input type="email" id="email" name="email" placeholder="Enter your email" 

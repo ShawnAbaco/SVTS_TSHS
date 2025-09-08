@@ -148,24 +148,40 @@
       </tbody>
     </table>
   </div>
+<!-- ADD / EDIT MODAL -->
+<div class="modal" id="addModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addModal')">&times;</span>
+    <h2 id="modalTitle">Add Parent/Guardian</h2>
+    <form id="addParentForm" method="POST" action="{{ route('parents.store') }}">
+      @csrf
+      <input type="hidden" name="parent_id" id="parent_id" value="">
 
-  <!-- ADD / EDIT MODAL -->
-  <div class="modal" id="addModal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('addModal')">&times;</span>
-      <h2 id="modalTitle">Add Parent/Guardian</h2>
-      <form id="addParentForm" method="POST" action="{{ route('parents.store') }}">
-        @csrf
-        <input type="hidden" name="parent_id" id="parent_id" value="">
-        <input type="text" name="parent_fname" id="parent_fname" placeholder="First Name" required>
-        <input type="text" name="parent_lname" id="parent_lname" placeholder="Last Name" required>
-        <input type="date" name="parent_birthdate" id="parent_birthdate" required>
-        <input type="text" name="parent_contactinfo" id="parent_contactinfo" placeholder="Contact Number" required>
-        <span id="methodField"></span>
-        <button type="submit" class="btn btn-info"><i class="fas fa-save"></i> Save</button>
-      </form>
-    </div>
+      <!-- First Name -->
+      <input type="text" name="parent_fname" id="parent_fname" placeholder="First Name" 
+             required pattern="^[A-Za-z\s]+$" 
+             title="Only letters and spaces are allowed">
+
+      <!-- Last Name -->
+      <input type="text" name="parent_lname" id="parent_lname" placeholder="Last Name" 
+             required pattern="^[A-Za-z\s]+$" 
+             title="Only letters and spaces are allowed">
+
+      <!-- Birthdate -->
+      <input type="date" name="parent_birthdate" id="parent_birthdate" 
+             max="<?php echo date('Y-m-d'); ?>" required 
+             title="Birthdate cannot be in the future">
+
+      <!-- Contact Info -->
+      <input type="text" name="parent_contactinfo" id="parent_contactinfo" placeholder="Contact Number" 
+             required pattern="^[0-9]{11}$" 
+             title="Contact number must be exactly 11 digits (e.g., 09123456789)">
+
+      <span id="methodField"></span>
+      <button type="submit" class="btn btn-info"><i class="fas fa-save"></i> Save</button>
+    </form>
   </div>
+</div>
 
   <!-- INFO MODAL -->
   <div class="modal" id="infoModal">

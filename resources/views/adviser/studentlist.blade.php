@@ -105,25 +105,41 @@
       @csrf
 
       <div class="form-group">
-        <label>First Name</label>
-        <input type="text" name="student_fname" required>
-      </div>
+  <label>First Name</label>
+  <input type="text" name="student_fname" required 
+         pattern="[A-Za-z\s]+" 
+         title="Only letters and spaces are allowed">
+</div>
+
+<div class="form-group">
+  <label>Last Name</label>
+  <input type="text" name="student_lname" required 
+         pattern="[A-Za-z\s]+" 
+         title="Only letters and spaces are allowed">
+</div>
+
       <div class="form-group">
-        <label>Last Name</label>
-        <input type="text" name="student_lname" required>
-      </div>
-      <div class="form-group">
-        <label>Birthdate</label>
-        <input type="date" name="student_birthdate" required>
-      </div>
-      <div class="form-group">
-        <label>Address</label>
-        <input type="text" name="student_address" required>
-      </div>
-      <div class="form-group">
-        <label>Contact Info</label>
-        <input type="text" name="student_contactinfo" required>
-      </div>
+  <label>Birthdate</label>
+  <input type="date" name="student_birthdate" required
+         max="<?php echo date('Y-m-d'); ?>" 
+         title="Birthdate cannot be in the future">
+</div>
+
+<div class="form-group">
+  <label>Address</label>
+  <input type="text" name="student_address" required
+         pattern="^[A-Za-z0-9\s.,#/-]+$"
+         title="Only letters, numbers, spaces, commas, periods, hyphens, #, and / are allowed.">
+</div>
+
+
+
+<div class="form-group">
+  <label>Contact Info</label>
+  <input type="text" name="student_contactinfo" required
+         pattern="[0-9]{11}" 
+         title="Contact number must be 11 digits (e.g. 09123456789)">
+</div>
 
       <hr>
 

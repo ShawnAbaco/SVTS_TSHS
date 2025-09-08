@@ -81,7 +81,6 @@
     </table>
   </div>
 </div>
-
 <!-- ADD VIOLATION MODAL -->
 <div class="modal" id="addModal">
   <div class="modal-content">
@@ -89,6 +88,8 @@
     <h2>Add Violation Record</h2>
     <form id="addViolationForm" method="POST" action="{{ route('adviser.storeViolation') }}">
       @csrf
+
+      <!-- Student Selection -->
       <div class="form-group">
         <label for="student">Student</label>
         <select name="student_id" required>
@@ -98,6 +99,8 @@
           @endforeach
         </select>
       </div>
+
+      <!-- Offense Selection -->
       <div class="form-group">
         <label for="offense">Offense</label>
         <select name="offense_sanc_id" required>
@@ -107,24 +110,37 @@
           @endforeach
         </select>
       </div>
+
+      <!-- Incident -->
       <div class="form-group">
         <label for="incident">Incident</label>
-        <input type="text" name="violation_incident" placeholder="Incident Details" required>
+        <input type="text" name="violation_incident" placeholder="Incident Details" required
+               pattern="^[A-Za-z0-9\s.,#()!?-]+$"
+               title="Only letters, numbers, spaces, commas, periods, dashes, (), !, and ? are allowed">
       </div>
+
+      <!-- Date -->
       <div class="form-group">
         <label for="date">Date</label>
-        <input type="date" name="violation_date" required>
+        <input type="date" name="violation_date" 
+               max="<?php echo date('Y-m-d'); ?>" required
+               title="Date cannot be in the future">
       </div>
+
+      <!-- Time -->
       <div class="form-group">
         <label for="time">Time</label>
         <input type="time" name="violation_time" required>
       </div>
+
+      <!-- Save Button -->
       <div class="form-group">
         <button type="submit" class="btn"><i class="fas fa-save"></i> Save</button>
       </div>
     </form>
   </div>
 </div>
+
 <!-- EDIT VIOLATION MODAL -->
 <div class="modal" id="editModal">
   <div class="modal-content">
