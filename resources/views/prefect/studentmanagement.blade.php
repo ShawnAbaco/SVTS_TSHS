@@ -75,15 +75,6 @@
       color: #111;
     }
 
-    /* Stop hover on active item */
-    .sidebar ul li.active:hover {
-      background: rgb(11, 255, 68);
-      color: #111;
-    }
-    .sidebar ul li.active:hover i {
-      color: #111;
-    }
-
     .sidebar ul li a {
       text-decoration: none;
       color: inherit;
@@ -157,42 +148,71 @@
       box-shadow: 0 0 5px #ffcc00;
     }
 
+    /* Table UI Improvements */
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 14px;
       background: #fff;
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
+
+    table thead {
+      background: #111;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
     table th, table td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
+      padding: 12px 15px;
       text-align: left;
     }
-    table tr:hover {
-      background: #f2f2f2;
+
+    table tbody tr {
+      transition: background 0.3s;
+    }
+
+    table tbody tr:nth-child(even) {
+      background: #f7f7f7;
+    }
+
+    table tbody tr:hover {
+      background: #e0f7fa;
+    }
+
+    .action-container {
+      display: flex;
+      gap: 5px;
+      justify-content: flex-start;
     }
 
     .action-container button {
-      margin-right: 5px;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 5px;
       font-size: 12px;
-      cursor: pointer;
       border: none;
+      cursor: pointer;
       transition: 0.2s;
     }
+
     .btn-secondary {
-      background: #6c757d;
+      background: #007bff;
       color: #fff;
     }
-    .btn-secondary:hover { background: #5a6268; }
+    .btn-secondary:hover {
+      background: #0069d9;
+    }
+
     .btn-danger {
       background: #dc3545;
       color: #fff;
     }
-    .btn-danger:hover { background: #c82333; }
+    .btn-danger:hover {
+      background: #c82333;
+    }
 
     /* Modal */
     .modal {
@@ -229,6 +249,21 @@
       cursor: pointer;
     }
 
+    /* Responsive adjustments */
+    @media screen and (max-width: 768px) {
+      table th, table td {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      .flex {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .action-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
@@ -296,7 +331,7 @@
           <td>
             <div class="action-container">
               <button class="btn btn-secondary btn-sm" onclick="showFullInfo({{ $student->student_id }})">Info</button>
-              <form action="{{ route('student.delete', $student->student_id) }}" method="POST" style="display:inline;">
+              <form action="{{ route('student.delete', $student->student_id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete()">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -352,6 +387,11 @@
 
     function closeInfoModal() {
       document.getElementById('infoModal').classList.remove('show-modal');
+    }
+
+    // Delete confirmation
+    function confirmDelete() {
+      return confirm("Are you sure you want to delete this student?");
     }
 
     // Search and filter
