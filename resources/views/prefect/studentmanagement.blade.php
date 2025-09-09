@@ -6,7 +6,7 @@
   <title>Student Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-   /* Reset */
+    /* Reset */
     * {
       margin: 0;
       padding: 0;
@@ -22,55 +22,70 @@
       color: #111;
     }
 
+    /* Sidebar */
     .sidebar {
-    width: 220px;
-    background:rgb(0, 0, 0); 
-    color: #fff;
-    height: 100vh;
-    position: fixed;
-    padding: 25px 15px;
-    border-radius: 0 15px 15px 0;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-}
+      width: 230px;
+      background: rgb(0, 0, 0);
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
+
     .sidebar h2 {
       margin-bottom: 30px;
       text-align: center;
-      font-size: 20px;
+      font-size: 22px;
       letter-spacing: 1px;
-      color: rgb(255, 255, 255);
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
     }
+
     .sidebar ul {
       list-style: none;
     }
+
     .sidebar ul li {
-      padding: 12px 10px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       cursor: pointer;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #fff;
-      transition: 0.3s;
-      position: relative;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #e0e0e0;
+      transition: background 0.3s, transform 0.2s;
     }
+
     .sidebar ul li i {
       margin-right: 12px;
-      color: rgb(255, 255, 255);
+      color: #cfcfcf;
       min-width: 20px;
+      font-size: 16px;
     }
+
     .sidebar ul li:hover {
-      background: rgb(0, 221, 255);
-      color: #111;
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
     }
+
     .sidebar ul li:hover i {
-      color: #111;
+      color: #00e0ff;
     }
+
     .sidebar ul li.active {
-      background: rgb(11, 222, 255);
-      color: #111;
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
     }
+
     .sidebar ul li.active i {
-      color: #111;
+      color: #fff;
     }
 
     .sidebar ul li a {
@@ -78,34 +93,40 @@
       color: inherit;
       flex: 1;
     }
+
     .section-title {
-      margin: 15px 10px 5px;
+      margin: 20px 10px 8px;
       font-size: 11px;
       text-transform: uppercase;
-      color: #bbb;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
     }
 
     /* Dropdown */
     .dropdown-container {
       display: none;
       list-style: none;
-      padding-left: 20px;
-      transition: max-height 0.3s ease;
+      padding-left: 25px;
     }
+
     .dropdown-container li {
       padding: 10px;
-      font-size: 13px;
-      border-radius: 6px;
-      cursor: pointer;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
     }
+
     .dropdown-container li:hover {
-      background: rgb(255, 255, 255);
-      color: #111;
+      background: #3a4c66;
+      color: #fff;
     }
+
     .dropdown-btn .arrow {
       margin-left: auto;
       transition: transform 0.3s;
     }
+
     .dropdown-btn.active .arrow {
       transform: rotate(180deg);
     }
@@ -115,15 +136,15 @@
       width: 6px;
     }
     .sidebar::-webkit-scrollbar-thumb {
-      background: rgb(255, 255, 255);
+      background: rgba(255, 255, 255, 0.25);
       border-radius: 3px;
     }
 
     /* Main content */
     main {
-      margin-left: 220px;
+      margin-left: 230px;
       padding: 20px;
-      width: calc(100% - 220px);
+      width: calc(100% - 230px);
     }
     main h2 {
       margin-bottom: 15px;
@@ -146,41 +167,45 @@
       box-shadow: 0 0 5px #ffcc00;
     }
 
-    /* Table UI Improvements */
+    /* Improved Table UI */
     table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
       font-size: 14px;
-      background: #fff;
-      border-radius: 8px;
+      background: #ffffff;
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     table thead {
-      background: #111;
+      background: linear-gradient(90deg, #007bff, #00c6ff);
       color: #fff;
       text-transform: uppercase;
       font-size: 13px;
+      letter-spacing: 0.5px;
     }
 
     table th, table td {
-      padding: 12px 15px;
+      padding: 14px 16px;
       text-align: left;
     }
 
     table tbody tr {
-      transition: background 0.3s;
+      transition: all 0.3s ease;
     }
 
     table tbody tr:nth-child(even) {
-      background: #f7f7f7;
+      background: #f5f7fa;
     }
 
     table tbody tr:hover {
-      background: #e0f7fa;
+      background: #d0f0ff;
+      transform: scale(1.01);
     }
 
+    /* Action Buttons */
     .action-container {
       display: flex;
       gap: 5px;
@@ -188,28 +213,36 @@
     }
 
     .action-container button {
-      padding: 6px 10px;
-      border-radius: 5px;
-      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
       border: none;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.25s ease-in-out;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
 
     .btn-secondary {
-      background: #007bff;
+      background: linear-gradient(90deg, #007bff, #00c6ff);
       color: #fff;
     }
+
     .btn-secondary:hover {
-      background: #0069d9;
+      background: linear-gradient(90deg, #0056b3, #00a1cc);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     .btn-danger {
-      background: #dc3545;
+      background: linear-gradient(90deg, #ff4d4f, #ff7875);
       color: #fff;
     }
+
     .btn-danger:hover {
-      background: #c82333;
+      background: linear-gradient(90deg, #c82333, #ff4d4f);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     /* Modal */
@@ -226,11 +259,16 @@
     .modal.show-modal { display: flex; }
     .modal-content {
       background: #fff;
-      border-radius: 8px;
-      width: 400px;
+      border-radius: 10px;
+      width: 450px;
       max-width: 90%;
-      padding: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px);}
+      to { opacity: 1; transform: translateY(0);}
     }
     .modal-header, .modal-footer {
       display: flex;
@@ -239,18 +277,22 @@
       margin-bottom: 10px;
     }
     .modal-header h5 { font-size: 16px; }
-    .modal-body p { margin-bottom: 8px; font-size: 14px; }
+    .modal-body p { margin-bottom: 10px; font-size: 14px; }
     .btn-close {
       background: none;
       border: none;
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
+      color: #555;
+    }
+    .modal-footer .btn {
+      min-width: 90px;
     }
 
-    /* Responsive adjustments */
+    /* Responsive */
     @media screen and (max-width: 768px) {
       table th, table td {
-        padding: 8px 10px;
+        padding: 10px 12px;
         font-size: 12px;
       }
       .flex {
@@ -297,6 +339,7 @@
     </ul>
   </div>
 
+  <!-- Main -->
   <main>
     <h2>Student Management</h2>
     <div class="flex">
@@ -356,71 +399,67 @@
     </div>
   </div>
 
- <script>
-  // Dropdown functionality: only one open at a time
-  const dropdowns = document.querySelectorAll('.dropdown-btn');
-  dropdowns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling;
-
-      // Close other dropdowns
-      dropdowns.forEach(otherBtn => {
-        const otherContainer = otherBtn.nextElementSibling;
-        if (otherBtn !== btn) {
-          otherBtn.classList.remove('active');
-          otherContainer.style.display = 'none';
-        }
+  <!-- Scripts -->
+  <script>
+    // Dropdown functionality
+    const dropdowns = document.querySelectorAll('.dropdown-btn');
+    dropdowns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const container = btn.nextElementSibling;
+        dropdowns.forEach(otherBtn => {
+          const otherContainer = otherBtn.nextElementSibling;
+          if (otherBtn !== btn) {
+            otherBtn.classList.remove('active');
+            otherContainer.style.display = 'none';
+          }
+        });
+        btn.classList.toggle('active');
+        container.style.display = container.style.display === 'block' ? 'none' : 'block';
       });
-
-      // Toggle current dropdown
-      btn.classList.toggle('active');
-      container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
-  });
 
-  // Logout
-  function logout() { alert("Logging out..."); }
+    // Logout
+    function logout() { alert("Logging out..."); }
 
-  // Modal functions
-  function showFullInfo(studentId) {
-    const row = Array.from(document.querySelectorAll('#studentTable tbody tr'))
-      .find(tr => tr.children[0].innerText == studentId).children;
+    // Modal functions
+    function showFullInfo(studentId) {
+      const row = Array.from(document.querySelectorAll('#studentTable tbody tr'))
+        .find(tr => tr.children[0].innerText == studentId).children;
 
-    document.getElementById('infoModalTitle').textContent = `Info: ${row[1].innerText}`;
-    document.getElementById('infoModalBody').innerHTML = `
-      <p><strong>Grade Level:</strong> ${row[2].innerText}</p>
-      <p><strong>Section:</strong> ${row[3].innerText}</p>
-    `;
-    document.getElementById('infoModal').classList.add('show-modal');
-  }
+      document.getElementById('infoModalTitle').textContent = `Info: ${row[1].innerText}`;
+      document.getElementById('infoModalBody').innerHTML = `
+        <p><strong>Grade Level:</strong> ${row[2].innerText}</p>
+        <p><strong>Section:</strong> ${row[3].innerText}</p>
+      `;
+      document.getElementById('infoModal').classList.add('show-modal');
+    }
 
-  function closeInfoModal() {
-    document.getElementById('infoModal').classList.remove('show-modal');
-  }
+    function closeInfoModal() {
+      document.getElementById('infoModal').classList.remove('show-modal');
+    }
 
-  // Delete confirmation
-  function confirmDelete() {
-    return confirm("Are you sure you want to delete this student?");
-  }
+    // Delete confirmation
+    function confirmDelete() {
+      return confirm("Are you sure you want to delete this student?");
+    }
 
-  // Search and filter
-  const searchInput = document.getElementById('searchInput');
-  const sectionFilter = document.getElementById('sectionFilter');
+    // Search and filter
+    const searchInput = document.getElementById('searchInput');
+    const sectionFilter = document.getElementById('sectionFilter');
 
-  function filterTable() {
-    const query = searchInput.value.toLowerCase();
-    const section = sectionFilter.value;
-    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-      const name = row.children[1].innerText.toLowerCase();
-      const sec = row.children[3].innerText;
-      row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
-    });
-  }
+    function filterTable() {
+      const query = searchInput.value.toLowerCase();
+      const section = sectionFilter.value;
+      document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+        const name = row.children[1].innerText.toLowerCase();
+        const sec = row.children[3].innerText;
+        row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
+      });
+    }
 
-  searchInput.addEventListener('input', filterTable);
-  sectionFilter.addEventListener('change', filterTable);
-</script>
-
+    searchInput.addEventListener('input', filterTable);
+    sectionFilter.addEventListener('change', filterTable);
+  </script>
 
 </body>
 </html>

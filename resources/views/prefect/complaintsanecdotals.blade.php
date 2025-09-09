@@ -8,61 +8,93 @@
   <style>
     /* Reset & Base */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; font-weight: bold; transition: all 0.2s ease-in-out; }
-    body { display: flex; background: #f9f9f9; color: #111; }
+    body { display: flex; background: #f0f2f5; color: #111; }
 
     /* Sidebar */
     .sidebar {
-      width: 220px;
+      width: 230px;
       background: #000;
       color: #fff;
       height: 100vh;
       position: fixed;
       padding: 25px 15px;
       border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
       overflow-y: auto;
     }
-    .sidebar h2 { margin-bottom: 30px; text-align: center; font-size: 20px; letter-spacing: 1px; color: #fff; }
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
     .sidebar ul { list-style: none; }
     .sidebar ul li {
-      padding: 12px 10px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       cursor: pointer;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #fff;
-      transition: 0.3s;
-      position: relative;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #e0e0e0;
+      transition: background 0.3s, transform 0.2s;
     }
-    .sidebar ul li i { margin-right: 12px; min-width: 20px; }
-    .sidebar ul li:hover { background: #00f7ef; color: #111; }
-    .sidebar ul li:hover i { color: #111; }
-    .sidebar ul li.active { background: #0bffeb; color: #111; }
-    .sidebar ul li.active i { color: #111; }
+    .sidebar ul li i { margin-right: 12px; color: #cfcfcf; min-width: 20px; font-size: 16px; }
+    .sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
+    .sidebar ul li:hover i { color: #00e0ff; }
+    .sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #fff; }
+    .sidebar ul li.active i { color: #fff; }
     .sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
-    .section-title { margin: 15px 10px 5px; font-size: 11px; text-transform: uppercase; color: #bbb; }
+    .section-title { margin: 20px 10px 8px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: rgba(255, 255, 255, 0.6); letter-spacing: 1px; }
 
     /* Dropdown */
-    .dropdown-container { display: none; list-style: none; padding-left: 20px; }
-    .dropdown-container li { padding: 10px; font-size: 13px; border-radius: 6px; cursor: pointer; }
-    .dropdown-container li:hover { background: #fff; color: #111; }
+    .dropdown-container { display: none; list-style: none; padding-left: 25px; }
+    .dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
+    .dropdown-container li:hover { background: #3a4c66; color: #fff; }
     .dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
     .dropdown-btn.active .arrow { transform: rotate(180deg); }
 
+    /* Scrollbar */
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
+
     /* Content */
-    .content { margin-left: 270px; padding: 20px; }
-    h1 { text-align: center; margin-bottom: 20px; }
+    .content { margin-left: 270px; padding: 30px; }
+    h1 { text-align: center; margin-bottom: 25px; font-size: 28px; color: #333; }
+
+    /* Controls */
+    .controls { display: flex; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+    .controls input[type="text"] { padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; width: 250px; }
+    .btn { padding: 10px 18px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background-color: #007bff; color: #fff; }
+    .btn-primary:hover { background-color: #0056b3; }
 
     /* Table */
-    table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 20px; }
-    table thead { background: #3498db; color: #fff; }
-    table th, table td { padding: 12px 15px; border: 1px solid #ddd; text-align: center; }
-    table tbody tr:nth-child(even) { background: #f2f2f2; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+    table thead { background: #3498db; color: #fff; font-size: 15px; }
+    table th, table td { padding: 14px 12px; text-align: center; font-size: 14px; }
+    table tbody tr { background: #fff; transition: background 0.3s; }
+    table tbody tr:nth-child(even) { background: #f9f9f9; }
+    table tbody tr:hover { background: #e1f0ff; }
 
-    /* Buttons */
-    .btn { padding: 8px 16px; font-size: 14px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
-    .btn-primary { background: #007bff; color: #fff; }
+    /* Action Buttons */
+    .btn-action { padding: 6px 12px; font-size: 13px; margin: 2px; border-radius: 5px; border: none; cursor: pointer; transition: all 0.2s; }
+    .btn-edit { background: #ffc107; color: #000; }
+    .btn-edit:hover { background: #e0a800; }
+    .btn-delete { background: #dc3545; color: #fff; }
+    .btn-delete:hover { background: #a71d2a; }
+
+    /* Responsive */
+    @media(max-width: 900px){
+      .content { margin-left: 20px; padding: 20px; }
+      table th, table td { font-size: 12px; padding: 10px 8px; }
+      .controls { flex-direction: column; align-items: flex-start; }
+      .controls input[type="text"] { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -101,9 +133,9 @@
 <div class="content">
   <h1>Complaints Anecdotals</h1>
 
-  <div style="margin: 15px 0;">
-    <button class="btn btn-primary" onclick="openCreateModal()">Create</button>
-    <input type="text" id="searchInput" placeholder="Search by Complainant Name..." onkeyup="searchTable()" style="padding:5px; width:250px; margin-left:10px;">
+  <div class="controls">
+    <button class="btn btn-primary">Create</button>
+    <input type="text" id="searchInput" placeholder="Search by Complainant Name..." onkeyup="searchTable()">
   </div>
 
   <table>
@@ -116,6 +148,7 @@
         <th>Recommendation</th>
         <th>Date</th>
         <th>Time</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -128,6 +161,10 @@
         <td>{{ $anec->comp_anec_recommendation }}</td>
         <td>{{ $anec->comp_anec_date }}</td>
         <td>{{ $anec->comp_anec_time }}</td>
+        <td>
+          <button class="btn-action btn-edit"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn-action btn-delete"><i class="fas fa-trash"></i> Delete</button>
+        </td>
       </tr>
       @endforeach
     </tbody>
@@ -135,39 +172,20 @@
 </div>
 
 <script>
- // Dropdown functionality with sidebar scroll and only one open at a time
+  // Dropdown functionality
   const sidebar = document.querySelector('.sidebar');
   const dropdowns = document.querySelectorAll('.dropdown-btn');
-
   dropdowns.forEach(btn => {
     btn.addEventListener('click', () => {
       const container = btn.nextElementSibling;
-
-      // Close other dropdowns
       dropdowns.forEach(otherBtn => {
         const otherContainer = otherBtn.nextElementSibling;
-        if (otherBtn !== btn) {
-          otherBtn.classList.remove('active');
-          otherContainer.style.display = 'none';
-        }
+        if (otherBtn !== btn) { otherBtn.classList.remove('active'); otherContainer.style.display = 'none'; }
       });
-
-      // Toggle current dropdown
       btn.classList.toggle('active');
       container.style.display = container.style.display === 'block' ? 'none' : 'block';
-
-      // Sidebar scrollable when at least 1 dropdown is open
-      const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
-      sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
     });
   });
-
-  // Logout
-  function logout() {
-    fetch('/logout', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } })
-      .then(() => window.location.href = '/prefect/login')
-      .catch(err => console.error('Logout failed:', err));
-  }
 
   // Search Table
   function searchTable() {
@@ -177,9 +195,6 @@
       row.style.display = text.includes(input) ? '' : 'none';
     });
   }
-
-  // Dummy Create Modal
-  function openCreateModal() { alert('Open create modal here'); }
 </script>
 
 </body>

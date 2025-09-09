@@ -23,131 +23,152 @@
       color: #111;
     }
 
-   .sidebar {
-    width: 220px;
-    background:rgb(0, 0, 0); 
-    color: #fff;
-    height: 100vh;
-    position: fixed;
-    padding: 25px 15px;
-    border-radius: 0 15px 15px 0;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-}
+    .sidebar {
+      width: 230px;
+      background:rgb(0, 0, 0);
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
 
     .sidebar h2 {
       margin-bottom: 30px;
       text-align: center;
-      font-size: 20px;
+      font-size: 22px;
       letter-spacing: 1px;
-      color:rgb(255, 255, 255);
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
     }
+
     .sidebar ul {
       list-style: none;
     }
+
     .sidebar ul li {
-      padding: 12px 10px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       cursor: pointer;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #fff;
-      transition: 0.3s;
-      position: relative;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #e0e0e0;
+      transition: background 0.3s, transform 0.2s;
     }
+
     .sidebar ul li i {
       margin-right: 12px;
-      color:rgb(255, 255, 255);
+      color: #cfcfcf;
       min-width: 20px;
+      font-size: 16px;
     }
+
     .sidebar ul li:hover {
-      background:rgb(0, 247, 239);
-      color: #111;
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
     }
+
     .sidebar ul li:hover i {
-      color: #111;
+      color: #00e0ff;
     }
+
     .sidebar ul li.active {
-      background:rgb(11, 255, 235);
-      color: #111;
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
     }
+
     .sidebar ul li.active i {
-      color: #111;
+      color: #fff;
     }
+
     .sidebar ul li a {
       text-decoration: none;
       color: inherit;
       flex: 1;
     }
+
     .section-title {
-      margin: 15px 10px 5px;
+      margin: 20px 10px 8px;
       font-size: 11px;
       text-transform: uppercase;
-      color: #bbb;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
     }
 
-    /* Dropdown */
     .dropdown-container {
       display: none;
       list-style: none;
-      padding-left: 20px;
-      transition: max-height 0.3s ease;
+      padding-left: 25px;
     }
+
     .dropdown-container li {
       padding: 10px;
-      font-size: 13px;
-      border-radius: 6px;
-      cursor: pointer;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
     }
+
     .dropdown-container li:hover {
-      background:rgb(255, 255, 255);
-      color: #111;
+      background: #3a4c66;
+      color: #fff;
     }
+
     .dropdown-btn .arrow {
       margin-left: auto;
       transition: transform 0.3s;
     }
+
     .dropdown-btn.active .arrow {
       transform: rotate(180deg);
     }
 
-    /* Scrollbar */
     .sidebar::-webkit-scrollbar {
       width: 6px;
     }
+
     .sidebar::-webkit-scrollbar-thumb {
-      background:rgb(255, 255, 255);
+      background: rgba(255, 255, 255, 0.25);
       border-radius: 3px;
     }
 
-    /* Main Content */
     .main {
       margin-left: 220px;
       padding: 20px;
       width: calc(100% - 220px);
     }
+
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 20px;
     }
+
     .topbar h1 {
       font-size: 22px;
       margin-bottom: 4px;
     }
+
     .topbar p {
       font-size: 13px;
       color: #555;
     }
 
-    /* User Info (Profile) */
     .user-info {
       display: flex;
       align-items: center;
       gap: 10px;
       cursor: pointer;
     }
+
     .user-info img {
       width: 32px;
       height: 32px;
@@ -155,21 +176,23 @@
       object-fit: cover;
       cursor: pointer;
     }
+
     .user-info span {
       font-weight: bold;
       color: #111;
     }
+
     .user-info:hover {
       opacity: 0.7;
     }
 
-    /* Stats Cards */
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
       margin-bottom: 20px;
     }
+
     .card {
       border-radius: 8px;
       padding: 15px;
@@ -180,75 +203,84 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
+
     .card:hover {
       transform: scale(1.02);
     }
+
     .card h3 {
       font-size: 12px;
       color: #000;
     }
+
     .card p {
       font-size: 20px;
       margin: 4px 0;
       color: #000;
     }
+
     .card i {
       font-size: 20px;
       color: #000;
     }
-    .card:nth-child(1) { background-color:rgb(0, 145, 255); } /* Blue */
-    .card:nth-child(2) { background-color:rgb(246, 3, 3); } /* Red */
-    .card:nth-child(3) { background-color:rgb(0, 255, 60); } /* Green */
 
-    /* Grid (Chart + Table) */
+    .card:nth-child(1) { background-color:rgb(0, 145, 255); }
+    .card:nth-child(2) { background-color:rgb(246, 3, 3); }
+    .card:nth-child(3) { background-color:rgb(0, 255, 60); }
+
     .grid {
       display: grid;
       grid-template-columns: 1fr 2fr;
       gap: 20px;
       margin-bottom: 20px;
     }
+
     .grid .card {
       flex-direction: column;
       align-items: flex-start;
       background: #fff;
       border: 1px solid #ddd;
     }
+
     .grid .card-header {
       width: 100%;
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
     }
+
     .grid .card-header h3 {
       font-size: 14px;
       color: #111;
     }
+
     .grid .card-header a {
       font-size: 12px;
       color: #000;
       text-decoration: none;
     }
+
     .grid .card-header a:hover {
       text-decoration: underline;
     }
 
-    /* Table */
     .table {
       width: 100%;
       border-collapse: collapse;
     }
+
     .table th, .table td {
       padding: 8px;
       text-align: left;
       border-bottom: 1px solid #ccc;
       font-size: 13px;
     }
+
     .table tr:hover {
       background: #f2f2f2;
       cursor: pointer;
     }
 
-    /* Solid Status Badges */
     .status {
       padding: 4px 10px;
       border-radius: 12px;
@@ -256,16 +288,17 @@
       color: #fff;
       font-weight: bold;
     }
-    .pending { background-color:rgb(0, 0, 0); }   /* Orange */
-    .resolved { background-color:rgb(1, 255, 60); }  /* Green */
-    .escalated { background-color:rgb(255, 0, 25); } /* Red */
 
-    /* Appointments */
+    .pending { background-color:rgb(0, 0, 0); }
+    .resolved { background-color:rgb(1, 255, 60); }
+    .escalated { background-color:rgb(255, 0, 25); }
+
     .appointments {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
     }
+
     .appt-card {
       background: #fff;
       border-radius: 8px;
@@ -274,20 +307,24 @@
       font-size: 13px;
       cursor: pointer;
     }
+
     .appt-card:hover {
       background: #f0f0f0;
       transform: scale(1.01);
     }
+
     .appt-card h4 {
       font-size: 13px;
       margin-bottom: 4px;
       color: #111;
     }
+
     .appt-card .time {
       font-size: 12px;
       color: #555;
       margin-bottom: 8px;
     }
+
     .appt-card .status {
       float: right;
       font-size: 11px;
@@ -298,14 +335,12 @@
       background-color:rgb(0, 0, 0);
     }
 
-    /* Chart */
     #violationChart {
       max-width: 220px;
       max-height: 220px;
       margin: 0 auto;
     }
 
-    /* Welcome Modal */
     #welcomeModal {
       position: fixed;
       top: 20%;
@@ -321,6 +356,49 @@
       display: none;
       text-align: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 40%;
+      min-width: 300px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h2 {
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      font-size: 14px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #000;
     }
   </style>
 </head>
@@ -372,21 +450,21 @@
 
     <!-- Stats Cards -->
     <div class="cards">
-      <div class="card" onclick="menuClick('Total Students')">
+      <div class="card">
         <div>
           <h3>Total Students</h3>
           <p>1,248</p>
         </div>
         <i class="fas fa-user-graduate"></i>
       </div>
-      <div class="card" onclick="menuClick('Violations')">
+      <div class="card">
         <div>
           <h3>Violations</h3>
           <p>42</p>
         </div>
         <i class="fas fa-exclamation-circle"></i>
       </div>
-      <div class="card" onclick="menuClick('Complaints')">
+      <div class="card">
         <div>
           <h3>Complaints</h3>
           <p>18</p>
@@ -407,7 +485,7 @@
       <div class="card">
         <div class="card-header">
           <h3>Recent Violations</h3>
-          <a href="#" onclick="menuClick('View All Violations')">View All</a>
+          <a href="#">View All</a>
         </div>
         <table class="table">
           <thead>
@@ -419,25 +497,25 @@
             </tr>
           </thead>
           <tbody>
-            <tr onclick="rowClick('Alex Johnson')">
+            <tr>
               <td>Alex Johnson</td>
               <td>Attendance</td>
               <td>Jan 15, 2025</td>
               <td><span class="status pending">Pending</span></td>
             </tr>
-            <tr onclick="rowClick('Sarah Miller')">
+            <tr>
               <td>Sarah Miller</td>
               <td>Behavior</td>
               <td>Jan 12, 2025</td>
               <td><span class="status resolved">Resolved</span></td>
             </tr>
-            <tr onclick="rowClick('Mike Thompson')">
+            <tr>
               <td>Mike Thompson</td>
               <td>Dress Code</td>
               <td>Jan 10, 2025</td>
               <td><span class="status escalated">Escalated</span></td>
             </tr>
-            <tr onclick="rowClick('Emily Wilson')">
+            <tr>
               <td>Emily Wilson</td>
               <td>Attendance</td>
               <td>Jan 8, 2025</td>
@@ -451,19 +529,19 @@
     <!-- Appointments -->
     <h3 style="margin-bottom: 10px;">Upcoming Appointments</h3>
     <div class="appointments">
-      <div class="appt-card" onclick="menuClick('Violation Discussion')">
+      <div class="appt-card">
         <h4>Violation Discussion</h4>
         <p class="time">Jan 18, 2025 - 10:00 AM</p>
         <p>Alex Johnson <br><small>with Mr. Peterson</small></p>
         <span class="status pending">Scheduled</span>
       </div>
-      <div class="appt-card" onclick="menuClick('Complaint Review')">
+      <div class="appt-card">
         <h4>Complaint Review</h4>
         <p class="time">Jan 19, 2025 - 2:30 PM</p>
         <p>Sarah Miller <br><small>with Mrs. Johnson</small></p>
         <span class="status pending">Scheduled</span>
       </div>
-      <div class="appt-card" onclick="menuClick('Parent Conference')">
+      <div class="appt-card">
         <h4>Parent Conference</h4>
         <p class="time">Jan 20, 2025 - 11:15 AM</p>
         <p>Mike Thompson <br><small>with Principal Davis</small></p>
@@ -473,12 +551,18 @@
   </div>
 
   <!-- Welcome Modal -->
-  <div id="welcomeModal">
-    Welcome back, Admin!
+  <div id="welcomeModal">Welcome back, Admin!</div>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">Title</h2>
+      <div id="modalBody">Details go here...</div>
+    </div>
   </div>
 
-  <!-- JS -->
- <script>
+<script>
   // Chart.js
   const ctx = document.getElementById('violationChart').getContext('2d');
   new Chart(ctx, {
@@ -494,13 +578,11 @@
     options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
   });
 
-  // Dropdown functionality: only one open at a time
+  // Dropdown
   const dropdowns = document.querySelectorAll('.dropdown-btn');
   dropdowns.forEach(btn => {
     btn.addEventListener('click', () => {
       const container = btn.nextElementSibling;
-
-      // Close other dropdowns
       dropdowns.forEach(otherBtn => {
         const otherContainer = otherBtn.nextElementSibling;
         if (otherBtn !== btn) {
@@ -508,57 +590,86 @@
           otherContainer.style.display = 'none';
         }
       });
-
-      // Toggle current dropdown
       btn.classList.toggle('active');
       container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
   });
 
-  // Interactivity functions
-  function menuClick(name) { alert("Clicked: " + name); }
-  function rowClick(student) { alert("Opening details for " + student); }
-
-  // Logout function with confirmation
+  // Logout
   function logout() {
     const confirmLogout = confirm("Are you sure you want to logout?");
-    if (confirmLogout) {
-      window.location.href = "{{ route('prefect.login') }}"; // Adjust to your login page route
-    }
+    if (confirmLogout) window.location.href = "{{ route('prefect.login') }}";
   }
 
-  // Change profile image
-  function changeProfileImage() {
-    document.getElementById('imageInput').click();
-  }
-  document.getElementById('imageInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
+  // Profile image & name
+  function changeProfileImage() { document.getElementById('imageInput').click(); }
+  document.getElementById('imageInput').addEventListener('change', function(e){
+    const file = e.target.files[0];
     if(file){
       const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('profileImage').src = e.target.result;
-      }
+      reader.onload = function(ev){ document.getElementById('profileImage').src = ev.target.result; }
       reader.readAsDataURL(file);
     }
   });
-
-  // Change profile name
   function changeProfileName() {
     const newName = prompt("Enter new name:");
     if(newName) document.querySelector('.user-info span').innerText = newName;
   }
 
-  // Show welcome modal on login success
+  // Welcome modal
   window.addEventListener('DOMContentLoaded', () => {
     const welcomeModal = document.getElementById('welcomeModal');
     if(welcomeModal){
       welcomeModal.style.display = 'block';
-      setTimeout(() => {
-        welcomeModal.style.display = 'none';
-      }, 3000); // hide after 3 seconds
+      setTimeout(() => { welcomeModal.style.display = 'none'; }, 3000);
     }
   });
-</script>
 
+  // Info modal logic
+  const modal = document.getElementById("infoModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+  const closeBtn = document.querySelector(".close");
+
+  function openModal(title, content){
+    modalTitle.innerText = title;
+    modalBody.innerHTML = content;
+    modal.style.display = "block";
+  }
+
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => { if(event.target === modal) modal.style.display = "none"; }
+
+  // Attach modal to cards, appointments, table rows
+  document.querySelectorAll('.card, .appt-card, .table tr').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const type = el.querySelector('h3, h4, td')?.innerText || 'Details';
+      let content = '';
+
+      if(el.classList.contains('appt-card')){
+        content = `
+          <p><strong>Title:</strong> ${el.querySelector('h4').innerText}</p>
+          <p><strong>Time:</strong> ${el.querySelector('.time').innerText}</p>
+          <p>${el.querySelector('p').innerHTML}</p>
+          <p><strong>Status:</strong> ${el.querySelector('.status').innerText}</p>
+        `;
+      } else if(el.classList.contains('card') && el.querySelector('canvas')){
+        content = 'Chart content can be detailed here.';
+      } else if(el.tagName === 'TR'){
+        const cells = el.querySelectorAll('td');
+        content = `
+          <p><strong>Student:</strong> ${cells[0].innerText}</p>
+          <p><strong>Violation Type:</strong> ${cells[1].innerText}</p>
+          <p><strong>Date:</strong> ${cells[2].innerText}</p>
+          <p><strong>Status:</strong> ${cells[3].innerText}</p>
+        `;
+      } else {
+        content = el.innerHTML;
+      }
+
+      openModal(type, content);
+    });
+  });
+</script>
 </body>
 </html>

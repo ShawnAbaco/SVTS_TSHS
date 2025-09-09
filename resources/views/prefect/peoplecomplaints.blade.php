@@ -6,7 +6,7 @@
 <title>Complaints Management</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <style>
-/* Reset */
+/* --- Reset --- */
 * {
   margin: 0;
   padding: 0;
@@ -22,166 +22,217 @@ body {
   color: #111;
 }
 
+/* --- Sidebar (untouched) --- */
 .sidebar {
-  width: 220px;
-  background: #000; 
+  width: 230px;
+  background: rgb(0, 0, 0);
   color: #fff;
   height: 100vh;
   position: fixed;
   padding: 25px 15px;
   border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+  overflow-y: auto;
 }
 
 .sidebar h2 {
   margin-bottom: 30px;
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
   letter-spacing: 1px;
-  color:#fff;
+  color: #ffffff;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 10px;
 }
+
 .sidebar ul { list-style: none; }
 .sidebar ul li {
-  padding: 12px 10px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   cursor: pointer;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #fff;
-  transition: 0.3s;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #e0e0e0;
+  transition: background 0.3s, transform 0.2s;
 }
 .sidebar ul li i {
   margin-right: 12px;
-  color:#fff;
+  color: #cfcfcf;
   min-width: 20px;
+  font-size: 16px;
 }
 .sidebar ul li:hover {
-  background:rgb(0, 247, 239);
-  color: #111;
+  background: #2d3f55;
+  transform: translateX(5px);
+  color: #fff;
 }
-.sidebar ul li:hover i { color: #111; }
+.sidebar ul li:hover i { color: #00e0ff; }
 .sidebar ul li.active {
-  background:rgb(11, 255, 235);
-  color: #111;
+  background: #00aaff;
+  color: #fff;
+  border-left: 4px solid #ffffff;
 }
-.sidebar ul li.active i { color: #111; }
-.sidebar ul li a {
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-}
+.sidebar ul li.active i { color: #fff; }
+.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
 .section-title {
-  margin: 15px 10px 5px;
+  margin: 20px 10px 8px;
   font-size: 11px;
   text-transform: uppercase;
-  color: #bbb;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
 }
 
 /* Dropdown */
-.dropdown-container {
-  display: none;
-  list-style: none;
-  padding-left: 20px;
-}
-.dropdown-container li {
-  padding: 10px;
-  font-size: 13px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.dropdown-container li:hover {
-  background:#fff;
-  color: #111;
-}
-.dropdown-btn .arrow {
-  margin-left: auto;
-  transition: transform 0.3s;
-}
+.dropdown-container { display: none; list-style: none; padding-left: 25px; }
+.dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
+.dropdown-container li:hover { background: #3a4c66; color: #fff; }
+.dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
 .dropdown-btn.active .arrow { transform: rotate(180deg); }
 
 /* Scrollbar */
 .sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb {
-  background:#fff;
-  border-radius: 3px;
-}
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
 
+/* --- Main Content --- */
 .content {
   margin-left: 270px;
-  padding: 20px;
+  padding: 30px;
 }
 
 h1 {
-  text-align: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+/* --- Top Controls --- */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.btn-primary {
-  background: #007bff;
-  color: #fff;
-  border: none;
+.top-controls input {
   padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 15px;
-}
-.btn-primary:hover { background: #0056b3; }
-
-.btn-edit {
-  background: #ffc107;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 5px;
-  text-decoration: none;
-}
-.btn-edit:hover { background: #e0a800; }
-
-.btn-delete {
-  background: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.btn-delete:hover { background: #c82333; }
-
-/* Table Styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-table thead {
-  background: #007bff;
-  color: #fff;
-}
-table th, table td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 14px;
 }
-table tbody tr:hover { background: #f1f1f1; }
 
-/* Search bar styling */
-.search-container {
-  margin: 15px 0;
+.top-controls button {
+  border: none;
+  padding: 10px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #007bff, #00aaff);
+  transition: all 0.3s ease;
 }
-.search-container input {
-  padding: 8px 12px;
-  width: 250px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.top-controls button:hover {
+  background: linear-gradient(135deg, #0056b3, #007bbf);
+  transform: translateY(-2px);
+}
+
+/* --- Table Styling (Big & Modern) --- */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+  background: #ffffff;
+  font-size: 16px;
+}
+
+th {
+  background: linear-gradient(135deg, #007bff, #00aaff);
+  color: #fff;
+  padding: 16px 14px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e3e3e3;
+  vertical-align: middle;
+}
+
+tr:nth-child(even) { background: #f5f8ff; }
+tr:hover {
+  background: #d0e7ff;
+  transform: scale(1.01);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Status labels */
+.status-pending {
+  color: #e67e22;
+  background: #fff4e5;
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-weight: 600;
+  text-align: center;
+  display: inline-block;
+}
+
+.status-resolved {
+  color: #27ae60;
+  background: #e6f9f0;
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-weight: 600;
+  text-align: center;
+  display: inline-block;
+}
+
+/* Action buttons */
+.btn-action {
+  padding: 8px 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+  margin-right: 6px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-action i { margin-right: 5px; }
+
+.btn-edit { background: #28a745; }
+.btn-edit:hover { background: #218838; transform: translateY(-2px) scale(1.05); }
+
+.btn-delete { background: #dc3545; }
+.btn-delete:hover { background: #c82333; transform: translateY(-2px) scale(1.05); }
+
+/* Responsive adjustments */
+@media screen and (max-width: 1200px) {
+  table { font-size: 15px; }
+  th, td { padding: 12px 10px; }
+}
+
+@media screen and (max-width: 768px) {
+  .content { margin-left: 0; padding: 15px; }
+  table { font-size: 14px; }
+  th, td { padding: 10px 8px; }
+  .btn-action { padding: 6px 10px; font-size: 13px; }
 }
 </style>
 </head>
@@ -192,7 +243,6 @@ table tbody tr:hover { background: #f1f1f1; }
   <h2>PREFECT DASHBOARD</h2>
   <ul>
     <div class="section-title">Main</div>
-
     <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
     <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
     <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
@@ -221,11 +271,10 @@ table tbody tr:hover { background: #f1f1f1; }
 <!-- Content -->
 <div class="content">
   <h1>Complaints Management</h1>
-  <button class="btn-primary" onclick="openModal()">+ Add Complainant</button>
 
-  <!-- Search Bar -->
-  <div class="search-container">
+  <div class="top-controls">
     <input type="text" id="searchInput" onkeyup="searchComplainant()" placeholder="Search Complainant Name...">
+    <button class="btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Add Complainant</button>
   </div>
 
   <table id="complaintsTable">
@@ -238,6 +287,7 @@ table tbody tr:hover { background: #f1f1f1; }
         <th>Sanction</th>
         <th>Date</th>
         <th>Time</th>
+        <th>Status</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -251,13 +301,12 @@ table tbody tr:hover { background: #f1f1f1; }
         <td>{{ $complaint->offense->sanction_consequences }}</td>
         <td>{{ $complaint->complaints_date }}</td>
         <td>{{ \Carbon\Carbon::parse($complaint->complaints_time)->format('h:i A') }}</td>
+        <td class="{{ $complaint->status == 'Resolved' ? 'status-resolved' : 'status-pending' }}">
+            {{ $complaint->status ?? 'Pending' }}
+        </td>
         <td>
-          <a href="{{ route('complaints.edit', $complaint->complaints_id) }}" class="btn-edit">Edit</a>
-          <form action="{{ route('complaints.destroy', $complaint->complaints_id) }}" method="POST" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button class="btn-delete" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-          </form>
+          <button class="btn-action btn-edit"><i class="fas fa-edit"></i>Edit</button>
+          <button class="btn-action btn-delete"><i class="fas fa-trash"></i>Delete</button>
         </td>
       </tr>
       @endforeach
@@ -266,42 +315,32 @@ table tbody tr:hover { background: #f1f1f1; }
 </div>
 
 <script>
-// Dropdown functionality with sidebar scroll and only one open at a time
-  const sidebar = document.querySelector('.sidebar');
-  const dropdowns = document.querySelectorAll('.dropdown-btn');
-
-  dropdowns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling;
-
-      // Close other dropdowns
-      dropdowns.forEach(otherBtn => {
-        const otherContainer = otherBtn.nextElementSibling;
-        if (otherBtn !== btn) {
-          otherBtn.classList.remove('active');
-          otherContainer.style.display = 'none';
-        }
-      });
-
-      // Toggle current dropdown
-      btn.classList.toggle('active');
-      container.style.display = container.style.display === 'block' ? 'none' : 'block';
-
-      // Sidebar scrollable when at least 1 dropdown is open
-      const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
-      sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
+// Dropdown functionality
+const dropdowns = document.querySelectorAll('.dropdown-btn');
+dropdowns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const container = btn.nextElementSibling;
+    dropdowns.forEach(otherBtn => {
+      const otherContainer = otherBtn.nextElementSibling;
+      if (otherBtn !== btn) {
+        otherBtn.classList.remove('active');
+        otherContainer.style.display = 'none';
+      }
     });
+    btn.classList.toggle('active');
+    container.style.display = container.style.display === 'block' ? 'none' : 'block';
   });
+});
 
-// ✅ Logout
+// Logout
 function logout() {
-  fetch('/logout', {
-    method: 'POST',
-    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-  }).then(() => window.location.href = '/prefect/login');
+  fetch("/logout", {
+    method: "POST",
+    headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
+  }).then(() => window.location.href = "/prefect/login");
 }
 
-// ✅ Search complainant
+// Search filter
 function searchComplainant() {
   let input = document.getElementById("searchInput").value.toLowerCase();
   let table = document.getElementById("complaintsTable");
@@ -314,6 +353,10 @@ function searchComplainant() {
       tr[i].style.display = textValue.toLowerCase().includes(input) ? "" : "none";
     }
   }
+}
+
+function openModal() {
+  alert("Open Add Complainant form/modal here.");
 }
 </script>
 
