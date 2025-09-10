@@ -29,7 +29,7 @@
       z-index: -1;
     }
 
-    .page-header { background: white; color: #111; text-align: center; padding: 15px; font-weight: bold; font-size: 22px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .page-header { background: rgb(73, 0, 0); color: #ffffff; text-align: center; padding: 15px; font-weight: bold; font-size: 22px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
     .adviser-login-left, .adviser-login-right {
       position: fixed; top: 15px; padding: 8px 16px; background: white; color: #111; font-weight: bold; border-radius: 6px;
@@ -47,13 +47,13 @@
     .logo-section img { width: 220px; height: auto; object-fit: contain; }
     .logo-section p { font-size: 13px; margin-top: 8px; font-weight: 600; color: #111; }
 
-    .form-section { padding: 20px; background: white; color: #111; }
-    .form-section h1 { font-size: 18px; margin-bottom: 15px; text-align: center; }
-    .form-group { margin-bottom: 18px; position: relative; }
+    .form-section { padding: 20px; background: white; color: rgb(73, 0, 0); }
+    .form-section h1 { font-size: 25px; margin-bottom: 15px; text-align: center; }
+    .form-group { margin-bottom: 18px; position: relative;  font-weight: bold; }
     .form-section label { font-size: 13px; display: block; margin-bottom: 6px; }
 
     .input-icon-wrapper { position: relative; }
-    .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: #999; }
+    .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: rgb(73, 0, 0); }
     .input-icon-wrapper i.fa-envelope, .input-icon-wrapper i.fa-lock { left: 10px; }
 
     .input-icon-wrapper input { width: 100%; padding: 10px 12px; padding-left: 35px; padding-right: 35px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; color: #111; background: #fff; }
@@ -62,10 +62,10 @@
 
     .warning { font-size: 12px; color: #B91C1C; margin-top: 5px; display: none; }
 
-    .form-section button { width: 100%; padding: 10px; background: white; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold; color: #111; cursor: pointer; transition: background 0.3s ease; }
+    .form-section button { width: 100%; padding: 10px; background: rgb(73, 0, 0); border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold; color: #ffffff; cursor: pointer; transition: background 0.3s ease; }
     .form-section button:hover { background: #f0f0f0; }
 
-    .page-footer { background: white; color: #111; text-align: center; padding: 10px; font-size: 13px; font-weight: bold; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+    .page-footer { background: rgb(73, 0, 0); color: #ffffff; text-align: center; padding: 10px; font-size: 13px; font-weight: bold; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
 
     /* Modals */
     .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
@@ -87,7 +87,7 @@
     <div class="login-box">
       <div class="logo-section">
         <img src="/images/Logo.png" alt="TSHS Logo">
-        <p>DEVELOPMENT OF STUDENT VIOLATION TRACKING SYSTEM</p>
+        <h3>STUDENT VIOLATION TRACKING SYSTEM</h3>
       </div>
       <div class="form-section">
         <h1>Prefect Login</h1>
