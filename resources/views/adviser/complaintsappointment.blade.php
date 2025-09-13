@@ -11,7 +11,11 @@
       --secondary-color: #ffffff;
       --hover-bg: rgb(0, 88, 240);
       --hover-active-bg: rgb(0, 120, 255);
-      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      --button-blue: #007BFF;
+      --button-red: #dc3545;
+      --button-orange: #fd7e14;
+      --table-header-bg: #f5f5f5;
     }
 
     * {
@@ -30,152 +34,150 @@
       display: flex;
     }
 
-    /* Sidebar */
+    /* --- Sidebar (unchanged except colors) --- */
     .sidebar {
-      background-color: var(--secondary-color);
-      width: 250px;
-      padding: 1rem 0;
       position: fixed;
       top: 0;
-      bottom: 0;
+      left: 0;
+      width: 240px;
+      height: 100%;
+      background: linear-gradient(180deg, rgb(48, 48, 50));
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      z-index: 1000;
       overflow-y: auto;
-      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      font-weight: bold;
+      color: #ffffff;
     }
-
-    .sidebar img {
-      width: 200px;
-      height: auto;
-      margin-bottom: 0;
+    .sidebar, .sidebar * { color: #ffffff !important; }
+    .sidebar img { width: 180px; margin: 0 auto 0.1rem; display: block; }
+    .sidebar p { font-size: 0.9rem; text-transform: uppercase; text-align: center; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px; text-decoration: none;
+      font-size: 0.95rem; border-left: 4px solid transparent;
+      border-radius: 8px; transition: all 0.3s ease;
     }
+    .sidebar ul li a:hover { background-color: rgba(255,255,255,0.12); border-left-color: #FFD700; }
+    .dropdown-container { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .dropdown-container.show { max-height: 400px; padding-left: 12px; }
+    .dropdown-container li a { font-size: 0.85rem; padding: 10px 20px; }
+    .dropdown-btn .fa-caret-down { margin-left: auto; transition: transform 0.3s ease; }
 
-    .sidebar p {
-      margin-top: 0.5rem;
-      text-align: center;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .sidebar a {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      padding: 1rem 1.5rem;
-      margin: 0.5rem 0;
-      border-radius: 5px;
-    }
-
-    .sidebar a i {
-      margin-right: 1rem;
-      font-size: 1.2rem;
-    }
-
-    .sidebar a:hover { background-color: inherit; }
-    .sidebar a.active { background-color: inherit; }
-    .sidebar a.active:hover { background-color: inherit; }
-
-    /* Main content */
+    /* --- Main content --- */
     .main-content {
       margin-left: 260px;
       padding: 2rem;
       flex-grow: 1;
     }
 
-    /* Modal Styles */
+    /* --- High-res Buttons --- */
+    button, .btn-primary, .btn-red, .btn-orange {
+      font-size: 0.95rem;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+    .btn-primary { background-color: var(--button-blue); color: #fff; }
+    .btn-primary:hover { background-color: #0056b3; transform: translateY(-2px); }
+    .btn-red { background-color: var(--button-red); color: #fff; }
+    .btn-red:hover { background-color: #b52a37; transform: translateY(-2px); }
+    .btn-orange { background-color: var(--button-orange); color: #fff; }
+    .btn-orange:hover { background-color: #e76a05; transform: translateY(-2px); }
+
+    /* --- Table High-res --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+table th, table td {
+  padding: 14px 12px;
+  text-align: left;
+}
+table th {
+  background-color: #000000; /* Black background */
+  color: #ffffff !important; /* White text */
+  font-size: 1rem;
+}
+table tbody tr {
+  background: #fff;
+  transition: background 0.3s ease;
+}
+table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+table tbody tr:hover {
+  background: #eef5ff;
+}
+table td {
+  border-bottom: 1px solid #ddd;
+}
+
+
+    /* --- Modal High-res --- */
     .modal {
       display: none;
       position: fixed;
       z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
+      left: 0; top: 0; width: 100%; height: 100%;
+      overflow: auto; background-color: rgba(0,0,0,0.5);
     }
-
     .modal-content {
-      background-color: var(--secondary-color);
-      margin: 10% auto;
+      background-color: #fff;
+      margin: 5% auto;
       padding: 20px;
       border-radius: 10px;
-      width: 400px;
+      width: 450px;
       box-shadow: var(--shadow);
     }
-
-    .close {
-      float: right;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    .modal-content form {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-content label {
-      margin-top: 10px;
-      margin-bottom: 5px;
-    }
-
+    .close { float: right; font-size: 1.5rem; cursor: pointer; }
+    .modal-content form { display: flex; flex-direction: column; }
+    .modal-content label { margin-top: 10px; margin-bottom: 5px; }
     .modal-content input, .modal-content select {
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      padding: 8px; border-radius: 6px;
+      border: 1px solid #ccc; margin-bottom: 10px;
+      box-shadow: var(--shadow);
     }
-
-    .btn-primary {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: var(--hover-bg);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .btn-primary:hover {
-      background-color: var(--hover-active-bg);
-    }
-
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-    }
-
-    table, th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-
-    th {
-      background-color: var(--hover-bg);
-      color: white;
-    }
+    .modal-content button { align-self: flex-end; }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <nav class="sidebar" role="navigation">
-    <div style="text-align: center; margin-bottom: 1rem; margin-top: -1rem;">
-      <img src="/images/Logo.png" alt="Logo" style="width: 200px; height: auto; margin-bottom: 0;">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div style="text-align:center;margin-bottom:1rem;">
+      <img src="/images/Logo.png" alt="Logo">
       <p>ADVISER</p>
     </div>
     <ul>
-      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
       <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
       <li><a href="{{ route('parent.list') }}"><i class="fas fa-user-friends"></i> Parent List</a></li>
-      <li><a href="{{ route('violation.record') }}"><i class="fas fa-exclamation-triangle"></i> Violation Record</a></li>
-      <li><a href="{{ route('violation.appointment') }}"><i class="fas fa-calendar-check"></i> Violation Appointment</a></li>
-      <li><a href="{{ route('violation.anecdotal') }}"><i class="fas fa-clipboard-list"></i> Violation Anecdotal</a></li>
-      <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i> Complaints</a></li>
-      <li><a href="{{ route('complaints.anecdotal') }}"><i class="fas fa-clipboard"></i> Complaints Anecdotal</a></li>
-      <li><a href="{{ route('complaints.appointment') }}" class="active"><i class="fas fa-calendar-alt"></i> Complaints Appointment</a></li>
+      <li>
+        <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down"></i></a>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
+          <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
+          <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down"></i></a>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
+          <li><a href="{{ route('complaints.appointment') }}" class="active">Complaints Appoinment</a></li>
+          <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
+        </ul>
+      </li>
       <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
       <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
       <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
@@ -183,17 +185,17 @@
     </ul>
   </nav>
 
-    <!-- Main content -->
+  <!-- MAIN -->
   <div class="main-content">
     <h1>Complaints Appointments</h1>
 
-    <!-- Top controls: search + create button -->
-    <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom: 15px;">
-      <input type="text" id="searchInput" placeholder="Search appointments..." style="padding:5px; margin-right:10px;">
-      <button class="btn-primary" id="openModalBtn">Create Appointment</button>
+    <!-- Top Controls -->
+    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;">
+      <input type="text" id="searchInput" placeholder="Search appointments..." style="padding:8px 10px;border-radius:6px;border:1px solid #ccc;box-shadow:var(--shadow);margin-right:10px;">
+      <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Create Appointment</button>
     </div>
 
-    <!-- Appointment Modal -->
+    <!-- Modal -->
     <div id="appointmentModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -204,7 +206,7 @@
           <datalist id="complaintList">
             @foreach ($comp_appointments as $comp_appointment)
               <option value="{{ $comp_appointment->complaint->id }}">
-                {{ $comp_appointment->complaint->offense->offense_type }} - 
+                {{ $comp_appointment->complaint->offense->offense_type }} -
                 {{ $comp_appointment->complaint->respondent->student_fname }} {{ $comp_appointment->complaint->respondent->student_lname }}
               </option>
             @endforeach
@@ -223,12 +225,12 @@
             <option value="Cancelled">Cancelled</option>
           </select>
 
-          <button type="submit" class="btn-primary">Save</button>
+          <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
         </form>
       </div>
     </div>
 
-    <!-- Appointment Table -->
+    <!-- Table -->
     <table id="appointmentTable">
       <thead>
         <tr>
@@ -265,17 +267,24 @@
   </div>
 
   <script>
-    // Sidebar active link
-    const menuLinks = document.querySelectorAll('.sidebar a');
-    const activeLink = localStorage.getItem('activeMenu');
-    if (activeLink) menuLinks.forEach(link => { if(link.href===activeLink) link.classList.add('active'); });
-    menuLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        menuLinks.forEach(i=>i.classList.remove('active'));
-        this.classList.add('active');
-        if(!this.href.includes('profile.settings')) localStorage.setItem('activeMenu', this.href);
+   // Sidebar dropdown toggle
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
+  dropdowns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdowns.forEach(otherBtn => {
+        if (otherBtn !== this) {
+          otherBtn.nextElementSibling.classList.remove('show');
+          otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+        }
       });
+      const container = this.nextElementSibling;
+      container.classList.toggle('show');
+      this.querySelector('.fa-caret-down').style.transform =
+        container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
     });
+  });
+
     function logout(){ alert('Logging out...'); }
 
     // --- Live Search ---

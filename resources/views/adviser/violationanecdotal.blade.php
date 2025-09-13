@@ -1,73 +1,196 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Adviser Dashboard - Violation Anecdotal</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="{{ asset('css/adviser/violationanecdotal.css') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <style>
-    .header-row {
+    :root {
+      --primary-color: #000000;
+      --secondary-color: #ffffff;
+      --hover-bg: rgb(0, 88, 240);
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      font-weight: bold !important;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Arial", sans-serif;
+      margin: 0;
+      background-color: var(--secondary-color);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* --- Sidebar (unchanged) --- */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 240px; height: 100%;
+      background: linear-gradient(180deg,rgb(48, 48, 50));
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      z-index: 1000; overflow-y: auto;
+      transition: all 0.3s ease;
+      color: #ffffff;
+    }
+    .sidebar::-webkit-scrollbar { width: 8px; }
+    .sidebar::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.25); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-track { background-color: rgba(255, 255, 255, 0.05); }
+    .sidebar img { width: 180px; margin: 0 auto 0.10rem; display: block; }
+    .sidebar p { font-size: 0.9rem; font-weight: 700; margin: 0 0 1rem; color: #ffffff; text-align: center; }
+    .sidebar ul { list-style: none; padding: 0; margin: 0; }
+    .sidebar ul li a {
+      display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+      color: #ffffff; text-decoration: none; font-size: 0.95rem;
+      border-left: 4px solid transparent; border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .sidebar ul li a:hover, .sidebar ul li a.active {
+      background-color: rgba(255,255,255,0.12);
+      border-left-color: #FFD700;
+    }
+    .dropdown-container { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .dropdown-container.show { max-height: 400px; padding-left: 12px; }
+
+    /* --- Main Content --- */
+    .main-content {
+      margin-left: 260px;
+      padding: 2rem;
+      width: calc(100% - 260px);
+    }
+
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    .header-row input[type="text"] {
-      padding: 5px;
-      margin-right: 0.5rem;
+    .header h1 { font-size: 22px; margin: 0; }
+    .header .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .search-box input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      min-width: 200px;
     }
-    .btn-action {
-      margin: 0 2px;
-      padding: 3px 8px;
+
+    /* --- Buttons --- */
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
     }
-    table td, table th {
-      text-align: left;
-      padding: 8px;
+    .btn i { font-size: 16px; }
+    .btn-edit { background: linear-gradient(135deg, #ffc107, #e0a800); color: #000; }
+    .btn-danger { background: linear-gradient(135deg, #dc3545, #b02a37); color: #fff; }
+    .btn-info { background: linear-gradient(135deg, #17a2b8, #117a8b); color: #fff; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0,0,0,0.2); opacity: 0.95; }
+
+    /* --- Table --- */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 25px;
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: 16px;
     }
+    table th, table td {
+      padding: 14px 18px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    table th {
+      background-color: rgb(0, 0, 0);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    table tr:nth-child(even) { background-color: #f7f7f7; }
+    table tr:hover { background-color: rgba(0,0,0,0.05); }
+
+    /* --- Modal --- */
     .modal {
       display: none;
       position: fixed;
-      top:0; left:0; width:100%; height:100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      justify-content: center; align-items: center;
     }
     .modal-content {
       background: #fff;
       padding: 20px;
-      border-radius: 5px;
-      width: 500px;
-      max-width: 90%;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 100%;
       position: relative;
+      box-shadow: var(--shadow);
     }
+    .modal-content h2 { margin-bottom: 1rem; font-size: 20px; }
     .modal-content .close {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 20px;
-      cursor: pointer;
+      position: absolute; top: 10px; right: 15px;
+      cursor: pointer; font-size: 20px; color: red;
     }
+    .modal-content form { display: flex; flex-direction: column; gap: 12px; }
+    .modal-content label { font-size: 14px; }
+    .modal-content input, .modal-content textarea {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .modal-content textarea { resize: none; height: 80px; }
+    .modal-content button { align-self: flex-end; }
   </style>
 </head>
 <body>
+  <!-- SIDEBAR -->
   <nav class="sidebar" role="navigation">
-    <div style="text-align: center; margin-bottom: 1rem; margin-top: -1rem;">
-      <img src="/images/Logo.png" alt="Logo" style="width: 200px; height: auto; margin-bottom: 0;">
+    <div style="text-align: center; margin-bottom: 1rem;">
+      <img src="/images/Logo.png" alt="Logo">
       <p>ADVISER</p>
     </div>
     <ul>
-      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
       <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
       <li><a href="{{ route('parent.list') }}"><i class="fas fa-user-friends"></i> Parent List</a></li>
-      <li><a href="{{ route('violation.record') }}"><i class="fas fa-exclamation-triangle"></i> Violation Record</a></li>
-      <li><a href="{{ route('violation.appointment') }}"><i class="fas fa-calendar-check"></i> Violation Appointment</a></li>
-      <li><a href="{{ route('violation.anecdotal') }}" class="active"><i class="fas fa-clipboard-list"></i> Violation Anecdotal</a></li>
-      <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i> Complaints</a></li>
-      <li><a href="{{ route('complaints.anecdotal') }}"><i class="fas fa-clipboard"></i> Complaints Anecdotal</a></li>
-      <li><a href="{{ route('complaints.appointment') }}"><i class="fas fa-calendar-alt"></i> Complaints Appointment</a></li>
+      <li>
+        <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
+          <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
+          <li><a href="{{ route('violation.anecdotal') }}" class="active">Violation Anecdotal</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
+          <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
+          <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
+        </ul>
+      </li>
       <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
       <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
       <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
@@ -75,117 +198,108 @@
     </ul>
   </nav>
 
+  <!-- MAIN CONTENT -->
   <div class="main-content">
-    <div class="header-row">
-      <h2>Violation Anecdotal Records</h2>
-      <div>
-        <input type="text" id="searchInput" placeholder="Search...">
-        <button class="btn-primary" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Create</button>
+    <div class="header">
+      <h1>Violation Anecdotal</h1>
+      <div class="actions">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search...">
+        </div>
+        <button class="btn btn-info" onclick="openModal()">
+          <i class="fas fa-plus-circle"></i> Add Record
+        </button>
       </div>
     </div>
 
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Violator Name</th>
-          <th>Parent Name</th>
-          <th>Solution</th>
-          <th>Recommendation</th>
+          <th>Student Name</th>
+          <th>Violation</th>
           <th>Date</th>
-          <th>Time</th>
+          <th>Remarks</th>
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="anecdotalTable">
-        @forelse($anecdotal as $a)
-        <tr data-id="{{ $a->violation_anec_id }}">
-          <td>{{ $a->violation_anec_id }}</td>
-          <td>{{ $a->violation->student->student_fname }} {{ $a->violation->student->student_lname }}</td>
-          <td>{{ $a->violation->student->parent->parent_fname ?? '' }} {{ $a->violation->student->parent->parent_lname ?? '' }}</td>
-          <td>{{ $a->violation_anec_solution }}</td>
-          <td>{{ $a->violation_anec_recommendation }}</td>
-          <td>{{ \Carbon\Carbon::parse($a->violation_anec_date)->format('Y-m-d') }}</td>
-          <td>{{ \Carbon\Carbon::parse($a->violation_anec_time)->format('h:i A') }}</td>
+      <tbody>
+        <!-- Example row -->
+        <tr>
+          <td>Juan Dela Cruz</td>
+          <td>Bullying</td>
+          <td>2025-09-13</td>
+          <td>First offense</td>
           <td>
-            <button class="btn-action btn-edit" onclick="editRecord({{ $a->violation_anec_id }})"><i class="fas fa-edit"></i></button>
-            <button class="btn-action btn-delete" onclick="deleteRecord({{ $a->violation_anec_id }})"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-info"><i class="fas fa-info-circle"></i> Info</button>
+            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
+            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
           </td>
         </tr>
-        @empty
-        <tr>
-          <td colspan="8" style="text-align:center;">No anecdotal records found.</td>
-        </tr>
-        @endforelse
       </tbody>
     </table>
   </div>
 
-  <!-- Create Modal -->
-  <div class="modal" id="createModal">
+  <!-- MODAL -->
+  <div id="recordModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal('createModal')">&times;</span>
-      <h3>Create Violation Anecdotal</h3>
-      <form method="POST" action="{{ route('violation.anecdotal.store') }}">
-        @csrf
-        <div class="form-group">
-          <label for="violation_id">Select Violation</label>
-          <select name="violation_id" required>
-            @foreach($students as $student)
-              @foreach($student->violations as $violation)
-                <option value="{{ $violation->violation_id }}">
-                  {{ $student->student_fname }} {{ $student->student_lname }} - {{ $violation->offense->offense_type ?? '' }}
-                </option>
-              @endforeach
-            @endforeach
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="solution">Solution</label>
-          <input type="text" name="violation_anec_solution" required>
-        </div>
-        <div class="form-group">
-          <label for="recommendation">Recommendation</label>
-          <input type="text" name="violation_anec_recommendation" required>
-        </div>
-        <div class="form-group">
-          <label for="date">Date</label>
-          <input type="date" name="violation_anec_date" required>
-        </div>
-        <div class="form-group">
-          <label for="time">Time</label>
-          <input type="time" name="violation_anec_time" required>
-        </div>
-        <button type="submit" class="btn-primary">Save</button>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Add Violation Anecdotal</h2>
+      <form>
+        <label for="studentName">Student Name</label>
+        <input type="text" id="studentName" name="studentName" required>
+
+        <label for="violation">Violation</label>
+        <input type="text" id="violation" name="violation" required>
+
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="remarks">Remarks</label>
+        <textarea id="remarks" name="remarks" required></textarea>
+
+        <button type="submit" class="btn btn-info"><i class="fas fa-save"></i> Save</button>
       </form>
     </div>
   </div>
 
   <script>
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+       // Dropdown functionality - auto close others & scroll
+const dropdowns = document.querySelectorAll('.dropdown-btn');
+dropdowns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
 
-    // Live search
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('keyup', function() {
-      const filter = this.value.toLowerCase();
-      document.querySelectorAll('#anecdotalTable tr').forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(filter) ? '' : 'none';
-      });
+        // close all other dropdowns
+        dropdowns.forEach(otherBtn => {
+            if (otherBtn !== this) {
+                otherBtn.nextElementSibling.classList.remove('show');
+                otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // toggle clicked dropdown
+        const container = this.nextElementSibling;
+        container.classList.toggle('show');
+        this.querySelector('.fa-caret-down').style.transform =
+            container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+
+        // scroll into view if dropdown is opened
+        if(container.classList.contains('show')){
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     });
+});
 
-    function logout() { alert('Logging out...'); }
-
-    function editRecord(id) {
-      alert('Edit functionality for record ID: ' + id);
-      // You can implement modal prefill and AJAX update here
+    function openModal() {
+      document.getElementById("recordModal").style.display = "flex";
     }
-
-    function deleteRecord(id) {
-      if(confirm('Are you sure you want to delete this record?')) {
-        alert('Delete functionality for record ID: ' + id);
-        // You can implement AJAX delete here
+    function closeModal() {
+      document.getElementById("recordModal").style.display = "none";
+    }
+    window.onclick = function(event) {
+      const modal = document.getElementById("recordModal");
+      if (event.target === modal) {
+        modal.style.display = "none";
       }
     }
   </script>

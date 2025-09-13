@@ -29,51 +29,106 @@
       z-index: -1;
     }
 
-    .page-header { background: white; color: #111; text-align: center; padding: 15px; font-weight: bold; font-size: 22px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .page-header { 
+      background: #2e7d32; 
+      color: #fff; 
+      text-align: center; 
+      padding: 15px; 
+      font-weight: bold; 
+      font-size: 22px; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
+    }
 
     .adviser-login-left, .adviser-login-right {
-      position: fixed; top: 15px; padding: 8px 16px; background: white; color: #111; font-weight: bold; border-radius: 6px;
-      text-decoration: none; transition: background 0.3s ease; border: 1px solid #ccc; z-index: 10;
+      position: fixed; 
+      top: 15px; 
+      padding: 8px 16px; 
+      background: #2e7d32; 
+      color: #fff; 
+      font-weight: bold; 
+      border-radius: 6px;
+      text-decoration: none; 
+      transition: background 0.3s ease; 
+      border: 1px solid #1b5e20; 
+      z-index: 10;
     }
     .adviser-login-left { left: 15px; }
     .adviser-login-right { right: 15px; display: none; }
-    .adviser-login-left:hover, .adviser-login-right:hover { background: #f0f0f0; }
+    .adviser-login-left:hover, .adviser-login-right:hover { background: #388e3c; }
 
     .container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
 
-    .login-box { display: flex; flex-direction: column; max-width: 350px; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 18px rgba(0,0,0,0.2); background: white; }
+    .login-box { 
+      display: flex; 
+      flex-direction: column; 
+      max-width: 350px; 
+      width: 100%; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      box-shadow: 0 8px 18px rgba(0,0,0,0.4); 
+      background: #fff; 
+    }
 
     .logo-section { text-align: center; padding: 0; }
     .logo-section img { width: 220px; height: auto; object-fit: contain; }
-    .logo-section p { font-size: 13px; margin-top: 8px; font-weight: 600; color: #111; }
+    .logo-section p { font-size: 13px; margin-top: 8px; font-weight: 600; color: #2e7d32; }
 
-    .form-section { padding: 20px; background: white; color: #111; }
-    .form-section h1 { font-size: 18px; margin-bottom: 15px; text-align: center; }
+    .form-section { padding: 20px; background: #fff; color: #111; }
+    .form-section h1 { font-size: 18px; margin-bottom: 15px; text-align: center; color: #2e7d32; }
     .form-group { margin-bottom: 18px; position: relative; }
-    .form-section label { font-size: 13px; display: block; margin-bottom: 6px; }
+    .form-section label { font-size: 13px; display: block; margin-bottom: 6px; color: #000; }
 
     .input-icon-wrapper { position: relative; }
-    .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: #999; }
+    .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: #2e7d32; }
     .input-icon-wrapper i.fa-envelope, .input-icon-wrapper i.fa-lock { left: 10px; }
 
-    .input-icon-wrapper input { width: 100%; padding: 10px 12px; padding-left: 35px; padding-right: 35px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; color: #111; background: #fff; }
-    .input-icon-wrapper input:focus { border-color: #999; outline: none; }
-    .toggle-password { right: 10px; cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%); color: #999; }
+    .input-icon-wrapper input { 
+      width: 100%; 
+      padding: 10px 12px; 
+      padding-left: 35px; 
+      padding-right: 35px; 
+      border-radius: 6px; 
+      border: 1px solid #2e7d32; 
+      font-size: 14px; 
+      color: #000; 
+      background: #f9f9f9; 
+    }
+    .input-icon-wrapper input:focus { border-color: #388e3c; outline: none; }
+    .toggle-password { right: 10px; cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%); color: #2e7d32; }
 
     .warning { font-size: 12px; color: #B91C1C; margin-top: 5px; display: none; }
 
-    .form-section button { width: 100%; padding: 10px; background: white; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold; color: #111; cursor: pointer; transition: background 0.3s ease; }
-    .form-section button:hover { background: #f0f0f0; }
+    .form-section button { 
+      width: 100%; 
+      padding: 10px; 
+      background: #2e7d32; 
+      border: none; 
+      border-radius: 6px; 
+      font-size: 14px; 
+      font-weight: bold; 
+      color: #fff; 
+      cursor: pointer; 
+      transition: background 0.3s ease; 
+    }
+    .form-section button:hover { background: #388e3c; }
 
-    .page-footer { background: white; color: #111; text-align: center; padding: 10px; font-size: 13px; font-weight: bold; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+    .page-footer { 
+      background: #2e7d32; 
+      color: #fff; 
+      text-align: center; 
+      padding: 10px; 
+      font-size: 13px; 
+      font-weight: bold; 
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3); 
+    }
 
     /* Modals */
     .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
-    .modal-content { background: white; padding: 20px; border-radius: 8px; max-width: 320px; width: 90%; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
-    .modal-content h2 { color: #B91C1C; margin-bottom: 10px; font-size: 16px; }
+    .modal-content { background: #fff; padding: 20px; border-radius: 8px; max-width: 320px; width: 90%; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+    .modal-content h2 { color: #2e7d32; margin-bottom: 10px; font-size: 16px; }
     .modal-content p { color: #333; font-size: 13px; margin-bottom: 15px; }
-    .modal-content button { background: white; border: 1px solid #ccc; color: #111; padding: 6px 14px; border-radius: 5px; font-size: 13px; cursor: pointer; }
-    .modal-content button:hover { background: #f0f0f0; }
+    .modal-content button { background: #2e7d32; border: none; color: #fff; padding: 6px 14px; border-radius: 5px; font-size: 13px; cursor: pointer; }
+    .modal-content button:hover { background: #388e3c; }
   </style>
 </head>
 <body>
@@ -161,7 +216,7 @@
         valid = false;
       } else {
         emailWarning.style.display = 'none';
-        emailInput.style.borderColor = '#ccc';
+        emailInput.style.borderColor = '#2e7d32';
       }
       if (!passwordInput.value) {
         passwordWarning.style.display = 'block';
@@ -169,7 +224,7 @@
         valid = false;
       } else {
         passwordWarning.style.display = 'none';
-        passwordInput.style.borderColor = '#ccc';
+        passwordInput.style.borderColor = '#2e7d32';
       }
       if (!valid) { e.preventDefault(); return; }
 

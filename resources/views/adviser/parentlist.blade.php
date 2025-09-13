@@ -5,89 +5,343 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parent List</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('css/adviser/parents.css') }}">
+  
   <style>
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .header h1 { font-size: 22px; margin: 0; }
-    .header .actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .search-box input {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      min-width: 200px;
-    }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td {
-      padding: 10px; text-align: center; border: 1px solid #ddd;
-    }
-    thead { background: #343a40; color: #fff; }
-    .btn {
-      padding: 6px 10px;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .btn i { margin-right: 5px; }
-    .btn-danger { background: #dc3545; color: #fff; }
-    .btn-edit { background: #ffc107; color: #000; }
-    .btn-info { background: #17a2b8; color: #fff; }
-    .btn:hover { opacity: 0.9; }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center; align-items: center;
-    }
-    .modal-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 500px; width: 100%;
-      position: relative;
-    }
-    .modal-content .close {
-      position: absolute; top: 10px; right: 15px;
-      cursor: pointer; font-size: 20px;
-    }
-    .modal-content input {
-      width: 100%; margin-bottom: 10px;
-      padding: 8px; border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+    :root {
+  --primary-color: #000000;
+  --secondary-color: #ffffff;
+  --hover-bg: rgb(0, 88, 240);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  color: black;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: var(--secondary-color);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  background: linear-gradient(180deg, rgb(48, 48, 50));
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Sidebar scroll */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Logo */
+.sidebar img {
+  width: 180px;
+  height: auto;
+  margin: 0 auto 0.1rem;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.sidebar p {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0 0 1rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Sidebar Links */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.sidebar ul li a i {
+  font-size: 1.1rem;
+  min-width: 22px;
+  text-align: center;
+  color: #ffffff;
+  transition: color 0.3s ease;
+  font-weight: bold;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: rgba(255,255,255,0.12);
+  border-left-color: #FFD700;
+  color: #ffffff !important;
+}
+
+/* Dropdown */
+.dropdown-container {
+  max-height: 0;
+  overflow: hidden;
+  background-color: rgba(255,255,255,0.05);
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  border-left: 2px solid rgba(255,255,255,0.1);
+  border-radius: 0 8px 8px 0;
+}
+
+.dropdown-container.show {
+  max-height: 400px;
+  padding-left: 12px;
+}
+
+.dropdown-container li a {
+  font-size: 0.85rem;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.dropdown-container li a:hover {
+  background-color: rgba(255,255,255,0.12);
+  color: #ffffff;
+}
+
+.dropdown-btn .fa-caret-down {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+
+/* --- Main content --- */
+.main-content {
+  margin-left: 260px;
+  padding: 2rem;
+  width: calc(100% - 260px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.header .actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.search-box input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 200px;
+}
+
+/* --- Buttons (High Resolution) --- */
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.btn i { font-size: 16px; }
+
+.btn-edit {
+  background: linear-gradient(135deg, #ffc107, #e0a800);
+  color: #000;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545, #b02a37);
+  color: #fff;
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #17a2b8, #117a8b);
+  color: #fff;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+  opacity: 0.95;
+}
+
+/* --- Table (High Resolution) --- */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 16px;
+  }
+
+  table th, table td {
+    padding: 14px 18px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  table th {
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  table tr:nth-child(even) {
+    background-color: #f7f7f7;
+  }
+
+  table tr:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+
+/* --- Modal --- */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center; 
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px; 
+  width: 100%;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+}
+
+.modal-content input, 
+.modal-content select {
+  width: 100%; 
+  margin-bottom: 10px;
+  padding: 8px; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modal-content .close {
+  position: absolute; 
+  top: 10px; 
+  right: 15px;
+  cursor: pointer; 
+  font-size: 20px; 
+  color: red;
+}
+
   </style>
 </head>
 <body>
   <!-- SIDEBAR -->
-  <nav class="sidebar">
-    <div style="text-align: center;">
-      <img src="/images/Logo.png" alt="Logo" />
-      <p>ADVISER</p>
+ 
+<nav class="sidebar" role="navigation">
+    <div style="text-align: center; margin-bottom: 1rem;">
+        <img src="/images/Logo.png" alt="Logo">
+        <p>ADVISER</p>
     </div>
     <ul>
-      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
-      <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
-      <li><a href="{{ route('parent.list') }}"><i class="fas fa-user-friends"></i> Parent List</a></li>
-      <li><a href="{{ route('violation.record') }}"><i class="fas fa-exclamation-triangle"></i> Violation Record</a></li>
-      <li><a href="{{ route('violation.appointment') }}"><i class="fas fa-calendar-check"></i> Violation Appointment</a></li>
-      <li><a href="{{ route('violation.anecdotal') }}"><i class="fas fa-clipboard-list"></i> Violation Anecdotal</a></li>
-      <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i> Complaints</a></li>
-      <li><a href="{{ route('complaints.anecdotal') }}"><i class="fas fa-clipboard"></i> Complaints Anecdotal</a></li>
-      <li><a href="{{ route('complaints.appointment') }}"><i class="fas fa-calendar-alt"></i> Complaints Appointment</a></li>
-      <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
-      <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-      <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
+        <li><a href="{{ route('parent.list') }}" class="active"><i class="fas fa-user-friends"></i> Parent List</a></li>
+
+        <!-- Violations Dropdown -->
+        <li>
+            <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+            <ul class="dropdown-container">
+                <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
+                <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
+                <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
+            </ul>
+        </li>
+
+        <!-- Complaints Dropdown -->
+        <li>
+            <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+            <ul class="dropdown-container">
+                <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
+                <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
+                <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
+            </ul>
+        </li>
+
+        <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
+        <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
+        <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
+        <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
-  </nav>
+</nav>
 
   <!-- MAIN CONTENT -->
   <div class="main-content">
@@ -198,6 +452,43 @@
   </div>
 
   <script>
+
+    // Dropdown functionality - auto close others & scroll
+const dropdowns = document.querySelectorAll('.dropdown-btn');
+dropdowns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // close all other dropdowns
+        dropdowns.forEach(otherBtn => {
+            if (otherBtn !== this) {
+                otherBtn.nextElementSibling.classList.remove('show');
+                otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // toggle clicked dropdown
+        const container = this.nextElementSibling;
+        container.classList.toggle('show');
+        this.querySelector('.fa-caret-down').style.transform =
+            container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+
+        // scroll into view if dropdown is opened
+        if(container.classList.contains('show')){
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+});
+
+
+
+// Sidebar active link
+document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', function(){
+        document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
     // live search
     document.getElementById('searchInput').addEventListener('keyup', function() {
       const filter = this.value.toLowerCase();

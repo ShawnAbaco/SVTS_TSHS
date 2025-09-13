@@ -5,88 +5,392 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Adviser Dashboard - Student List</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ asset('css/adviser/studentlist.css') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <nav class="sidebar">
-    <div style="text-align: center;">
-      <img src="/images/Logo.png" alt="Logo" />
-      <p>ADVISER</p>
-    </div>
-    <ul>
-      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
-      <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
-      <li><a href="{{ route('parent.list') }}"><i class="fas fa-user-friends"></i> Parent List</a></li>
-      <li><a href="{{ route('violation.record') }}"><i class="fas fa-exclamation-triangle"></i> Violation Record</a></li>
-      <li><a href="{{ route('violation.appointment') }}"><i class="fas fa-calendar-check"></i> Violation Appointment</a></li>
-      <li><a href="{{ route('violation.anecdotal') }}"><i class="fas fa-clipboard-list"></i> Violation Anecdotal</a></li>
-      <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i> Complaints</a></li>
-      <li><a href="{{ route('complaints.anecdotal') }}"><i class="fas fa-clipboard"></i> Complaints Anecdotal</a></li>
-      <li><a href="{{ route('complaints.appointment') }}"><i class="fas fa-calendar-alt"></i> Complaints Appointment</a></li>
-      <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
-      <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-      <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
-  </nav>
+<style>
+  :root {
+    --primary-color: #000000;
+    --secondary-color: #ffffff;
+    --hover-bg: rgb(0, 88, 240);
+    --shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    --overlay: rgba(0, 0, 0, 0.6);
+  }
 
-  <!-- MAIN CONTENT -->
-  <main class="main-content">
-    <h1>Student List</h1>
+  * {
+    color: black;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    <!-- Toolbar: search (left) and create button (right) -->
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin: 12px 0;">
-      <input
-        id="tableSearch"
-        type="search"
-        placeholder="Search students (name, address, contact)..."
-        style="padding:8px 10px; width:360px; border:1px solid #ccc; border-radius:6px;"
-        aria-label="Search students"
+  body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    background-color: var(--secondary-color);
+    min-height: 100vh;
+    display: flex;
+  }
+
+ 
+/* --- Sidebar --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  background: linear-gradient(180deg, rgb(48, 48, 50));
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Sidebar scroll */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Logo */
+.sidebar img {
+  width: 180px;
+  height: auto;
+  margin: 0 auto 0.1rem;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.sidebar p {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0 0 1rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Sidebar Links */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.sidebar ul li a i {
+  font-size: 1.1rem;
+  min-width: 22px;
+  text-align: center;
+  color: #ffffff;
+  transition: color 0.3s ease;
+  font-weight: bold;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: rgba(255,255,255,0.12);
+  border-left-color: #FFD700;
+  color: #ffffff !important;
+}
+
+/* Dropdown */
+.dropdown-container {
+  max-height: 0;
+  overflow: hidden;
+  background-color: rgba(255,255,255,0.05);
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  border-left: 2px solid rgba(255,255,255,0.1);
+  border-radius: 0 8px 8px 0;
+}
+
+.dropdown-container.show {
+  max-height: 400px;
+  padding-left: 12px;
+}
+
+.dropdown-container li a {
+  font-size: 0.85rem;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.dropdown-container li a:hover {
+  background-color: rgba(255,255,255,0.12);
+  color: #ffffff;
+}
+
+.dropdown-btn .fa-caret-down {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+  /* --- MAIN CONTENT --- */
+  .main-content {
+    margin-left: 260px;
+    padding: 3rem;
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .main-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #222;
+  }
+
+  /* Toolbar */
+  #tableSearch {
+    padding: 12px 15px;
+    width: 400px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  }
+
+  .btn-primary {
+    background-color: var(--hover-bg);
+    color: #fff !important;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  }
+
+  /* --- TABLE --- */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 16px;
+  }
+
+  table th, table td {
+    padding: 14px 18px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  table th {
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  table tr:nth-child(even) {
+    background-color: #f7f7f7;
+  }
+
+  table tr:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+
+  .action-btn {
+    border: none;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff !important;
+    transition: all 0.2s ease;
+  }
+
+  .action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  .action-btn.info { background-color: #17a2b8; }
+  .action-btn.edit { background-color: #007bff; }
+  .action-btn.delete { background-color: #dc3545; }
+
+  /* --- MODAL --- */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--overlay);
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .modal-content {
+    background-color: #fff;
+    width: 500px;
+    max-width: 100%;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    position: relative;
+    font-size: 16px;
+  }
+
+  .modal-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .close-btn:hover {
+    transform: scale(1.2);
+  }
+
+  .form-group { margin-bottom: 18px; }
+  label { display: block; margin-bottom: 6px; font-size: 15px; }
+  input, select { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; }
+
+  .modal-footer { text-align: center; margin-top: 15px; }
+  .btn-submit {
+    background-color: var(--hover-bg);
+    color: #fff !important;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+</style>
+
+<!-- Sidebar -->
+<nav class="sidebar" role="navigation">
+  <div style="text-align: center; margin-bottom: 1rem;">
+    <img src="/images/Logo.png" alt="Logo">
+    <p>ADVISER</p>
+  </div>
+  <ul>
+    <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+    <li><a href="{{ route('student.list') }}" class="active"><i class="fas fa-users"></i> Student List</a></li>
+    <li><a href="{{ route('parent.list') }}"><i class="fas fa-user-friends"></i> Parent List</a></li>
+    <li>
+      <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
+        <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
+        <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+      <ul class="dropdown-container">
+        <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
+        <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
+        <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
+      </ul>
+    </li>
+    <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
+    <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
+    <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
+    <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+  <h1>Student List</h1>
+  <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin: 15px 0;">
+    <input id="tableSearch" type="search" placeholder="Search students (name, address, contact)...">
+    <button class="btn-primary" id="openModalBtn" style="white-space:nowrap;"><i class="fas fa-plus"></i> Create Student Info</button>
+  </div>
+  <table id="studentTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Birthdate</th>
+        <th>Address</th>
+        <th>Contact#</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach($students as $student)
+      <tr 
+          data-id="{{ $student->student_id }}"
+          data-fname="{{ $student->student_fname }}"
+          data-lname="{{ $student->student_lname }}"
+          data-birthdate="{{ $student->student_birthdate }}"
+          data-address="{{ $student->student_address }}"
+          data-contact="{{ $student->student_contactinfo }}"
+          data-parent-name="{{ $student->parent ? $student->parent->parent_fname . ' ' . $student->parent->parent_lname : '' }}"
+          data-parent-contact="{{ $student->parent ? $student->parent->parent_contactinfo : '' }}"
+          data-parent-id="{{ $student->parent ? $student->parent->parent_id : '' }}"
       >
-
-      <button class="btn-primary" id="openModalBtn" style="white-space:nowrap;">
-        <i class="fas fa-plus"></i> Create Student Info
-      </button>
-    </div>
-
-    <!-- Table -->
-    <table id="studentTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Birthdate</th>
-          <th>Address</th>
-          <th>Contact#</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-@foreach($students as $student)
-<tr 
-    data-id="{{ $student->student_id }}"
-    data-fname="{{ $student->student_fname }}"
-    data-lname="{{ $student->student_lname }}"
-    data-birthdate="{{ $student->student_birthdate }}"
-    data-address="{{ $student->student_address }}"
-    data-contact="{{ $student->student_contactinfo }}"
-    data-parent-name="{{ $student->parent ? $student->parent->parent_fname . ' ' . $student->parent->parent_lname : '' }}"
-    data-parent-contact="{{ $student->parent ? $student->parent->parent_contactinfo : '' }}"
-    data-parent-id="{{ $student->parent ? $student->parent->parent_id : '' }}"
->
-  <td>{{ $student->student_fname . " " . $student->student_lname }}</td>
-  <td>{{ $student->student_birthdate }}</td>
-  <td>{{ $student->student_address }}</td>
-  <td>{{ $student->student_contactinfo }}</td>
-  <td>
-    <button class="action-btn info"><i class="fas fa-info-circle"></i> Info</button>
-    <button class="action-btn edit"><i class="fas fa-edit"></i> Edit</button>
-    <form method="POST" action="{{ route('students.destroy', $student->student_id) }}" style="display:inline;">
-      @csrf
-      @method('DELETE')
-      <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i> Delete</button>
+        <td>{{ $student->student_fname . " " . $student->student_lname }}</td>
+        <td>{{ $student->student_birthdate }}</td>
+        <td>{{ $student->student_address }}</td>
+        <td>{{ $student->student_contactinfo }}</td>
+        <td>
+          <button class="action-btn info"><i class="fas fa-info-circle"></i> Info</button>
+          <button class="action-btn edit"><i class="fas fa-edit"></i> Edit</button>
+          <form method="POST" action="{{ route('students.destroy', $student->student_id) }}" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i> Delete</button>
     </form>
   </td>
 </tr>
@@ -226,6 +530,43 @@
 </div>
 
 <script>
+// Dropdown functionality - auto close others & scroll
+const dropdowns = document.querySelectorAll('.dropdown-btn');
+dropdowns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // close all other dropdowns
+        dropdowns.forEach(otherBtn => {
+            if (otherBtn !== this) {
+                otherBtn.nextElementSibling.classList.remove('show');
+                otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // toggle clicked dropdown
+        const container = this.nextElementSibling;
+        container.classList.toggle('show');
+        this.querySelector('.fa-caret-down').style.transform =
+            container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+
+        // scroll into view if dropdown is opened
+        if(container.classList.contains('show')){
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+});
+
+
+
+
+document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', function(){
+        document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+    });// Sidebar active link
+});
+
 const openModalBtn = document.getElementById('openModalBtn');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const modal = document.getElementById('createStudentModal');

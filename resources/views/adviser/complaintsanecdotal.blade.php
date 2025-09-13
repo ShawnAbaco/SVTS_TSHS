@@ -8,45 +8,174 @@
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
   
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="{{ asset('css/adviser/complaintsanecdotal.css') }}">
-  
   <style>
-    /* Buttons */
-    .btn-primary { padding: 8px 12px; background-color: #0058f0; color:white; border:none; border-radius:5px; cursor:pointer; }
-    .btn-orange { padding:5px 8px; background-color: orange; color:white; border:none; border-radius:5px; cursor:pointer; }
-    .btn-red { padding:5px 8px; background-color: red; color:white; border:none; border-radius:5px; cursor:pointer; margin-left:5px; }
+  :root {
+      --primary-color: rgb(134, 142, 142);
+      --secondary-color: #ffffff;
+      --hover-bg: rgb(0, 88, 240);
+      --hover-active-bg: rgb(0, 120, 255);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      color: black !important;
+      font-weight: bold !important;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Arial", sans-serif;
+      margin: 0;
+      background-color: var(--secondary-color);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* --- Sidebar --- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 100%;
+      background: linear-gradient(180deg, rgb(48, 48, 50));
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      z-index: 1000;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      color: #ffffff;
+    }
+    .sidebar, .sidebar * { color: #ffffff !important; }
+    .sidebar img { width: 180px; margin: 0 auto 0.1rem; display: block; }
+    .sidebar p { font-size: 0.9rem; text-transform: uppercase; text-align: center; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px; text-decoration: none;
+      font-size: 0.95rem; border-left: 4px solid transparent;
+      border-radius: 8px; transition: all 0.3s ease;
+    }
+    .sidebar ul li a:hover { background-color: rgba(255,255,255,0.12); border-left-color: #FFD700; }
+    .dropdown-container { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .dropdown-container.show { max-height: 400px; padding-left: 12px; }
+    .dropdown-container li a { font-size: 0.85rem; padding: 10px 20px; }
+    .dropdown-btn .fa-caret-down { margin-left: auto; transition: transform 0.3s ease; }
+
+    /* Main content */
+    .main-content {
+      margin-left: 260px;
+      padding: 2rem;
+      flex-grow: 1;
+    }
+
+    /* Small search bar */
+    #searchInput {
+      padding: 3px 6px;
+      font-size: 0.8rem;
+      width: 140px; /* shorter width */
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    #searchInput:focus {
+      border-color: var(--hover-bg);
+      box-shadow: var(--shadow);
+    }
+
+    /* Complaints table styles */
+    .complaints-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .complaints-table th, 
+    .complaints-table td {
+      padding: 12px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .complaints-table th {
+      background-color: black;
+      color: white !important; /* white text */
+      font-size: 0.95rem;
+    }
+
+    .complaints-table tr:nth-child(even) {
+      background-color: #f5f5f5;
+    }
+
+    .complaints-table tr:hover {
+      background-color: #e9f0ff;
+    }
+
+    /* Buttons high resolution */
+    .btn-primary, .btn-orange, .btn-red {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary { background-color: #0058f0; color: white; }
+    .btn-primary:hover { background-color: var(--hover-active-bg); }
+
+    .btn-orange { background-color: orange; color: white; }
+    .btn-orange:hover { background-color: darkorange; }
+
+    .btn-red { background-color: red; color: white; margin-left: 5px; }
+    .btn-red:hover { background-color: darkred; }
 
     /* Modal */
     .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); z-index:1000; }
-    .modal-content { background:white; margin:10% auto; padding:20px; border-radius:10px; width:400px; }
+    .modal-content { background:white; margin:8% auto; padding:20px; border-radius:10px; width:400px; box-shadow: var(--shadow); }
     .close { float:right; cursor:pointer; font-size:1.5rem; }
-
-    input, textarea { width:100%; padding:5px; margin-bottom:10px; }
-
-    table { border-collapse: collapse; width:100%; margin-top:15px; }
-    table th, table td { padding:8px; border:1px solid #ccc; text-align:left; }
-    th { background:#0058f0; color:white; }
+    input, textarea { width:100%; padding:7px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px; }
+    input:focus, textarea:focus { border-color: var(--hover-bg); box-shadow: var(--shadow); }
+  </style>
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <nav class="sidebar" role="navigation">
-    <div style="text-align: center; margin-bottom: 1rem; margin-top: -1rem;">
-      <img src="/images/Logo.png" alt="Logo" style="width: 200px; height: auto; margin-bottom: 0;">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div style="text-align: center; margin-bottom: 1rem;">
+      <img src="/images/Logo.png" alt="Logo">
       <p>ADVISER</p>
     </div>
     <ul>
-      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+      <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
       <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
       <li><a href="{{ route('parent.list') }}"><i class="fas fa-user-friends"></i> Parent List</a></li>
-      <li><a href="{{ route('violation.record') }}"><i class="fas fa-exclamation-triangle"></i> Violation Record</a></li>
-      <li><a href="{{ route('violation.appointment') }}"><i class="fas fa-calendar-check"></i> Violation Appointment</a></li>
-      <li><a href="{{ route('violation.anecdotal') }}"><i class="fas fa-clipboard-list"></i> Violation Anecdotal</a></li>
-      <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i> Complaints</a></li>
-      <li><a href="{{ route('complaints.anecdotal') }}" class="active"><i class="fas fa-clipboard"></i> Complaints Anecdotal</a></li>
-      <li><a href="{{ route('complaints.appointment') }}"><i class="fas fa-calendar-alt"></i> Complaints Appointment</a></li>
+      <li>
+        <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
+          <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
+          <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
+          <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
+          <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
+        </ul>
+      </li>
       <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
       <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
       <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
@@ -54,13 +183,12 @@
     </ul>
   </nav>
 
-  <!-- Main Content -->
+  <!-- MAIN CONTENT -->
   <div class="main-content">
     <h2>Complaints Anecdotal</h2>
 
-    <!-- Top Controls: Search + Add Button -->
-    <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-      <input type="text" id="searchInput" placeholder="Search anecdotal complaints..." style="padding:5px; margin-right:10px;">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:10px; gap:10px;">
+      <input type="text" id="searchInput" placeholder="Search..." />
       <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Add</button>
     </div>
 
@@ -128,20 +256,28 @@
   </div>
 
   <script>
-    // Sidebar Active Menu & Logout
-    const menuLinks = document.querySelectorAll('.sidebar a');
-    const activeLink = localStorage.getItem('activeMenu');
-    if(activeLink) menuLinks.forEach(link => { if(link.href===activeLink) link.classList.add('active'); });
-    menuLinks.forEach(link => { 
-      link.addEventListener('click', function(){
-        menuLinks.forEach(i=>i.classList.remove('active'));
-        this.classList.add('active');
-        if(!this.href.includes('profile.settings')) localStorage.setItem('activeMenu', this.href);
-      }); 
+    // Dropdown toggle
+    const dropdowns = document.querySelectorAll('.dropdown-btn');
+    dropdowns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        dropdowns.forEach(other => {
+          if (other !== this) {
+            other.nextElementSibling.classList.remove('show');
+            other.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+          }
+        });
+        const container = this.nextElementSibling;
+        container.classList.toggle('show');
+        this.querySelector('.fa-caret-down').style.transform =
+          container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
     });
+
+    // Logout
     function logout(){ alert('Logging out...'); }
 
-    // --- Live Search ---
+    // Search filter
     const searchInput = document.getElementById('searchInput');
     const tableBody = document.querySelector('#anecdotalTable tbody');
     searchInput.addEventListener('keyup', function(){
@@ -151,7 +287,7 @@
       });
     });
 
-    // --- Modal Logic ---
+    // Modal logic
     const modal = document.getElementById("anecdotalModal");
     const openBtn = document.getElementById("openModalBtn");
     const closeBtn = document.querySelector(".close");
@@ -166,22 +302,6 @@
     }
     closeBtn.onclick = () => modal.style.display="none";
     window.onclick = e => { if(e.target==modal) modal.style.display="none"; }
-
-    // --- Edit/Delete Buttons ---
-    function createActionButtons(row){
-      const actionsCell = row.insertCell(-1);
-      const editBtn = document.createElement('button');
-      editBtn.className='btn-orange';
-      editBtn.innerHTML='<i class="fas fa-edit"></i> Edit';
-      editBtn.onclick=()=> editRow(row);
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className='btn-red';
-      deleteBtn.innerHTML='<i class="fas fa-trash"></i> Delete';
-      deleteBtn.style.marginLeft='5px';
-      deleteBtn.onclick=()=> row.remove();
-      actionsCell.appendChild(editBtn);
-      actionsCell.appendChild(deleteBtn);
-    }
 
     document.querySelectorAll('.btn-edit').forEach((btn,i)=>{ 
       btn.onclick=()=> editRow(tableBody.rows[i]); 
@@ -217,12 +337,12 @@
         row.insertCell(4).textContent = form.recommendation.value;
         row.insertCell(5).textContent = form.date.value;
         row.insertCell(6).textContent = form.time.value;
-        createActionButtons(row);
+        const actions = row.insertCell(7);
+        actions.innerHTML = '<button class="btn-orange"><i class="fas fa-edit"></i> Edit</button> <button class="btn-red"><i class="fas fa-trash"></i> Delete</button>';
       }
       modal.style.display='none';
       form.reset();
     });
   </script>
-
 </body>
 </html>
