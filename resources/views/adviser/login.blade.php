@@ -31,37 +31,37 @@
     }
 
     /* HEADER & FOOTER */
-    .page-header { 
-      background:rgb(0, 42, 105); 
-      color: white; 
-      text-align: center; 
-      padding: 15px; 
-      font-weight: bold; 
-      font-size: 22px; 
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
+    .page-header {
+      background:rgb(0, 42, 105);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 22px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    .page-footer { 
-      background:rgb(0, 42, 105); 
-      color: white; 
-      text-align: center; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: bold; 
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.3); 
+    .page-footer {
+      background:rgb(0, 42, 105);
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
     }
 
     /* LINKS */
     .prefect-login-left, .prefect-login-right {
-      position: fixed; top: 15px; 
-      padding: 8px 16px; 
-      background: black; 
-      color: white; 
-      font-weight: bold; 
+      position: fixed; top: 15px;
+      padding: 8px 16px;
+      background: black;
+      color: white;
+      font-weight: bold;
       border-radius: 6px;
-      text-decoration: none; 
-      transition: 0.3s ease; 
-      border: 1px solidrgb(1, 39, 97); 
+      text-decoration: none;
+      transition: 0.3s ease;
+      border: 1px solidrgb(1, 39, 97);
       z-index: 10;
     }
     .prefect-login-left { left: 15px; }
@@ -69,25 +69,25 @@
     .prefect-login-left:hover, .prefect-login-right:hover { background:rgb(0, 42, 105); color: #fff; }
 
     /* CONTAINER */
-    .container { 
-      flex-grow: 1; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      padding: 20px; 
+    .container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
     /* LOGIN BOX */
-    .login-box { 
-      display: flex; 
-      flex-direction: column; 
-      max-width: 350px; 
-      width: 100%; 
-      border-radius: 12px; 
-      overflow: hidden; 
-      box-shadow: 0 8px 18px rgba(0,0,0,0.3); 
-      background: #fff; 
-      border: 2px solidrgb(0, 40, 100);
+    .login-box {
+      display: flex;
+      flex-direction: column;
+      max-width: 350px;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+      background: #fff;
+      border: 2px rgb(0, 40, 100);
     }
 
     /* LOGO SECTION */
@@ -106,42 +106,42 @@
     .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color:rgb(0, 42, 105); }
     .input-icon-wrapper i.fa-envelope, .input-icon-wrapper i.fa-lock { left: 10px; }
 
-    .input-icon-wrapper input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      padding-left: 35px; 
-      padding-right: 35px; 
-      border-radius: 6px; 
-      border: 1px rgb(0, 42, 105); 
-      font-size: 14px; 
-      color: black; 
-      background: #fff; 
+    .input-icon-wrapper input {
+      width: 100%;
+      padding: 10px 12px;
+      padding-left: 35px;
+      padding-right: 35px;
+      border-radius: 6px;
+      border: 1px rgb(0, 42, 105);
+      font-size: 14px;
+      color: black;
+      background: #fff;
     }
     .input-icon-wrapper input:focus { border-color: black; outline: none; }
     .toggle-password { right: 10px; cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%); color:rgb(0, 42, 105); }
 
     /* WARNINGS */
-.warning { 
-    font-size: 12px; 
-    color: #B91C1C; 
-    margin-top: 5px; 
-    display: none; 
-    font-weight: bold; 
+.warning {
+    font-size: 12px;
+    color: #B91C1C;
+    margin-top: 5px;
+    display: none;
+    font-weight: bold;
 }
 
 
     /* BUTTON */
-    .form-section button { 
-      width: 100%; 
-      padding: 10px; 
-      background:rgb(0, 42, 105); 
-      border: none; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      font-weight: bold; 
-      color: white; 
-      cursor: pointer; 
-      transition: background 0.3s ease; 
+    .form-section button {
+      width: 100%;
+      padding: 10px;
+      background:rgb(0, 42, 105);
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
     .form-section button:hover { background: black; }
 
@@ -166,7 +166,7 @@
       <div class="logo-section">
         <img src="/images/Logo.png" alt="TSHS Logo">
         <h3>STUDENT VIOLATION TRACKING SYSTEM</h3>
-       
+
       </div>
       <div class="form-section">
         <h1>Adviser </h1>

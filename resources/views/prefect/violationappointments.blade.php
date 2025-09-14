@@ -25,7 +25,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 230px;
-  background: rgb(0,0,0);
+  background: rgb(73, 0, 0);
   color: #fff;
   height: 100vh;
   position: fixed;

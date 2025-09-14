@@ -13,7 +13,7 @@
     /* Sidebar */
     .sidebar {
       width: 230px;
-      background: #000;
+      background: rgb(73, 0, 0);
       color: #fff;
       height: 100vh;
       position: fixed;

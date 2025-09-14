@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Offenses & Sanctions</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-  
+
 
   <!-- Small layout helpers for the toolbar -->
   <style>
-     
-    
+
+
    /* Reset */
 * {
   margin: 0;
@@ -30,7 +30,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 230px;
-  background: rgb(0, 0, 0); /* Solid block color */
+  background: rgb(73, 0, 0); /* Solid block color */
   color: #fff;
   height: 100vh;
   position: fixed;

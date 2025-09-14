@@ -25,7 +25,7 @@
     /* Sidebar (untouched) */
 .sidebar {
   width: 230px;
-  background:rgb(0, 0, 0); 
+  background:rgb(73, 0, 0);
   color: #fff;
   height: 100vh;
   position: fixed;
@@ -101,9 +101,9 @@
 .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
 
     /* Main Content */
-.main-content { 
-  margin-left: 250px; 
-  padding: 30px; 
+.main-content {
+  margin-left: 250px;
+  padding: 30px;
   width: calc(100% - 250px);
 }
 
@@ -136,9 +136,9 @@ table th, table td {
   font-weight: 500;
 }
 
-table thead { 
+table thead {
   background: linear-gradient(90deg, #007BFF, #00aaff);
-  color: #fff; 
+  color: #fff;
   text-transform: uppercase;
   font-size: 13px;
 }
@@ -147,15 +147,15 @@ table tr:nth-child(even) { background-color: #f7f9fc; }
 table tr:hover { background-color: #e3f2fd; }
 
 /* Buttons */
-.btn { 
-  padding: 6px 14px; 
-  border-radius: 6px; 
-  border: none; 
-  cursor: pointer; 
-  font-size: 14px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+.btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.2s;
 }
 
@@ -171,14 +171,14 @@ table tr:hover { background-color: #e3f2fd; }
 .btn-danger:hover { background-color: #c82333; transform: translateY(-2px); }
 
 /* Modal */
-.modal { 
-  display: none; 
-  position: fixed; 
-  top: 0; left: 0; 
-  width: 100%; height: 100%; 
-  background: rgba(0,0,0,0.5); 
-  justify-content: center; 
-  align-items: center; 
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 

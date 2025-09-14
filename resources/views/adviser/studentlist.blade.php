@@ -34,7 +34,7 @@
     display: flex;
   }
 
- 
+
 /* --- Sidebar --- */
 .sidebar {
   position: fixed;
@@ -369,7 +369,7 @@
     </thead>
     <tbody>
       @foreach($students as $student)
-      <tr 
+      <tr
           data-id="{{ $student->student_id }}"
           data-fname="{{ $student->student_fname }}"
           data-lname="{{ $student->student_lname }}"
@@ -410,22 +410,22 @@
 
       <div class="form-group">
   <label>First Name</label>
-  <input type="text" name="student_fname" required 
-         pattern="[A-Za-z\s]+" 
+  <input type="text" name="student_fname" required
+         pattern="[A-Za-z\s]+"
          title="Only letters and spaces are allowed">
 </div>
 
 <div class="form-group">
   <label>Last Name</label>
-  <input type="text" name="student_lname" required 
-         pattern="[A-Za-z\s]+" 
+  <input type="text" name="student_lname" required
+         pattern="[A-Za-z\s]+"
          title="Only letters and spaces are allowed">
 </div>
 
       <div class="form-group">
   <label>Birthdate</label>
   <input type="date" name="student_birthdate" required
-         max="<?php echo date('Y-m-d'); ?>" 
+         max="<?php echo date('Y-m-d'); ?>"
          title="Birthdate cannot be in the future">
 </div>
 
@@ -441,7 +441,7 @@
 <div class="form-group">
   <label>Contact Info</label>
   <input type="text" name="student_contactinfo" required
-         pattern="[0-9]{11}" 
+         pattern="[0-9]{11}"
          title="Contact number must be 11 digits (e.g. 09123456789)">
 </div>
 

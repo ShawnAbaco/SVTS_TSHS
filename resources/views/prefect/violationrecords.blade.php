@@ -25,7 +25,7 @@ body {
 /* Sidebar (untouched) */
 .sidebar {
   width: 230px;
-  background:rgb(0, 0, 0); 
+  background:rgb(73, 0, 0);
   color: #fff;
   height: 100vh;
   position: fixed;
@@ -101,9 +101,9 @@ body {
 .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
 
 /* Main Content */
-.main-content { 
-  margin-left: 250px; 
-  padding: 30px; 
+.main-content {
+  margin-left: 250px;
+  padding: 30px;
   width: calc(100% - 250px);
 }
 
@@ -169,7 +169,7 @@ table thead {
 }
 
 table tr:nth-child(even) { background-color: #f4f7fa; }
-table tr:hover { 
+table tr:hover {
   background-color: #e0f0ff;
   transform: scale(1.01);
   transition: all 0.2s ease-in-out;
@@ -193,36 +193,36 @@ table tr:hover {
 .btn i { font-size: 14px; }
 
 /* Info Button */
-.btn-info { 
-  background-color: #17a2b8; 
-  color: #fff; 
+.btn-info {
+  background-color: #17a2b8;
+  color: #fff;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-.btn-info:hover { 
-  background-color: #138496; 
-  transform: translateY(-2px) scale(1.02); 
+.btn-info:hover {
+  background-color: #138496;
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* Edit Button */
 .btn-edit {
-  background-color: #ffc107; 
-  color: #000; 
+  background-color: #ffc107;
+  color: #000;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-.btn-edit:hover { 
-  background-color: #e0a800; 
-  transform: translateY(-2px) scale(1.02); 
+.btn-edit:hover {
+  background-color: #e0a800;
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* Delete Button */
 .btn-delete {
-  background-color: #dc3545; 
-  color: #fff; 
+  background-color: #dc3545;
+  color: #fff;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-.btn-delete:hover { 
-  background-color: #c82333; 
-  transform: translateY(-2px) scale(1.02); 
+.btn-delete:hover {
+  background-color: #c82333;
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* Create Button */
@@ -245,14 +245,14 @@ table tr:hover {
 }
 
 /* Modal */
-.modal { 
-  display: none; 
-  position: fixed; 
-  top: 0; left: 0; 
-  width: 100%; height: 100%; 
-  background: rgba(0,0,0,0.5); 
-  justify-content: center; 
-  align-items: center; 
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 

@@ -16,7 +16,7 @@
   left: 0;
   width: 240px;
   height: 100%;
-  background: linear-gradient(180deg, rgb(48, 48, 50));
+  background: linear-gradient(180deg, rgb(108, 108, 108));
   font-family: "Segoe UI", Tahoma, sans-serif;
   z-index: 1000;
   overflow-y: auto;
@@ -47,7 +47,7 @@
 }
 
 .sidebar p {
-  font-size: 0.9rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin: 0 0 1rem;
   color: #ffffff;

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Adviser Dashboard - Reports</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
-  
+
   <style>
     :root {
       --primary-color: #000000;
@@ -82,42 +82,42 @@
 }
 
 /* Individual box colors */
-.report-box:nth-child(1) { background-color: #8B0000; }      
-.report-box:nth-child(2) { background-color: #2F4F4F; }      
-.report-box:nth-child(3) { background-color: #556B2F; }      
-.report-box:nth-child(4) { background-color: #4B0082; }      
-.report-box:nth-child(5) { background-color: #800000; }      
-.report-box:nth-child(6) { background-color: #006400; }      
-.report-box:nth-child(7) { background-color: #483D8B; }      
-.report-box:nth-child(8) { background-color: #8B4513; }      
-.report-box:nth-child(9) { background-color: #2E8B57; }      
-.report-box:nth-child(10) { background-color: #4682B4; }     
-.report-box:nth-child(11) { background-color: #800080; }     
-.report-box:nth-child(12) { background-color: #708090; }     
-.report-box:nth-child(13) { background-color: #FF8C00; }     
-.report-box:nth-child(14) { background-color: #B22222; }     
-.report-box:nth-child(15) { background-color: #556B2F; }     
-.report-box:nth-child(16) { background-color: #2F4F4F; }     
-.report-box:nth-child(17) { background-color: #8B0000; }     
-.report-box:nth-child(18) { background-color: #4B0082; }     
-.report-box:nth-child(19) { background-color: #483D8B; }     
-.report-box:nth-child(20) { background-color:rgb(30, 42, 52); }     
+.report-box:nth-child(1) { background-color: #8B0000; }
+.report-box:nth-child(2) { background-color: #2F4F4F; }
+.report-box:nth-child(3) { background-color: #556B2F; }
+.report-box:nth-child(4) { background-color: #4B0082; }
+.report-box:nth-child(5) { background-color: #800000; }
+.report-box:nth-child(6) { background-color: #006400; }
+.report-box:nth-child(7) { background-color: #483D8B; }
+.report-box:nth-child(8) { background-color: #8B4513; }
+.report-box:nth-child(9) { background-color: #2E8B57; }
+.report-box:nth-child(10) { background-color: #4682B4; }
+.report-box:nth-child(11) { background-color: #800080; }
+.report-box:nth-child(12) { background-color: #708090; }
+.report-box:nth-child(13) { background-color: #FF8C00; }
+.report-box:nth-child(14) { background-color: #B22222; }
+.report-box:nth-child(15) { background-color: #556B2F; }
+.report-box:nth-child(16) { background-color: #2F4F4F; }
+.report-box:nth-child(17) { background-color: #8B0000; }
+.report-box:nth-child(18) { background-color: #4B0082; }
+.report-box:nth-child(19) { background-color: #483D8B; }
+.report-box:nth-child(20) { background-color:rgb(30, 42, 52); }
 
 /* All report box icons black */
 .report-box i {
   color: #000000;
 }
 
-.modal { 
-  display: none; position: fixed; z-index: 100; 
-  left: 0; top: 0; width: 100%; height: 100%; 
+.modal {
+  display: none; position: fixed; z-index: 100;
+  left: 0; top: 0; width: 100%; height: 100%;
   background-color: rgba(0,0,0,0.5);
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 
-.modal-content { 
-  background-color: var(--secondary-color); 
-  margin: 40px auto; padding: 20px; border-radius: 10px; 
+.modal-content {
+  background-color: var(--secondary-color);
+  margin: 40px auto; padding: 20px; border-radius: 10px;
   width: 90%; max-width: 900px;
   position: relative; box-shadow: 0 6px 15px rgba(0,0,0,0.3);
   max-height: 90vh; display: flex; flex-direction: column;
@@ -144,8 +144,8 @@
 .btn-danger { background-color: #e74c3c; color: #fff; }
 .btn:hover { opacity: 0.9; }
 
-table { 
-  width: 100%; border-collapse: collapse; margin-top:15px; font-size: 0.85rem; table-layout: fixed; 
+table {
+  width: 100%; border-collapse: collapse; margin-top:15px; font-size: 0.85rem; table-layout: fixed;
 }
 
 th, td { border:1px solid #ccc; padding:6px; text-align:left; word-wrap: break-word; }
@@ -166,55 +166,57 @@ tr:nth-child(even){ background-color:#f9f9f9; }
         <p>ADVISER</p>
     </div>
     <ul>
-        <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="#"><i class="fas fa-users"></i> Student List</a></li>
-        <li><a href="#" ><i class="fas fa-user-friends"></i> Parent List</a></li>
+        <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
+        <li><a href="{{ route('parent.list') }}" ><i class="fas fa-user-friends"></i> Parent List</a></li>
         <li>
             <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down"></i></a>
             <ul class="dropdown-container">
-                <li><a href="#">Violation Record</a></li>
-                <li><a href="#">Violation Appointment</a></li>
-                <li><a href="#">Violation Anecdotal</a></li>
+                <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
+                <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
+                <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
             </ul>
         </li>
         <li>
             <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down"></i></a>
             <ul class="dropdown-container">
-                <li><a href="#">Complaints</a></li>
-                <li><a href="#">Complaint Appointment</a></li>
-                <li><a href="#">Complaints Anecdotal</a></li>
+                <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
+                <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
+                <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
             </ul>
         </li>
-        <li><a href="#"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
-        <li><a href="#" class="active"><i class="fas fa-chart-bar"></i> Reports</a></li>
-        <li><a href="#"><i class="fas fa-cog"></i> Profile Settings</a></li>
+        <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
+        <li><a href="{{ route('adviser.reports') }}" class="active"><i class="fas fa-chart-bar"></i> Reports</a></li>
+        <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
         <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
 </nav>
 
 <div class="main-content">
-  <!-- 20 Report Boxes -->
-  <div class="report-box" data-modal="modal1"><i class="fas fa-exclamation-circle"></i><h3>1. Violation Records with Violator Information</h3></div>
-  <div class="report-box" data-modal="modal2"><i class="fas fa-user-graduate"></i><h3>2. Students and Their Parents</h3></div>
-  <div class="report-box" data-modal="modal3"><i class="fas fa-file-alt"></i><h3>3. Complaint Records with Complainant and Respondent</h3></div>
-  <div class="report-box" data-modal="modal4"><i class="fas fa-gavel"></i><h3>4. Offenses and Their Sanction Consequences</h3></div>
-  <div class="report-box" data-modal="modal5"><i class="fas fa-users"></i><h3>5. Violation Records and Assigned Adviser</h3></div>
-  <div class="report-box" data-modal="modal6"><i class="fas fa-chalkboard-teacher"></i><h3>6. Students and Their Class Advisers</h3></div>
-  <div class="report-box" data-modal="modal7"><i class="fas fa-book"></i><h3>7. Anecdotal Records per Violation Case</h3></div>
-  <div class="report-box" data-modal="modal8"><i class="fas fa-calendar-alt"></i><h3>8. Appointments Scheduled for Violation Cases</h3></div>
-  <div class="report-box" data-modal="modal9"><i class="fas fa-book-open"></i><h3>9. Anecdotal Records per Complaint Case</h3></div>
-  <div class="report-box" data-modal="modal10"><i class="fas fa-calendar-check"></i><h3>10. Appointments Scheduled for Complaints</h3></div>
-  <div class="report-box" data-modal="modal11"><i class="fas fa-user-friends"></i><h3>11. Students with the Most Violation Records</h3></div>
-  <div class="report-box" data-modal="modal12"><i class="fas fa-chart-bar"></i><h3>12. Common Offenses by Frequency</h3></div>
-  <div class="report-box" data-modal="modal13"><i class="fas fa-user-tie"></i><h3>13. Complaint Records by Adviser</h3></div>
-  <div class="report-box" data-modal="modal14"><i class="fas fa-exclamation-triangle"></i><h3>14. List of Violators with Repeat Offenses</h3></div>
-  <div class="report-box" data-modal="modal15"><i class="fas fa-layer-group"></i><h3>15. Summary of Violations per Grade Level</h3></div>
-  <div class="report-box" data-modal="modal16"><i class="fas fa-phone-alt"></i><h3>16. Parent Contact Info for Students with Active Violations</h3></div>
-  <div class="report-box" data-modal="modal17"><i class="fas fa-clock"></i><h3>17. Complaints Filed within the Last 30 Days</h3></div>
-  <div class="report-box" data-modal="modal18"><i class="fas fa-search"></i><h3>18. Violation Records Involving Specific Offense Types</h3></div>
-  <div class="report-box" data-modal="modal19"><i class="fas fa-user-shield"></i><h3>19. Students with Both Violation and Complaint Records</h3></div>
-  <div class="report-box" data-modal="modal20"><i class="fas fa-chart-line"></i><h3>20. Sanction Trends Across Time Periods</h3></div>
+  <!-- 20 Report Boxes (Sorted A-Z) -->
+  <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
+  <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
+  <div class="report-box" data-modal="modal3"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
+  <div class="report-box" data-modal="modal4"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
+  <div class="report-box" data-modal="modal5"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
+  <!-- <div class="report-box"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div> -->
+  <div class="report-box" data-modal="modal6"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
+  <div class="report-box" data-modal="modal7"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
+  <div class="report-box" data-modal="modal8"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
+  <div class="report-box" data-modal="modal9"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
+  <div class="report-box" data-modal="modal10"><i class="fas fa-phone-alt"></i><h3>Parent Contact Info for Students with Active Violations</h3></div>
+  <div class="report-box" data-modal="modal11"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
+  <!-- <div class="report-box"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div> -->
+  <div class="report-box" data-modal="modal12"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
+  <div class="report-box" data-modal="modal13"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
+  <div class="report-box" data-modal="modal14"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
+  <!-- <div class="report-box"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div> -->
+  <div class="report-box" data-modal="modal15"><i class="fas fa-search"></i><h3>Violation Records Involving Specific Offense Types</h3></div>
+  <!-- <div class="report-box"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div> -->
+  <div class="report-box" data-modal="modal16"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
 </div>
+
+
 
 <!-- 20 Modals -->
 @for ($i = 1; $i <= 20; $i++)
