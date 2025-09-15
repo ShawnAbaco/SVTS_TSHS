@@ -18,180 +18,300 @@ class ReportController extends Controller
 
 public function getReportData($reportId)
 {
-    $data = collect(); // default empty collection
+$data = collect();
 
-    switch($reportId) {
+switch ($reportId) {
+    case 1: // Anecdotal Records per Complaint Case
+        $data = collect(DB::select("
+            SELECT
+                ca.comp_anec_id AS anecdotal_id,
+                CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
+                CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
+                ca.comp_anec_solution AS solution,
+                ca.comp_anec_recommendation AS recommendation,
+                DATE_FORMAT(ca.comp_anec_date, '%M %d, %Y') AS date_recorded,
+                TIME_FORMAT(ca.comp_anec_time, '%h:%i %p') AS time_recorded
+            FROM
+                tbl_complaints_anecdotal ca
+            JOIN
+                tbl_complaints c ON ca.complaints_id = c.complaints_id
+            JOIN
+                tbl_student s1 ON c.complainant_id = s1.student_id
+            JOIN
+                tbl_student s2 ON c.respondent_id = s2.student_id
+        "));
+        break;
 
-        case 1: // Anecdotal Records per Complaint Case
-            $data = DB::table('tbl_complaints_anecdotal as ca')
-                ->join('tbl_complaints as c','ca.complaints_id','=','c.complaints_id')
-                ->join('tbl_student as s1','c.complainant_id','=','s1.student_id')
-                ->join('tbl_student as s2','c.respondent_id','=','s2.student_id')
-                ->select('ca.comp_anec_id','c.complaints_id',
-                    's1.student_id as complainant_id','s1.student_fname as complainant_fname',
-                    's2.student_id as respondent_id','s2.student_fname as respondent_fname',
-                    'ca.comp_anec_solution','ca.comp_anec_recommendation',
-                    'ca.comp_anec_date','ca.comp_anec_time')
-                ->get();
-            break;
+    case 2: // Anecdotal Records per Violation Case
+        $data = collect(DB::select("
+            SELECT
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                va.violation_anec_solution AS solution,
+                va.violation_anec_recommendation AS recommendation,
+                DATE_FORMAT(va.violation_anec_date, '%M %d, %Y') AS date,
+                TIME_FORMAT(va.violation_anec_time, '%h:%i %p') AS time
+            FROM
+                tbl_violation_anecdotal va
+            JOIN
+                tbl_violation_record v ON va.violation_id = v.violation_id
+            JOIN
+                tbl_student s ON v.violator_id = s.student_id
+        "));
+        break;
 
-        case 2: // Anecdotal Records per Violation Case
-            $data = DB::table('tbl_violation_anecdotal as va')
-                ->join('tbl_violation_record as v','va.violation_id','=','v.violation_id')
-                ->join('tbl_student as s','v.violator_id','=','s.student_id')
-                ->select('va.violation_anec_id','v.violation_id','s.student_id','s.student_fname','s.student_lname',
-                    'va.violation_anec_solution','va.violation_anec_recommendation',
-                    'va.violation_anec_date','va.violation_anec_time')
-                ->get();
-            break;
+    case 3: // Appointments Scheduled for Complaints
+        $data = collect(DB::select("
+            SELECT
+                ca.comp_app_id AS appointment_id,
+                CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
+                CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
+                DATE_FORMAT(ca.comp_app_date, '%M %d, %Y') AS appointment_date,
+                ca.comp_app_status AS appointment_status
+            FROM
+                tbl_complaints_appointment ca
+            JOIN
+                tbl_complaints c ON ca.complaints_id = c.complaints_id
+            JOIN
+                tbl_student s1 ON c.complainant_id = s1.student_id
+            JOIN
+                tbl_student s2 ON c.respondent_id = s2.student_id
+        "));
+        break;
 
-        case 3: // Appointments Scheduled for Complaints
-            $data = DB::table('tbl_complaints_appointment as ca')
-                ->join('tbl_complaints as c','ca.complaints_id','=','c.complaints_id')
-                ->join('tbl_student as s1','c.complainant_id','=','s1.student_id')
-                ->join('tbl_student as s2','c.respondent_id','=','s2.student_id')
-                ->select('ca.comp_app_id','c.complaints_id',
-                    's1.student_id as complainant_id','s1.student_fname as complainant_fname',
-                    's2.student_id as respondent_id','s2.student_fname as respondent_fname',
-                    'ca.comp_app_date','ca.comp_app_time','ca.comp_app_status')
-                ->get();
-            break;
+    case 4: // Appointments Scheduled for Violation Cases
+        $data = collect(DB::select("
+            SELECT
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                DATE_FORMAT(va.violation_app_date, '%M %d, %Y') AS appointment_date,
+                TIME_FORMAT(va.violation_app_time, '%h:%i %p') AS appointment_time,
+                va.violation_app_status AS appointment_status
+            FROM
+                tbl_violation_appointment va
+            JOIN
+                tbl_violation_record v ON va.violation_id = v.violation_id
+            JOIN
+                tbl_student s ON v.violator_id = s.student_id
+        "));
+        break;
 
-        case 4: // Appointments Scheduled for Violation Cases
-            $data = DB::table('tbl_violation_appointment as va')
-                ->join('tbl_violation_record as v','va.violation_id','=','v.violation_id')
-                ->join('tbl_student as s','v.violator_id','=','s.student_id')
-                ->select('va.violation_app_id','v.violation_id','s.student_id','s.student_fname','s.student_lname',
-                    'va.violation_app_date','va.violation_app_time','va.violation_app_status')
-                ->get();
-            break;
+    case 5: // Complaint Records with Complainant and Respondent
+        $data = collect(DB::select("
+            SELECT
+                c.complaints_id,
+                CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
+                CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
+                c.complaints_incident AS incident_description,
+                DATE_FORMAT(c.complaints_date, '%M %d, %Y') AS complaint_date,
+                TIME_FORMAT(c.complaints_time, '%h:%i %p') AS complaint_time
+            FROM
+                tbl_complaints c
+            JOIN
+                tbl_student s1 ON c.complainant_id = s1.student_id
+            JOIN
+                tbl_student s2 ON c.respondent_id = s2.student_id
+        "));
+        break;
 
-        case 5: // Complaints Filed within the Last 30 Days
-            $data = DB::table('tbl_complaints as c')
-                ->join('tbl_student as s1','c.complainant_id','=','s1.student_id')
-                ->join('tbl_student as s2','c.respondent_id','=','s2.student_id')
-                ->join('tbl_offenses_with_sanction as ows','c.offense_sanc_id','=','ows.offense_sanc_id')
-                ->select('c.complaints_id',
-                    's1.student_id as complainant_id','s1.student_fname as complainant_fname',
-                    's2.student_id as respondent_id','s2.student_fname as respondent_fname',
-                    'ows.offense_type','c.complaints_date','c.complaints_time')
-                ->where('c.complaints_date','>=', DB::raw('CURDATE() - INTERVAL 30 DAY'))
-                ->get();
-            break;
+    case 6: // Complaints Filed within the Last 30 Days
+        $data = collect(DB::select("
+            SELECT
+                c.complaints_id,
+                CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
+                CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
+                ows.offense_type,
+                DATE_FORMAT(c.complaints_date, '%M %d, %Y') AS complaint_date,
+                TIME_FORMAT(c.complaints_time, '%h:%i %p') AS complaint_time
+            FROM
+                tbl_complaints c
+            JOIN
+                tbl_student s1 ON c.complainant_id = s1.student_id
+            JOIN
+                tbl_student s2 ON c.respondent_id = s2.student_id
+            JOIN
+                tbl_offenses_with_sanction ows ON c.offense_sanc_id = ows.offense_sanc_id
+            WHERE
+                c.complaints_date >= CURDATE() - INTERVAL 30 DAY
+        "));
+        break;
 
-        case 6: // Complaint Records with Complainant and Respondent
-            $data = DB::table('tbl_complaints as c')
-                ->join('tbl_student as s1','c.complainant_id','=','s1.student_id')
-                ->join('tbl_student as s2','c.respondent_id','=','s2.student_id')
-                ->select('c.complaints_id',
-                    's1.student_id as complainant_id','s1.student_fname as complainant_fname','s1.student_lname as complainant_lname',
-                    's2.student_id as respondent_id','s2.student_fname as respondent_fname','s2.student_lname as respondent_lname',
-                    'c.complaints_incident','c.complaints_date','c.complaints_time')
-                ->get();
-            break;
+    case 7: // Common Offenses by Frequency
+        $data = collect(DB::select("
+            SELECT
+                ows.offense_sanc_id AS offense_id,
+                ows.offense_type,
+                ows.offense_description,
+                COUNT(v.violation_id) AS total_occurrences
+            FROM
+                tbl_violation_record v
+            JOIN
+                tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
+            GROUP BY
+                v.offense_sanc_id
+            ORDER BY
+                total_occurrences DESC
+        "));
+        break;
 
-        case 7: // Common Offenses by Frequency
-            $data = DB::table('tbl_violation_record as v')
-                ->join('tbl_offenses_with_sanction as ows','v.offense_sanc_id','=','ows.offense_sanc_id')
-                ->select('ows.offense_sanc_id','ows.offense_type','ows.offense_description',
-                    DB::raw('COUNT(v.violation_id) as offense_count'))
-                ->groupBy('v.offense_sanc_id','ows.offense_type','ows.offense_description')
-                ->orderByDesc('offense_count')
-                ->get();
-            break;
+    case 8: // List of Violators with Repeat Offenses
+        $data = collect(DB::select("
+            SELECT
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                a.adviser_section AS section,
+                a.adviser_gradelevel AS grade_level,
+                COUNT(v.violation_id) AS total_violations,
+                MIN(DATE_FORMAT(v.violation_date, '%M %d, %Y')) AS first_violation_date,
+                MAX(DATE_FORMAT(v.violation_date, '%M %d, %Y')) AS most_recent_violation_date
+            FROM
+                tbl_violation_record v
+            JOIN
+                tbl_student s ON v.violator_id = s.student_id
+            JOIN
+                tbl_adviser a ON s.adviser_id = a.adviser_id
+            GROUP BY
+                s.student_id
+            HAVING
+                COUNT(v.violation_id) > 1
+        "));
+        break;
 
-        case 8: // List of Violators with Repeat Offenses
-            $data = DB::table('tbl_violation_record as v')
-                ->select('v.violator_id', DB::raw('COUNT(v.violation_id) as violation_count'))
-                ->groupBy('v.violator_id')
-                ->havingRaw('COUNT(v.violation_id) > 1')
-                ->get();
-            break;
+    case 9: // Offenses and Their Sanction Consequences
+        $data = collect(DB::select("
+            SELECT
+                offense_type, offense_description, sanction_consequences
+            FROM
+                tbl_offenses_with_sanction
+        "));
+        break;
 
-        case 9: // Offenses and Their Sanction Consequences
-            $data = DB::table('tbl_offenses_with_sanction')
-                ->select('offense_sanc_id','offense_type','offense_description','sanction_consequences')
-                ->get();
-            break;
+    case 10: // Parent Contact Info for Students with Active Violations
+        $data = collect(DB::select("
+            SELECT
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                CONCAT(p.parent_fname, ' ', p.parent_lname) AS parent_name,
+                p.parent_contactinfo AS parent_contactinfo,
+                DATE_FORMAT(v.violation_date, '%M %d, %Y') AS violation_date,
+                TIME_FORMAT(v.violation_time, '%h:%i %p') AS violation_time,
+                'Active' AS violation_status
+            FROM
+                tbl_violation_record v
+            JOIN
+                tbl_student s ON v.violator_id = s.student_id
+            JOIN
+                tbl_parent p ON s.parent_id = p.parent_id
+            WHERE
+                v.violation_date >= CURDATE() - INTERVAL 30 DAY
+        "));
+        break;
 
-        case 10: // Parent Contact Info for Students with Active Violations
-            $data = DB::table('tbl_violation_record as v')
-                ->join('tbl_student as s','v.violator_id','=','s.student_id')
-                ->join('tbl_parent as p','s.parent_id','=','p.parent_id')
-                ->select('s.student_id','s.student_fname','s.student_lname',
-                    'p.parent_id','p.parent_fname','p.parent_contactinfo',
-                    'v.violation_date','v.violation_time', DB::raw("'Active' as violation_status"))
-                ->where('v.violation_date','>=', DB::raw('CURDATE() - INTERVAL 30 DAY'))
-                ->get();
-            break;
+    case 11: // Sanction Trends Across Time Periods
+        $data = collect(DB::select("
+            SELECT
+                ows.offense_sanc_id,
+                ows.offense_type,
+                ows.sanction_consequences,
+                DATE_FORMAT(v.violation_date, '%M %Y') AS month_and_year,
+                COUNT(v.violation_id) AS number_of_sanctions_given
+            FROM
+                tbl_violation_record v
+            JOIN
+                tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
+            GROUP BY
+                ows.offense_sanc_id, month_and_year
+            ORDER BY
+                month_and_year DESC, number_of_sanctions_given DESC
+        "));
+        break;
 
-        case 11: // Sanction Trends Across Time Periods
-            $data = DB::table('tbl_violation_record as v')
-                ->join('tbl_offenses_with_sanction as ows','v.offense_sanc_id','=','ows.offense_sanc_id')
-                ->select('ows.offense_sanc_id','ows.offense_type','ows.sanction_consequences',
-                    DB::raw("DATE_FORMAT(v.violation_date,'%Y-%m') as period_range"),
-                    DB::raw('COUNT(v.violation_id) as sanction_count'))
-                ->groupBy('ows.offense_sanc_id','period_range')
-                ->orderByDesc('period_range')
-                ->orderByDesc('sanction_count')
-                ->get();
-            break;
+    case 12: // Students and Their Parents
+        $data = collect(DB::select("
+            SELECT
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                CONCAT(p.parent_fname, ' ', p.parent_lname) AS parent_name,
+                p.parent_contactinfo AS parent_contactinfo
+            FROM
+                tbl_student s
+            JOIN
+                tbl_parent p ON s.parent_id = p.parent_id
+        "));
+        break;
 
-        case 12: // Students and Their Parents
-            $data = DB::table('tbl_student as s')
-                ->join('tbl_parent as p','s.parent_id','=','p.parent_id')
-                ->select('s.student_id','s.student_fname','s.student_lname',
-                    'p.parent_id','p.parent_fname','p.parent_lname','p.parent_contactinfo')
-                ->get();
-            break;
+    case 13: // Students with Both Violation and Complaint Records
+        $data = collect(DB::select("
+            SELECT
+                s.student_fname AS first_name,
+                s.student_lname AS last_name,
+                COUNT(DISTINCT v.violation_id) AS violation_count,
+                COUNT(DISTINCT c.complaints_id) AS complaint_involvement_count
+            FROM
+                tbl_student s
+            LEFT JOIN
+                tbl_violation_record v ON s.student_id = v.violator_id
+            LEFT JOIN
+                tbl_complaints c ON s.student_id = c.complainant_id OR s.student_id = c.respondent_id
+            GROUP BY
+                s.student_id
+            HAVING
+                violation_count > 0 AND complaint_involvement_count > 0
+        "));
+        break;
 
-        case 13: // Students with Both Violation and Complaint Records
-            $data = DB::table('tbl_student as s')
-                ->leftJoin('tbl_violation_record as v','s.student_id','=','v.violator_id')
-                ->leftJoin('tbl_complaints as c', function($join){
-                    $join->on('s.student_id','=','c.complainant_id')
-                         ->orOn('s.student_id','=','c.respondent_id');
-                })
-                ->select('s.student_id','s.student_fname','s.student_lname',
-                    DB::raw('COUNT(DISTINCT v.violation_id) as violation_count'),
-                    DB::raw('COUNT(DISTINCT c.complaints_id) as complaint_involvement_count'))
-                ->groupBy('s.student_id','s.student_fname','s.student_lname')
-                ->havingRaw('violation_count > 0 AND complaint_involvement_count > 0')
-                ->get();
-            break;
+    case 14: // Students with the Most Violation Records
+        $data = collect(DB::select("
+            SELECT
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                a.adviser_section AS adviser_section,
+                a.adviser_gradelevel AS grade_level,
+                COUNT(v.violation_id) AS total_violations
+            FROM
+                tbl_violation_record v
+            JOIN
+                tbl_student s ON v.violator_id = s.student_id
+            JOIN
+                tbl_adviser a ON s.adviser_id = a.adviser_id
+            GROUP BY
+                s.student_id
+            ORDER BY
+                total_violations DESC
+        "));
+        break;
 
-        case 14: // Students with the Most Violation Records
-            $data = DB::table('tbl_violation_record as v')
-                ->join('tbl_student as s','v.violator_id','=','s.student_id')
-                ->select('s.student_id','s.student_fname','s.student_lname',
-                    DB::raw('COUNT(v.violation_id) as violation_count'))
-                ->groupBy('s.student_id','s.student_fname','s.student_lname')
-                ->orderByDesc('violation_count')
-                ->get();
-            break;
+    case 15: // Violation Records Involving Specific Offense Types
+        $data = collect(DB::select("
+            SELECT
+                v.violation_id,
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                ows.offense_type,
+                DATE_FORMAT(v.violation_date, '%M %d, %Y') AS violation_date,
+                TIME_FORMAT(v.violation_time, '%h:%i %p') AS violation_time,
+                v.violation_incident AS incident_description
+            FROM
+                tbl_violation_record v
+            JOIN
+                tbl_student s ON v.violator_id = s.student_id
+            JOIN
+                tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
+        "));
+        break;
 
-        case 15: // Violation Records Involving Specific Offense Types
-            $data = DB::table('tbl_violation_record as v')
-                ->join('tbl_student as s','v.violator_id','=','s.student_id')
-                ->join('tbl_offenses_with_sanction as ows','v.offense_sanc_id','=','ows.offense_sanc_id')
-                ->select('v.violation_id','s.student_id','s.student_fname','s.student_lname',
-                    'ows.offense_type','v.violation_date','v.violation_time','v.violation_incident')
-                ->where('ows.offense_type','=','Tardiness')
-                ->get();
-            break;
+    case 16: // Violation Records with Violator Information
+        $data = collect(DB::select("
+            SELECT
+                v.violation_id AS violation_id,
+                CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+                ows.offense_type AS offense_type,
+                ows.sanction_consequences AS sanction,
+                v.violation_incident AS incident_description,
+                DATE_FORMAT(v.violation_date, '%M %d, %Y') AS violation_date,
+                TIME_FORMAT(v.violation_time, '%h:%i %p') AS violation_time
+            FROM
+                tbl_violation_record v
+            JOIN tbl_student s ON v.violator_id = s.student_id
+            JOIN tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
+        "));
+        break;
+}
 
-        case 16: // Violation Records with Violator Information
-            $data = DB::table('tbl_violation_record as v')
-                ->join('tbl_student as s','v.violator_id','=','s.student_id')
-                ->join('tbl_offenses_with_sanction as ows','v.offense_sanc_id','=','ows.offense_sanc_id')
-                ->select('v.violation_id','s.student_id','s.student_fname','s.student_lname',
-                    'ows.offense_type','ows.offense_description',
-                    'v.violation_date','v.violation_time','v.violation_incident')
-                ->get();
-            break;
-    }
-
-    return response()->json($data);
+return response()->json($data);
 }
 
 

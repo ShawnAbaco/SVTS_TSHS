@@ -85,27 +85,28 @@ tr:nth-child(even){background:#f2f2f2;}
 
 <!-- Report boxes -->
 <div class="main-content">
-  <div class="report-box" data-modal="modal1"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
-<div class="report-box" data-modal="modal2"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
-  <div class="report-box" data-modal="modal3"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
-  <div class="report-box" data-modal="modal4"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
-  <div class="report-box" data-modal="modal5"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
-  <div class="report-box" data-modal="modal6"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div>
-  <div class="report-box" data-modal="modal7"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
-  <div class="report-box" data-modal="modal8"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
-  <div class="report-box" data-modal="modal9"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
-  <div class="report-box" data-modal="modal10"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
-  <div class="report-box" data-modal="modal11"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
-  <div class="report-box" data-modal="modal12"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
-  <div class="report-box" data-modal="modal13"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div>
-  <div class="report-box" data-modal="modal14"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
-  <div class="report-box" data-modal="modal15"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div>
-  <div class="report-box" data-modal="modal16"><i class="fas fa-phone-alt"></i><h3>Parent Contact Info for Students with Active Violations</h3></div>
-  <div class="report-box" data-modal="modal17"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
+  <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
+  <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
+  <div class="report-box" data-modal="modal3"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
+  <div class="report-box" data-modal="modal4"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
+  <div class="report-box" data-modal="modal5"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div>
+  <div class="report-box" data-modal="modal6"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
+  <div class="report-box" data-modal="modal7"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
+  <div class="report-box" data-modal="modal8"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
+  <div class="report-box" data-modal="modal9"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
+  <div class="report-box" data-modal="modal10"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
+  <div class="report-box" data-modal="modal11"><i class="fas fa-phone-alt"></i><h3>Parent Contact Information for Students with Active Violations</h3></div>
+  <div class="report-box" data-modal="modal12"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
+  <div class="report-box" data-modal="modal13"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div>
+  <div class="report-box" data-modal="modal14"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
+  <div class="report-box" data-modal="modal15"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
+  <div class="report-box" data-modal="modal16"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
+  <div class="report-box" data-modal="modal17"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div>
   <div class="report-box" data-modal="modal18"><i class="fas fa-search"></i><h3>Violation Records Involving Specific Offense Types</h3></div>
-  <div class="report-box" data-modal="modal19"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
-  <div class="report-box" data-modal="modal20"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
+  <div class="report-box" data-modal="modal19"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
+  <div class="report-box" data-modal="modal20"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
 </div>
+
 
 <!-- Modals -->
 @for($i=1; $i<=20; $i++)
@@ -119,87 +120,70 @@ tr:nth-child(even){background:#f2f2f2;}
       <button class="btn btn-warning" onclick="printModal('modal{{ $i }}')"><i class="fa fa-print"></i> Print</button>
       <button class="btn btn-danger" onclick="exportCSV('modal{{ $i }}')"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
+
+
 <!-- NOTE: table id is table-{{ $i }} -->
 <h2 class="text-xl font-semibold mb-3 text-center">
     @switch($i)
         @case(1)
-            Violation Records with Violator Information
+            Anecdotal Records per Complaint Case
             @break
         @case(2)
-            Students and Their Parents
-
+            Anecdotal Records per Violation Case
             @break
         @case(3)
-            Complaint Records with Complainant and Respondent
-
+            Appointments Scheduled for Complaints
             @break
         @case(4)
-            Offenses and Their Sanction Consequences
-
+            Appointments Scheduled for Violation Cases
             @break
         @case(5)
-            Violation Records and Assigned Adviser
-
+            Complaint Records by Adviser
             @break
         @case(6)
-            Students and Their Class Advisers
-
+            Complaint Records with Complainant and Respondent
             @break
         @case(7)
-            Anecdotal Records per Violation Case
-
+            Complaints Filed within the Last 30 Days
             @break
         @case(8)
-            Appointments Scheduled for Violation Cases
-
+            Common Offenses by Frequency
             @break
         @case(9)
-            Anecdotal Records per Complaint Case
-
+            List of Violators with Repeat Offenses
             @break
         @case(10)
-            Appointments Scheduled for Complaints
-
+            Offenses and Their Sanction Consequences
             @break
         @case(11)
-            Students with the Most Violation Records
-
+            Parent Contact Information for Students with Active Violations
             @break
         @case(12)
-            Common Offenses by Frequency
-
+            Sanction Trends Across Time Periods
             @break
         @case(13)
-            Complaint Records by Adviser
-
+            Students and Their Class Advisers
             @break
         @case(14)
-            List of Violators with Repeat Offenses
-
+            Students and Their Parents
             @break
         @case(15)
-            Summary of Violations per Grade Level
-
+            Students with Both Violation and Complaint Records
             @break
         @case(16)
-            Parent Contact Information for Students with Active Violations
-
+            Students with the Most Violation Records
             @break
         @case(17)
-            Complaints Filed within the Last 30 Days
-
+            Summary of Violations per Grade Level
             @break
         @case(18)
             Violation Records Involving Specific Offense Types
-
             @break
         @case(19)
-            Students with Both Violation and Complaint Records
-
+            Violation Records and Assigned Adviser
             @break
         @case(20)
-            Sanction Trends Across Time Periods
-
+            Violation Records with Violator Information
             @break
     @endswitch
 </h2>
@@ -208,205 +192,206 @@ tr:nth-child(even){background:#f2f2f2;}
   <thead>
     @switch($i)
         @case(1)
-<tr>
-    <th>Violation ID</th>
-    <th>Student Name</th>
-    <th>Offense Type</th>
-    <th>Sanction</th>
-    <th>Incident Description</th>
-    <th>Violation Date</th>
-    <th>Violation Time</th>
-</tr>
-@break
+        <tr>
+            <th>Anecdotal ID</th>
+            <th>Complainant Name</th>
+            <th>Respondent Name</th>
+            <th>Solution</th>
+            <th>Recommendation</th>
+            <th>Date Recorded</th>
+            <th>Time Recorded</th>
+        </tr>
+        @break
 
         @case(2)
-<tr>
-    <th>Student Name</th>
-    <th>Parent Name</th>
-    <th>Parent Contact Info</th>
-</tr>
-@break
+        <tr>
+            <th>Student Name</th>
+            <th>Solution</th>
+            <th>Recommendation</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+        @break
 
         @case(3)
-<tr>
-    <th>Complaint ID</th>
-    <th>Complainant Name</th>
-    <th>Respondent Name</th>
-    <th>Incident Description</th>
-    <th>Complaint Date</th>
-    <th>Complaint Time</th>
-</tr>
-@break
+        <tr>
+            <th>Appointment ID</th>
+            <th>Complainant Name</th>
+            <th>Respondent Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Status</th>
+        </tr>
+        @break
 
         @case(4)
-<tr>
-    <th>Offense Type</th>
-    <th>Offense Description</th>
-    <th>Sanction Consequences</th>
-</tr>
-@break
+        <tr>
+            <th>Student Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Time</th>
+            <th>Appointment Status</th>
+        </tr>
+        @break
 
         @case(5)
-<tr>
-    <th>Violation ID</th>
-    <th>Student Name</th>
-    <th>Adviser Name</th>
-    <th>Type of Offense</th>
-    <th>Violation Date</th>
-    <th>Violation Time</th>
-    <th>Incident Description</th>
-</tr>
-@break
-    @case(6)
-    <tr>
-        <th>Student Name</th>
-        <th>Adviser Name</th>
-        <th>Section</th>
-        <th>Grade Level</th>
-    </tr>
-    @break
+        <tr>
+            <th>Complaint ID</th>
+            <th>Adviser Name</th>
+            <th>Complainant Name</th>
+            <th>Respondent Name</th>
+            <th>Type of Offense</th>
+            <th>Complaint Date</th>
+            <th>Complaint Time</th>
+        </tr>
+        @break
 
-    @case(7)
-    <tr>
-        <th>Student Name</th>
-        <th>Solution</th>
-        <th>Recommendation</th>
-        <th>Date</th>
-        <th>Time</th>
-    </tr>
-    @break
+        @case(6)
+        <tr>
+            <th>Complaint ID</th>
+            <th>Complainant Name</th>
+            <th>Respondent Name</th>
+            <th>Incident Description</th>
+            <th>Complaint Date</th>
+            <th>Complaint Time</th>
+        </tr>
+        @break
 
-    @case(8)
-    <tr>
-        <th>Student Name</th>
-        <th>Appointment Date</th>
-        <th>Appointment Time</th>
-        <th>Appointment Status</th>
-    </tr>
-    @break
+        @case(7)
+        <tr>
+            <th>Complaint ID</th>
+            <th>Complainant Name</th>
+            <th>Respondent Name</th>
+            <th>Offense Type</th>
+            <th>Complaint Date</th>
+            <th>Complaint Time</th>
+        </tr>
+        @break
 
-    @case(9)
-    <tr>
-        <th>Anecdotal ID</th>
-        <th>Complainant Name</th>
-        <th>Respondent Name</th>
-        <th>Solution</th>
-        <th>Recommendation</th>
-        <th>Date Recorded</th>
-        <th>Time Recorded</th>
-    </tr>
-    @break
+        @case(8)
+        <tr>
+            <th>Offense ID</th>
+            <th>Offense Type</th>
+            <th>Description</th>
+            <th>Total Occurrences</th>
+        </tr>
+        @break
 
-    @case(10)
-    <tr>
-        <th>Appointment ID</th>
-        <th>Complainant Name</th>
-        <th>Respondent Name</th>
-        <th>Appointment Date</th>
-        <th>Appointment Status</th>
-    </tr>
-    @break
+        @case(9)
+        <tr>
+            <th>Student Name</th>
+            <th>Section</th>
+            <th>Grade Level</th>
+            <th>Total Violations</th>
+            <th>First Violation Date</th>
+            <th>Most Recent Violation Date</th>
+        </tr>
+        @break
 
-    @case(11)
-    <tr>
-        <th>Student Name</th>
-        <th>Adviser Section</th>
-        <th>Grade Level</th>
-        <th>Total Violations</th>
-    </tr>
-    @break
+        @case(10)
+        <tr>
+            <th>Offense Type</th>
+            <th>Offense Description</th>
+            <th>Sanction Consequences</th>
+        </tr>
+        @break
 
-    @case(12)
-    <tr>
-        <th>Offense ID</th>
-        <th>Offense Type</th>
-        <th>Description</th>
-        <th>Total Occurrences</th>
-    </tr>
-    @break
+        @case(11)
+        <tr>
+            <th>Student Name</th>
+            <th>Parent Name</th>
+            <th>Parent Contact Info</th>
+            <th>Violation Date</th>
+            <th>Violation Time</th>
+            <th>Violation Status</th>
+        </tr>
+        @break
 
-    @case(13)
-    <tr>
-        <th>Complaint ID</th>
-        <th>Adviser Name</th>
-        <th>Complainant Name</th>
-        <th>Respondent Name</th>
-        <th>Type of Offense</th>
-        <th>Complaint Date</th>
-        <th>Complaint Time</th>
-    </tr>
-    @break
+        @case(12)
+        <tr>
+            <th>Offense Sanction ID</th>
+            <th>Offense Type</th>
+            <th>Sanction Consequences</th>
+            <th>Month and Year</th>
+            <th>Number of Sanctions Given</th>
+        </tr>
+        @break
 
-    @case(14)
-    <tr>
-        <th>Student Name</th>
-        <th>Section</th>
-        <th>Grade Level</th>
-        <th>Total Violations</th>
-        <th>First Violation Date</th>
-        <th>Most Recent Violation Date</th>
-    </tr>
-    @break
+        @case(13)
+        <tr>
+            <th>Student Name</th>
+            <th>Adviser Name</th>
+            <th>Section</th>
+            <th>Grade Level</th>
+        </tr>
+        @break
 
-    @case(15)
-    <tr>
-        <th>Grade Level</th>
-        <th>Offense Type</th>
-        <th>Number of Violations</th>
-    </tr>
-    @break
+        @case(14)
+        <tr>
+            <th>Student Name</th>
+            <th>Parent Name</th>
+            <th>Parent Contact Info</th>
+        </tr>
+        @break
 
-    @case(16)
-    <tr>
-        <th>Student Name</th>
-        <th>Parent Name</th>
-        <th>Parent Contact Info</th>
-        <th>Violation Date</th>
-        <th>Violation Time</th>
-        <th>Violation Status</th>
-    </tr>
-    @break
+        @case(15)
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Violation Count</th>
+            <th>Complaint Involvement Count</th>
+        </tr>
+        @break
 
-    @case(17)
-    <tr>
-        <th>Complaint ID</th>
-        <th>Complainant Name</th>
-        <th>Respondent Name</th>
-        <th>Offense Type</th>
-        <th>Complaint Date</th>
-        <th>Complaint Time</th>
-    </tr>
-    @break
+        @case(16)
+        <tr>
+            <th>Student Name</th>
+            <th>Adviser Section</th>
+            <th>Grade Level</th>
+            <th>Total Violations</th>
+        </tr>
+        @break
 
-    @case(18)
-    <tr>
-        <th>Violation ID</th>
-        <th>Student Name</th>
-        <th>Offense Type</th>
-        <th>Violation Date</th>
-        <th>Violation Time</th>
-        <th>Incident Description</th>
-    </tr>
-    @break
+        @case(17)
+        <tr>
+            <th>Grade Level</th>
+            <th>Offense Type</th>
+            <th>Number of Violations</th>
+        </tr>
+        @break
 
-    @case(19)
-    <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Violation Count</th>
-        <th>Complaint Involvement Count</th>
-    </tr>
-    @break
+        @case(18)
+        <tr>
+            <th>Violation ID</th>
+            <th>Student Name</th>
+            <th>Offense Type</th>
+            <th>Violation Date</th>
+            <th>Violation Time</th>
+            <th>Incident Description</th>
+        </tr>
+        @break
 
-    @case(20)
-    <tr>
-        <th>Offense Sanction ID</th>
-        <th>Offense Type</th>
-        <th>Sanction Consequences</th>
-        <th>Month and Year</th>
-        <th>Number of Sanctions Given</th>
-    </tr>
-    @break
+        @case(19)
+        <tr>
+            <th>Violation ID</th>
+            <th>Student Name</th>
+            <th>Adviser Name</th>
+            <th>Type of Offense</th>
+            <th>Violation Date</th>
+            <th>Violation Time</th>
+            <th>Incident Description</th>
+        </tr>
+        @break
+
+        @case(20)
+        <tr>
+            <th>Violation ID</th>
+            <th>Student Name</th>
+            <th>Offense Type</th>
+            <th>Sanction</th>
+            <th>Incident Description</th>
+            <th>Violation Date</th>
+            <th>Violation Time</th>
+        </tr>
+        @break
 
     @endswitch
   </thead>

@@ -198,44 +198,209 @@ tr:nth-child(even){ background-color:#f9f9f9; }
   <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
   <div class="report-box" data-modal="modal3"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
   <div class="report-box" data-modal="modal4"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
-  <div class="report-box" data-modal="modal5"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
-  <!-- <div class="report-box"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div> -->
-  <div class="report-box" data-modal="modal6"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
+  <div class="report-box" data-modal="modal5"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
+  <div class="report-box" data-modal="modal6"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
   <div class="report-box" data-modal="modal7"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
   <div class="report-box" data-modal="modal8"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
   <div class="report-box" data-modal="modal9"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
   <div class="report-box" data-modal="modal10"><i class="fas fa-phone-alt"></i><h3>Parent Contact Info for Students with Active Violations</h3></div>
   <div class="report-box" data-modal="modal11"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
-  <!-- <div class="report-box"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div> -->
   <div class="report-box" data-modal="modal12"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
   <div class="report-box" data-modal="modal13"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
   <div class="report-box" data-modal="modal14"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
-  <!-- <div class="report-box"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div> -->
   <div class="report-box" data-modal="modal15"><i class="fas fa-search"></i><h3>Violation Records Involving Specific Offense Types</h3></div>
-  <!-- <div class="report-box"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div> -->
   <div class="report-box" data-modal="modal16"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
 </div>
 
 
+<!-- Modals -->
+@for($i=1; $i<=16; $i++)
+<div id="modal{{ $i }}" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 class="modal-title"></h2>
 
-<!-- 20 Modals -->
-@for ($i = 1; $i <= 20; $i++)
-  <div id="modal{{ $i }}" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 class="modal-title"></h2>
-      <div class="toolbar">
-        <input type="text" placeholder="Search..." oninput="liveSearch('modal{{ $i }}', this.value)">
-        <button onclick="sortTable('table-modal{{ $i }}')" class="btn btn-blue"><i class="fa fa-sort"></i> Sort</button>
-        <button onclick="printModal('modal{{ $i }}')" class="btn btn-warning"><i class="fa fa-print"></i> Print</button>
-        <button onclick="exportCSV('modal{{ $i }}')" class="btn btn-danger"><i class="fa fa-file-export"></i> Export CSV</button>
-      </div>
-      <table id="table-modal{{ $i }}">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
+    <div class="toolbar">
+      <input type="text" placeholder="Search..." oninput="liveSearch('modal{{ $i }}', this.value)">
+      <button class="btn btn-warning" onclick="printModal('modal{{ $i }}')"><i class="fa fa-print"></i> Print</button>
+      <button class="btn btn-danger" onclick="exportCSV('modal{{ $i }}')"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
+
+    <!-- Table ID -->
+    <h2 class="text-xl font-semibold mb-3 text-center">
+        @switch($i)
+            @case(1) Anecdotal Records per Complaint Case @break
+            @case(2) Anecdotal Records per Violation Case @break
+            @case(3) Appointments Scheduled for Complaints @break
+            @case(4) Appointments Scheduled for Violation Cases @break
+            @case(5) Complaint Records with Complainant and Respondent @break
+            @case(6) Complaints Filed within the Last 30 Days @break
+            @case(7) Common Offenses by Frequency @break
+            @case(8) List of Violators with Repeat Offenses @break
+            @case(9) Offenses and Their Sanction Consequences @break
+            @case(10) Parent Contact Info for Students with Active Violations @break
+            @case(11) Sanction Trends Across Time Periods @break
+            @case(12) Students and Their Parents @break
+            @case(13) Students with Both Violation and Complaint Records @break
+            @case(14) Students with the Most Violation Records @break
+            @case(15) Violation Records Involving Specific Offense Types @break
+            @case(16) Violation Records with Violator Information @break
+        @endswitch
+    </h2>
+
+    <table id="table-{{ $i }}" class="w-full border-collapse">
+      <thead>
+        @switch($i)
+            @case(1)
+            <tr>
+                <th>Anecdotal ID</th>
+                <th>Complainant Name</th>
+                <th>Respondent Name</th>
+                <th>Solution</th>
+                <th>Recommendation</th>
+                <th>Date Recorded</th>
+                <th>Time Recorded</th>
+            </tr>
+            @break
+            @case(2)
+            <tr>
+                <th>Student Name</th>
+                <th>Solution</th>
+                <th>Recommendation</th>
+                <th>Date</th>
+                <th>Time</th>
+            </tr>
+            @break
+            @case(3)
+            <tr>
+                <th>Appointment ID</th>
+                <th>Complainant Name</th>
+                <th>Respondent Name</th>
+                <th>Appointment Date</th>
+                <th>Appointment Status</th>
+            </tr>
+            @break
+            @case(4)
+            <tr>
+                <th>Student Name</th>
+                <th>Appointment Date</th>
+                <th>Appointment Time</th>
+                <th>Appointment Status</th>
+            </tr>
+            @break
+            @case(5)
+            <tr>
+                <th>Complaint ID</th>
+                <th>Complainant Name</th>
+                <th>Respondent Name</th>
+                <th>Incident Description</th>
+                <th>Complaint Date</th>
+                <th>Complaint Time</th>
+            </tr>
+            @break
+            @case(6)
+            <tr>
+                <th>Complaint ID</th>
+                <th>Complainant Name</th>
+                <th>Respondent Name</th>
+                <th>Type of Offense</th>
+                <th>Complaint Date</th>
+                <th>Complaint Time</th>
+            </tr>
+            @break
+            @case(7)
+            <tr>
+                <th>Offense ID</th>
+                <th>Offense Type</th>
+                <th>Description</th>
+                <th>Total Occurrences</th>
+            </tr>
+            @break
+            @case(8)
+            <tr>
+                <th>Student Name</th>
+                <th>Section</th>
+                <th>Grade Level</th>
+                <th>Total Violations</th>
+                <th>First Violation Date</th>
+                <th>Most Recent Violation Date</th>
+            </tr>
+            @break
+            @case(9)
+            <tr>
+                <th>Offense Type</th>
+                <th>Offense Description</th>
+                <th>Sanction Consequences</th>
+            </tr>
+            @break
+            @case(10)
+            <tr>
+                <th>Student Name</th>
+                <th>Parent Name</th>
+                <th>Parent Contact Info</th>
+                <th>Violation Date</th>
+                <th>Violation Time</th>
+                <th>Violation Status</th>
+            </tr>
+            @break
+            @case(11)
+            <tr>
+                <th>Offense Sanction ID</th>
+                <th>Offense Type</th>
+                <th>Sanction Consequences</th>
+                <th>Month and Year</th>
+                <th>Number of Sanctions Given</th>
+            </tr>
+            @break
+            @case(12)
+            <tr>
+                <th>Student Name</th>
+                <th>Parent Name</th>
+                <th>Parent Contact Info</th>
+            </tr>
+            @break
+            @case(13)
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Violation Count</th>
+                <th>Complaint Involvement Count</th>
+            </tr>
+            @break
+            @case(14)
+            <tr>
+                <th>Student Name</th>
+                <th>Adviser Section</th>
+                <th>Grade Level</th>
+                <th>Total Violations</th>
+            </tr>
+            @break
+            @case(15)
+            <tr>
+                <th>Offense ID</th>
+                <th>Offense Type</th>
+                <th>Sanction Consequences</th>
+                <th>Month and Year</th>
+                <th>Number of Sanctions Given</th>
+            </tr>
+            @break
+            @case(16)
+            <tr>
+                <th>Violation ID</th>
+                <th>Student Name</th>
+                <th>Offense Type</th>
+                <th>Sanction</th>
+                <th>Incident Description</th>
+                <th>Violation Date</th>
+                <th>Violation Time</th>
+            </tr>
+            @break
+        @endswitch
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
+</div>
 @endfor
 
 <script>
@@ -247,13 +412,14 @@ tr:nth-child(even){ background-color:#f9f9f9; }
       dropdowns.forEach(otherBtn => {
         if (otherBtn !== this) {
           otherBtn.nextElementSibling.classList.remove('show');
-          otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+          const icon = otherBtn.querySelector('.fa-caret-down');
+          if(icon) icon.style.transform = 'rotate(0deg)';
         }
       });
       const container = this.nextElementSibling;
       container.classList.toggle('show');
-      this.querySelector('.fa-caret-down').style.transform =
-        container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+      const icon = this.querySelector('.fa-caret-down');
+      if(icon) icon.style.transform = container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
       if(container.classList.contains('show')) container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
   });
@@ -278,28 +444,57 @@ tr:nth-child(even){ background-color:#f9f9f9; }
           modal.style.display = 'block';
           return;
         }
+
+        // Build table header dynamically based on reportId
+        let headers = [];
+        switch(parseInt(reportId)){
+          case 1: headers = ['Anecdotal ID','Complainant Name','Respondent Name','Solution','Recommendation','Date Recorded','Time Recorded']; break;
+          case 2: headers = ['Student Name','Solution','Recommendation','Date','Time']; break;
+          case 3: headers = ['Appointment ID','Complainant Name','Respondent Name','Appointment Date','Appointment Status']; break;
+          case 4: headers = ['Student Name','Appointment Date','Appointment Time','Appointment Status']; break;
+          case 5: headers = ['Complaint ID','Complainant Name','Respondent Name','Incident Description','Complaint Date','Complaint Time']; break;
+          case 6: headers = ['Complaint ID','Complainant Name','Respondent Name','Type of Offense','Complaint Date','Complaint Time']; break;
+          case 7: headers = ['Offense ID','Offense Type','Description','Total Occurrences']; break;
+          case 8: headers = ['Student Name','Section','Grade Level','Total Violations','First Violation Date','Most Recent Violation Date']; break;
+          case 9: headers = ['Offense Type','Offense Description','Sanction Consequences']; break;
+          case 10: headers = ['Student Name','Parent Name','Parent Contact Info','Violation Date','Violation Time','Violation Status']; break;
+          case 11: headers = ['Offense Sanction ID','Offense Type','Sanction Consequences','Month and Year','Number of Sanctions Given']; break;
+          case 12: headers = ['Student Name','Parent Name','Parent Contact Info']; break;
+          case 13: headers = ['First Name','Last Name','Violation Count','Complaint Involvement Count']; break;
+          case 14: headers = ['Student Name','Adviser Section','Grade Level','Total Violations']; break;
+          case 15: headers = ['Offense Sanction ID','Offense Type','Sanction Consequences','Month and Year','Number of Sanctions Given']; break;
+          case 16: headers = ['Violation ID','Student Name','Offense Type','Sanction','Incident Description','Violation Date','Violation Time']; break;
+        }
+
         const headerRow = document.createElement('tr');
-        Object.keys(data[0]).forEach(key=>{
-          const th = document.createElement('th'); th.textContent = key.replace(/_/g,' ').toUpperCase(); headerRow.appendChild(th);
-        });
+        headers.forEach(h=>{ const th = document.createElement('th'); th.textContent = h; headerRow.appendChild(th); });
         thead.appendChild(headerRow);
+
+        // Build table body
         data.forEach(row=>{
           const tr = document.createElement('tr');
-          Object.values(row).forEach(val=>{
-            const td = document.createElement('td'); td.textContent = val; tr.appendChild(td);
+          headers.forEach(h=>{
+            let key = h.toLowerCase().replace(/ /g,'_');
+            tr.innerHTML += `<td>${row[key] ?? ''}</td>`;
           });
           tbody.appendChild(tr);
         });
+
         modal.style.display='block';
       })
       .catch(err=>{
         tbody.innerHTML='<tr><td colspan="20" style="text-align:center;">Error loading data.</td></tr>';
-        modal.style.display='block'; console.error(err);
+        modal.style.display='block';
+        console.error(err);
       });
   }
 
+  // Attach modal open to report boxes
   document.querySelectorAll('.report-box').forEach(box=>{
-    box.addEventListener('click', ()=>{ const reportId = box.dataset.modal.replace('modal',''); openReportModal(reportId); });
+    box.addEventListener('click', ()=>{
+      const reportId = box.dataset.modal.replace('modal','');
+      openReportModal(reportId);
+    });
   });
 
   // Close modal
@@ -313,41 +508,37 @@ tr:nth-child(even){ background-color:#f9f9f9; }
     const tbody = document.querySelector('#'+modalId+' tbody');
     query = query.toLowerCase();
     tbody.querySelectorAll('tr').forEach(tr=>{
-      const text = tr.textContent.toLowerCase();
-      tr.style.display = text.includes(query) ? '' : 'none';
+      tr.style.display = Array.from(tr.cells).some(td=>td.textContent.toLowerCase().includes(query)) ? '' : 'none';
     });
-  }
-
-  // Sort table (simple string sort)
-  function sortTable(tableId){
-    const table = document.getElementById(tableId);
-    const tbody = table.tBodies[0];
-    Array.from(tbody.rows)
-      .sort((a,b)=> a.cells[0].textContent.localeCompare(b.cells[0].textContent))
-      .forEach(tr=>tbody.appendChild(tr));
   }
 
   // Print modal
   function printModal(modalId){
     const modal = document.getElementById(modalId);
-    const printContents = modal.querySelector('.modal-content').innerHTML;
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-    location.reload();
+    const clone = modal.querySelector('.modal-content').cloneNode(true);
+    clone.querySelectorAll('input,button,.close').forEach(el=>el.remove());
+    const w = window.open('','','width=900,height=700');
+    w.document.write('<html><head><title>Print</title></head><body>');
+    w.document.write(clone.innerHTML);
+    w.document.write('</body></html>');
+    w.document.close(); w.focus(); w.print(); w.close();
   }
 
   // Export CSV
   function exportCSV(modalId){
     const table = document.querySelector('#'+modalId+' table');
-    let csvContent = Array.from(table.rows).map(r=>Array.from(r.cells).map(c=>c.textContent).join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = modalId+'.csv';
-    link.click();
+    const rows = Array.from(table.querySelectorAll('tr')).filter(r=>r.style.display!=='none');
+    const csv = rows.map((row,i)=>{
+      const cells = Array.from(row.querySelectorAll(i===0?'th':'td'));
+      return cells.map(c=>`"${(c.textContent||'').replace(/"/g,'""')}"`).join(',');
+    }).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = modalId+'.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
   }
 </script>
+
 </body>
 </html>
