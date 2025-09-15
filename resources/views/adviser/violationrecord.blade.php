@@ -33,7 +33,8 @@ body {
 .sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 0;]
+  
   width: 240px;
   height: 100%;
   background: linear-gradient(180deg, rgb(48, 48, 50));

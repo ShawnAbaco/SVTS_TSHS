@@ -341,23 +341,6 @@
       margin: 0 auto;
     }
 
-    #welcomeModal {
-      position: fixed;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color:rgb(14, 14, 14);
-      color: #fff;
-      padding: 20px 40px;
-      border-radius: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      z-index: 9999;
-      display: none;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
     /* Modal Styles */
     .modal {
       display: none;
@@ -439,7 +422,7 @@
     <div class="topbar">
       <div>
         <h1>Dashboard</h1>
-        <p>Welcome back, Admin</p>
+       
       </div>
       <div class="user-info">
         <img id="profileImage" src="https://i.pravatar.cc/35" alt="Profile" onclick="changeProfileImage()" />
@@ -550,8 +533,7 @@
     </div>
   </div>
 
-  <!-- Welcome Modal -->
-  <div id="welcomeModal">Welcome back, Admin!</div>
+  
 
   <!-- Info Modal -->
   <div id="infoModal" class="modal">

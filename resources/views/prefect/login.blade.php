@@ -29,7 +29,6 @@
       z-index: -1;
     }
 
-<<<<<<< HEAD
     .page-header { 
       background: #2e7d32; 
       color: #fff; 
@@ -39,9 +38,6 @@
       font-size: 22px; 
       box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
     }
-=======
-    .page-header { background: rgb(73, 0, 0); color: #ffffff; text-align: center; padding: 15px; font-weight: bold; font-size: 22px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
->>>>>>> d4d8001ce69ce54d246784d03eb15bef290b8eca
 
     .adviser-login-left, .adviser-login-right {
       position: fixed; 
@@ -61,7 +57,6 @@
     .adviser-login-left:hover, .adviser-login-right:hover { background: #388e3c; }
 
     .container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-
     .login-box { 
       display: flex; 
       flex-direction: column; 
@@ -75,9 +70,8 @@
 
     .logo-section { text-align: center; padding: 0; }
     .logo-section img { width: 220px; height: auto; object-fit: contain; }
-    .logo-section p { font-size: 13px; margin-top: 8px; font-weight: 600; color: #2e7d32; }
+    .logo-section h3 { margin-top: 8px; font-size: 14px; font-weight: 600; color: #2e7d32; }
 
-<<<<<<< HEAD
     .form-section { padding: 20px; background: #fff; color: #111; }
     .form-section h1 { font-size: 18px; margin-bottom: 15px; text-align: center; color: #2e7d32; }
     .form-group { margin-bottom: 18px; position: relative; }
@@ -85,16 +79,8 @@
 
     .input-icon-wrapper { position: relative; }
     .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: #2e7d32; }
-=======
-    .form-section { padding: 20px; background: white; color: rgb(73, 0, 0); }
-    .form-section h1 { font-size: 25px; margin-bottom: 15px; text-align: center; }
-    .form-group { margin-bottom: 18px; position: relative;  font-weight: bold; }
-    .form-section label { font-size: 13px; display: block; margin-bottom: 6px; }
-
-    .input-icon-wrapper { position: relative; }
-    .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: rgb(73, 0, 0); }
->>>>>>> d4d8001ce69ce54d246784d03eb15bef290b8eca
-    .input-icon-wrapper i.fa-envelope, .input-icon-wrapper i.fa-lock { left: 10px; }
+    .input-icon-wrapper i.fa-envelope, 
+    .input-icon-wrapper i.fa-lock { left: 10px; }
 
     .input-icon-wrapper input { 
       width: 100%; 
@@ -108,11 +94,11 @@
       background: #f9f9f9; 
     }
     .input-icon-wrapper input:focus { border-color: #388e3c; outline: none; }
+
     .toggle-password { right: 10px; cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%); color: #2e7d32; }
 
     .warning { font-size: 12px; color: #B91C1C; margin-top: 5px; display: none; }
 
-<<<<<<< HEAD
     .form-section button { 
       width: 100%; 
       padding: 10px; 
@@ -125,7 +111,8 @@
       cursor: pointer; 
       transition: background 0.3s ease; 
     }
-    .form-section button:hover { background: #388e3c; }
+    .form-section button:disabled { background: gray; cursor: not-allowed; }
+    .form-section button:hover:enabled { background: #388e3c; }
 
     .page-footer { 
       background: #2e7d32; 
@@ -136,14 +123,7 @@
       font-weight: bold; 
       box-shadow: 0 -2px 5px rgba(0,0,0,0.3); 
     }
-=======
-    .form-section button { width: 100%; padding: 10px; background: rgb(73, 0, 0); border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold; color: #ffffff; cursor: pointer; transition: background 0.3s ease; }
-    .form-section button:hover { background: #f0f0f0; }
 
-    .page-footer { background: rgb(73, 0, 0); color: #ffffff; text-align: center; padding: 10px; font-size: 13px; font-weight: bold; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
->>>>>>> d4d8001ce69ce54d246784d03eb15bef290b8eca
-
-    /* Modals */
     .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
     .modal-content { background: #fff; padding: 20px; border-radius: 8px; max-width: 320px; width: 90%; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
     .modal-content h2 { color: #2e7d32; margin-bottom: 10px; font-size: 16px; }
@@ -205,6 +185,14 @@
     </div>
   </div>
 
+  <!-- Success modal -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <h2>Success</h2>
+      <p>Login successful!!</p>
+    </div>
+  </div>
+
   <!-- Too many attempts modal -->
   <div id="attemptModal" class="modal">
     <div class="modal-content">
@@ -215,91 +203,78 @@
 
   <script>
     const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
+    const loginBtn = document.getElementById('loginBtn'); 
+    const errorModal = document.getElementById('errorModal');
+    const errorMessage = document.getElementById('errorMessage'); 
+    const successModal = document.getElementById('successModal'); 
+    const attemptModal = document.getElementById('attemptModal');
+    const countdownEl = document.getElementById('countdown');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
-    const emailWarning = document.getElementById('emailWarning');
-    const passwordWarning = document.getElementById('passwordWarning');
-    const errorModal = document.getElementById('errorModal');
-    const attemptModal = document.getElementById('attemptModal');
-    const countdownSpan = document.getElementById('countdown');
 
-    let attemptCount = 0;
-    const maxAttempts = 3;
-    const lockoutTime = 10; // seconds
+    let attempts = 0;
+    let lockout = false;
+    let lockoutTime = 10; // seconds
 
-    loginForm.addEventListener('submit', function(e) {
-      // Client-side validation
-      let valid = true;
-      if (!emailInput.value || !/\S+@\S+\.\S+/.test(emailInput.value)) {
-        emailWarning.style.display = 'block';
-        emailInput.style.borderColor = '#B91C1C';
-        valid = false;
-      } else {
-        emailWarning.style.display = 'none';
-        emailInput.style.borderColor = '#2e7d32';
-      }
-      if (!passwordInput.value) {
-        passwordWarning.style.display = 'block';
-        passwordInput.style.borderColor = '#B91C1C';
-        valid = false;
-      } else {
-        passwordWarning.style.display = 'none';
-        passwordInput.style.borderColor = '#2e7d32';
-      }
-      if (!valid) { e.preventDefault(); return; }
-
-      // Only increment attempts if Laravel returns an error
-      @if ($errors->any())
-        e.preventDefault(); // prevent default form submission
-        attemptCount++;
-
-        if(attemptCount >= maxAttempts) {
-          loginBtn.disabled = true;
-          attemptModal.style.display = 'flex';
-          let timeLeft = lockoutTime;
-          countdownSpan.innerText = timeLeft;
-          loginBtn.innerText = `Wait (${timeLeft}s)`;
-
-          const countdownInterval = setInterval(() => {
-            timeLeft--;
-            countdownSpan.innerText = timeLeft;
-            loginBtn.innerText = `Wait (${timeLeft}s)`;
-            if(timeLeft <= 0){
-              clearInterval(countdownInterval);
-              attemptModal.style.display = 'none';
-              loginBtn.disabled = false;
-              loginBtn.innerText = 'Login';
-              attemptCount = 0;
-            }
-          }, 1000);
-        }
-
-        // Show invalid credentials modal
-        const errorMsg = "{{ $errors->first() }}";
-        document.getElementById('errorMessage').innerText = errorMsg.includes('email') || errorMsg.includes('password') ? "Invalid credentials. Please try again." : errorMsg;
-        errorModal.style.display = 'flex';
-      @endif
-    });
-
+    // Toggle password visibility
     function togglePassword() {
-      const eyeIcon = document.querySelector('.toggle-password');
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash');
-      } else {
-        passwordInput.type = 'password';
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye');
-      }
+      const type = passwordInput.type === "password" ? "text" : "password";
+      passwordInput.type = type;
+      const icon = document.querySelector('.toggle-password');
+      icon.classList.toggle("fa-eye");
+      icon.classList.toggle("fa-eye-slash");
     }
 
-    function closeModal() { errorModal.style.display = 'none'; }
+    loginForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (lockout) return;
 
-    if (/android/i.test(navigator.userAgent)) {
-      document.querySelector('.adviser-login-left').style.display = 'none';
-      document.querySelector('.adviser-login-right').style.display = 'block';
+      const formData = new FormData(loginForm); 
+      let response = await fetch("{{ route('prefect.login') }}", { 
+        method: "POST", 
+        headers: { "X-CSRF-TOKEN": formData.get("_token") }, 
+        body: formData 
+      }); 
+      let data = await response.json();
+
+      if (data.success) {
+        successModal.style.display = 'flex'; 
+        setTimeout(() => { window.location.href = data.redirect; }, 2000);
+      } else {
+        attempts++;
+        // Clear fields when wrong credentials
+      
+        passwordInput.value = "";
+
+        if (attempts >= 3) {
+          lockout = true;
+          loginBtn.disabled = true;
+          let timeLeft = lockoutTime;
+          countdownEl.innerText = timeLeft;
+          attemptModal.style.display = 'flex';
+
+          let timer = setInterval(() => {
+            timeLeft--;
+            countdownEl.innerText = timeLeft;
+            if (timeLeft <= 0) {
+              clearInterval(timer);
+              attemptModal.style.display = 'none';
+              lockout = false;
+              attempts = 0;
+              loginBtn.disabled = false;
+            }
+          }, 1000);
+        } else {
+          errorMessage.innerText = data.message;
+          errorModal.style.display = 'flex'; 
+        }
+      }
+    });
+
+    function closeModal() { errorModal.style.display = 'none'; }
+    function closeSuccessModal() {
+      successModal.style.display = 'none'; 
+      window.location.href = "{{ route('prefect.dashboard') }}"; 
     }
   </script>
 </body>
