@@ -247,30 +247,28 @@ tr:nth-child(even) { background-color: #f2f2f2; }
     <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
   </ul>
 </div>
-
 <div class="main-content">
-  <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
-  <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
-  <div class="report-box" data-modal="modal3"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
-  <div class="report-box" data-modal="modal4"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
-  <div class="report-box" data-modal="modal5"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
-  <div class="report-box" data-modal="modal6"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div>
-  <div class="report-box" data-modal="modal7"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
-  <div class="report-box" data-modal="modal8"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
-  <div class="report-box" data-modal="modal9"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
-  <div class="report-box" data-modal="modal10"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
-  <div class="report-box" data-modal="modal11"><i class="fas fa-phone-alt"></i><h3>Parent Contact Info for Students with Active Violations</h3></div>
-  <div class="report-box" data-modal="modal12"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
-  <div class="report-box" data-modal="modal13"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div>
-  <div class="report-box" data-modal="modal14"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
-  <div class="report-box" data-modal="modal15"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
-  <div class="report-box" data-modal="modal16"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
-  <div class="report-box" data-modal="modal17"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div>
+  <div class="report-box" data-modal="modal1"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
+  <div class="report-box" data-modal="modal2"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
+  <div class="report-box" data-modal="modal3"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
+  <div class="report-box" data-modal="modal4"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
+  <div class="report-box" data-modal="modal5"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
+  <div class="report-box" data-modal="modal6"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div>
+  <div class="report-box" data-modal="modal7"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
+  <div class="report-box" data-modal="modal8"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
+  <div class="report-box" data-modal="modal9"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
+  <div class="report-box" data-modal="modal10"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
+  <div class="report-box" data-modal="modal11"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
+  <div class="report-box" data-modal="modal12"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
+  <div class="report-box" data-modal="modal13"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div>
+  <div class="report-box" data-modal="modal14"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
+  <div class="report-box" data-modal="modal15"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div>
+  <div class="report-box" data-modal="modal16"><i class="fas fa-phone-alt"></i><h3>Parent Contact Info for Students with Active Violations</h3></div>
+  <div class="report-box" data-modal="modal17"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
   <div class="report-box" data-modal="modal18"><i class="fas fa-search"></i><h3>Violation Records Involving Specific Offense Types</h3></div>
-  <div class="report-box" data-modal="modal19"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
-  <div class="report-box" data-modal="modal20"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
+  <div class="report-box" data-modal="modal19"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
+  <div class="report-box" data-modal="modal20"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
 </div>
-
 
 
 <!-- Modals -->
