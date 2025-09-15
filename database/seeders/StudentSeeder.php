@@ -11,30 +11,40 @@ class StudentSeeder extends Seeder
 {
     public function run(): void
     {
-        $parent1 = ParentModel::first();
-        $adviser1 = Adviser::first();
+        $parents = ParentModel::all();
+        $advisers = Adviser::all();
 
-        Student::create([
-            'parent_id'          => $parent1->parent_id,
-            'adviser_id'         => $adviser1->adviser_id,
-            'student_fname'      => 'Pedro',
-            'student_lname'      => 'Garcia',
-            'student_birthdate'  => '2007-01-15',
-            'student_address'    => 'Tagoloan, Misamis Oriental',
-            'student_contactinfo'=> '09301234567',
-        ]);
+        $students = [
+            ['Miguel', 'Garcia', '2007-01-10'],
+            ['Angelica', 'Lopez', '2006-03-15'],
+            ['Joshua', 'Reyes', '2007-05-22'],
+            ['Samantha', 'Cruz', '2006-07-30'],
+            ['Mark', 'Dela Rosa', '2007-02-12'],
+            ['Nicole', 'Santos', '2006-09-05'],
+            ['Ryan', 'Torres', '2007-08-18'],
+            ['Isabella', 'Velasco', '2006-11-12'],
+            ['Daniel', 'Ramos', '2007-04-25'],
+            ['Stephanie', 'Gonzales', '2006-06-17'],
+            ['Kevin', 'Diaz', '2007-03-09'],
+            ['Jessica', 'Mendoza', '2006-12-02'],
+            ['Christian', 'Navarro', '2007-10-14'],
+            ['Alexa', 'Villanueva', '2006-05-23'],
+            ['Patrick', 'Flores', '2007-07-01'],
+        ];
 
-        $parent2 = ParentModel::skip(1)->first();
-        $adviser2 = Adviser::skip(1)->first();
+        foreach ($students as $i => $s) {
+            $parent = $parents[$i % 4];
+            $adviser = $advisers[$i % 2];
 
-        Student::create([
-            'parent_id'          => $parent2->parent_id,
-            'adviser_id'         => $adviser2->adviser_id,
-            'student_fname'      => 'Luisa',
-            'student_lname'      => 'Lopez',
-            'student_birthdate'  => '2008-03-22',
-            'student_address'    => 'Cagayan de Oro City',
-            'student_contactinfo'=> '09324567890',
-        ]);
+            Student::create([
+                'parent_id' => $parent->parent_id,
+                'adviser_id' => $adviser->adviser_id,
+                'student_fname' => $s[0],
+                'student_lname' => $s[1],
+                'student_birthdate' => $s[2],
+                'student_address' => 'Brgy. ' . ($i+1) . ', Tagoloan, Misamis Oriental',
+                'student_contactinfo' => '0917' . str_pad($i+1000, 7, '0', STR_PAD_LEFT),
+            ]);
+        }
     }
 }

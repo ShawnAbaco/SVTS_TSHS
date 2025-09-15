@@ -25,7 +25,9 @@ body {
 /* --- Sidebar --- */
 .sidebar {
   width: 230px;
-  background: rgb(73, 0, 0);
+background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+background-repeat: no-repeat;
+background-attachment: fixed;
   color: #fff;
   height: 100vh;
   position: fixed;

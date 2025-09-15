@@ -9,18 +9,20 @@ class ParentSeeder extends Seeder
 {
     public function run(): void
     {
-        ParentModel::create([
-            'parent_fname'     => 'Carlos',
-            'parent_lname'     => 'Garcia',
-            'parent_birthdate' => '1980-05-10',
-            'parent_contactinfo' => '09194567890',
-        ]);
+        $parents = [
+            ['Juan', 'Dela Cruz', '1975-03-12', '09171234567'],
+            ['Maria', 'Santos', '1980-07-22', '09281234567'],
+            ['Antonio', 'Reyes', '1978-11-05', '09391234567'],
+            ['Sofia', 'Cruz', '1982-02-15', '09451234567'],
+        ];
 
-        ParentModel::create([
-            'parent_fname'     => 'Ana',
-            'parent_lname'     => 'Lopez',
-            'parent_birthdate' => '1985-08-20',
-            'parent_contactinfo' => '09201234567',
-        ]);
+        foreach ($parents as $p) {
+            ParentModel::create([
+                'parent_fname' => $p[0],
+                'parent_lname' => $p[1],
+                'parent_birthdate' => $p[2],
+                'parent_contactinfo' => $p[3],
+            ]);
+        }
     }
 }

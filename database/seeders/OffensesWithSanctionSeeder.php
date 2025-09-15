@@ -9,30 +9,25 @@ class OffensesWithSanctionSeeder extends Seeder
 {
     public function run(): void
     {
-        // ========== Tardiness ==========
-        OffensesWithSanction::create([
-            'offense_type'        => 'Tardiness',
-            'offense_description' => 'Failure to arrive at school or class on time without valid reason.',
-            'sanction_consequences' => 'Verbal Warning',
-        ]);
+        $offenses = [
+            ['Tardiness', 'Late to school or class without valid reason', 'Verbal Warning'],
+            ['Tardiness', 'Late to school or class without valid reason', 'Parent Notification'],
+            ['Improper Uniform', 'Wearing incomplete or improper school uniform', 'Verbal Warning'],
+            ['Improper Uniform', 'Wearing incomplete or improper school uniform', 'Parent Notification'],
+            ['Bullying/Harassment', 'Intimidation, harassment, or bullying of fellow students', 'Verbal Warning'],
+            ['Bullying/Harassment', 'Intimidation, harassment, or bullying of fellow students', 'Parent Notification'],
+            ['Late Homework', 'Submitting homework past the deadline', 'Verbal Warning'],
+            ['Late Homework', 'Submitting homework past the deadline', 'Parent Notification'],
+            ['Disruptive Behavior', 'Interrupting or disturbing the class', 'Verbal Warning'],
+            ['Disruptive Behavior', 'Interrupting or disturbing the class', 'Parent Notification'],
+        ];
 
-        OffensesWithSanction::create([
-            'offense_type'        => 'Tardiness',
-            'offense_description' => 'Failure to arrive at school or class on time without valid reason.',
-            'sanction_consequences' => 'Parent Notification',
-        ]);
-
-        // ========== Bullying / Harassment ==========
-        OffensesWithSanction::create([
-            'offense_type'        => 'Bullying/Harassment',
-            'offense_description' => 'Any act of intimidation, harassment, or bullying of a fellow student.',
-            'sanction_consequences' => 'Verbal Warning',
-        ]);
-
-        OffensesWithSanction::create([
-            'offense_type'        => 'Bullying/Harassment',
-            'offense_description' => 'Any act of intimidation, harassment, or bullying of a fellow student.',
-            'sanction_consequences' => 'Parent Notification',
-        ]);
+        foreach ($offenses as $offense) {
+            OffensesWithSanction::create([
+                'offense_type' => $offense[0],
+                'offense_description' => $offense[1],
+                'sanction_consequences' => $offense[2],
+            ]);
+        }
     }
 }

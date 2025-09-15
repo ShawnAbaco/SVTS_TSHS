@@ -29,27 +29,29 @@
       z-index: -1;
     }
 
-    .page-header { 
-      background: #2e7d32; 
-      color: #fff; 
-      text-align: center; 
-      padding: 15px; 
-      font-weight: bold; 
-      font-size: 22px; 
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
+    .page-header {
+background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+background-repeat: no-repeat;
+background-attachment: fixed;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 22px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
     .adviser-login-left, .adviser-login-right {
-      position: fixed; 
-      top: 15px; 
-      padding: 8px 16px; 
-      background: #2e7d32; 
-      color: #fff; 
-      font-weight: bold; 
+      position: fixed;
+      top: 15px;
+      padding: 8px 16px;
+      background: #2e7d32;
+      color: #fff;
+      font-weight: bold;
       border-radius: 6px;
-      text-decoration: none; 
-      transition: background 0.3s ease; 
-      border: 1px solid #1b5e20; 
+      text-decoration: none;
+      transition: background 0.3s ease;
+      border: 1px solid #1b5e20;
       z-index: 10;
     }
     .adviser-login-left { left: 15px; }
@@ -57,15 +59,15 @@
     .adviser-login-left:hover, .adviser-login-right:hover { background: #388e3c; }
 
     .container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    .login-box { 
-      display: flex; 
-      flex-direction: column; 
-      max-width: 350px; 
-      width: 100%; 
-      border-radius: 12px; 
-      overflow: hidden; 
-      box-shadow: 0 8px 18px rgba(0,0,0,0.4); 
-      background: #fff; 
+    .login-box {
+      display: flex;
+      flex-direction: column;
+      max-width: 350px;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+      background: #fff;
     }
 
     .logo-section { text-align: center; padding: 0; }
@@ -79,19 +81,19 @@
 
     .input-icon-wrapper { position: relative; }
     .input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: #2e7d32; }
-    .input-icon-wrapper i.fa-envelope, 
+    .input-icon-wrapper i.fa-envelope,
     .input-icon-wrapper i.fa-lock { left: 10px; }
 
-    .input-icon-wrapper input { 
-      width: 100%; 
-      padding: 10px 12px; 
-      padding-left: 35px; 
-      padding-right: 35px; 
-      border-radius: 6px; 
-      border: 1px solid #2e7d32; 
-      font-size: 14px; 
-      color: #000; 
-      background: #f9f9f9; 
+    .input-icon-wrapper input {
+      width: 100%;
+      padding: 10px 12px;
+      padding-left: 35px;
+      padding-right: 35px;
+      border-radius: 6px;
+      border: 1px solid #2e7d32;
+      font-size: 14px;
+      color: #000;
+      background: #f9f9f9;
     }
     .input-icon-wrapper input:focus { border-color: #388e3c; outline: none; }
 
@@ -99,29 +101,33 @@
 
     .warning { font-size: 12px; color: #B91C1C; margin-top: 5px; display: none; }
 
-    .form-section button { 
-      width: 100%; 
-      padding: 10px; 
-      background: #2e7d32; 
-      border: none; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      font-weight: bold; 
-      color: #fff; 
-      cursor: pointer; 
-      transition: background 0.3s ease; 
+    .form-section button {
+      width: 100%;
+      padding: 10px;
+background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+background-repeat: no-repeat;
+background-attachment: fixed;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
     .form-section button:disabled { background: gray; cursor: not-allowed; }
     .form-section button:hover:enabled { background: #388e3c; }
 
-    .page-footer { 
-      background: #2e7d32; 
-      color: #fff; 
-      text-align: center; 
-      padding: 10px; 
-      font-size: 13px; 
-      font-weight: bold; 
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.3); 
+    .page-footer {
+background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+background-repeat: no-repeat;
+background-attachment: fixed;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
     }
 
     .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
@@ -203,10 +209,10 @@
 
   <script>
     const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn'); 
+    const loginBtn = document.getElementById('loginBtn');
     const errorModal = document.getElementById('errorModal');
-    const errorMessage = document.getElementById('errorMessage'); 
-    const successModal = document.getElementById('successModal'); 
+    const errorMessage = document.getElementById('errorMessage');
+    const successModal = document.getElementById('successModal');
     const attemptModal = document.getElementById('attemptModal');
     const countdownEl = document.getElementById('countdown');
     const emailInput = document.getElementById('email');
@@ -229,21 +235,21 @@
       e.preventDefault();
       if (lockout) return;
 
-      const formData = new FormData(loginForm); 
-      let response = await fetch("{{ route('prefect.login') }}", { 
-        method: "POST", 
-        headers: { "X-CSRF-TOKEN": formData.get("_token") }, 
-        body: formData 
-      }); 
+      const formData = new FormData(loginForm);
+      let response = await fetch("{{ route('prefect.login') }}", {
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": formData.get("_token") },
+        body: formData
+      });
       let data = await response.json();
 
       if (data.success) {
-        successModal.style.display = 'flex'; 
+        successModal.style.display = 'flex';
         setTimeout(() => { window.location.href = data.redirect; }, 2000);
       } else {
         attempts++;
         // Clear fields when wrong credentials
-      
+
         passwordInput.value = "";
 
         if (attempts >= 3) {
@@ -266,15 +272,15 @@
           }, 1000);
         } else {
           errorMessage.innerText = data.message;
-          errorModal.style.display = 'flex'; 
+          errorModal.style.display = 'flex';
         }
       }
     });
 
     function closeModal() { errorModal.style.display = 'none'; }
     function closeSuccessModal() {
-      successModal.style.display = 'none'; 
-      window.location.href = "{{ route('prefect.dashboard') }}"; 
+      successModal.style.display = 'none';
+      window.location.href = "{{ route('prefect.dashboard') }}";
     }
   </script>
 </body>

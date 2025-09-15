@@ -9,7 +9,9 @@
 /* (styles unchanged from your working version) */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;font-weight:bold;transition:all .2s ease-in-out;}
 body{display:flex;background:#f9f9f9;color:#111;}
-.sidebar{width:230px;background:#000;color:#fff;height:100vh;position:fixed;padding:25px 15px;border-radius:0 15px 15px 0;box-shadow:2px 0 15px rgba(0,0,0,.5);overflow-y:auto;}
+.sidebar{width:230px;background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+background-repeat: no-repeat;
+background-attachment: fixed;color:#fff;height:100vh;position:fixed;padding:25px 15px;border-radius:0 15px 15px 0;box-shadow:2px 0 15px rgba(0,0,0,.5);overflow-y:auto;}
 .sidebar h2{margin-bottom:30px;text-align:center;font-size:22px;letter-spacing:1px;color:#fff;text-transform:uppercase;border-bottom:2px solid rgba(255,255,255,.15);padding-bottom:10px;}
 .sidebar ul{list-style:none;}
 .sidebar ul li{padding:12px 14px;display:flex;align-items:center;cursor:pointer;border-radius:10px;font-size:15px;color:#e0e0e0;transition:background .3s,transform .2s;}
@@ -117,12 +119,95 @@ tr:nth-child(even){background:#f2f2f2;}
       <button class="btn btn-warning" onclick="printModal('modal{{ $i }}')"><i class="fa fa-print"></i> Print</button>
       <button class="btn btn-danger" onclick="exportCSV('modal{{ $i }}')"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
+<!-- NOTE: table id is table-{{ $i }} -->
+<h2 class="text-xl font-semibold mb-3 text-center">
+    @switch($i)
+        @case(1)
+            Violation Records with Violator Information
+            @break
+        @case(2)
+            Students and Their Parents
 
-    <!-- NOTE: table id is table-{{ $i }} -->
-    <table id="table-{{ $i }}">
-      <thead>
-        @switch($i)
-            @case(1)
+            @break
+        @case(3)
+            Complaint Records with Complainant and Respondent
+
+            @break
+        @case(4)
+            Offenses and Their Sanction Consequences
+
+            @break
+        @case(5)
+            Violation Records and Assigned Adviser
+
+            @break
+        @case(6)
+            Students and Their Class Advisers
+
+            @break
+        @case(7)
+            Anecdotal Records per Violation Case
+
+            @break
+        @case(8)
+            Appointments Scheduled for Violation Cases
+
+            @break
+        @case(9)
+            Anecdotal Records per Complaint Case
+
+            @break
+        @case(10)
+            Appointments Scheduled for Complaints
+
+            @break
+        @case(11)
+            Students with the Most Violation Records
+
+            @break
+        @case(12)
+            Common Offenses by Frequency
+
+            @break
+        @case(13)
+            Complaint Records by Adviser
+
+            @break
+        @case(14)
+            List of Violators with Repeat Offenses
+
+            @break
+        @case(15)
+            Summary of Violations per Grade Level
+
+            @break
+        @case(16)
+            Parent Contact Information for Students with Active Violations
+
+            @break
+        @case(17)
+            Complaints Filed within the Last 30 Days
+
+            @break
+        @case(18)
+            Violation Records Involving Specific Offense Types
+
+            @break
+        @case(19)
+            Students with Both Violation and Complaint Records
+
+            @break
+        @case(20)
+            Sanction Trends Across Time Periods
+
+            @break
+    @endswitch
+</h2>
+
+<table id="table-{{ $i }}" class="w-full border-collapse">
+  <thead>
+    @switch($i)
+        @case(1)
 <tr>
     <th>Violation ID</th>
     <th>Student Name</th>
@@ -134,14 +219,203 @@ tr:nth-child(even){background:#f2f2f2;}
 </tr>
 @break
 
-            {{-- Add other cases' headers here --}}
-        @endswitch
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+        @case(2)
+<tr>
+    <th>Student Name</th>
+    <th>Parent Name</th>
+    <th>Parent Contact Info</th>
+</tr>
+@break
+
+        @case(3)
+<tr>
+    <th>Complaint ID</th>
+    <th>Complainant Name</th>
+    <th>Respondent Name</th>
+    <th>Incident Description</th>
+    <th>Complaint Date</th>
+    <th>Complaint Time</th>
+</tr>
+@break
+
+        @case(4)
+<tr>
+    <th>Offense Type</th>
+    <th>Offense Description</th>
+    <th>Sanction Consequences</th>
+</tr>
+@break
+
+        @case(5)
+<tr>
+    <th>Violation ID</th>
+    <th>Student Name</th>
+    <th>Adviser Name</th>
+    <th>Type of Offense</th>
+    <th>Violation Date</th>
+    <th>Violation Time</th>
+    <th>Incident Description</th>
+</tr>
+@break
+    @case(6)
+    <tr>
+        <th>Student Name</th>
+        <th>Adviser Name</th>
+        <th>Section</th>
+        <th>Grade Level</th>
+    </tr>
+    @break
+
+    @case(7)
+    <tr>
+        <th>Student Name</th>
+        <th>Solution</th>
+        <th>Recommendation</th>
+        <th>Date</th>
+        <th>Time</th>
+    </tr>
+    @break
+
+    @case(8)
+    <tr>
+        <th>Student Name</th>
+        <th>Appointment Date</th>
+        <th>Appointment Time</th>
+        <th>Appointment Status</th>
+    </tr>
+    @break
+
+    @case(9)
+    <tr>
+        <th>Anecdotal ID</th>
+        <th>Complainant Name</th>
+        <th>Respondent Name</th>
+        <th>Solution</th>
+        <th>Recommendation</th>
+        <th>Date Recorded</th>
+        <th>Time Recorded</th>
+    </tr>
+    @break
+
+    @case(10)
+    <tr>
+        <th>Appointment ID</th>
+        <th>Complainant Name</th>
+        <th>Respondent Name</th>
+        <th>Appointment Date</th>
+        <th>Appointment Status</th>
+    </tr>
+    @break
+
+    @case(11)
+    <tr>
+        <th>Student Name</th>
+        <th>Adviser Section</th>
+        <th>Grade Level</th>
+        <th>Total Violations</th>
+    </tr>
+    @break
+
+    @case(12)
+    <tr>
+        <th>Offense ID</th>
+        <th>Offense Type</th>
+        <th>Description</th>
+        <th>Total Occurrences</th>
+    </tr>
+    @break
+
+    @case(13)
+    <tr>
+        <th>Complaint ID</th>
+        <th>Adviser Name</th>
+        <th>Complainant Name</th>
+        <th>Respondent Name</th>
+        <th>Type of Offense</th>
+        <th>Complaint Date</th>
+        <th>Complaint Time</th>
+    </tr>
+    @break
+
+    @case(14)
+    <tr>
+        <th>Student Name</th>
+        <th>Section</th>
+        <th>Grade Level</th>
+        <th>Total Violations</th>
+        <th>First Violation Date</th>
+        <th>Most Recent Violation Date</th>
+    </tr>
+    @break
+
+    @case(15)
+    <tr>
+        <th>Grade Level</th>
+        <th>Offense Type</th>
+        <th>Number of Violations</th>
+    </tr>
+    @break
+
+    @case(16)
+    <tr>
+        <th>Student Name</th>
+        <th>Parent Name</th>
+        <th>Parent Contact Info</th>
+        <th>Violation Date</th>
+        <th>Violation Time</th>
+        <th>Violation Status</th>
+    </tr>
+    @break
+
+    @case(17)
+    <tr>
+        <th>Complaint ID</th>
+        <th>Complainant Name</th>
+        <th>Respondent Name</th>
+        <th>Offense Type</th>
+        <th>Complaint Date</th>
+        <th>Complaint Time</th>
+    </tr>
+    @break
+
+    @case(18)
+    <tr>
+        <th>Violation ID</th>
+        <th>Student Name</th>
+        <th>Offense Type</th>
+        <th>Violation Date</th>
+        <th>Violation Time</th>
+        <th>Incident Description</th>
+    </tr>
+    @break
+
+    @case(19)
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Violation Count</th>
+        <th>Complaint Involvement Count</th>
+    </tr>
+    @break
+
+    @case(20)
+    <tr>
+        <th>Offense Sanction ID</th>
+        <th>Offense Type</th>
+        <th>Sanction Consequences</th>
+        <th>Month and Year</th>
+        <th>Number of Sanctions Given</th>
+    </tr>
+    @break
+
+    @endswitch
+  </thead>
+  <tbody></tbody>
+</table>
+</div>
 </div>
 @endfor
+
 
 <script>
 /* small helper to safely get different possible property names */
@@ -174,11 +448,11 @@ document.querySelectorAll('.dropdown-btn').forEach(btn=>{
 });
 
 /* open modal + fetch */
+/* open modal + fetch */
 async function openReportModal(reportId) {
     const modal = document.getElementById(`modal${reportId}`);
     modal.style.display = "block";
 
-    // Fetch report data
     try {
         const res = await fetch(`/prefect/reports/data/${reportId}`);
         const data = await res.json();
@@ -201,8 +475,257 @@ async function openReportModal(reportId) {
                     </tr>
                 `;
             });
-        } else {
-            // Fallback for other reports
+        }
+            else if (reportId === 2) {
+    data.forEach(row => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${row.student_name}</td>
+                <td>${row.parent_name}</td>
+                <td>${row.parent_contact_info}</td>
+            </tr>
+        `;
+    });
+}
+else if (reportId === 3) {
+    data.forEach(row => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${row.complaint_id}</td>
+                <td>${row.complainant_name}</td>
+                <td>${row.respondent_name}</td>
+                <td>${row.incident_description}</td>
+                <td>${row.complaint_date}</td>
+                <td>${row.complaint_time}</td>
+            </tr>
+        `;
+    });
+}
+else if (reportId === 4) {
+    data.forEach(row => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${row.offense_type}</td>
+                <td>${row.offense_description}</td>
+                <td>${row.sanction_consequences}</td>
+            </tr>
+        `;
+    });
+}
+else if (reportId === 5) {
+    data.forEach(row => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${row.violation_id}</td>
+                <td>${row.student_name}</td>
+                <td>${row.adviser_name}</td>
+                <td>${row.type_of_offense}</td>
+                <td>${row.violation_date}</td>
+                <td>${row.violation_time}</td>
+                <td>${row.incident_description}</td>
+            </tr>
+        `;
+    });
+}
+
+        else if (reportId === 6) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.adviser_name}</td>
+                        <td>${row.section}</td>
+                        <td>${row.grade_level}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 7) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.solution}</td>
+                        <td>${row.recommendation}</td>
+                        <td>${row.date}</td>
+                        <td>${row.time}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 8) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.appointment_date}</td>
+                        <td>${row.appointment_time}</td>
+                        <td>${row.appointment_status}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 9) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.anecdotal_id}</td>
+                        <td>${row.complainant_name}</td>
+                        <td>${row.respondent_name}</td>
+                        <td>${row.solution}</td>
+                        <td>${row.recommendation}</td>
+                        <td>${row.date_recorded}</td>
+                        <td>${row.time_recorded}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 10) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.appointment_id}</td>
+                        <td>${row.complainant_name}</td>
+                        <td>${row.respondent_name}</td>
+                        <td>${row.appointment_date}</td>
+                        <td>${row.appointment_status}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 11) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.adviser_section}</td>
+                        <td>${row.grade_level}</td>
+                        <td>${row.total_violations}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 12) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.offense_id}</td>
+                        <td>${row.offense_type}</td>
+                        <td>${row.description}</td>
+                        <td>${row.total_occurrences}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 13) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.complaint_id}</td>
+                        <td>${row.adviser_name}</td>
+                        <td>${row.complainant_name}</td>
+                        <td>${row.respondent_name}</td>
+                        <td>${row.offense_type}</td>
+                        <td>${row.complaint_date}</td>
+                        <td>${row.complaint_time}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 14) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.section}</td>
+                        <td>${row.grade_level}</td>
+                        <td>${row.total_violations}</td>
+                        <td>${row.first_violation_date}</td>
+                        <td>${row.most_recent_violation_date}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 15) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.grade_level}</td>
+                        <td>${row.offense_type}</td>
+                        <td>${row.number_of_violations}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 16) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.parent_name}</td>
+                        <td>${row.parent_contact_info}</td>
+                        <td>${row.violation_date}</td>
+                        <td>${row.violation_time}</td>
+                        <td>${row.violation_status}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 17) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.complaint_id}</td>
+                        <td>${row.complainant_name}</td>
+                        <td>${row.respondent}</td>
+                        <td>${row.offense_type}</td>
+                        <td>${row.complaint_date}</td>
+                        <td>${row.complaint_time}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 18) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.violation_id}</td>
+                        <td>${row.student_name}</td>
+                        <td>${row.offense_type}</td>
+                        <td>${row.violation_date}</td>
+                        <td>${row.violation_time}</td>
+                        <td>${row.incident_description}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 19) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.first_name}</td>
+                        <td>${row.last_name}</td>
+                        <td>${row.violation_count}</td>
+                        <td>${row.complaint_involvement_count}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 20) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.offense_sanc_id}</td>
+                        <td>${row.offense_type}</td>
+                        <td>${row.sanction_consequences}</td>
+                        <td>${row.month_and_year}</td>
+                        <td>${row.number_of_sanctions_given}</td>
+                    </tr>
+                `;
+            });
+        }
+        else {
+            // fallback for unlisted reports
             data.forEach(row => {
                 const values = Object.values(row);
                 tbody.innerHTML += `<tr>${values.map(v => `<td>${v ?? ''}</td>`).join('')}</tr>`;
@@ -213,6 +736,7 @@ async function openReportModal(reportId) {
         console.error("Error fetching data:", error);
     }
 }
+
 
 
 /* attach event to boxes (report tiles) */
