@@ -25,7 +25,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 230px;
-  background:rgb(73, 0, 0); /* Solid block color */
+  background:rgb(0, 0, 0); /* Solid block color */
   color: #fff;
   height: 100vh;
   position: fixed;
@@ -247,6 +247,9 @@ tr:nth-child(even) { background-color: #f2f2f2; }
     <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
   </ul>
 </div>
+
+<!-- Main Content: Report Boxes -->
+<!-- Main Content: Report Boxes -->
 <div class="main-content">
   <div class="report-box" data-modal="modal1"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
   <div class="report-box" data-modal="modal2"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
@@ -277,18 +280,44 @@ tr:nth-child(even) { background-color: #f2f2f2; }
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2 class="modal-title"></h2>
+
     <div class="toolbar">
       <input type="text" placeholder="Search..." oninput="liveSearch('modal{{ $i }}', this.value)">
       <button class="btn btn-warning" onclick="printModal('modal{{ $i }}')"><i class="fa fa-print"></i> Print</button>
       <button class="btn btn-danger" onclick="exportCSV('modal{{ $i }}')"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
+
     <table id="table-modal{{ $i }}">
-      <thead></thead>
+      <thead>
+        @switch($i)
+            @case(1)
+                <tr>
+                    <th>Violation ID</th>
+                    <th>Student Name</th>
+                    <th>Offense Type</th>
+                    <th>Sanction</th>
+                    <th>Incident Description</th>
+                    <th>Violation Date</th>
+                    <th>Violation Time</th>
+                </tr>
+                @break
+            @case(2)
+                <tr>
+                    <th>Adviser</th>
+                    <th>Section</th>
+                    <th>Total Violations</th>
+                    <th>Most Recent Violation</th>
+                </tr>
+                @break
+            {{-- ... repeat for other 18 reports --}}
+        @endswitch
+      </thead>
       <tbody></tbody>
     </table>
   </div>
 </div>
 @endfor
+
 
 <script>
 // Dropdown functionality
@@ -316,10 +345,10 @@ function openReportModal(reportId){
   const modal = document.getElementById('modal'+reportId);
   const table = modal.querySelector('table');
   const tbody = table.querySelector('tbody');
-  const thead = table.querySelector('thead');
   const title = document.querySelector('.report-box[data-modal="modal'+reportId+'"] h3').textContent;
+
   modal.querySelector('.modal-title').textContent = title;
-  tbody.innerHTML=''; thead.innerHTML='';
+  tbody.innerHTML=''; // keep clearing body, not header!
 
   fetch(`/adviser/reports/data/${reportId}`)
   .then(res=>res.ok?res.json():Promise.reject('Fetch failed'))
@@ -328,16 +357,12 @@ function openReportModal(reportId){
       tbody.innerHTML='<tr><td colspan="20" style="text-align:center;">No records found.</td></tr>';
       modal.style.display='block'; return;
     }
-    const headerRow=document.createElement('tr');
-    Object.keys(data[0]).forEach(key=>{
-      const th=document.createElement('th'); th.textContent=key.replace(/_/g,' ').toUpperCase();
-      headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
     data.forEach(row=>{
       const tr=document.createElement('tr');
       Object.values(row).forEach(val=>{
-        const td=document.createElement('td'); td.textContent=val; tr.appendChild(td);
+        const td=document.createElement('td');
+        td.textContent=val;
+        tr.appendChild(td);
       });
       tbody.appendChild(tr);
     });
@@ -348,6 +373,7 @@ function openReportModal(reportId){
     modal.style.display='block'; console.error(err);
   });
 }
+
 
 document.querySelectorAll('.report-box').forEach(box=>{
   box.addEventListener('click', ()=>openReportModal(box.dataset.modal.replace('modal','')));
