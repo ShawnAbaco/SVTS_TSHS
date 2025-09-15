@@ -27,21 +27,27 @@ class PrefectController extends Controller
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->only('email', 'password');
+    {
+        $credentials = [
+            'prefect_email' => $request->email, // keep your DB column
+            'password' => $request->password,
+        ];
 
-    // Map 'email' input to 'prefect_email' in DB
-    $credentials = [
-        'prefect_email' => $credentials['email'],
-        'password'      => $credentials['password'],
-    ]; 
+        if (Auth::guard('prefect')->attempt($credentials)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful!',
+                'redirect' => route('prefect.dashboard')
+            ]);
+        }
 
-    if (Auth::guard('prefect')->attempt($credentials)) {
-    return redirect('/prefect/dashboard');
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid credentials. Please try again.'
+        ]);
     }
 
-    return back()->withErrors(['email' => 'Invalid credentials.']);
-}
+
 
     public function dashboard()
     {

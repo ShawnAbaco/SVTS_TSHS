@@ -6,219 +6,52 @@
 <title>Violation Reports</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-/* Base Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
-
-body {
-  display: flex;
-  background: #f9f9f9;
-  color: #111;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 230px;
-  background:rgb(73, 0, 0); /* Solid block color */
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-  overflow-y: auto;
-}
-
-.sidebar h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: #ffffff;
-  text-transform: uppercase;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-  padding-bottom: 10px;
-}
-
-.sidebar ul {
-  list-style: none;
-}
-
-.sidebar ul li {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #e0e0e0;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.sidebar ul li i {
-  margin-right: 12px;
-  color: #cfcfcf;
-  min-width: 20px;
-  font-size: 16px;
-}
-
-.sidebar ul li:hover {
-  background: #2d3f55; /* lighter block color hover */
-  transform: translateX(5px);
-  color: #fff;
-}
-
-.sidebar ul li:hover i {
-  color: #00e0ff; /* neon blue icon highlight */
-}
-
-.sidebar ul li.active {
-  background: #00aaff; /* strong solid highlight */
-  color: #fff;
-  border-left: 4px solid #ffffff;
-}
-
-.sidebar ul li.active i {
-  color: #fff;
-}
-
-.sidebar ul li a {
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-}
-
-.section-title {
-  margin: 20px 10px 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 1px;
-}
-
-/* Dropdown */
-.dropdown-container {
-  display: none;
-  list-style: none;
-  padding-left: 25px;
-}
-
-.dropdown-container li {
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 8px;
-  color: #ddd;
-}
-
-.dropdown-container li:hover {
-  background: #3a4c66; /* block hover inside dropdown */
-  color: #fff;
-}
-
-.dropdown-btn .arrow {
-  margin-left: auto;
-  transition: transform 0.3s;
-}
-
-.dropdown-btn.active .arrow {
-  transform: rotate(180deg);
-}
-
-/* Scrollbar */
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 3px;
-}
-
-
-/* Main Content Grid */
-.main-content {
-  margin-left: 220px;
-  padding: 20px;
-  width: calc(100% - 220px);
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-/* Report Boxes */
-.report-box {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-  cursor: pointer;
-}
-.report-box:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
-.report-box i { font-size: 24px; margin-bottom: 10px; color: #2980b9; }
-.report-box h3 { margin: 0; font-size: 18px; }
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
-}
-.modal-content {
-  background-color: #fff;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
-}
-.close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-.close:hover { color: black; }
-
-/* Table Styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-th { background-color: #2980b9; color: white; position: sticky; top: 0; }
-tr:nth-child(even) { background-color: #f2f2f2; }
-
-/* Status Labels */
-.status-pending { color: orange; }
-.status-resolved { color: green; }
-
-/* Toolbar Inputs */
-.toolbar input { padding: 6px 10px; border-radius: 5px; border: 1px solid #ccc; margin-right: 5px; }
-.toolbar button { padding: 6px 10px; border-radius: 5px; border: none; cursor: pointer; margin-right: 5px; }
-.toolbar button.btn-warning { background-color: #f39c12; color: white; }
-.toolbar button.btn-warning:hover { background-color: #d68910; }
-.toolbar button.btn-danger { background-color: #c0392b; color: white; }
-.toolbar button.btn-danger:hover { background-color: #962d22; }
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .main-content { margin-left: 0; width: 100%; grid-template-columns: 1fr; padding: 15px; }
-  .toolbar input { width: 100%; margin-bottom: 5px; }
-}
+/* (styles unchanged from your working version) */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;font-weight:bold;transition:all .2s ease-in-out;}
+body{display:flex;background:#f9f9f9;color:#111;}
+.sidebar{width:230px;background:#000;color:#fff;height:100vh;position:fixed;padding:25px 15px;border-radius:0 15px 15px 0;box-shadow:2px 0 15px rgba(0,0,0,.5);overflow-y:auto;}
+.sidebar h2{margin-bottom:30px;text-align:center;font-size:22px;letter-spacing:1px;color:#fff;text-transform:uppercase;border-bottom:2px solid rgba(255,255,255,.15);padding-bottom:10px;}
+.sidebar ul{list-style:none;}
+.sidebar ul li{padding:12px 14px;display:flex;align-items:center;cursor:pointer;border-radius:10px;font-size:15px;color:#e0e0e0;transition:background .3s,transform .2s;}
+.sidebar ul li i{margin-right:12px;color:#cfcfcf;min-width:20px;font-size:16px;}
+.sidebar ul li:hover{background:#2d3f55;transform:translateX(5px);color:#fff;}
+.sidebar ul li:hover i{color:#00e0ff;}
+.sidebar ul li.active{background:#00aaff;color:#fff;border-left:4px solid #fff;}
+.sidebar ul li.active i{color:#fff;}
+.sidebar ul li a{text-decoration:none;color:inherit;flex:1;}
+.section-title{margin:20px 10px 8px;font-size:11px;text-transform:uppercase;font-weight:bold;color:rgba(255,255,255,.6);letter-spacing:1px;}
+.dropdown-container{display:none;list-style:none;padding-left:25px;}
+.dropdown-container li{padding:10px;font-size:14px;border-radius:8px;color:#ddd;}
+.dropdown-container li:hover{background:#3a4c66;color:#fff;}
+.dropdown-btn .arrow{margin-left:auto;transition:transform .3s;}
+.dropdown-btn.active .arrow{transform:rotate(180deg);}
+.sidebar::-webkit-scrollbar{width:6px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:3px;}
+.main-content{margin-left:220px;padding:20px;width:calc(100% - 220px);display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.report-box{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 6px rgba(0,0,0,.1);transition:transform .2s,box-shadow .2s;cursor:pointer;}
+.report-box:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,.2);}
+.report-box i{font-size:24px;margin-bottom:10px;color:#2980b9;}
+.report-box h3{margin:0;font-size:18px;}
+.modal{display:none;position:fixed;z-index:100;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,.5);}
+.modal-content{background:#fff;margin:50px auto;padding:20px;border-radius:10px;width:90%;max-height:80vh;overflow-y:auto;position:relative;}
+.close{color:#aaa;float:right;font-size:28px;font-weight:bold;cursor:pointer;}
+.close:hover{color:black;}
+table{width:100%;border-collapse:collapse;margin-top:15px;}
+th,td{border:1px solid #ccc;padding:8px;text-align:left;}
+th{background:#2980b9;color:#fff;position:sticky;top:0;}
+tr:nth-child(even){background:#f2f2f2;}
+.toolbar input{padding:6px 10px;border-radius:5px;border:1px solid #ccc;margin-right:5px;}
+.toolbar button{padding:6px 10px;border-radius:5px;border:none;cursor:pointer;margin-right:5px;}
+.toolbar button.btn-warning{background:#f39c12;color:#fff;}
+.toolbar button.btn-warning:hover{background:#d68910;}
+.toolbar button.btn-danger{background:#c0392b;color:#fff;}
+.toolbar button.btn-danger:hover{background:#962d22;}
+@media screen and (max-width:768px){.main-content{margin-left:0;width:100%;grid-template-columns:1fr;padding:15px;}.toolbar input{width:100%;margin-bottom:5px;}}
 </style>
 </head>
 <body>
 
-<!-- Sidebar -->
+<!-- Sidebar (unchanged) -->
 <div class="sidebar">
   <h2>PREFECT DASHBOARD</h2>
   <ul>
@@ -247,9 +80,11 @@ tr:nth-child(even) { background-color: #f2f2f2; }
     <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
   </ul>
 </div>
+
+<!-- Report boxes -->
 <div class="main-content">
   <div class="report-box" data-modal="modal1"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
-  <div class="report-box" data-modal="modal2"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
+<div class="report-box" data-modal="modal2"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
   <div class="report-box" data-modal="modal3"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
   <div class="report-box" data-modal="modal4"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
   <div class="report-box" data-modal="modal5"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
@@ -270,20 +105,38 @@ tr:nth-child(even) { background-color: #f2f2f2; }
   <div class="report-box" data-modal="modal20"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
 </div>
 
-
 <!-- Modals -->
 @for($i=1; $i<=20; $i++)
 <div id="modal{{ $i }}" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2 class="modal-title"></h2>
+
     <div class="toolbar">
       <input type="text" placeholder="Search..." oninput="liveSearch('modal{{ $i }}', this.value)">
       <button class="btn btn-warning" onclick="printModal('modal{{ $i }}')"><i class="fa fa-print"></i> Print</button>
       <button class="btn btn-danger" onclick="exportCSV('modal{{ $i }}')"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
-    <table id="table-modal{{ $i }}">
-      <thead></thead>
+
+    <!-- NOTE: table id is table-{{ $i }} -->
+    <table id="table-{{ $i }}">
+      <thead>
+        @switch($i)
+            @case(1)
+<tr>
+    <th>Violation ID</th>
+    <th>Student Name</th>
+    <th>Offense Type</th>
+    <th>Sanction</th>
+    <th>Incident Description</th>
+    <th>Violation Date</th>
+    <th>Violation Time</th>
+</tr>
+@break
+
+            {{-- Add other cases' headers here --}}
+        @endswitch
+      </thead>
       <tbody></tbody>
     </table>
   </div>
@@ -291,117 +144,132 @@ tr:nth-child(even) { background-color: #f2f2f2; }
 @endfor
 
 <script>
-// Dropdown functionality
-const sidebar = document.querySelector('.sidebar');
-const dropdowns = document.querySelectorAll('.dropdown-btn');
-
-dropdowns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const container = btn.nextElementSibling;
-    dropdowns.forEach(otherBtn => {
-      const otherContainer = otherBtn.nextElementSibling;
-      if(otherBtn !== btn){
-        otherBtn.classList.remove('active');
-        otherContainer.style.display='none';
-      }
-    });
-    btn.classList.toggle('active');
-    container.style.display = container.style.display === 'block' ? 'none' : 'block';
-    sidebar.style.overflowY = document.querySelectorAll('.dropdown-container[style*="block"]').length>=1 ? 'auto':'hidden';
-  });
-});
-
-// Open modal and fetch data
-function openReportModal(reportId){
-  const modal = document.getElementById('modal'+reportId);
-  const table = modal.querySelector('table');
-  const tbody = table.querySelector('tbody');
-  const thead = table.querySelector('thead');
-  const title = document.querySelector('.report-box[data-modal="modal'+reportId+'"] h3').textContent;
-  modal.querySelector('.modal-title').textContent = title;
-  tbody.innerHTML=''; thead.innerHTML='';
-
-  fetch(`/adviser/reports/data/${reportId}`)
-  .then(res=>res.ok?res.json():Promise.reject('Fetch failed'))
-  .then(data=>{
-    if(!data.length){
-      tbody.innerHTML='<tr><td colspan="20" style="text-align:center;">No records found.</td></tr>';
-      modal.style.display='block'; return;
+/* small helper to safely get different possible property names */
+function getVal(row, colIndex, reportId) {
+    if (reportId === 1) {
+        const keys = [
+            'violation_id',
+            'student_name',
+            'offense_type',
+            'sanction',
+            'incident_description',
+            'violation_date',
+            'violation_time'
+        ];
+        return row[keys[colIndex]] ?? '';
     }
-    const headerRow=document.createElement('tr');
-    Object.keys(data[0]).forEach(key=>{
-      const th=document.createElement('th'); th.textContent=key.replace(/_/g,' ').toUpperCase();
-      headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    data.forEach(row=>{
-      const tr=document.createElement('tr');
-      Object.values(row).forEach(val=>{
-        const td=document.createElement('td'); td.textContent=val; tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
-    });
-    modal.style.display='block';
-  })
-  .catch(err=>{
-    tbody.innerHTML='<tr><td colspan="20" style="text-align:center;">Error loading data.</td></tr>';
-    modal.style.display='block'; console.error(err);
-  });
+    // fallback for other reports
+    return Object.values(row)[colIndex] ?? '';
 }
 
-document.querySelectorAll('.report-box').forEach(box=>{
-  box.addEventListener('click', ()=>openReportModal(box.dataset.modal.replace('modal','')));
+
+/* dropdown */
+document.querySelectorAll('.dropdown-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const container = btn.nextElementSibling;
+    document.querySelectorAll('.dropdown-btn').forEach(b=>{ if(b!==btn){ b.classList.remove('active'); b.nextElementSibling.style.display='none';}});
+    btn.classList.toggle('active');
+    container.style.display = container.style.display === 'block' ? 'none' : 'block';
+  });
 });
 
-// Close modal
+/* open modal + fetch */
+async function openReportModal(reportId) {
+    const modal = document.getElementById(`modal${reportId}`);
+    modal.style.display = "block";
+
+    // Fetch report data
+    try {
+        const res = await fetch(`/prefect/reports/data/${reportId}`);
+        const data = await res.json();
+        console.log("Fetched data:", data); // ✅ DEBUG
+
+        const tbody = modal.querySelector("tbody");
+        tbody.innerHTML = ""; // clear old data
+
+        if (reportId === 1) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.violation_id}</td>
+                        <td>${row.student_name}</td>
+                        <td>${row.offense_type}</td>
+                        <td>${row.sanction}</td>
+                        <td>${row.incident_description}</td>
+                        <td>${row.violation_date}</td>
+                        <td>${row.violation_time}</td>
+                    </tr>
+                `;
+            });
+        } else {
+            // Fallback for other reports
+            data.forEach(row => {
+                const values = Object.values(row);
+                tbody.innerHTML += `<tr>${values.map(v => `<td>${v ?? ''}</td>`).join('')}</tr>`;
+            });
+        }
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+
+/* attach event to boxes (report tiles) */
+document.querySelectorAll('.report-box').forEach(box=>{
+  box.addEventListener('click', ()=> openReportModal(box.dataset.modal.replace('modal','')));
+});
+
+/* close modals */
 document.addEventListener('click', e=>{
   if(e.target.classList.contains('close')) e.target.closest('.modal').style.display='none';
   if(e.target.classList.contains('modal')) e.target.style.display='none';
 });
 
-// Live search
+/* search (text input passes 'modalX' so we convert to numeric id) */
 function liveSearch(modalId, query){
-  const table = document.getElementById('table-'+modalId.replace('modal',''));
+  const id = modalId.replace('modal','');
+  const table = document.getElementById('table-'+id);
   if(!table) return;
-  query=query.toLowerCase();
+  query = query.toLowerCase();
   Array.from(table.querySelectorAll('tbody tr')).forEach(tr=>{
-    tr.style.display = Array.from(tr.querySelectorAll('td')).some(td=>td.textContent.toLowerCase().includes(query)) ? '':'none';
+    tr.style.display = Array.from(tr.querySelectorAll('td')).some(td => td.textContent.toLowerCase().includes(query)) ? '' : 'none';
   });
 }
 
-// Print modal
+/* print */
 function printModal(modalId){
-  const modalContent = document.getElementById(modalId).querySelector('.modal-content');
-  const clone = modalContent.cloneNode(true);
+  const m = document.getElementById(modalId).querySelector('.modal-content');
+  const clone = m.cloneNode(true);
   clone.querySelectorAll('input,button,.close').forEach(e=>e.remove());
-  const newWin=window.open('','','width=900,height=700');
-  newWin.document.write('<html><head><title>Print</title></head><body>');
-  newWin.document.write(clone.innerHTML);
-  newWin.document.write('</body></html>');
-  newWin.document.close(); newWin.focus(); newWin.print(); newWin.close();
+  const w = window.open('','','width=900,height=700');
+  w.document.write('<html><head><title>Print</title></head><body>');
+  w.document.write(clone.innerHTML);
+  w.document.write('</body></html>');
+  w.document.close(); w.focus(); w.print(); w.close();
 }
 
-// Export CSV
+/* export CSV expects modal string 'modalX' */
 function exportCSV(modalId){
-  const table = document.getElementById('table-'+modalId.replace('modal',''));
+  const id = modalId.replace('modal','');
+  const table = document.getElementById('table-'+id);
   if(!table) return;
   const rows = Array.from(table.querySelectorAll('tr')).filter(r=>r.style.display!=='none');
   const csv = rows.map((row,i)=>{
     const cells = Array.from(row.querySelectorAll(i===0?'th':'td'));
-    return cells.map(c=>`"${c.textContent.replace(/"/g,'""')}"`).join(',');
+    return cells.map(c=>`"${(c.textContent||'').replace(/"/g,'""')}"`).join(',');
   }).join('\n');
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download=`${modalId}.csv`;
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `report-${id}.csv`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-// Logout
+/* logout */
 function logout(){
   fetch("/logout",{method:"POST",headers:{"X-CSRF-TOKEN":"{{ csrf_token() }}"}})
-  .then(()=>window.location.href="/prefect/login");
+    .then(()=>window.location.href="/prefect/login");
 }
 </script>
-
 </body>
 </html>

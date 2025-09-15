@@ -14,7 +14,7 @@ use App\Http\Controllers\ViolationAnecdotalController;
 
 Route::get('/', function () {
     return view('adviser.login');
-}); 
+});
 
 // ===================== Prefect Routes =====================
 Route::prefix('prefect')->group(function () {
@@ -53,7 +53,7 @@ Route::prefix('prefect')->group(function () {
 
         // Reports
         Route::get('/reportgenerate', [PrefectController::class, 'reportgenerate'])->name('report.generate');
-        Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData']);
+        Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData'])->name('prefect.reports.data');;
 
         // Parents CRUD
         Route::get('/parents/create', [PrefectController::class, 'parentCreate'])->name('parent.create');
@@ -68,6 +68,8 @@ Route::prefix('prefect')->group(function () {
         // Offenses & Sanctions
         Route::get('/offensesandsanctions', [PrefectController::class, 'offensesandsanctions'])->name('offenses.sanctions');
     });
+
+
 });
 
 // ===================== Adviser Routes =====================
