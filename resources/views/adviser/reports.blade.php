@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Adviser Dashboard - Reports</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="{{ asset('css/adviser/reports.css') }}">
+  
   <style>
     :root {
       --primary-color: #000000;
@@ -23,46 +23,119 @@
       display: flex;
     }
 
-    /* Sidebar */
-    .sidebar {
-      position: fixed; top: 0; left: 0;
-      width: 240px; height: 100%;
-      background: var(--sidebar-bg); color: #ffffff;
-      z-index: 1000; overflow-y: auto;
-      transition: all 0.3s ease;
-    }
-    .sidebar img { width: 180px; display: block; margin: 0 auto 0.25rem; }
-    .sidebar p {
-      font-size: 0.9rem; font-weight: bold;
-      text-align: center; text-transform: uppercase;
-      letter-spacing: 0.5px; color: #ffffff; margin-bottom: 1rem;
-    }
-    .sidebar ul { list-style: none; padding: 0; }
-    .sidebar ul li a {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 20px; color: #ffffff; text-decoration: none;
-      font-size: 0.95rem; font-weight: bold;
-      border-left: 4px solid transparent; border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-    .sidebar ul li a i { font-size: 1.1rem; min-width: 22px; text-align: center; }
-    .sidebar ul li a:hover, .sidebar ul li a.active {
-      background-color: var(--sidebar-hover-bg);
-      border-left-color: var(--sidebar-border-color);
-    }
+   /* --- Sidebar --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  /* Gradient background */
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased; /* smooth fonts for high-res */
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: optimizeQuality; /* high-res image rendering */
+}
 
-    /* Dropdown */
-    .dropdown-container {
-      max-height: 0; overflow: hidden;
-      background-color: rgba(255,255,255,0.05);
-      transition: max-height 0.4s ease, padding 0.4s ease;
-      border-left: 2px solid rgba(255,255,255,0.1);
-      border-radius: 0 8px 8px 0;
-    }
-    .dropdown-container.show { max-height: 400px; padding-left: 12px; }
-    .dropdown-container li a { font-size: 0.85rem; padding: 10px 20px; }
-    .dropdown-container li a:hover { background-color: var(--sidebar-hover-bg); }
-    .dropdown-btn .fa-caret-down { margin-left: auto; transition: transform 0.3s ease; }
+/* Sidebar scroll */
+.sidebar::-webkit-scrollbar { width: 8px; }
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Logo */
+.sidebar img {
+  width: 180px;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  display: block;
+  transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Sidebar Title */
+.sidebar p {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin: 0 0 1rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Sidebar Links */
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.sidebar ul li a i {
+  font-size: 1.2rem;
+  min-width: 22px;
+  text-align: center;
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+/* Hover & Active */
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: rgba(255,255,255,0.15);
+  border-left-color: #FFD700;
+  color: #ffffff !important;
+}
+
+/* Dropdown */
+.dropdown-container {
+  max-height: 0;
+  overflow: hidden;
+  background-color: rgba(255,255,255,0.05);
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  border-left: 2px solid rgba(255,255,255,0.1);
+  border-radius: 0 8px 8px 0;
+}
+.dropdown-container.show { 
+  max-height: 400px; 
+  padding-left: 12px; 
+}
+.dropdown-container li a {
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.dropdown-container li a:hover {
+  background-color: rgba(255,255,255,0.15);
+  color: #ffffff;
+}
+.dropdown-btn .fa-caret-down {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: #ffffff;
+}
 
     /* Main content */
     .main-content {
@@ -71,6 +144,19 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
     }
+    .page-header {
+  grid-column: 1 / -1; /* make it span full width above grid */
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #111;
+  border-bottom: 3px solid var(--sidebar-border-color);
+  padding-bottom: 8px;
+  letter-spacing: 1px;
+}
 
    /* Report boxes with darker colors */
 .report-box {
@@ -191,8 +277,11 @@ tr:nth-child(even){ background-color:#f9f9f9; }
         <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
 </nav>
-
 <div class="main-content">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>REPORTS</h1>
+  </div>
   <!-- 20 Report Boxes (Sorted A-Z) -->
   <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
   <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>

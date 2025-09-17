@@ -36,21 +36,23 @@ body {
   left: 0;
   width: 240px;
   height: 100%;
-  background: linear-gradient(180deg, rgb(48, 48, 50));
+  /* Gradient background */
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
   font-family: "Segoe UI", Tahoma, sans-serif;
   z-index: 1000;
   overflow-y: auto;
   transition: all 0.3s ease;
   color: #ffffff;
   font-weight: bold;
+  -webkit-font-smoothing: antialiased; /* smooth fonts for high-res */
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: optimizeQuality; /* high-res image rendering */
 }
 
 /* Sidebar scroll */
-.sidebar::-webkit-scrollbar {
-  width: 8px;
-}
+.sidebar::-webkit-scrollbar { width: 8px; }
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
 }
 .sidebar::-webkit-scrollbar-track {
@@ -61,36 +63,35 @@ body {
 .sidebar img {
   width: 180px;
   height: auto;
-  margin: 0 auto 0.1rem;
+  margin: 0 auto 0.5rem;
   display: block;
   transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
+/* Sidebar Title */
 .sidebar p {
-  font-size: 0.9rem;
-  font-weight: bold;
+  font-size: 1.6rem;
+  font-weight: 900;
   margin: 0 0 1rem;
   color: #ffffff;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   text-align: center;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
 /* Sidebar Links */
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
 .sidebar ul li a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 20px;
+  padding: 14px 22px;
   color: #ffffff;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: bold;
   border-left: 4px solid transparent;
   border-radius: 8px;
@@ -98,17 +99,17 @@ body {
 }
 
 .sidebar ul li a i {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   min-width: 22px;
   text-align: center;
   color: #ffffff;
   transition: color 0.3s ease;
-  font-weight: bold;
 }
 
+/* Hover & Active */
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
-  background-color: rgba(255,255,255,0.12);
+  background-color: rgba(255,255,255,0.15);
   border-left-color: #FFD700;
   color: #ffffff !important;
 }
@@ -122,29 +123,24 @@ body {
   border-left: 2px solid rgba(255,255,255,0.1);
   border-radius: 0 8px 8px 0;
 }
-
-.dropdown-container.show {
-  max-height: 400px;
-  padding-left: 12px;
+.dropdown-container.show { 
+  max-height: 400px; 
+  padding-left: 12px; 
 }
-
 .dropdown-container li a {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   padding: 10px 20px;
   color: #ffffff;
   font-weight: bold;
 }
-
 .dropdown-container li a:hover {
-  background-color: rgba(255,255,255,0.12);
+  background-color: rgba(255,255,255,0.15);
   color: #ffffff;
 }
-
 .dropdown-btn .fa-caret-down {
   margin-left: auto;
   transition: transform 0.3s ease;
   color: #ffffff;
-  font-weight: bold;
 }
 
 /* Main Content */
@@ -157,6 +153,27 @@ body {
 
 h2 {
   color: var(--primary-color);
+}
+.btn-archive {
+  background: linear-gradient( #e55300); /* Coral to Deep Orange */
+  color: #fff !important;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+.btn-archive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+  opacity: 0.95;
 }
 
 /* --- High Resolution Buttons --- */
@@ -357,12 +374,18 @@ h2 {
   gap: 10px;
   flex-wrap: wrap;
 }
+/* Match search box with button size */
 .search-box input {
-  padding: 8px 12px;
+  padding: 10px 16px;         /* same as .btn */
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;         /* match button radius */
+  font-size: 15px;            /* match font size */
+  font-weight: 600;           /* same text weight */
+  height: 42px;               /* force equal height */
   min-width: 200px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15); /* consistent shadow */
 }
+
 
     </style>
 </head>
@@ -417,7 +440,10 @@ h2 {
       </div>
       <button class="btn btn-info" onclick="openAddModal()">
         <i class="fas fa-plus-circle"></i> Add Violation Record
-      </button>
+        <button class="btn-archive" id="archivesBtn">
+  <i class="fas fa-archive"></i> Archives
+</button>
+
     </div>
   </div>
 

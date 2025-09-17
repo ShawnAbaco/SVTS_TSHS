@@ -54,6 +54,11 @@
         <button class="btn btn-info" onclick="openModal()">
           <i class="fas fa-plus-circle"></i> Add Record
         </button>
+         
+         <button class="btn-archive" id="archivesBtn">
+  <i class="fas fa-archive"></i> Archives
+</button>
+
       </div>
     </div>
 

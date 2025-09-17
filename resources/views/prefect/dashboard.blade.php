@@ -25,7 +25,9 @@
 
     .sidebar {
       width: 230px;
-background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+
+
 background-repeat: no-repeat;
 background-attachment: fixed;
       color: #fff;
@@ -59,13 +61,13 @@ background-attachment: fixed;
       cursor: pointer;
       border-radius: 10px;
       font-size: 15px;
-      color: #e0e0e0;
+      color:rgb(255, 255, 255);
       transition: background 0.3s, transform 0.2s;
     }
 
     .sidebar ul li i {
       margin-right: 12px;
-      color: #cfcfcf;
+      color:rgb(255, 255, 255);
       min-width: 20px;
       font-size: 16px;
     }
@@ -164,29 +166,31 @@ background-attachment: fixed;
       color: #555;
     }
 
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
+   .user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+  }
 
-    .user-info img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      cursor: pointer;
-    }
+  .user-info img {
+    width: 70px;   /* bigger size */
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #003366; /* adds border for emphasis */
+    cursor: pointer;
+  }
 
-    .user-info span {
-      font-weight: bold;
-      color: #111;
-    }
+  .user-info span {
+    font-size: 20px;  /* bigger name text */
+    font-weight: bold;
+    color: #111;
+  }
 
-    .user-info:hover {
-      opacity: 0.7;
-    }
+  .user-info:hover {
+    opacity: 0.8;
+  }
 
     .cards {
       display: grid;

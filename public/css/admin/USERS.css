@@ -17,7 +17,7 @@ body {
 /* Sidebar (untouched) */
 .sidebar {
   width: 230px;
-background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
 background-repeat: no-repeat;
 background-attachment: fixed;
   color: #fff;

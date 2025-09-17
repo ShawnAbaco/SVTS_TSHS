@@ -31,10 +31,17 @@ class AdviserController extends Controller
         ];
 
         if (Auth::guard('adviser')->attempt($credentials)) {
-            return redirect()->route('adviser.dashboard');
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful!',
+                'redirect' => route('adviser.dashboard')
+            ]);
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials.']);
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid credentials. Please try again.'
+        ]);
     }
 
     public function dashboard()

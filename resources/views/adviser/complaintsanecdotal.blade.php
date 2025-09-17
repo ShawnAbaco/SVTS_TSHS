@@ -7,11 +7,268 @@
   
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="{{ asset('css/adviser/complaintsanecdotal.css') }}">
+  
   
 </head>
 <body>
+<style>
+  :root {
+  --primary-color: rgb(134, 142, 142);
+  --secondary-color: #ffffff;
+  --hover-bg: rgb(0, 88, 240);
+  --hover-active-bg: rgb(0, 120, 255);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
+/* --- Reset / Global --- */
+* {
+  color: black !important;
+  font-weight: bold !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  background-color: var(--secondary-color);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  /* Gradient background */
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased; /* smooth fonts for high-res */
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: optimizeQuality; /* high-res image rendering */
+}
+
+/* Sidebar scroll */
+.sidebar::-webkit-scrollbar { width: 8px; }
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Logo */
+.sidebar img {
+  width: 180px;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  display: block;
+  transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Sidebar Title */
+.sidebar p {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin: 0 0 1rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Sidebar Links */
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.sidebar ul li a i {
+  font-size: 1.2rem;
+  min-width: 22px;
+  text-align: center;
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+/* Hover & Active */
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: rgba(255,255,255,0.15);
+  border-left-color: #FFD700;
+  color: #ffffff !important;
+}
+
+/* Dropdown */
+.dropdown-container {
+  max-height: 0;
+  overflow: hidden;
+  background-color: rgba(255,255,255,0.05);
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  border-left: 2px solid rgba(255,255,255,0.1);
+  border-radius: 0 8px 8px 0;
+}
+.dropdown-container.show { 
+  max-height: 400px; 
+  padding-left: 12px; 
+}
+.dropdown-container li a {
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.dropdown-container li a:hover {
+  background-color: rgba(255,255,255,0.15);
+  color: #ffffff;
+}
+.dropdown-btn .fa-caret-down {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: #ffffff;
+}
+
+
+/* --- Main content --- */
+.main-content {
+  margin-left: 260px;
+  padding: 2rem;
+  flex-grow: 1;
+}
+
+/* --- Toolbar --- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.toolbar h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+  color: #000;
+}
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.toolbar-actions input,
+.toolbar-actions button {
+  height: 46px; 
+  font-size: 0.95rem;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+}
+
+/* --- Search box --- */
+#searchInput {
+  width: 280px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.3s ease;
+}
+#searchInput:focus {
+  border-color: var(--hover-bg);
+  box-shadow: var(--shadow);
+}
+
+/* --- Buttons --- */
+.btn-add, .btn-primary { 
+  background-color: #0058f0; 
+  color: #fff; 
+  border: none; 
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+.btn-add:hover, .btn-primary:hover { 
+  background-color: var(--hover-active-bg); 
+  transform: translateY(-2px); 
+}
+
+.btn-archive { 
+  background: linear-gradient(135deg, #ff7f50, #e55300); 
+  color: #fff; 
+  border: none; 
+  cursor: pointer; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  transition: all 0.3s ease; 
+}
+.btn-archive:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 5px 12px rgba(0,0,0,0.25); 
+  opacity: 0.95; 
+}
+
+.btn-orange { background-color: orange; color: #fff; }
+.btn-orange:hover { background-color: darkorange; }
+.btn-red { background-color: red; color: #fff; margin-left: 5px; }
+.btn-red:hover { background-color: darkred; }
+
+/* --- Table --- */
+.complaints-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.complaints-table th, .complaints-table td {
+  padding: 12px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+.complaints-table th {
+  background-color: black;
+  color: white !important;
+  font-size: 0.95rem;
+}
+.complaints-table tr:nth-child(even) { background-color: #f5f5f5; }
+.complaints-table tr:hover { background-color: #e9f0ff; }
+
+/* --- Modal --- */
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); z-index:1000; }
+.modal-content { background:white; margin:8% auto; padding:20px; border-radius:10px; width:400px; box-shadow: var(--shadow); }
+.close { float:right; cursor:pointer; font-size:1.5rem; }
+input, textarea, select { width:100%; padding:7px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px; }
+input:focus, textarea:focus, select:focus { border-color: var(--hover-bg); box-shadow: var(--shadow); }
+.modal-content button { align-self:flex-end; }
+
+
+</style>
   <!-- SIDEBAR -->
   <nav class="sidebar">
     <div style="text-align: center; margin-bottom: 1rem;">
@@ -47,12 +304,15 @@
 
   <!-- MAIN CONTENT -->
   <div class="main-content">
-    <h2>Complaints Anecdotal</h2>
+   <div class="toolbar">
+  <h1>Complaints Anecdotal</h1>
+  <div class="toolbar-actions">
+    <input type="text" id="searchInput" placeholder="Search..." />
+    <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Add</button>
+    <button class="btn-archive" id="archivesBtn"><i class="fas fa-archive"></i> Archives</button>
+  </div>
+</div>
 
-    <div style="display:flex; justify-content:flex-end; margin-bottom:10px; gap:10px;">
-      <input type="text" id="searchInput" placeholder="Search..." />
-      <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Add</button>
-    </div>
 
     <!-- Modal -->
     <div id="anecdotalModal" class="modal">

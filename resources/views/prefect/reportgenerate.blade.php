@@ -8,8 +8,49 @@
 <style>
 /* (styles unchanged from your working version) */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;font-weight:bold;transition:all .2s ease-in-out;}
-body{display:flex;background:#f9f9f9;color:#111;}
-.sidebar{width:230px;background: linear-gradient(135deg, rgb(100, 0, 0), rgb(75, 0, 130), rgb(255, 165, 0));
+body {
+  display: flex;
+  background: #f9f9f9;
+  color: #111;
+}
+ .page-header {
+  grid-column: 1 / -1; /* make it span full width above grid */
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #111;
+  border-bottom: 3px solid var(--sidebar-border-color);
+  padding-bottom: 8px;
+  letter-spacing: 1px;
+}
+.sidebar {
+  width: 230px;
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  padding: 25px 15px;
+  border-radius: 0 15px 15px 0;
+  box-shadow: 2px 0 15px rgba(0,0,0,.5);
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: #fff;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(255,255,255,.15);
+  padding-bottom: 10px;
+}
+
 background-repeat: no-repeat;
 background-attachment: fixed;color:#fff;height:100vh;position:fixed;padding:25px 15px;border-radius:0 15px 15px 0;box-shadow:2px 0 15px rgba(0,0,0,.5);overflow-y:auto;}
 .sidebar h2{margin-bottom:30px;text-align:center;font-size:22px;letter-spacing:1px;color:#fff;text-transform:uppercase;border-bottom:2px solid rgba(255,255,255,.15);padding-bottom:10px;}
@@ -83,8 +124,11 @@ tr:nth-child(even){background:#f2f2f2;}
   </ul>
 </div>
 
-<!-- Report boxes -->
-<div class="main-content">
+ <div class="main-content">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>REPORTS</h1>
+  </div>
   <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
   <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
   <div class="report-box" data-modal="modal3"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
