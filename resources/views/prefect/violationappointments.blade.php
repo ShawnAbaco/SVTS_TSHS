@@ -25,9 +25,9 @@ body {
 /* Sidebar */
 .sidebar {
   width: 230px;
-background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
-background-repeat: no-repeat;
-background-attachment: fixed;
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #fff;
   height: 100vh;
   position: fixed;
@@ -95,6 +95,29 @@ background-attachment: fixed;
 /* Heading */
 h1 { font-size: 28px; margin-bottom: 20px; color: #2c3e50; }
 
+/* Search + Buttons */
+.search-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.search-buttons input[type="text"] {
+  padding: 10px;
+  width: 300px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  height: 40px;
+  font-size: 14px;
+}
+.search-buttons .btn {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Buttons */
 .btn, .btn-primary, .btn-create, .btn-edit, .btn-delete {
   padding: 10px 18px;
@@ -140,15 +163,6 @@ h1 { font-size: 28px; margin-bottom: 20px; color: #2c3e50; }
   background: linear-gradient(90deg, #a71d2a, #ff2b3d);
   transform: translateY(-2px) scale(1.03);
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-}
-
-/* Disabled / Inactive Button */
-.btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-  color: #666;
 }
 
 /* Cards */
@@ -211,14 +225,13 @@ input, select, textarea { width: 100%; padding: 10px; border-radius: 6px; border
 }
 .close:hover { color: #000; }
 
-/* Search Input */
-#searchInput { padding: 10px; width: 300px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 15px; }
-
 /* Responsive */
 @media screen and (max-width: 768px) {
   .container { margin-left: 0; padding: 15px; }
   table th, table td { padding: 8px; }
   .btn, .btn-primary { font-size: 12px; padding: 6px 12px; }
+  .search-buttons { flex-direction: column; align-items: stretch; gap: 8px; }
+  .search-buttons input { width: 100%; }
 }
 </style>
 </head>
@@ -254,48 +267,51 @@ input, select, textarea { width: 100%; padding: 10px; border-radius: 6px; border
 <!-- Main Content -->
 <div class="container">
   <h1>VIOLATION APPOINTMENTS</h1>
-  <button class="btn-create" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Create Appointment</button>
-  <input type="text" id="searchInput" placeholder="Search student or parent name...">
 
-  <div class="card">
-    <div class="card-header">Scheduled Appointments</div>
+  <!-- Search + Buttons -->
+  <div class="search-buttons">
+      <input type="text" id="searchInput" placeholder="Search student or parent name...">
+      <button class="btn-create" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Create Appointment</button>
+      <button class="btn-delete" onclick="bulkDelete()"><i class="fas fa-trash"></i> Delete</button>
+  </div>
+
+  
     <div class="card-body">
-  <table>
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Student</th>
-      <th>Parent</th>
-      <th>Contact</th>
-      <th>Incident</th>
-      <th>Offense</th>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody id="appointmentList">
-@foreach($violation_appointments as $index => $app)
-<tr>
-    <td>{{ $index + 1 }}</td>
-    <td>{{ $app->violation->student->student_fname }} {{ $app->violation->student->student_lname }}</td>
-    <td>{{ $app->violation->student->parent->parent_fname }} {{ $app->violation->student->parent->parent_lname }}</td>
-    <td>{{ $app->violation->student->parent->parent_contactinfo }}</td>
-    <td>{{ $app->violation->violation_incident }}</td>
-    <td>{{ $app->violation->offense->offense_type }}</td>
-    <td>{{ $app->violation_app_date }}</td>
-    <td>{{ \Carbon\Carbon::parse($app->violation_app_time)->format('h:i A') }}</td>
-    <td>{{ $app->violation_app_status }}</td>
-    <td>
-        <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-        <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
-    </td>
-</tr>
-@endforeach
-  </tbody>
-</table>
-
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Student</th>
+            <th>Parent</th>
+            <th>Contact</th>
+            <th>Incident</th>
+            <th>Offense</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentList">
+        @foreach($violation_appointments as $index => $app)
+        <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $app->violation->student->student_fname }} {{ $app->violation->student->student_lname }}</td>
+            <td>{{ $app->violation->student->parent->parent_fname }} {{ $app->violation->student->parent->parent_lname }}</td>
+            <td>{{ $app->violation->student->parent->parent_contactinfo }}</td>
+            <td>{{ $app->violation->violation_incident }}</td>
+            <td>{{ $app->violation->offense->offense_type }}</td>
+            <td>{{ $app->violation_app_date }}</td>
+            <td>{{ \Carbon\Carbon::parse($app->violation_app_time)->format('h:i A') }}</td>
+            <td>{{ $app->violation_app_status }}</td>
+            <td>
+                <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
+            </td>
+        </tr>
+        @endforeach
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -377,6 +393,9 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
     row.style.display = (student.includes(filter) || parent.includes(filter)) ? '' : 'none';
   });
 });
+
+// Placeholder for bulk delete (implement your logic)
+function bulkDelete() { alert('Bulk delete clicked!'); }
 </script>
 
 </body>

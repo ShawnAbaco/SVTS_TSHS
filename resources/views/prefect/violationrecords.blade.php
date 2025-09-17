@@ -121,11 +121,13 @@ background-attachment: fixed;
   color: #0a1e2d;
 }
 
-/* Search + Create */
+/* Search + Create + Trash buttons aligned right */
 .search-create {
   display: flex;
-  margin-bottom: 20px;
+  justify-content: flex-end;
   align-items: center;
+  gap: 10px; /* space between input and buttons */
+  margin-bottom: 20px;
 }
 
 .search-create input[type="text"] {
@@ -135,13 +137,30 @@ background-attachment: fixed;
   outline: none;
   font-size: 14px;
   width: 250px;
-  margin-right: 12px;
   transition: all 0.2s;
 }
 .search-create input[type="text"]:focus {
   border-color: #007BFF;
   box-shadow: 0 0 8px rgba(0,123,255,0.2);
 }
+
+/* Optional: small hover effect on Trash button */
+.search-create .btn-delete {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease-in-out;
+}
+.search-create .btn-delete:hover {
+  background-color: #c82333;
+  transform: translateY(-2px) scale(1.02);
+}
+
 
 /* Improved Table */
 table {
@@ -228,7 +247,7 @@ table tr:hover {
 
 /* Create Button */
 .btn-create {
-  background-color: #28a745;
+  background-color:rgb(0, 140, 255);
   color: #fff;
   border-radius: 8px;
   padding: 10px 18px;
@@ -326,12 +345,14 @@ table tr:hover {
 
 <!-- Main Content -->
 <div class="main-content">
-  <div class="crud-container">
+ 
     <h2>Student Violations</h2>
     <div class="search-create">
-      <input type="text" id="searchInput" placeholder="Search student name...">
-      <button class="btn-create"><i class="fas fa-plus"></i> Create Violation</button>
-    </div>
+  <input type="text" id="searchInput" placeholder="Search student name...">
+  <button class="btn-create"><i class="fas fa-plus"></i> Create Violation</button>
+  <button class="btn btn-delete"><i class="fas fa-trash"></i> Trash</button>
+</div>
+
     <table id="violationTable">
       <thead>
         <tr>
@@ -416,6 +437,16 @@ function showInfo(student, parent, number, adviser) {
   document.getElementById('modalAdviser').innerText = adviser;
   document.getElementById('infoModal').classList.add('show');
 }
+// Live search for student name
+document.getElementById('searchInput').addEventListener('input', function() {
+  const filter = this.value.toLowerCase();
+  const rows = document.querySelectorAll('#violationTable tbody tr');
+  rows.forEach(row => {
+    const name = row.cells[1].textContent.toLowerCase();
+    row.style.display = name.includes(filter) ? '' : 'none';
+  });
+});
+
 </script>
 
 </body>

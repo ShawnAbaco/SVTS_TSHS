@@ -22,12 +22,12 @@
       color: #111;
     }
 
-    /* Sidebar (untouched) */
+    /* Sidebar */
 .sidebar {
   width: 230px;
-background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
-background-repeat: no-repeat;
-background-attachment: fixed;
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #fff;
   height: 100vh;
   position: fixed;
@@ -65,23 +65,11 @@ background-attachment: fixed;
   min-width: 20px;
   font-size: 16px;
 }
-.sidebar ul li:hover {
-  background: #2d3f55;
-  transform: translateX(5px);
-  color: #fff;
-}
+.sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
 .sidebar ul li:hover i { color: #00e0ff; }
-.sidebar ul li.active {
-  background: #00aaff;
-  color: #fff;
-  border-left: 4px solid #ffffff;
-}
+.sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #ffffff; }
 .sidebar ul li.active i { color: #fff; }
-.sidebar ul li a {
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-}
+.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
 .section-title {
   margin: 20px 10px 8px;
   font-size: 11px;
@@ -102,7 +90,7 @@ background-attachment: fixed;
 .sidebar::-webkit-scrollbar { width: 6px; }
 .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
 
-    /* Main Content */
+/* Main Content */
 .main-content {
   margin-left: 250px;
   padding: 30px;
@@ -120,6 +108,25 @@ background-attachment: fixed;
   font-size: 28px;
   margin-bottom: 20px;
   color: #0a1e2d;
+}
+
+/* Right-aligned search */
+.flex {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.flex input.form-control {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+.flex input.form-control:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 5px #ffcc00;
 }
 
 /* Table */
@@ -219,6 +226,7 @@ table tr:hover { background-color: #e3f2fd; }
   .main-content { margin-left: 0; padding: 15px; }
   table th, table td { font-size: 12px; padding: 8px; }
   .btn { font-size: 12px; padding: 4px 8px; }
+  .flex { justify-content: flex-start; flex-direction: column; gap: 8px; }
 }
   </style>
 </head>
@@ -257,8 +265,14 @@ table tr:hover { background-color: #e3f2fd; }
 
   <!-- Main Content -->
   <div class="main-content">
-    <div class="crud-container">
+    
       <h2>Parent List</h2>
+
+      <!-- Search Bar -->
+      <div class="flex">
+        <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -293,9 +307,7 @@ table tr:hover { background-color: #e3f2fd; }
             <td>
               <button class="btn btn-info" onclick="showInfo(
                 `@foreach($parent->students as $student){{ $student->student_fname }} {{ $student->student_lname }}<br>@endforeach`,
-
                 `@foreach($parent->students as $student){{ $student->adviser ? $student->adviser->adviser_fname.' '.$student->adviser->adviser_lname : 'N/A' }}<br>@endforeach`,
-
                 '{{ $parent->parent_fname }} {{ $parent->parent_lname }}'
               )"><i class="fas fa-info-circle"></i> Info</button>
               <button class="btn btn-warning"><i class="fas fa-edit"></i> Edit</button>
@@ -326,14 +338,11 @@ table tr:hover { background-color: #e3f2fd; }
   </div>
 
   <script>
-  // Dropdown functionality: only one open at a time
+  // Dropdown functionality
   const dropdowns = document.querySelectorAll('.dropdown-btn');
-
   dropdowns.forEach(btn => {
     btn.addEventListener('click', () => {
       const container = btn.nextElementSibling;
-
-      // Close other dropdowns
       dropdowns.forEach(otherBtn => {
         const otherContainer = otherBtn.nextElementSibling;
         if (otherBtn !== btn) {
@@ -341,8 +350,6 @@ table tr:hover { background-color: #e3f2fd; }
           otherContainer.style.display = 'none';
         }
       });
-
-      // Toggle current dropdown
       btn.classList.toggle('active');
       container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
@@ -362,7 +369,17 @@ table tr:hover { background-color: #e3f2fd; }
     }).then(() => window.location.href='/prefect/login')
       .catch(error => console.error('Logout failed:', error));
   }
-</script>
+
+  // Search functionality
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    document.querySelectorAll('table tbody tr').forEach(row => {
+      const name = row.children[1].innerText.toLowerCase(); // parent fullname column
+      row.style.display = name.includes(query) ? '' : 'none';
+    });
+  });
+  </script>
 
 </body>
 </html>

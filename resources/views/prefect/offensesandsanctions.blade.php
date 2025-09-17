@@ -193,17 +193,19 @@ background-attachment: fixed;
   background-color: #0056b3;
 }
 
-/* ===== High Resolution Table ===== */
+/* ===== High Resolution Table (Updated) ===== */
 table {
   width: 100%;
+  min-width: 900px; /* ensure table doesn’t shrink too small */
+  max-width: 1400px; /* optional, to keep it visually balanced */
+  margin-top: 20px;
+  font-size: 16px; /* bigger font */
+  background: #fff;
   border-collapse: separate;
   border-spacing: 0;
-  margin-top: 20px;
-  font-size: 15px;
-  background: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 thead {
@@ -211,34 +213,32 @@ thead {
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-size: 15px;
 }
 
 th, td {
-  padding: 14px 16px;
+  padding: 18px 20px; /* more spacing */
   text-align: center;
 }
 
-tbody tr {
-  border-bottom: 1px solid #e0e0e0;
-}
-
 tbody tr:nth-child(even) {
-  background: #f9f9f9;
+  background: #f2f6ff; /* slightly different for better readability */
 }
 
 tbody tr:hover {
-  background: #f1f7ff;
-  transform: scale(1.002);
+  background: #e6f0ff; /* subtle hover effect */
+  transform: scale(1.001);
   transition: 0.2s ease-in-out;
 }
 
 th:first-child {
-  border-top-left-radius: 8px;
+  border-top-left-radius: 10px;
 }
 
 th:last-child {
-  border-top-right-radius: 8px;
+  border-top-right-radius: 10px;
 }
+
 
 /* ===== High Resolution Buttons ===== */
 .btn {
@@ -339,25 +339,44 @@ input[type="date"] {
 /* Toolbar */
 .toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin: 10px 0 0;
+  margin: 10px 0 20px;
 }
-.toolbar .left,
-.toolbar .right {
+th, td {
+  padding: 20px 25px;    /* more spacing for bigger table */
+  text-align: center;
+}
+
+thead {
+  font-size: 16px;       /* slightly bigger headers */
+}
+
+tbody tr:hover {
+  background: #dbeaff;    /* slightly more visible hover */
+}
+/* Left group: Add button + Search + other buttons */
+.toolbar .left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px; /* spacing between Add, Search, and other buttons */
+  flex-wrap: wrap;
+}
+
+/* Remove the right group since search is now beside Add */
+.toolbar .right {
+  display: none;
 }
 
 #searchInput {
-  min-width: 260px;
-  padding: 10px;
+  width: 180px;
+  padding: 8px 10px;
+  font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
 
   </style>
 </head>
@@ -394,20 +413,28 @@ input[type="date"] {
 
   <!-- Main Content -->
   <div class="main-content">
-    <div class="crud-container">
+    
       <h2>Offenses & Sanctions</h2>
+<!-- Toolbar: Add + Search together, all buttons right-aligned -->
+<div class="toolbar" style="justify-content: flex-end;">
+  <div class="left" style="display: flex; align-items: center; gap: 10px;">
+    <input type="text" id="searchInput" placeholder="Search offenses..." style="width: 180px; padding: 8px; font-size: 14px;">
+    <button class="btn btn-primary" id="openModalBtn"><i class="fa fa-plus"></i> Add</button>
+    
+    <button class="btn btn-warning" id="printBtn"><i class="fa fa-print"></i> Print</button>
+    <button class="btn btn-danger" id="exportBtn"><i class="fa fa-file-export"></i> Export</button>
+    <button onclick="openTrash()" style="border: none; padding: 8px 12px; font-size: 14px; border-radius: 6px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 5px; background: linear-gradient(135deg, #dc3545, #ff4d4d); box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+      <i class="fas fa-trash"></i> Trash
+    </button>
+  </div>
+</div>
 
-      <!-- Toolbar: search left, actions right -->
-      <div class="toolbar">
-        <div class="left">
-          <input type="text" id="searchInput" placeholder="Search offenses...">
-        </div>
-        <div class="right">
-          <button class="btn btn-primary" id="openModalBtn"><i class="fa fa-plus"></i> Add Offense & Sanction</button>
-          <button class="btn btn-warning" id="printBtn"><i class="fa fa-print"></i> Print</button>
-          <button class="btn btn-danger" id="exportBtn"><i class="fa fa-file-export"></i> Export CSV</button>
-        </div>
-      </div>
+<!-- Table -->
+<table id="offenseTable" style="min-width: 1000px; max-width: 1500px; font-size: 16px;">
+  <thead>
+    <tr>
+
+
 
       <table id="offenseTable">
         <thead>

@@ -135,10 +135,15 @@ background-attachment: fixed;
 <div class="content">
   <h1>Complaints Anecdotals</h1>
 
-  <div class="controls">
-    <button class="btn btn-primary">Create</button>
-    <input type="text" id="searchInput" placeholder="Search by Complainant Name..." onkeyup="searchTable()">
-  </div>
+  <div class="top-controls" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 20px;">
+  <input type="text" id="searchInput" placeholder="Search Complainant Name..." onkeyup="searchComplainant()" style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; width: 250px;">
+ <button class="btn btn-primary">Create</button>
+  </button>
+  <button onclick="openTrash()" style="border: none; padding: 10px 16px; font-size: 15px; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #dc3545, #ff4d4d); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+    <i class="fas fa-trash"></i> Trash
+  </button>
+</div>
+
 
   <table>
     <thead>

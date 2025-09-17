@@ -22,12 +22,12 @@ body {
   color: #111;
 }
 
-/* --- Sidebar (untouched) --- */
+/* --- Sidebar --- */
 .sidebar {
   width: 230px;
-background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
-background-repeat: no-repeat;
-background-attachment: fixed;
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #fff;
   height: 100vh;
   position: fixed;
@@ -37,59 +37,16 @@ background-attachment: fixed;
   overflow-y: auto;
 }
 
-.sidebar h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: #ffffff;
-  text-transform: uppercase;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-  padding-bottom: 10px;
-}
-
+.sidebar h2 { margin-bottom: 30px; text-align: center; font-size: 22px; letter-spacing: 1px; color: #fff; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.15); padding-bottom: 10px; }
 .sidebar ul { list-style: none; }
-.sidebar ul li {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #e0e0e0;
-  transition: background 0.3s, transform 0.2s;
-}
-.sidebar ul li i {
-  margin-right: 12px;
-  color: #cfcfcf;
-  min-width: 20px;
-  font-size: 16px;
-}
-.sidebar ul li:hover {
-  background: #2d3f55;
-  transform: translateX(5px);
-  color: #fff;
-}
+.sidebar ul li { padding: 12px 14px; display: flex; align-items: center; cursor: pointer; border-radius: 10px; font-size: 15px; color: #e0e0e0; transition: background 0.3s, transform 0.2s; }
+.sidebar ul li i { margin-right: 12px; color: #cfcfcf; min-width: 20px; font-size: 16px; }
+.sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
 .sidebar ul li:hover i { color: #00e0ff; }
-.sidebar ul li.active {
-  background: #00aaff;
-  color: #fff;
-  border-left: 4px solid #ffffff;
-}
+.sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #fff; }
 .sidebar ul li.active i { color: #fff; }
-.sidebar ul li a {
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-}
-.section-title {
-  margin: 20px 10px 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 1px;
-}
+.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
+.section-title { margin: 20px 10px 8px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
 
 /* Dropdown */
 .dropdown-container { display: none; list-style: none; padding-left: 25px; }
@@ -100,7 +57,7 @@ background-attachment: fixed;
 
 /* Scrollbar */
 .sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
 
 /* --- Main Content --- */
 .main-content {
@@ -108,17 +65,14 @@ background-attachment: fixed;
   padding: 30px;
 }
 
-h2 {
-  font-size: 26px;
-  margin-bottom: 20px;
-  color: #007bff;
-}
+h2 { font-size: 26px; margin-bottom: 20px; color: #007bff; }
 
 /* --- Top Controls --- */
 .top-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
@@ -130,8 +84,7 @@ h2 {
   font-size: 14px;
 }
 
-.top-controls button,
-.btn-action {
+.top-controls button {
   border: none;
   padding: 10px 16px;
   font-size: 15px;
@@ -139,18 +92,25 @@ h2 {
   cursor: pointer;
   color: #fff;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-}
-
-.top-controls button {
-  background: linear-gradient(135deg, #007bff, #00aaff);
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: all 0.3s ease;
 }
 
-.top-controls button:hover {
+.top-controls .create-btn {
+  background: linear-gradient(135deg, #007bff, #00aaff);
+}
+.top-controls .create-btn:hover {
   background: linear-gradient(135deg, #0056b3, #007bbf);
+  transform: translateY(-2px);
+}
+
+.top-controls .trash-btn {
+  background: linear-gradient(135deg, #dc3545, #ff4c4c);
+}
+.top-controls .trash-btn:hover {
+  background: linear-gradient(135deg, #c82333, #ff1c1c);
   transform: translateY(-2px);
 }
 
@@ -182,15 +142,8 @@ td {
   vertical-align: middle;
 }
 
-tr:nth-child(even) {
-  background: #f9faff;
-}
-
-tr:hover {
-  background: #d0e7ff;
-  transform: scale(1.01);
-  transition: all 0.2s ease-in-out;
-}
+tr:nth-child(even) { background: #f9faff; }
+tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s ease-in-out; }
 
 /* --- Status Labels --- */
 .status-pending {
@@ -226,25 +179,13 @@ tr:hover {
   justify-content: center;
 }
 
-.btn-action i {
-  margin-right: 4px;
-}
+.btn-action i { margin-right: 4px; }
 
-.btn-edit {
-  background: #28a745;
-}
-.btn-edit:hover {
-  background: #218838;
-  transform: translateY(-2px) scale(1.05);
-}
+.btn-edit { background: #28a745; }
+.btn-edit:hover { background: #218838; transform: translateY(-2px) scale(1.05); }
 
-.btn-delete {
-  background: #dc3545;
-}
-.btn-delete:hover {
-  background: #c82333;
-  transform: translateY(-2px) scale(1.05);
-}
+.btn-delete { background: #dc3545; }
+.btn-delete:hover { background: #c82333; transform: translateY(-2px) scale(1.05); }
 
 /* --- Responsive --- */
 @media screen and (max-width: 768px) {
@@ -271,7 +212,7 @@ tr:hover {
     <ul class="dropdown-container">
       <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
       <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
-      <li class="active" ><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+      <li class="active"><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
     </ul>
 
     <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
@@ -292,7 +233,8 @@ tr:hover {
 
   <div class="top-controls">
     <input type="text" id="searchInput" placeholder="Search student name...">
-    <button onclick="openCreateForm()"><i class="fas fa-plus"></i> Create Violation Anecdotal</button>
+    <button class="create-btn" onclick="openCreateForm()"><i class="fas fa-plus"></i> Create Violation Anecdotal</button>
+    <button class="trash-btn" onclick="deleteSelected()"><i class="fas fa-trash"></i> Trash</button>
   </div>
 
   <table id="anecTable">
@@ -333,7 +275,7 @@ tr:hover {
 </div>
 
 <script>
-  // Dropdown functionality
+  // Dropdown
   const dropdowns = document.querySelectorAll('.dropdown-btn');
   dropdowns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -352,10 +294,8 @@ tr:hover {
 
   // Logout
   function logout() {
-    fetch("/logout", {
-      method: "POST",
-      headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
-    }).then(() => window.location.href = "/prefect/login");
+    fetch("/logout", { method: "POST", headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" } })
+    .then(() => window.location.href = "/prefect/login");
   }
 
   // Search filter

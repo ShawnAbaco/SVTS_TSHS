@@ -15,9 +15,7 @@
         display: block;
     }
 
-    input.invalid {
-        border-color: red;
-    }
+    input.invalid { border-color: red; }
 
     /* Modal styling */
     .modal {
@@ -40,46 +38,141 @@
     }
 
     /* Small modal */
-    .small-modal {
-        width: 350px;
-        padding: 15px;
-    }
+    .small-modal { width: 350px; padding: 15px; }
+    .small-modal .form-group { margin-bottom: 10px; }
+    .small-modal label { font-size: 0.9rem; }
+    .small-modal input, .small-modal select { width: 100%; padding: 6px 8px; font-size: 0.9rem; }
+    .small-modal button { font-size: 0.85rem; padding: 6px 12px; }
+    .small-modal .modal-header { font-size: 1rem; margin-bottom: 8px; }
 
-    .small-modal .form-group {
-        margin-bottom: 10px;
-    }
+    .modal-footer { text-align: right; margin-top: 10px; }
+    #successMessage { color: green; margin-bottom: 10px; display: none; }
 
-    .small-modal label {
-        font-size: 0.9rem;
-    }
+    /* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; font-weight: bold; transition: all 0.2s ease-in-out; }
+body { display: flex; background: #f9f9f9; color: #111; }
 
-    .small-modal input,
-    .small-modal select {
-        width: 100%;
-        padding: 6px 8px;
-        font-size: 0.9rem;
-    }
+/* Sidebar */
+.sidebar {
+  width: 230px;
+  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  padding: 25px 15px;
+  border-radius: 0 15px 15px 0;
+  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+  overflow-y: auto;
+}
 
-    .small-modal button {
-        font-size: 0.85rem;
-        padding: 6px 12px;
-    }
+.sidebar h2 { margin-bottom: 30px; text-align: center; font-size: 22px; letter-spacing: 1px; color: #ffffff; text-transform: uppercase; border-bottom: 2px solid rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
+.sidebar ul { list-style: none; }
+.sidebar ul li { padding: 12px 14px; display: flex; align-items: center; cursor: pointer; border-radius: 10px; font-size: 15px; color: #e0e0e0; transition: background 0.3s, transform 0.2s; }
+.sidebar ul li i { margin-right: 12px; color: #cfcfcf; min-width: 20px; font-size: 16px; }
+.sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
+.sidebar ul li:hover i { color: #00e0ff; }
+.sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #ffffff; }
+.sidebar ul li.active i { color: #fff; }
+.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
+.section-title { margin: 20px 10px 8px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: rgba(255, 255, 255, 0.6); letter-spacing: 1px; }
 
-    .small-modal .modal-header {
-        font-size: 1rem;
-        margin-bottom: 8px;
-    }
+/* Dropdown */
+.dropdown-container { display: none; list-style: none; padding-left: 25px; }
+.dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
+.dropdown-container li:hover { background: #3a4c66; color: #fff; }
+.dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
+.dropdown-btn.active .arrow { transform: rotate(180deg); }
 
-    .modal-footer {
-        text-align: right;
-        margin-top: 10px;
-    }
+/* Scrollbar */
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
 
-    #successMessage {
-        color: green;
-        margin-bottom: 10px;
-        display: none;
-    }
+/* Main Content */
+main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250px); }
+
+/* Cards */
+.card, .crud-container { background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 25px; }
+
+/* Tables */
+.table, table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+.table thead, table thead { background: linear-gradient(90deg, #007bff, #00aaff); color: #fff; text-transform: uppercase; font-size: 13px; }
+.table th, .table td, table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #eaeaea; font-weight: 500; }
+.table tr:nth-child(even), table tr:nth-child(even) { background-color: #f9f9f9; }
+.table tr:hover, table tr:hover { background-color: #eef3fb; }
+
+/* Buttons */
+.btn { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease-in-out; }
+.btn i { margin-right: 5px; }
+.btn-primary { background-color: #007bff; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+.btn-primary:hover { background-color: #0056b3; transform: translateY(-2px); }
+.btn-warning { background-color: #ffc107; color: #212529; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+.btn-warning:hover { background-color: #e0a800; transform: translateY(-2px); }
+.btn-danger { background-color: #dc3545; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+.btn-danger:hover { background-color: #bd2130; transform: translateY(-2px); }
+.btn-secondary { background-color: #000; color: #fff; }
+
+/* Make search input same height as buttons */
+/* Search + Buttons Container */
+.search-create {
+    display: flex;
+    justify-content: flex-end; /* aligns everything to the right */
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-create input[type="text"] {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    height: 40px; /* same as buttons */
+    width: 250px;
+}
+
+.search-create input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 6px rgba(0,123,255,0.2);
+    outline: none;
+}
+
+/* Buttons next to each other */
+.top-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.top-buttons .btn {
+    height: 40px; /* same as search input */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/* Modal */
+.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+.modal.show, .show-modal { display: flex; animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+.modal-content { background-color: #fff; margin: 10% auto; padding: 25px; border-radius: 10px; width: 100%; max-width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.modal-header { display: flex; justify-content: space-between; font-size: 20px; margin-bottom: 15px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* Forms */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #ccc; font-weight: normal; font-size: 14px; transition: border-color 0.2s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #007bff; outline: none; }
+
+/* Responsive */
+@media screen and (max-width:768px) {
+  main, .main-content { margin-left: 0; padding: 15px; width: 100%; }
+  table th, table td, .table th, .table td { font-size: 12px; padding: 8px; }
+  .btn { font-size: 12px; padding: 6px 12px; }
+}
 </style>
 </head>
 <body>
@@ -113,15 +206,22 @@
 
 <!-- Main Content -->
 <main>
+    
+            <h2>List of Advisers</h2>
     <div style="padding:20px;">
-        <div style="margin-bottom:20px;">
-            <button class="btn btn-primary" onclick="openModal()">+ Create Adviser</button>
-        </div>
+      <!-- Search and Create/Delete -->
+<div class="search-create">
+    <input type="text" id="searchInput" placeholder="Search adviser name...">
+    <div class="top-buttons">
+        <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Create</button>
+        <button class="btn btn-danger" onclick="bulkDelete()"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+</div>
+
 
         <div id="successMessage">Created successfully!</div>
 
-        <section id="list-advisers" class="card">
-            <h2>List of Advisers</h2>
+        
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -260,7 +360,6 @@
         let valid = true;
         const namePattern = /^[A-Za-z\s]+$/;
 
-        // Validation (similar as before)
         function validateField(input, pattern=null, errorId, emptyMsg, patternMsg=null){
             if(!input.value.trim()){
                 document.getElementById(errorId).textContent = emptyMsg;
@@ -284,13 +383,9 @@
 
         if(!valid) return;
 
-        // Submit via fetch
         fetch('/admin/advisers',{
             method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'X-CSRF-TOKEN':'{{ csrf_token() }}'
-            },
+            headers:{ 'Content-Type':'application/json', 'X-CSRF-TOKEN':'{{ csrf_token() }}' },
             body: JSON.stringify({
                 adviser_fname: fnameInput.value,
                 adviser_lname: lnameInput.value,
@@ -308,9 +403,7 @@
                 setTimeout(()=>successMsg.style.display='none',3000);
                 form.reset();
                 closeModal();
-            } else {
-                alert('Failed to create adviser');
-            }
+            } else { alert('Failed to create adviser'); }
         })
         .catch(err=>console.error(err));
     });
@@ -346,7 +439,7 @@
         if(confirm("Are you sure you want to delete this adviser?")){
             fetch(`/admin/advisers/${id}`,{ method:"DELETE", headers:{"X-CSRF-TOKEN":"{{ csrf_token() }}"}})
             .then(res=>res.json()).then(data=>{
-                alert(data.success ? "Deleted successfully." : "Failed to delete.");
+                alert(data.success ? "Deleted successfully" : "Failed to delete.");
                 if(data.success) location.reload();
             });
         }
@@ -356,6 +449,16 @@
         fetch('/logout',{method:'POST',headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}'}})
         .then(()=>window.location.href='/prefect/login').catch(console.error);
     }
+
+    // Live search for advisers by name
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#list-advisers tbody tr');
+        rows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            row.style.display = name.includes(filter) ? '' : 'none';
+        });
+    });
 </script>
 </body>
 </html>

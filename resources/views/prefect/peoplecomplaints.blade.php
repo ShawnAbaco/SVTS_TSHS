@@ -274,10 +274,16 @@ tr:hover {
 <div class="content">
   <h1>Complaints Management</h1>
 
-  <div class="top-controls">
-    <input type="text" id="searchInput" onkeyup="searchComplainant()" placeholder="Search Complainant Name...">
-    <button class="btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Add Complainant</button>
-  </div>
+  <div class="top-controls" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 20px;">
+  <input type="text" id="searchInput" placeholder="Search Complainant Name..." onkeyup="searchComplainant()" style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; width: 250px;">
+  <button onclick="openModal()" style="border: none; padding: 10px 16px; font-size: 15px; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #007bff, #00aaff); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+    <i class="fas fa-plus"></i> Add Complainant
+  </button>
+  <button onclick="openTrash()" style="border: none; padding: 10px 16px; font-size: 15px; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #dc3545, #ff4d4d); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+    <i class="fas fa-trash"></i> Trash
+  </button>
+</div>
+
 
   <table id="complaintsTable">
     <thead>

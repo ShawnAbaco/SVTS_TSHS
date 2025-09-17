@@ -343,16 +343,18 @@ background-attachment: fixed;
 
   <!-- Main -->
   <main>
+    
     <h2>Student Management</h2>
-    <div class="flex">
-      <input type="text" id="searchInput" placeholder="Search students..." class="form-control">
-      <select id="sectionFilter" class="form-select" style="max-width:200px;">
-        <option value="">All Sections</option>
-        @foreach($sections as $section)
-          <option value="{{ $section }}">{{ $section }}</option>
-        @endforeach
-      </select>
-    </div>
+    <div class="flex" style="justify-content: flex-end; gap: 10px; margin-bottom: 15px;">
+  <input type="text" id="searchInput" placeholder="Search students..." class="form-control">
+  <select id="sectionFilter" class="form-select" style="max-width:200px;">
+    <option value="">All Sections</option>
+    @foreach($sections as $section)
+      <option value="{{ $section }}">{{ $section }}</option>
+    @endforeach
+  </select>
+</div>
+
 
     <table id="studentTable">
       <thead>
