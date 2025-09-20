@@ -367,51 +367,61 @@ table {
       </div>
     </div>
 
-    <table id="parentTable">
-      <thead>
-        <tr>
-          <th>Parent/Guardian Name</th>
-          <th>Birthdate</th>
-          <th>Contact Number</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($parents as $parent)
-        <tr data-id="{{ $parent->parent_id }}"
-            data-students='@json(
-                $parent->students->map(fn($s) => [
-                    "name" => $s->student_fname . " " . $s->student_lname,
-                    "contact" => $s->student_contactinfo,
-                    "adviser_id" => $s->adviser_id
-                ])
-            )'>
-          <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
-          <td>{{ $parent->parent_birthdate }}</td>
-          <td>{{ $parent->parent_contactinfo }}</td>
-          <td class="actions">
-            <button class="btn btn-info" onclick="showInfo(
-              '{{ $parent->parent_fname }} {{ $parent->parent_lname }}',
-              '{{ $parent->parent_birthdate }}',
-              '{{ $parent->parent_contactinfo }}',
-              this.closest('tr').dataset.students
-            )"><i class="fas fa-info-circle"></i> Info</button>
-            <button class="btn btn-edit" onclick="editGuardian(this)">
-              <i class="fas fa-edit"></i> Edit
-            </button>
-            <form method="POST" action="{{ route('parents.destroy', $parent->parent_id) }}" style="display:inline;">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i> Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
+   <table id="parentTable">
+  <thead>
+    <tr>
+      <th>
+        <input type="checkbox" id="selectAll"> 
+        <button id="trashBtn" class="btn btn-danger" style="margin-left:6px;">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </th>
+      <th>Parent/Guardian Name</th>
+      <th>Birthdate</th>
+      <th>Contact Number</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach($parents as $parent)
+    <tr data-id="{{ $parent->parent_id }}"
+        data-students='@json(
+            $parent->students->map(fn($s) => [
+                "name" => $s->student_fname . " " . $s->student_lname,
+                "contact" => $s->student_contactinfo,
+                "adviser_id" => $s->adviser_id
+            ])
+        )'>
+      <td><input type="checkbox" class="rowCheckbox"></td>
+      <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
+      <td>{{ $parent->parent_birthdate }}</td>
+      <td>{{ $parent->parent_contactinfo }}</td>
+      <td class="actions">
+        <button class="btn btn-info" onclick="showInfo(
+          '{{ $parent->parent_fname }} {{ $parent->parent_lname }}',
+          '{{ $parent->parent_birthdate }}',
+          '{{ $parent->parent_contactinfo }}',
+          this.closest('tr').dataset.students
+        )"><i class="fas fa-info-circle"></i> Info</button>
+        <button class="btn btn-edit" onclick="editGuardian(this)">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <form method="POST" action="{{ route('parents.destroy', $parent->parent_id) }}" style="display:inline;">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash-alt"></i> Delete
+          </button>
+        </form>
+      </td>
+    </tr>
+    @endforeach
+  </tbody>
+</table>
+
+
   </div>
+  
 <!-- ADD / EDIT MODAL -->
 <div class="modal" id="addModal">
   <div class="modal-content">
@@ -460,121 +470,287 @@ table {
       <button class="btn btn-info" id="smsBtn"><i class="fas fa-sms"></i> Send SMS</button>
     </div>
   </div>
+<!-- ARCHIVE MODAL -->
+<div class="modal" id="archiveModal">
+  <div class="modal-content" style="max-width:900px;">
+    <span class="close" onclick="closeModal('archiveModal')">&times;</span>
+    <h2>Archived Parents</h2>
+
+    <!-- Search bar -->
+    <input type="text" id="archiveSearch" placeholder="Search by name..." 
+           style="width: 100%; padding: 8px; margin: 10px 0;">
+
+    <!-- Restore All button -->
+    <button class="btn btn-success" onclick="restoreAllRows()" style="margin-bottom:10px;">
+      <i class="fas fa-undo"></i> Restore All
+    </button>
+
+    <table id="archiveTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Birthdate</th>
+          <th>Contact</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled dynamically -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
 
   <script>
 
-    // Dropdown functionality - auto close others & scroll
+  // --- Dropdown functionality - auto close others & scroll ---
 const dropdowns = document.querySelectorAll('.dropdown-btn');
 dropdowns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
 
-        // close all other dropdowns
-        dropdowns.forEach(otherBtn => {
-            if (otherBtn !== this) {
-                otherBtn.nextElementSibling.classList.remove('show');
-                otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
-            }
-        });
-
-        // toggle clicked dropdown
-        const container = this.nextElementSibling;
-        container.classList.toggle('show');
-        this.querySelector('.fa-caret-down').style.transform =
-            container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-
-        // scroll into view if dropdown is opened
-        if(container.classList.contains('show')){
-            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+    // close all other dropdowns
+    dropdowns.forEach(otherBtn => {
+      if (otherBtn !== this) {
+        otherBtn.nextElementSibling.classList.remove('show');
+        otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+      }
     });
+
+    // toggle clicked dropdown
+    const container = this.nextElementSibling;
+    container.classList.toggle('show');
+    this.querySelector('.fa-caret-down').style.transform =
+      container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+
+    // scroll into view if dropdown is opened
+    if (container.classList.contains('show')) {
+      container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
 });
 
-
-
-// Sidebar active link
+// --- Sidebar active link ---
 document.querySelectorAll('.sidebar a').forEach(link => {
-    link.addEventListener('click', function(){
-        document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-    });
+  link.addEventListener('click', function () {
+    document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
 });
-    // live search
-    document.getElementById('searchInput').addEventListener('keyup', function() {
-      const filter = this.value.toLowerCase();
-      const rows = document.querySelectorAll("#parentTable tbody tr");
-      rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(filter) ? '' : 'none';
-      });
+
+// --- Live search ---
+document.getElementById('searchInput').addEventListener('keyup', function () {
+  const filter = this.value.toLowerCase();
+  const rows = document.querySelectorAll("#parentTable tbody tr");
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(filter) ? '' : 'none';
+  });
+});
+
+function openAddModal() {
+  document.getElementById('addParentForm').reset();
+  document.getElementById('methodField').innerHTML = '';
+  document.getElementById('modalTitle').innerText = 'Add Parent/Guardian';
+  document.querySelector('#addParentForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
+  document.getElementById('addModal').style.display = 'flex';
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function showInfo(name, birthdate, contact, studentsJson) {
+  const loggedAdviserId = {{ optional(auth()->guard('adviser')->user())->adviser_id ?? 'null' }};
+  document.getElementById('infoName').innerText = name;
+  document.getElementById('infoBirthdate').innerText = birthdate;
+  document.getElementById('infoContact').innerText = contact;
+
+  const childrenList = document.getElementById('infoChildren');
+  childrenList.innerHTML = '';
+  let students = [];
+  try { students = JSON.parse(studentsJson); } catch (e) { students = []; }
+  const filtered = students.filter(s => s.adviser_id == loggedAdviserId);
+  if (filtered.length > 0) {
+    filtered.forEach(student => {
+      const li = document.createElement('li');
+      li.textContent = `${student.name} - Contact: ${student.contact}`;
+      childrenList.appendChild(li);
     });
+  } else {
+    childrenList.innerHTML = '<li>No children under your supervision</li>';
+  }
+  document.getElementById('smsBtn').onclick = function () {
+    const msg = `Hello ${name}, regarding your child(ren): ${filtered.map(s => s.name).join(', ')}.`;
+    alert(`SMS to ${contact}: ${msg}`);
+  };
+  document.getElementById('infoModal').style.display = 'flex';
+}
 
-    function openAddModal() {
-      document.getElementById('addParentForm').reset();
-      document.getElementById('methodField').innerHTML = '';
-      document.getElementById('modalTitle').innerText = 'Add Parent/Guardian';
-      document.querySelector('#addParentForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
-      document.getElementById('addModal').style.display = 'flex';
-    }
+function editGuardian(button) {
+  const row = button.closest('tr');
+  const cells = row.cells;
+  const fullName = cells[0].innerText.trim();
+  const lastSpaceIndex = fullName.lastIndexOf(' ');
+  const firstName = fullName.slice(0, lastSpaceIndex).trim();
+  const lastName = fullName.slice(lastSpaceIndex + 1).trim();
 
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
+  document.getElementById('parent_id').value = row.dataset.id;
+  document.getElementById('parent_fname').value = firstName;
+  document.getElementById('parent_lname').value = lastName;
+  document.getElementById('parent_birthdate').value = cells[1].innerText.trim();
+  document.getElementById('parent_contactinfo').value = cells[2].innerText.trim();
 
-    function showInfo(name, birthdate, contact, studentsJson) {
-      const loggedAdviserId = {{ optional(auth()->guard('adviser')->user())->adviser_id ?? 'null' }};
-      document.getElementById('infoName').innerText = name;
-      document.getElementById('infoBirthdate').innerText = birthdate;
-      document.getElementById('infoContact').innerText = contact;
+  const form = document.getElementById('addParentForm');
+  form.action = `/adviser/adviser/parents/${row.dataset.id}`;
+  document.getElementById('methodField').innerHTML = '@method("PUT")';
+  form.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update';
+  document.getElementById('modalTitle').innerText = 'Edit Parent/Guardian';
+  document.getElementById('addModal').style.display = 'flex';
+}
 
-      const childrenList = document.getElementById('infoChildren');
-      childrenList.innerHTML = '';
-      let students = [];
-      try { students = JSON.parse(studentsJson); } catch(e) { students = []; }
-      const filtered = students.filter(s => s.adviser_id == loggedAdviserId);
-      if(filtered.length > 0) {
-        filtered.forEach(student => {
-          const li = document.createElement('li');
-          li.textContent = `${student.name} - Contact: ${student.contact}`;
-          childrenList.appendChild(li);
-        });
-      } else {
-        childrenList.innerHTML = '<li>No children under your supervision</li>';
-      }
-      document.getElementById('smsBtn').onclick = function() {
-        const msg = `Hello ${name}, regarding your child(ren): ${filtered.map(s => s.name).join(', ')}.`;
-        alert(`SMS to ${contact}: ${msg}`);
-      };
-      document.getElementById('infoModal').style.display = 'flex';
-    }
+function logout() {
+  if (confirm('Are you sure you want to log out?')) {
+    window.location.href = '/adviser/login';
+  }
+}
 
-    function editGuardian(button) {
-      const row = button.closest('tr');
-      const cells = row.cells;
-      const fullName = cells[0].innerText.trim();
-      const lastSpaceIndex = fullName.lastIndexOf(' ');
-      const firstName = fullName.slice(0, lastSpaceIndex).trim();
-      const lastName = fullName.slice(lastSpaceIndex + 1).trim();
+// --- SELECT ALL CHECKBOX ---
+document.getElementById('selectAll').addEventListener('change', function () {
+  const checkboxes = document.querySelectorAll('.rowCheckbox');
+  checkboxes.forEach(cb => cb.checked = this.checked);
+});
 
-      document.getElementById('parent_id').value = row.dataset.id;
-      document.getElementById('parent_fname').value = firstName;
-      document.getElementById('parent_lname').value = lastName;
-      document.getElementById('parent_birthdate').value = cells[1].innerText.trim();
-      document.getElementById('parent_contactinfo').value = cells[2].innerText.trim();
+// --- Individual Row Checkbox: update "Select All" ---
+document.querySelectorAll('.rowCheckbox').forEach(cb => {
+  cb.addEventListener('change', function () {
+    const all = document.querySelectorAll('.rowCheckbox');
+    const allChecked = [...all].every(chk => chk.checked);
+    document.getElementById('selectAll').checked = allChecked;
+  });
+});
 
-      const form = document.getElementById('addParentForm');
-      form.action = `/adviser/adviser/parents/${row.dataset.id}`;
-      document.getElementById('methodField').innerHTML = '@method("PUT")';
-      form.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update';
-      document.getElementById('modalTitle').innerText = 'Edit Parent/Guardian';
-      document.getElementById('addModal').style.display = 'flex';
-    }
+let archiveRows = []; // store archived rows
 
-    function logout() {
-      if(confirm('Are you sure you want to log out?')){
-        window.location.href = '/adviser/login';
-      }
-    }
+// --- Trash selected rows ---
+document.getElementById('trashBtn').addEventListener('click', function () {
+  const checkboxes = document.querySelectorAll('.rowCheckbox:checked');
+  if (checkboxes.length === 0) {
+    alert("Please select at least one row to trash.");
+    return;
+  }
+
+  if (!confirm("Are you sure you want to move selected to archive?")) return;
+
+  checkboxes.forEach(cb => {
+    const row = cb.closest('tr');
+    const cells = row.querySelectorAll('td');
+    archiveRows.push({
+      name: cells[1].innerText,
+      birthdate: cells[2].innerText,
+      contact: cells[3].innerText
+    });
+    row.remove(); // remove from main table
+  });
+  document.getElementById('selectAll').checked = false;
+});
+
+// --- Open Archive Modal ---
+document.querySelector('.btn-archive').addEventListener('click', function () {
+  renderArchiveTable();
+  document.getElementById('archiveModal').style.display = 'flex';
+});
+
+// --- Render Archive Table with Restore buttons ---
+function renderArchiveTable() {
+  const archiveBody = document.querySelector('#archiveTable tbody');
+  archiveBody.innerHTML = "";
+  if (archiveRows.length === 0) {
+    archiveBody.innerHTML = "<tr><td colspan='4'>No archived parents.</td></tr>";
+  } else {
+    archiveRows.forEach((r, index) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.name}</td>
+        <td>${r.birthdate}</td>
+        <td>${r.contact}</td>
+        <td>
+          <button class="btn btn-info" onclick="restoreRow(${index})">
+            <i class="fas fa-undo"></i> Restore
+          </button>
+        </td>
+      `;
+      archiveBody.appendChild(tr);
+    });
+  }
+}
+
+// --- Restore row from archive ---
+function restoreRow(index) {
+  const r = archiveRows[index];
+
+  // add back to main table
+  const parentTableBody = document.querySelector("#parentTable tbody");
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>${r.name}</td>
+    <td>${r.birthdate}</td>
+    <td>${r.contact}</td>
+    <td class="actions">
+      <button class="btn btn-info"><i class="fas fa-info-circle"></i> Info</button>
+      <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
+      <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+    </td>
+  `;
+  parentTableBody.appendChild(tr);
+
+  // remove from archive
+  archiveRows.splice(index, 1);
+  renderArchiveTable();
+}
+// --- Restore All ---
+function restoreAllRows() {
+  if (archiveRows.length === 0) {
+    alert("No archived parents to restore.");
+    return;
+  }
+
+  if (!confirm("Restore all archived parents?")) return;
+
+  const parentTableBody = document.querySelector("#parentTable tbody");
+  archiveRows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="checkbox" class="rowCheckbox"></td>
+      <td>${r.name}</td>
+      <td>${r.birthdate}</td>
+      <td>${r.contact}</td>
+      <td class="actions">
+        <button class="btn btn-info"><i class="fas fa-info-circle"></i> Info</button>
+        <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
+        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+      </td>
+    `;
+    parentTableBody.appendChild(tr);
+  });
+
+  archiveRows = []; // clear archive
+  renderArchiveTable();
+}
+
+// --- Search inside Archive ---
+document.getElementById('archiveSearch').addEventListener('keyup', function() {
+  const filter = this.value.toLowerCase();
+  const rows = document.querySelectorAll("#archiveTable tbody tr");
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(filter) ? '' : 'none';
+  });
+});
+
   </script>
 </body>
 </html>
