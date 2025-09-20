@@ -20,21 +20,82 @@
       --table-header-bg: #f5f5f5;
     }
 
-    * {
-      color: black !important;
-      font-weight: bold !important;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+/* --- Body --- */
+body {
+  background-color: var(--secondary-color);
+  min-height: 100vh;
+  display: flex;
 
-    body {
-      font-family: "Arial", sans-serif;
-      margin: 0;
-      background-color: var(--secondary-color);
-      min-height: 100vh;
-      display: flex;
-    }
+ color: black;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+
+}
+
+p, span, a, li, label {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: black;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+}
+
+button, input, textarea, select, th, td {
+  color: black;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+}
+/* --- Reset Margin & Padding --- */
+body, div, p {
+  margin: 0;
+  padding: 0;
+}
+
+ul, ol, li {
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+table, th, td {
+  margin: 0;
+  padding: 0;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Box Sizing --- */
+body, div, p {
+  box-sizing: border-box;
+}
+
+ul, ol, li {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  box-sizing: border-box;
+}
+
+table, th, td, form {
+  box-sizing: border-box;
+}
+
+input, textarea, select, button {
+  box-sizing: border-box;
+}
+
 
    /* --- Sidebar --- */
 .sidebar {
@@ -130,9 +191,9 @@
   border-left: 2px solid rgba(255,255,255,0.1);
   border-radius: 0 8px 8px 0;
 }
-.dropdown-container.show { 
-  max-height: 400px; 
-  padding-left: 12px; 
+.dropdown-container.show {
+  max-height: 400px;
+  padding-left: 12px;
 }
 .dropdown-container li a {
   font-size: 0.9rem;
@@ -290,9 +351,14 @@
       </li>
       <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
       <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-      <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
   </nav>
 
   <!-- MAIN -->

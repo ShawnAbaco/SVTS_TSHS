@@ -46,6 +46,21 @@ class PrefectController extends Controller
             'message' => 'Invalid credentials. Please try again.'
         ]);
     }
+    public function logout(Request $request)
+{
+    Auth::guard('prefect')->logout();
+
+    // Optionally invalidate the session
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+     return response()->json([
+                'success' => true,
+                'message' => 'Logout successful!',
+                'redirect' => route('prefect.login')
+            ]);
+}
+
 
 
 
@@ -207,7 +222,7 @@ public function storeViolationAppointment(Request $request)
     {
 
          $violation_anecdotals = ViolationAnecdotal::with([
-        'violation.student.adviser', 
+        'violation.student.adviser',
         'violation.offense'
     ])->get();
 
@@ -258,12 +273,12 @@ public function complaintAppointmentDestroy($id)
     $appointment->delete();
     return redirect()->route('complaints.appointments')->with('success', 'Appointment deleted successfully.');
 }
-    
+
      public function complaintsanecdotals()
     {
          // Eager load complaints with complainant and respondent for efficiency
         $complaint_anecdotals = ComplaintsAnecdotal::with([
-            'complaint.complainant', 
+            'complaint.complainant',
             'complaint.respondent'
         ])->get();
 
@@ -289,5 +304,5 @@ public function complaintAppointmentDestroy($id)
 
         return back()->with('success', 'Adviser created successfully.');
     }
-    
+
 }

@@ -22,6 +22,7 @@ Route::prefix('prefect')->group(function () {
     // Auth routes (outside middleware)
     Route::get('/login', [PrefectController::class, 'showLoginForm'])->name('prefect.login');
     Route::post('/login', [PrefectController::class, 'login'])->name('prefect.login.submit');
+    Route::post('/logout', [PrefectController::class, 'logout'])->name('prefect.logout');
 
     // Protected routes
     Route::middleware('auth:prefect')->group(function () {

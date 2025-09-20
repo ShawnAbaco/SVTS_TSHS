@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parent List</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  
+
   <style>
     :root {
   --primary-color: #000000;
@@ -125,9 +125,9 @@ body {
   border-left: 2px solid rgba(255,255,255,0.1);
   border-radius: 0 8px 8px 0;
 }
-.dropdown-container.show { 
-  max-height: 400px; 
-  padding-left: 12px; 
+.dropdown-container.show {
+  max-height: 400px;
+  padding-left: 12px;
 }
 .dropdown-container li a {
   font-size: 0.9rem;
@@ -266,12 +266,12 @@ table {
 .modal {
   display: none;
   position: fixed;
-  top: 0; 
+  top: 0;
   left: 0;
-  width: 100%; 
+  width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.5);
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
 }
 
@@ -279,7 +279,7 @@ table {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 500px; 
+  max-width: 500px;
   width: 100%;
   position: relative;
   box-shadow: var(--shadow);
@@ -289,28 +289,28 @@ table {
   margin-bottom: 1rem;
 }
 
-.modal-content input, 
+.modal-content input,
 .modal-content select {
-  width: 100%; 
+  width: 100%;
   margin-bottom: 10px;
-  padding: 8px; 
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 .modal-content .close {
-  position: absolute; 
-  top: 10px; 
+  position: absolute;
+  top: 10px;
   right: 15px;
-  cursor: pointer; 
-  font-size: 20px; 
+  cursor: pointer;
+  font-size: 20px;
   color: red;
 }
   </style>
 </head>
 <body>
   <!-- SIDEBAR -->
- 
+
 <nav class="sidebar" role="navigation">
     <div style="text-align: center; margin-bottom: 1rem;">
         <img src="/images/Logo.png" alt="Logo">
@@ -343,9 +343,14 @@ table {
 
         <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
         <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-        <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-        <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
 </nav>
 
   <div class="main-content">
@@ -373,7 +378,7 @@ table {
       </thead>
       <tbody>
         @foreach($parents as $parent)
-        <tr data-id="{{ $parent->parent_id }}" 
+        <tr data-id="{{ $parent->parent_id }}"
             data-students='@json(
                 $parent->students->map(fn($s) => [
                     "name" => $s->student_fname . " " . $s->student_lname,
@@ -417,23 +422,23 @@ table {
       <input type="hidden" name="parent_id" id="parent_id" value="">
 
       <!-- First Name -->
-      <input type="text" name="parent_fname" id="parent_fname" placeholder="First Name" 
-             required pattern="^[A-Za-z\s]+$" 
+      <input type="text" name="parent_fname" id="parent_fname" placeholder="First Name"
+             required pattern="^[A-Za-z\s]+$"
              title="Only letters and spaces are allowed">
 
       <!-- Last Name -->
-      <input type="text" name="parent_lname" id="parent_lname" placeholder="Last Name" 
-             required pattern="^[A-Za-z\s]+$" 
+      <input type="text" name="parent_lname" id="parent_lname" placeholder="Last Name"
+             required pattern="^[A-Za-z\s]+$"
              title="Only letters and spaces are allowed">
 
       <!-- Birthdate -->
-      <input type="date" name="parent_birthdate" id="parent_birthdate" 
-             max="<?php echo date('Y-m-d'); ?>" required 
+      <input type="date" name="parent_birthdate" id="parent_birthdate"
+             max="<?php echo date('Y-m-d'); ?>" required
              title="Birthdate cannot be in the future">
 
       <!-- Contact Info -->
-      <input type="text" name="parent_contactinfo" id="parent_contactinfo" placeholder="Contact Number" 
-             required pattern="^[0-9]{11}$" 
+      <input type="text" name="parent_contactinfo" id="parent_contactinfo" placeholder="Contact Number"
+             required pattern="^[0-9]{11}$"
              title="Contact number must be exactly 11 digits (e.g., 09123456789)">
 
       <span id="methodField"></span>

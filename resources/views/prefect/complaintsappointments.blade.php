@@ -372,6 +372,29 @@ function searchTable(){
     }
   }
 }
+  // Logout
+function logout() {
+    const confirmLogout = confirm("Are you sure you want to logout?");
+    if (!confirmLogout) return;
+
+    fetch("{{ route('prefect.logout') }}", {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if(response.ok) {
+            // Redirect to login after successful logout
+            window.location.href = "{{ route('prefect.login') }}";
+        } else {
+            console.error('Logout failed:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Logout failed:', error));
+}
+
 </script>
 </body>
 </html>

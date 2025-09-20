@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +16,9 @@ class ViolationRecord extends Model
         'violation_date',
         'violation_time',
     ];
+
+    // Cast dates/times to Carbon instances
+    protected $dates = ['violation_date', 'violation_time', 'created_at', 'updated_at'];
 
     public function student()
     {

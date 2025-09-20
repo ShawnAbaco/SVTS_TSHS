@@ -131,9 +131,9 @@ body {
   border-left: 2px solid rgba(255,255,255,0.1);
   border-radius: 0 8px 8px 0;
 }
-.dropdown-container.show { 
-  max-height: 400px; 
-  padding-left: 12px; 
+.dropdown-container.show {
+  max-height: 400px;
+  padding-left: 12px;
 }
 .dropdown-container li a {
   font-size: 0.9rem;
@@ -280,17 +280,17 @@ table td {
 
 /* Modal */
 .modal {
-  display: none; 
-  position: fixed; 
+  display: none;
+  position: fixed;
   z-index: 1000;
-  left: 0; top: 0; 
+  left: 0; top: 0;
   width: 100%; height: 100%;
-  overflow: auto; 
+  overflow: auto;
   background-color: rgba(0,0,0,0.5);
 }
 .modal-content {
   background-color: var(--secondary-color);
-  margin: 5% auto; 
+  margin: 5% auto;
   padding: 20px;
   border-radius: 12px;
   width: 500px;
@@ -300,12 +300,12 @@ table td {
 .modal-content h3 { margin-bottom: 1rem; }
 .modal-content label { display: block; margin: 10px 0 5px; }
 .modal-content input, .modal-content textarea {
-  width: 100%; 
+  width: 100%;
   padding: 10px 12px;
-  border-radius: 8px; 
+  border-radius: 8px;
   border: 1px solid var(--input-border);
   margin-bottom: 12px;
-  font-size: 0.95rem; 
+  font-size: 0.95rem;
   font-weight: normal;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
@@ -330,7 +330,7 @@ table td {
 
   </style>
 
-  
+
 
   <!-- SIDEBAR -->
   <nav class="sidebar" role="navigation">
@@ -362,9 +362,14 @@ table td {
       </li>
       <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
       <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-      <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
   </nav>
 
   <!-- Main content -->

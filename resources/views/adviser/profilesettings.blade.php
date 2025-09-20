@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Adviser Dashboard - Profile Settings</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
- 
+
 </head>
 <body>
    <link rel="stylesheet" href="{{ asset('css/adviser/profilesettings.css') }}">
@@ -37,9 +37,14 @@
         </li>
         <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
         <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-        <li><a href="{{ route('profile.settings') }}" class="active"><i class="fas fa-cog"></i> Profile Settings</a></li>
-        <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
   </nav>
 
   <!-- Main content -->

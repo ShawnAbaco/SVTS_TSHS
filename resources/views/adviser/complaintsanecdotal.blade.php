@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Adviser Dashboard - Complaints Anecdotal</title>
-  
+
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
-  
-  
+
+
 </head>
 <body>
 <style>
-  :root {
+:root {
   --primary-color: rgb(134, 142, 142);
   --secondary-color: #ffffff;
   --hover-bg: rgb(0, 88, 240);
@@ -20,21 +20,81 @@
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Reset / Global --- */
-* {
-  color: black !important;
-  font-weight: bold !important;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
+
+/* --- Body --- */
 body {
-  font-family: "Arial", sans-serif;
-  margin: 0;
   background-color: var(--secondary-color);
   min-height: 100vh;
   display: flex;
+
+ color: black;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+}
+
+p, span, a, li, label {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: black;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+}
+
+button, input, textarea, select, th, td {
+  color: black;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+}
+/* --- Reset Margin & Padding --- */
+body, div, p {
+  margin: 0;
+  padding: 0;
+}
+
+ul, ol, li {
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+table, th, td {
+  margin: 0;
+  padding: 0;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Box Sizing --- */
+body, div, p {
+  box-sizing: border-box;
+}
+
+ul, ol, li {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  box-sizing: border-box;
+}
+
+table, th, td, form {
+  box-sizing: border-box;
+}
+
+input, textarea, select, button {
+  box-sizing: border-box;
 }
 
 /* --- Sidebar --- */
@@ -44,7 +104,6 @@ body {
   left: 0;
   width: 240px;
   height: 100%;
-  /* Gradient background */
   background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
   font-family: "Segoe UI", Tahoma, sans-serif;
   z-index: 1000;
@@ -52,9 +111,9 @@ body {
   transition: all 0.3s ease;
   color: #ffffff;
   font-weight: bold;
-  -webkit-font-smoothing: antialiased; /* smooth fonts for high-res */
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  image-rendering: optimizeQuality; /* high-res image rendering */
+  image-rendering: optimizeQuality;
 }
 
 /* Sidebar scroll */
@@ -63,9 +122,7 @@ body {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
 }
-.sidebar::-webkit-scrollbar-track {
-  background-color: rgba(255, 255, 255, 0.05);
-}
+.sidebar::-webkit-scrollbar-track { background-color: rgba(255, 255, 255, 0.05); }
 
 /* Logo */
 .sidebar img {
@@ -105,7 +162,6 @@ body {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-
 .sidebar ul li a i {
   font-size: 1.2rem;
   min-width: 22px;
@@ -119,7 +175,7 @@ body {
 .sidebar ul li a.active {
   background-color: rgba(255,255,255,0.15);
   border-left-color: #FFD700;
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 /* Dropdown */
@@ -131,26 +187,19 @@ body {
   border-left: 2px solid rgba(255,255,255,0.1);
   border-radius: 0 8px 8px 0;
 }
-.dropdown-container.show { 
-  max-height: 400px; 
-  padding-left: 12px; 
-}
+.dropdown-container.show { max-height: 400px; padding-left: 12px; }
 .dropdown-container li a {
   font-size: 0.9rem;
   padding: 10px 20px;
   color: #ffffff;
   font-weight: bold;
 }
-.dropdown-container li a:hover {
-  background-color: rgba(255,255,255,0.15);
-  color: #ffffff;
-}
+.dropdown-container li a:hover { background-color: rgba(255,255,255,0.15); color: #ffffff; }
 .dropdown-btn .fa-caret-down {
   margin-left: auto;
   transition: transform 0.3s ease;
   color: #ffffff;
 }
-
 
 /* --- Main content --- */
 .main-content {
@@ -159,7 +208,7 @@ body {
   flex-grow: 1;
 }
 
-/* --- Toolbar --- */
+/* Toolbar */
 .toolbar {
   display: flex;
   align-items: center;
@@ -173,71 +222,32 @@ body {
   margin: 0;
   color: #000;
 }
-.toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.toolbar-actions { display: flex; align-items: center; gap: 12px; }
 .toolbar-actions input,
-.toolbar-actions button {
-  height: 46px; 
-  font-size: 0.95rem;
-  border-radius: 8px;
-  padding: 0 14px;
-  font-weight: bold;
-  box-shadow: var(--shadow);
-}
+.toolbar-actions button { height: 46px; font-size: 0.95rem; border-radius: 8px; padding: 0 14px; font-weight: bold; box-shadow: var(--shadow); }
 
-/* --- Search box --- */
+/* Search box */
 #searchInput {
   width: 280px;
   border: 1px solid #ccc;
   outline: none;
   transition: all 0.3s ease;
 }
-#searchInput:focus {
-  border-color: var(--hover-bg);
-  box-shadow: var(--shadow);
-}
+#searchInput:focus { border-color: var(--hover-bg); box-shadow: var(--shadow); }
 
-/* --- Buttons --- */
-.btn-add, .btn-primary { 
-  background-color: #0058f0; 
-  color: #fff; 
-  border: none; 
-  cursor: pointer; 
-  transition: all 0.3s ease; 
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
-}
-.btn-add:hover, .btn-primary:hover { 
-  background-color: var(--hover-active-bg); 
-  transform: translateY(-2px); 
-}
+/* Buttons */
+.btn-add, .btn-primary { background-color: #0058f0; color: #fff; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+.btn-add:hover, .btn-primary:hover { background-color: var(--hover-active-bg); transform: translateY(-2px); }
 
-.btn-archive { 
-  background: linear-gradient(135deg, #ff7f50, #e55300); 
-  color: #fff; 
-  border: none; 
-  cursor: pointer; 
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
-  transition: all 0.3s ease; 
-}
-.btn-archive:hover { 
-  transform: translateY(-2px); 
-  box-shadow: 0 5px 12px rgba(0,0,0,0.25); 
-  opacity: 0.95; 
-}
+.btn-archive { background: linear-gradient(135deg, #ff7f50, #e55300); color: #fff; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+.btn-archive:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0,0,0,0.25); opacity: 0.95; }
 
 .btn-orange { background-color: orange; color: #fff; }
 .btn-orange:hover { background-color: darkorange; }
 .btn-red { background-color: red; color: #fff; margin-left: 5px; }
 .btn-red:hover { background-color: darkred; }
 
-/* --- Table --- */
+/* Table */
 .complaints-table {
   width: 100%;
   border-collapse: collapse;
@@ -246,20 +256,12 @@ body {
   overflow: hidden;
   box-shadow: var(--shadow);
 }
-.complaints-table th, .complaints-table td {
-  padding: 12px;
-  text-align: left;
-  font-size: 0.9rem;
-}
-.complaints-table th {
-  background-color: black;
-  color: white !important;
-  font-size: 0.95rem;
-}
+.complaints-table th, .complaints-table td { padding: 12px; text-align: left; font-size: 0.9rem; }
+.complaints-table th { background-color: black; color: white; font-size: 0.95rem; }
 .complaints-table tr:nth-child(even) { background-color: #f5f5f5; }
 .complaints-table tr:hover { background-color: #e9f0ff; }
 
-/* --- Modal --- */
+/* Modal */
 .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); z-index:1000; }
 .modal-content { background:white; margin:8% auto; padding:20px; border-radius:10px; width:400px; box-shadow: var(--shadow); }
 .close { float:right; cursor:pointer; font-size:1.5rem; }
@@ -267,8 +269,8 @@ input, textarea, select { width:100%; padding:7px; margin-bottom:10px; border:1p
 input:focus, textarea:focus, select:focus { border-color: var(--hover-bg); box-shadow: var(--shadow); }
 .modal-content button { align-self:flex-end; }
 
-
 </style>
+
   <!-- SIDEBAR -->
   <nav class="sidebar">
     <div style="text-align: center; margin-bottom: 1rem;">
@@ -297,9 +299,14 @@ input:focus, textarea:focus, select:focus { border-color: var(--hover-bg); box-s
       </li>
       <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
       <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-      <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
   </nav>
 
   <!-- MAIN CONTENT -->
@@ -425,8 +432,8 @@ input:focus, textarea:focus, select:focus { border-color: var(--hover-bg); box-s
     closeBtn.onclick = () => modal.style.display="none";
     window.onclick = e => { if(e.target==modal) modal.style.display="none"; }
 
-    document.querySelectorAll('.btn-edit').forEach((btn,i)=>{ 
-      btn.onclick=()=> editRow(tableBody.rows[i]); 
+    document.querySelectorAll('.btn-edit').forEach((btn,i)=>{
+      btn.onclick=()=> editRow(tableBody.rows[i]);
     });
 
     function editRow(row){

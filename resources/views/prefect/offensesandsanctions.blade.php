@@ -413,14 +413,14 @@ tbody tr:hover {
 
   <!-- Main Content -->
   <div class="main-content">
-    
+
       <h2>Offenses & Sanctions</h2>
 <!-- Toolbar: Add + Search together, all buttons right-aligned -->
 <div class="toolbar" style="justify-content: flex-end;">
   <div class="left" style="display: flex; align-items: center; gap: 10px;">
     <input type="text" id="searchInput" placeholder="Search offenses..." style="width: 180px; padding: 8px; font-size: 14px;">
     <button class="btn btn-primary" id="openModalBtn"><i class="fa fa-plus"></i> Add</button>
-    
+
     <button class="btn btn-warning" id="printBtn"><i class="fa fa-print"></i> Print</button>
     <button class="btn btn-danger" id="exportBtn"><i class="fa fa-file-export"></i> Export</button>
     <button onclick="openTrash()" style="border: none; padding: 8px 12px; font-size: 14px; border-radius: 6px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 5px; background: linear-gradient(135deg, #dc3545, #ff4d4d); box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
@@ -673,10 +673,24 @@ function escapeHtml(str) {
 
 // ✅ Logout
 function logout() {
-  fetch('/logout', {
-    method: 'POST',
-    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-  }).then(() => window.location.href='/prefect/login')
+    const confirmLogout = confirm("Are you sure you want to logout?");
+    if (!confirmLogout) return;
+
+    fetch("{{ route('prefect.logout') }}", {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if(response.ok) {
+            // Redirect to login after successful logout
+            window.location.href = "{{ route('prefect.login') }}";
+        } else {
+            console.error('Logout failed:', response.statusText);
+        }
+    })
     .catch(error => console.error('Logout failed:', error));
 }
 </script>

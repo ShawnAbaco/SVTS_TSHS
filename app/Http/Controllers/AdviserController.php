@@ -175,7 +175,7 @@ public function complaintsappointment()
 
     public function reports()
     {
-        
+
         $adviserId = Auth::guard('adviser')->id();
         $students = Student::where('adviser_id', $adviserId)->with('violations')->get();
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Violation Logging</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  
+
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <style>
  :root {
@@ -123,9 +123,9 @@ body {
   border-left: 2px solid rgba(255,255,255,0.1);
   border-radius: 0 8px 8px 0;
 }
-.dropdown-container.show { 
-  max-height: 400px; 
-  padding-left: 12px; 
+.dropdown-container.show {
+  max-height: 400px;
+  padding-left: 12px;
 }
 .dropdown-container li a {
   font-size: 0.9rem;
@@ -392,7 +392,7 @@ h2 {
 <body>
 
  <!-- SIDEBAR -->
- 
+
 <nav class="sidebar" role="navigation">
     <div style="text-align: center; margin-bottom: 1rem;">
         <img src="/images/Logo.png" alt="Logo">
@@ -425,9 +425,14 @@ h2 {
 
         <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
         <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-        <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-        <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
 </nav>
 
 <!-- MAIN CONTENT -->
@@ -470,7 +475,7 @@ h2 {
           <td>{{ $v->violation_date }}</td>
           <td>{{ $v->violation_time }}</td>
           <td>{{ $v->offense->sanction_consequences }}</td>
-       
+
           <td>
             <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
             <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
@@ -522,7 +527,7 @@ h2 {
       <!-- Date -->
       <div class="form-group">
         <label for="date">Date</label>
-        <input type="date" name="violation_date" 
+        <input type="date" name="violation_date"
                max="<?php echo date('Y-m-d'); ?>" required
                title="Date cannot be in the future">
       </div>

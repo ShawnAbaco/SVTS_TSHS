@@ -38,9 +38,14 @@
       </li>
       <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
       <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-      <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
   </nav>
 
   <!-- MAIN CONTENT -->
@@ -54,7 +59,7 @@
         <button class="btn btn-info" onclick="openModal()">
           <i class="fas fa-plus-circle"></i> Add Record
         </button>
-         
+
          <button class="btn-archive" id="archivesBtn">
   <i class="fas fa-archive"></i> Archives
 </button>
@@ -65,26 +70,36 @@
     <table>
       <thead>
         <tr>
-          <th>Student Name</th>
-          <th>Violation</th>
+          <th>ID</th>
+          <th>Violator Name</th>
+          <th>Parent Name</th>
+          <th>Solution</th>
+          <th>Recommendation</th>
           <th>Date</th>
-          <th>Remarks</th>
+          <th>Time</th>
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Example row -->
-        <tr>
-          <td>Juan Dela Cruz</td>
-          <td>Bullying</td>
-          <td>2025-09-13</td>
-          <td>First offense</td>
+      <tbody id="anecdotalTable">
+        @forelse($anecdotal as $a)
+        <tr data-id="{{ $a->violation_anec_id }}">
+          <td>{{ $a->violation_anec_id }}</td>
+          <td>{{ $a->violation->student->student_fname }} {{ $a->violation->student->student_lname }}</td>
+          <td>{{ $a->violation->student->parent->parent_fname ?? '' }} {{ $a->violation->student->parent->parent_lname ?? '' }}</td>
+          <td>{{ $a->violation_anec_solution }}</td>
+          <td>{{ $a->violation_anec_recommendation }}</td>
+          <td>{{ \Carbon\Carbon::parse($a->violation_anec_date)->format('Y-m-d') }}</td>
+          <td>{{ \Carbon\Carbon::parse($a->violation_anec_time)->format('h:i A') }}</td>
           <td>
-            <button class="btn btn-info"><i class="fas fa-info-circle"></i> Info</button>
-            <button class="btn btn-edit"><i class="fas fa-edit"></i> Edit</button>
-            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+            <button class="btn-action btn-edit" onclick="editRecord({{ $a->violation_anec_id }})"><i class="fas fa-edit"></i></button>
+            <button class="btn-action btn-delete" onclick="deleteRecord({{ $a->violation_anec_id }})"><i class="fas fa-trash"></i></button>
           </td>
         </tr>
+        @empty
+        <tr>
+          <td colspan="8" style="text-align:center;">No anecdotal records found.</td>
+        </tr>
+        @endforelse
       </tbody>
     </table>
   </div>

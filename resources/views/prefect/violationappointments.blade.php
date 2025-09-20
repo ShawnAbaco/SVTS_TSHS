@@ -275,7 +275,7 @@ input, select, textarea { width: 100%; padding: 10px; border-radius: 6px; border
       <button class="btn-delete" onclick="bulkDelete()"><i class="fas fa-trash"></i> Delete</button>
   </div>
 
-  
+
     <div class="card-body">
       <table>
         <thead>
@@ -379,11 +379,26 @@ function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
 // Logout
 function logout() {
-  fetch('/logout', { method:'POST', headers:{ 'X-CSRF-TOKEN':'{{ csrf_token() }}' } })
-  .then(()=> window.location.href='/prefect/login')
-  .catch(err=>console.error('Logout failed', err));
-}
+    const confirmLogout = confirm("Are you sure you want to logout?");
+    if (!confirmLogout) return;
 
+    fetch("{{ route('prefect.logout') }}", {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if(response.ok) {
+            // Redirect to login after successful logout
+            window.location.href = "{{ route('prefect.login') }}";
+        } else {
+            console.error('Logout failed:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Logout failed:', error));
+}
 // Search filter
 document.getElementById('searchInput').addEventListener('keyup', function() {
   let filter = this.value.toLowerCase();

@@ -281,9 +281,14 @@ tr:nth-child(even){ background-color:#f9f9f9; }
         </li>
         <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
         <li><a href="{{ route('adviser.reports') }}" class="active"><i class="fas fa-chart-bar"></i> Reports</a></li>
-        <li><a href="{{ route('profile.settings') }}"><i class="fas fa-cog"></i> Profile Settings</a></li>
-        <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
+<li>
+    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</li>    </ul>
 </nav>
 <div class="main-content">
   <!-- Page Header -->
