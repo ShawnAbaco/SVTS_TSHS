@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class ViolationRecord extends Model
 {
@@ -15,7 +16,10 @@ class ViolationRecord extends Model
         'violation_incident',
         'violation_date',
         'violation_time',
+        'status',
     ];
+
+
 
     // Cast dates/times to Carbon instances
     protected $dates = ['violation_date', 'violation_time', 'created_at', 'updated_at'];

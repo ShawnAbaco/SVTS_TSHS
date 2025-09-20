@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Complaints extends Model
 {
@@ -17,7 +18,11 @@ class Complaints extends Model
         'complaints_incident',
         'complaints_date',
         'complaints_time',
+        'status',
     ];
+
+
+
 
     public function complainant()
     {

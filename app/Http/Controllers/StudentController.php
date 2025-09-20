@@ -13,28 +13,39 @@ class StudentController extends Controller
 {
 public function store(Request $request)
 {
-    $request->validate([
-        'student_fname' => 'required|string',
-        'student_lname' => 'required|string',
-        'student_birthdate' => 'required|date',
-        'student_address' => 'required|string',
-        'student_contactinfo' => 'required|string',
-        'parent_id' => 'required|exists:tbl_parent,parent_id',
+    // Validate incoming request
+    $validated = $request->validate([
+        'student_fname'      => 'required|string|max:255',
+        'student_lname'      => 'required|string|max:255',
+        'student_birthdate'  => 'required|date',
+        'student_address'    => 'required|string|max:500',
+        'student_contactinfo'=> 'required|string|max:50',
+        'parent_id'          => 'required|exists:tbl_parent,parent_id',
+        'student_sex'        => 'nullable|in:Male,Female,Other',
     ]);
 
-    // Assign adviser_id along with other fields
-    $student = Student::create([
-        'parent_id' => $request->parent_id,
-        'student_fname' => $request->student_fname,
-        'student_lname' => $request->student_lname,
-        'student_birthdate' => $request->student_birthdate,
-        'student_address' => $request->student_address,
-        'student_contactinfo' => $request->student_contactinfo,
-        'adviser_id' => auth()->guard('adviser')->id(), // <-- add adviser_id here
-    ]);
+    try {
+        // Create student record
+        $student = Student::create([
+            'parent_id'        => $validated['parent_id'],
+            'student_fname'    => $validated['student_fname'],
+            'student_lname'    => $validated['student_lname'],
+            'student_birthdate'=> $validated['student_birthdate'],
+            'student_address'  => $validated['student_address'],
+            'student_contactinfo'=> $validated['student_contactinfo'],
+            'adviser_id'       => auth()->guard('adviser')->id(), // ensure adviser is authenticated
+            'student_sex'      => $validated['student_sex'] ?? null,
+        ]);
 
-    return redirect()->back()->with('success', 'Student created successfully!');
+        return redirect()->back()->with('success', 'Student created successfully!');
+    } catch (\Exception $e) {
+        // Log the error for debugging
+        \Log::error('Student creation failed: '.$e->getMessage());
+
+        return redirect()->back()->with('error', 'Failed to create student. Please try again.');
+    }
 }
+
 
  public function parentsearch(Request $request)
     {
@@ -49,7 +60,7 @@ public function store(Request $request)
             ->get();
 
         return response()->json($parents);
-    } 
+    }
 
     public function update(Request $request, $id)
     {

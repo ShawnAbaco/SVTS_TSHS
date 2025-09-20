@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 
 class PrefectOfDiscipline extends Authenticatable
 {
@@ -12,10 +13,14 @@ class PrefectOfDiscipline extends Authenticatable
     protected $fillable = [
         'prefect_fname',
         'prefect_lname',
+        'prefect_sex',
         'prefect_email',
         'prefect_password',
         'prefect_contactinfo',
+        'status',
     ];
+
+
 
     protected $hidden = [
         'prefect_password',

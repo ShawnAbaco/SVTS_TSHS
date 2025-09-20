@@ -18,9 +18,11 @@ return new class extends Migration
             $table->bigIncrements('prefect_id');
             $table->string('prefect_fname', 255);
             $table->string('prefect_lname', 255);
+            $table->enum('prefect_sex', ['male', 'female', 'other'])->nullable();
             $table->string('prefect_email', 255);
             $table->string('prefect_password', 255);
             $table->string('prefect_contactinfo', 255);
+            $table->string('status', 50)->default('active');
             $table->timestamps();
         });
 
@@ -42,11 +44,13 @@ return new class extends Migration
             $table->bigIncrements('adviser_id');
             $table->string('adviser_fname', 255);
             $table->string('adviser_lname', 255);
+            $table->enum('adviser_sex', ['male', 'female', 'other'])->nullable();
             $table->string('adviser_email', 255);
             $table->string('adviser_password', 255);
             $table->string('adviser_contactinfo', 255);
             $table->string('adviser_section', 255);
             $table->string('adviser_gradelevel', 50);
+            $table->string('status', 50)->default('active');
             $table->timestamps();
         });
 
@@ -57,8 +61,12 @@ return new class extends Migration
             $table->bigIncrements('parent_id');
             $table->string('parent_fname', 255);
             $table->string('parent_lname', 255);
+            $table->enum('parent_sex', ['male', 'female', 'other'])->nullable();
             $table->date('parent_birthdate');
+            $table->string('parent_email', 255)->nullable();
             $table->string('parent_contactinfo', 255);
+            $table->string('parent_relationship', 50)->nullable();
+            $table->string('status', 50)->default('active');
             $table->timestamps();
         });
 
@@ -71,9 +79,11 @@ return new class extends Migration
             $table->unsignedBigInteger('adviser_id');
             $table->string('student_fname', 255);
             $table->string('student_lname', 255);
+            $table->enum('student_sex', ['male', 'female', 'other'])->nullable();
             $table->date('student_birthdate');
             $table->string('student_address', 255);
             $table->string('student_contactinfo', 255);
+            $table->string('status', 50)->default('active');
             $table->timestamps();
 
             $table->foreign('parent_id')->references('parent_id')->on('tbl_parent')->onDelete('cascade');
@@ -91,6 +101,7 @@ return new class extends Migration
             $table->text('violation_incident');
             $table->date('violation_date');
             $table->time('violation_time');
+            $table->string('status', 50)->default('active');
             $table->timestamps();
 
             $table->foreign('violator_id')->references('student_id')->on('tbl_student')->onDelete('cascade');
@@ -107,6 +118,7 @@ return new class extends Migration
             $table->date('violation_app_date');
             $table->time('violation_app_time');
             $table->string('violation_app_status', 100);
+            $table->string('status', 50)->default('active');
             $table->timestamps();
 
             $table->foreign('violation_id')->references('violation_id')->on('tbl_violation_record')->onDelete('cascade');
@@ -122,6 +134,7 @@ return new class extends Migration
             $table->text('violation_anec_recommendation');
             $table->date('violation_anec_date');
             $table->time('violation_anec_time');
+            $table->string('status', 50)->default('active');
             $table->timestamps();
 
             $table->foreign('violation_id')->references('violation_id')->on('tbl_violation_record')->onDelete('cascade');
@@ -139,6 +152,7 @@ return new class extends Migration
             $table->text('complaints_incident');
             $table->date('complaints_date');
             $table->time('complaints_time');
+            $table->string('status', 50)->default('active');
             $table->timestamps();
 
             $table->foreign('complainant_id')->references('student_id')->on('tbl_student')->onDelete('cascade');
@@ -156,6 +170,7 @@ return new class extends Migration
             $table->date('comp_app_date');
             $table->time('comp_app_time');
             $table->string('comp_app_status', 100);
+            $table->string('status', 50)->default('active');
             $table->timestamps();
 
             $table->foreign('complaints_id')->references('complaints_id')->on('tbl_complaints')->onDelete('cascade');
@@ -171,6 +186,7 @@ return new class extends Migration
             $table->text('comp_anec_recommendation');
             $table->date('comp_anec_date');
             $table->time('comp_anec_time');
+            $table->string('status', 50)->default('active');
             $table->timestamps();
 
             $table->foreign('complaints_id')->references('complaints_id')->on('tbl_complaints')->onDelete('cascade');

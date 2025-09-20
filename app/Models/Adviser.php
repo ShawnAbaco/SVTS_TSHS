@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 
 class Adviser extends Authenticatable
 {
@@ -12,12 +13,17 @@ class Adviser extends Authenticatable
     protected $fillable = [
         'adviser_fname',
         'adviser_lname',
+        'adviser_sex',
         'adviser_email',
         'adviser_password',
         'adviser_contactinfo',
         'adviser_section',
         'adviser_gradelevel',
+        'status',
+
     ];
+
+
 
     protected $hidden = [
         'adviser_password',

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Student extends Model
 {
@@ -14,10 +15,14 @@ class Student extends Model
         'adviser_id',
         'student_fname',
         'student_lname',
+        'student_sex',
         'student_birthdate',
         'student_address',
         'student_contactinfo',
+        'status',
     ];
+
+
 
     public function parent()
     {

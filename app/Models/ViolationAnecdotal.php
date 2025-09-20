@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class ViolationAnecdotal extends Model
 {
@@ -14,7 +15,10 @@ class ViolationAnecdotal extends Model
         'violation_anec_recommendation',
         'violation_anec_date',
         'violation_anec_time',
+        'status',
     ];
+
+
 
     // Cast dates/times to Carbon instances
     protected $dates = ['violation_anec_date', 'violation_anec_time', 'created_at', 'updated_at'];

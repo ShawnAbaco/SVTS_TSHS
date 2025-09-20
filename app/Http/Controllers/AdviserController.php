@@ -56,38 +56,62 @@ class AdviserController extends Controller
 
         return view('adviser.dashboard', compact('studentsCount','violationsCount','complaintsCount'));
     }
-
-    public function studentlist()
-    {
-        $adviserId = Auth::guard('adviser')->id();
-        $students = Student::where('adviser_id', $adviserId)->with('parent')->get();
-
-        return view('adviser.studentlist', compact('students'));
-    }
-
-    public function parentlist()
+public function studentlist()
 {
-    // Get all parents with their students
-    $parents = \App\Models\ParentModel::with('students')->get();
+    $adviserId = Auth::guard('adviser')->id();
+
+    // Get students assigned to this adviser, with their parent
+    $students = \App\Models\Student::where('adviser_id', $adviserId)
+        ->with('parent') // Load parent relation
+        ->with('adviser') // Load adviser relation
+        ->get();
+
+    // Get all advisers (for dropdown in edit modal)
+    $advisers = \App\Models\Adviser::where('status', 'active')->get();
+
+    // Pass students and advisers to the view
+    return view('adviser.studentlist', compact('students', 'advisers'));
+}
+
+
+
+public function parentlist()
+{
+    $allParents = \App\Models\ParentModel::with('students')->get();
+
+    $parents = [
+        'active' => $allParents->where('status', 'active'),
+        'inactive' => $allParents->where('status', 'inactive'),
+    ];
 
     return view('adviser.parentlist', compact('parents'));
 }
 
 
+
 // Display violation records
     public function violationrecord()
-    {
-        $adviserId = Auth::guard('adviser')->id();
+{
+    $adviserId = Auth::guard('adviser')->id();
 
-        $violations = ViolationRecord::with(['student', 'offense'])
-            ->whereHas('student', fn($q) => $q->where('adviser_id', $adviserId))
-            ->get();
+    // Get only active violations of students under this adviser
+    $violations = ViolationRecord::with(['student', 'offense'])
+        ->where('status', 'active') // ✅ filter by status since your migration has this column
+        ->whereHas('student', function ($q) use ($adviserId) {
+            $q->where('adviser_id', $adviserId);
+        })
+        ->get();
 
-        $students = Student::where('adviser_id', $adviserId)->get();
-        $offenses = OffensesWithSanction::all();
+    // Get only active students assigned to this adviser
+    $students = Student::where('adviser_id', $adviserId)
+        ->where('status', 'active')
+        ->get();
 
-        return view('adviser.violationrecord', compact('violations', 'students', 'offenses'));
-    }
+    // Get all offenses (no status column, so we fetch all)
+    $offenses = OffensesWithSanction::all();
+
+    return view('adviser.violationrecord', compact('violations', 'students', 'offenses'));
+}
 
    public function violationappointment()
 {

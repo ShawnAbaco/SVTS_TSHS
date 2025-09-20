@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class OffensesWithSanction extends Model
 {
@@ -14,6 +15,9 @@ class OffensesWithSanction extends Model
         'offense_description',
         'sanction_consequences',
     ];
+
+
+
 
     public function violations()
     {
