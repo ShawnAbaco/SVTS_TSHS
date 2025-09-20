@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
-use App\Models\ParentModel; 
+use App\Models\ParentModel;
 use App\Models\ViolationRecord;
 use App\Models\ViolationAppointment;
 use App\Models\ViolationAnecdotal;
@@ -165,7 +165,7 @@ public function complaintsappointment()
         ->get();
 
     return view('adviser.complaintsanecdotal', compact('anecdotal'));
-} 
+}
 
     public function offensesanction()
     {
@@ -175,6 +175,7 @@ public function complaintsappointment()
 
     public function reports()
     {
+        
         $adviserId = Auth::guard('adviser')->id();
         $students = Student::where('adviser_id', $adviserId)->with('violations')->get();
 
