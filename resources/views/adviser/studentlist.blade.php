@@ -340,26 +340,6 @@
       font-weight: 600;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .btn-trash-small {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease;
-}
-.btn-trash-small:hover {
-  background-color: #a71d2a;
-}
-.btn-trash-small i {
-  font-size: 12px;
-}
-
       </style>
 
 
@@ -400,148 +380,22 @@
     </a>
 </li>    </ul>
   </nav>
-<!-- MAIN CONTENT -->
-<main class="main-content">
-  <div class="toolbar">
-    <h1>Student List</h1>
-    <div class="toolbar-actions">
-      <input id="tableSearch" type="search" placeholder="Search students...">
-      <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Create Student</button>
-      <button class="btn-archive"><i class="fas fa-archive"></i> Archives</button>
-    </div>
-  </div>
 
-  <table id="studentTable">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Sex</th>
-        <th>Birthdate</th>
-        <th>Address</th>
-        <th>Contact#</th>
-        <th>Adviser</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach($students as $student)
-      <tr
-    data-id="{{ $student->student_id }}"
-    data-fname="{{ $student->student_fname }}"
-    data-lname="{{ $student->student_lname }}"
-    data-sex="{{ $student->student_sex }}"
-    data-birthdate="{{ $student->student_birthdate }}"
-    data-address="{{ $student->student_address }}"
-    data-contact="{{ $student->student_contactinfo }}"
-    data-parent-name="{{ $student->parent ? $student->parent->parent_fname . ' ' . $student->parent->parent_lname : '' }}"
-    data-parent-relationship="{{ $student->parent ? $student->parent->parent_relationship : '' }}"
-    data-parent-contact="{{ $student->parent ? $student->parent->parent_contactinfo : '' }}"
-    data-parent-id="{{ $student->parent ? $student->parent->parent_id : '' }}"
-    data-adviser-id="{{ $student->adviser ? $student->adviser->adviser_id : '' }}"
->
-
-        <td>{{ $student->student_fname . ' ' . $student->student_lname }}</td>
-        <td>{{ ucfirst($student->student_sex ?? '-') }}</td>
-        <td>{{ $student->student_birthdate }}</td>
-        <td>{{ $student->student_address }}</td>
-        <td>{{ $student->student_contactinfo }}</td>
-        <td>{{ $student->adviser ? $student->adviser->adviser_fname . ' ' . $student->adviser->adviser_lname : '-' }}</td>
-        <td>
-          <button class="action-btn info"><i class="fas fa-info-circle"></i> Info</button>
-          <button class="action-btn edit"><i class="fas fa-edit"></i> Edit</button>
-          <form method="POST" action="{{ route('students.destroy', $student->student_id) }}" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i> Delete</button>
-          </form>
-        </td>
-      </tr>
-      @endforeach
-    </tbody>
-  </table>
-</main>
-
-<!-- CREATE STUDENT MODAL -->
-<div class="modal" id="createStudentModal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeModalBtn">&times;</span>
-    <div class="modal-header">Create Student Information</div>
-
-    <form id="studentForm" method="POST" action="{{ route('students.store') }}">
-      @csrf
-
-      <div class="form-group">
-        <label>First Name</label>
-        <input type="text" name="student_fname" required pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
-      </div>
-
-      <div class="form-group">
-        <label>Last Name</label>
-        <input type="text" name="student_lname" required pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
-      </div>
-
-      <div class="form-group">
-        <label>Sex</label>
-        <select name="student_sex" required>
-          <option value="">Select Sex</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Birthdate</label>
-        <input type="date" name="student_birthdate" required max="<?php echo date('Y-m-d'); ?>" title="Birthdate cannot be in the future">
-      </div>
-
-      <div class="form-group">
-        <label>Address</label>
-        <input type="text" name="student_address" required pattern="^[A-Za-z0-9\s.,#/-]+$" title="Only letters, numbers, spaces, commas, periods, hyphens, #, and / are allowed.">
-      </div>
-
-      <div class="form-group">
-        <label>Contact Info</label>
-        <input type="text" name="student_contactinfo" required pattern="[0-9]{11}" title="Contact number must be 11 digits (e.g. 09123456789)">
-      </div>
-
-      <hr>
-
-      <div class="form-group">
-        <label for="parent_search">Parent</label>
-        <input type="text" id="parent_search" class="form-control" placeholder="Type parent name...">
-        <input type="hidden" id="parent_id" name="parent_id">
-        <div id="parentList" class="list-group mt-1" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
-      </div>
-
-      <div class="form-group">
-        <label>Adviser</label>
-        <select name="adviser_id" required>
-          <option value="">Select Adviser</option>
-          @foreach($advisers as $adviser)
-            <option value="{{ $adviser->adviser_id }}">{{ $adviser->adviser_fname . ' ' . $adviser->adviser_lname }} ({{ $adviser->adviser_section }})</option>
-          @endforeach
-        </select>
-      </div>
-
-      <div class="modal-footer">
-        <button type="submit" class="btn-submit">Create Student</button>
-      </div>
-    </form>
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+ <div class="toolbar">
+  <h1>Student List</h1>
+  <div class="toolbar-actions">
+    <input id="tableSearch" type="search" placeholder="Search students...">
+    <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Create Student</button>
+    <button class="btn-archive"><i class="fas fa-archive"></i> Archives</button>
   </div>
 </div>
 
 
-<<<<<<< HEAD
-=======
     <table id="studentTable">
       <thead>
         <tr>
-           <th style="text-align: center;">
-      <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-        <input type="checkbox" id="selectAll">
-        <button class="btn-trash-small" title="Delete Selected">
-          <i class="fas fa-trash"></i>
           <th>Name</th>
           <th>Birthdate</th>
           <th>Address</th>
@@ -550,7 +404,6 @@
         </tr>
       </thead>
       <tbody>
-        
         @foreach($students as $student)
         <tr
             data-id="{{ $student->student_id }}"
@@ -563,8 +416,6 @@
             data-parent-contact="{{ $student->parent ? $student->parent->parent_contactinfo : '' }}"
             data-parent-id="{{ $student->parent ? $student->parent->parent_id : '' }}"
         >
-        <td><input type="checkbox" class="rowCheckbox" value="{{ $student->student_id }}"></td>
-
           <td>{{ $student->student_fname . " " . $student->student_lname }}</td>
           <td>{{ $student->student_birthdate }}</td>
           <td>{{ $student->student_address }}</td>
@@ -583,320 +434,90 @@
         </tbody>
       </table>
     </main>
-<!-- ARCHIVE MODAL -->
-<div class="modal" id="archiveModal">
-  <div class="modal-content" style="width: 850px; max-height: 90vh; overflow-y: auto;">
-    <span class="close-btn" id="closeArchiveModalBtn">&times;</span>
-    <div class="modal-header">Archived Students</div>
 
-    <!-- 🔍 Archive Search -->
-    <input type="text" id="archiveSearch" placeholder="Search archived students..." 
-           style="width:100%; padding:8px; margin:10px 0; border:1px solid #ccc; border-radius:5px;">
+  <!-- CREATE STUDENT MODAL -->
+  <div class="modal" id="createStudentModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModalBtn">&times;</span>
+      <div class="modal-header">Create Student Information</div>
 
-    <!-- 🟢 Restore All Button -->
-    <button id="restoreAllBtn" 
-            style="margin-bottom:10px; padding:8px 12px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">
-      <i class="fas fa-undo"></i> Restore All
-    </button>
+      <form id="studentForm" method="POST" action="{{ route('students.store') }}">
+        @csrf
 
-    <table id="archiveTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Birthdate</th>
-          <th>Address</th>
-          <th>Contact#</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Filled dynamically -->
-      </tbody>
-    </table>
+        <div class="form-group">
+    <label>First Name</label>
+    <input type="text" name="student_fname" required
+          pattern="[A-Za-z\s]+"
+          title="Only letters and spaces are allowed">
   </div>
-</div>
 
->>>>>>> 7f659179386581912d84155f915df185ee051ec3
+  <div class="form-group">
+    <label>Last Name</label>
+    <input type="text" name="student_lname" required
+          pattern="[A-Za-z\s]+"
+          title="Only letters and spaces are allowed">
+  </div>
 
-<!-- INFO MODAL -->
-<div class="modal" id="infoModal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeInfoModalBtn">&times;</span>
-    <div class="modal-header">Student & Parent/Guardian Info</div>
+        <div class="form-group">
+    <label>Birthdate</label>
+    <input type="date" name="student_birthdate" required
+          max="<?php echo date('Y-m-d'); ?>"
+          title="Birthdate cannot be in the future">
+  </div>
 
-    <div class="form-group">
-      <label>Student Name:</label>
-      <p id="infoStudentName"></p>
-    </div>
+  <div class="form-group">
+    <label>Address</label>
+    <input type="text" name="student_address" required
+          pattern="^[A-Za-z0-9\s.,#/-]+$"
+          title="Only letters, numbers, spaces, commas, periods, hyphens, #, and / are allowed.">
+  </div>
 
-    <div class="form-group">
-      <label>Sex:</label>
-      <p id="infoStudentSex"></p>
-    </div>
 
-    <div class="form-group">
-      <label>Contact:</label>
-      <p id="infoStudentContact"></p>
-    </div>
 
-    <hr>
+  <div class="form-group">
+    <label>Contact Info</label>
+    <input type="text" name="student_contactinfo" required
+          pattern="[0-9]{11}"
+          title="Contact number must be 11 digits (e.g. 09123456789)">
+  </div>
 
-    <div class="form-group">
-      <label>Parent/Guardian Name:</label>
-      <p id="infoGuardianName"></p>
-    </div>
+        <hr>
 
-    <div class="form-group">
-      <label>Relationship:</label>
-      <p id="infoGuardianRelationship"></p>
-    </div>
+        <div class="form-group">
+          <label for="parent_search">Parent</label>
+          <input type="text" id="parent_search" class="form-control" placeholder="Type parent name...">
+          <input type="hidden" id="parent_id" name="parent_id">
+          <div id="parentList" class="list-group mt-1" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
+        </div>
 
-    <div class="form-group">
-      <label>Parent/Guardian Contact:</label>
-      <p id="infoGuardianContact"></p>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="btn-submit" id="sendSMSBtn">Send SMS</button>
+        <div class="modal-footer">
+          <button type="submit" class="btn-submit">Create Student</button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
 
-<!-- EDIT STUDENT MODAL -->
-<div class="modal" id="editStudentModal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeEditModalBtn">&times;</span>
-    <div class="modal-header">Edit Student Information</div>
-    <form id="editStudentForm" method="POST">
-      @csrf
-      @method('PUT')
-      <input type="hidden" name="id" id="editStudentId">
+  <!-- INFO MODAL -->
+  <div class="modal" id="infoModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeInfoModalBtn">&times;</span>
+      <div class="modal-header">Parent / Guardian Information</div>
 
       <div class="form-group">
-        <label>First Name</label>
-        <input type="text" name="student_fname" id="editStudentFname" required>
+        <label>Parent/Guardian Name:</label>
+        <p><strong id="infoGuardianName"></strong></p>
       </div>
-
       <div class="form-group">
-        <label>Last Name</label>
-        <input type="text" name="student_lname" id="editStudentLname" required>
-      </div>
-
-      <div class="form-group">
-        <label>Sex</label>
-        <select name="student_sex" id="editStudentSex" required>
-          <option value="">Select Sex</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Birthdate</label>
-        <input type="date" name="student_birthdate" id="editStudentBirthdate" required>
-      </div>
-
-      <div class="form-group">
-        <label>Address</label>
-        <input type="text" name="student_address" id="editStudentAddress" required>
-      </div>
-
-      <div class="form-group">
-        <label>Contact Info</label>
-        <input type="text" name="student_contactinfo" id="editStudentContact" required>
-      </div>
-
-      <hr>
-
-      <div class="form-group">
-        <label for="edit_parent_search">Parent / Guardian</label>
-        <input type="text" id="edit_parent_search" class="form-control" placeholder="Type parent name..." required>
-        <input type="hidden" id="edit_parent_id" name="parent_id">
-        <div id="editParentList" class="list-group mt-1" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
-      </div>
-
-      <div class="form-group">
-        <label>Adviser</label>
-        <select name="adviser_id" id="editAdviserId" required>
-          <option value="">Select Adviser</option>
-          @foreach($advisers as $adviser)
-            <option value="{{ $adviser->adviser_id }}">{{ $adviser->adviser_fname . ' ' . $adviser->adviser_lname }} ({{ $adviser->adviser_section }})</option>
-          @endforeach
-        </select>
+        <label>Contact Number:</label>
+        <p><strong id="infoGuardianContact"></strong></p>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn-submit">Update Student</button>
+        <button id="sendSMSBtn" class="btn-submit"><i class="fas fa-sms"></i> Send SMS</button>
       </div>
-    </form>
+    </div>
   </div>
-</div><script>
-// --- DROPDOWN FUNCTIONALITY ---
-document.querySelectorAll('.dropdown-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-        e.preventDefault();
-        const container = btn.nextElementSibling;
 
-<<<<<<< HEAD
-        // Close other dropdowns
-        document.querySelectorAll('.dropdown-btn').forEach(otherBtn => {
-            if (otherBtn !== btn) {
-                otherBtn.nextElementSibling?.classList.remove('show');
-                otherBtn.querySelector('.fa-caret-down')?.style.setProperty('transform', 'rotate(0deg)');
-            }
-        });
-
-        // Toggle clicked dropdown
-        container?.classList.toggle('show');
-        btn.querySelector('.fa-caret-down')?.style.setProperty(
-            'transform',
-            container?.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)'
-        );
-
-        if(container?.classList.contains('show')) container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    });
-});
-
-// --- SIDEBAR ACTIVE LINK ---
-document.querySelectorAll('.sidebar a').forEach(link => {
-    link.addEventListener('click', () => {
-        document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-    });
-});
-
-// --- MODALS ---
-const modals = {
-    create: document.getElementById('createStudentModal'),
-    edit: document.getElementById('editStudentModal'),
-    info: document.getElementById('infoModal')
-};
-
-const modalButtons = {
-    openCreate: document.getElementById('openModalBtn'),
-    closeCreate: document.getElementById('closeModalBtn'),
-    closeEdit: document.getElementById('closeEditModalBtn'),
-    closeInfo: document.getElementById('closeInfoModalBtn'),
-    sendSMS: document.getElementById('sendSMSBtn')
-};
-
-// OPEN / CLOSE MODALS
-modalButtons.openCreate?.addEventListener('click', () => modals.create.style.display = 'flex');
-modalButtons.closeCreate?.addEventListener('click', () => modals.create.style.display = 'none');
-modalButtons.closeEdit?.addEventListener('click', () => modals.edit.style.display = 'none');
-modalButtons.closeInfo?.addEventListener('click', () => modals.info.style.display = 'none');
-
-window.addEventListener('click', e => {
-    Object.values(modals).forEach(modal => {
-        if(e.target === modal) modal.style.display = 'none';
-    });
-});
-
-// --- TABLE SEARCH (LIVE) ---
-document.getElementById('tableSearch')?.addEventListener('input', function() {
-    const q = this.value.trim().toLowerCase();
-    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
-    });
-});
-// --- INFO MODAL BUTTON ---
-document.querySelectorAll('.info').forEach(btn => {
-    btn.addEventListener('click', e => {
-        const row = e.target.closest('tr');
-        if (!row) return;
-        const data = row.dataset;
-
-        // Fill info modal fields
-        document.getElementById('infoStudentName').innerText = `${data.fname} ${data.lname}` || '-';
-        document.getElementById('infoStudentSex').innerText = data.sex ? data.sex.charAt(0).toUpperCase() + data.sex.slice(1) : '-';
-        document.getElementById('infoStudentContact').innerText = data.contact || '-';
-
-        document.getElementById('infoGuardianName').innerText = data.parentName || '-';
-        document.getElementById('infoGuardianRelationship').innerText = data.parentRelationship || '-';
-        document.getElementById('infoGuardianContact').innerText = data.parentContact || '-';
-
-        // Show modal
-        modals.info.style.display = 'flex';
-
-        // SMS button
-        const oldBtn = document.getElementById('sendSMSBtn');
-        oldBtn.replaceWith(oldBtn.cloneNode(true));
-        document.getElementById('sendSMSBtn').addEventListener('click', () => {
-            alert(`📩 SMS will be sent to ${data.parentName} (${data.parentContact})`);
-        });
-    });
-});
-
-// --- EDIT BUTTON ---
-document.querySelectorAll('.edit').forEach(btn => {
-    btn.addEventListener('click', e => {
-        const row = e.target.closest('tr');
-        if (!row) return;
-        const data = row.dataset;
-
-        document.getElementById('editStudentId').value = data.id;
-        document.getElementById('editStudentFname').value = data.fname;
-        document.getElementById('editStudentLname').value = data.lname;
-        document.getElementById('editStudentSex').value = data.sex;
-        document.getElementById('editStudentBirthdate').value = data.birthdate;
-        document.getElementById('editStudentAddress').value = data.address;
-        document.getElementById('editStudentContact').value = data.contact;
-        document.getElementById('edit_parent_id').value = data.parentId;
-        document.getElementById('edit_parent_search').value = data.parentName;
-        document.getElementById('editAdviserId').value = data.adviserId;
-
-        // Show edit modal
-        modals.edit.style.display = 'flex';
-    });
-});
-
-
-
-// --- LIVE SEARCH PARENT (CREATE) ---
-function setupParentSearch(inputId, listId, hiddenId) {
-    const input = document.getElementById(inputId);
-    const list = document.getElementById(listId);
-    input?.addEventListener('keyup', function() {
-        const query = this.value.trim();
-        if(query.length < 2) {
-            list.style.display = 'none';
-            list.innerHTML = '';
-            return;
-        }
-        fetch(`{{ route('adviser.parentsearch') }}?query=${encodeURIComponent(query)}`)
-            .then(res => res.json())
-            .then(data => {
-                let html = '';
-                data.forEach(p => {
-                    const name = p.parent_name.replace(/'/g, "\\'");
-                    html += `<div class="dropdown-results-item" onclick="selectParentItem(${p.parent_id}, '${name}', '${inputId}', '${hiddenId}', '${listId}')">${p.parent_name}</div>`;
-                });
-                list.innerHTML = html;
-                list.style.display = 'block';
-            });
-    });
-}
-
-function selectParentItem(id, name, inputId, hiddenId, listId) {
-    document.getElementById(hiddenId).value = id;
-    document.getElementById(inputId).value = name;
-    document.getElementById(listId).style.display = 'none';
-}
-
-// Initialize parent search for both modals
-setupParentSearch('parent_search', 'parentList', 'parent_id');
-setupParentSearch('edit_parent_search', 'editParentList', 'edit_parent_id');
-
-// --- LOGOUT ---
-function logout() {
-    if(confirm('Are you sure you want to log out?')) {
-        window.location.href = '/adviser/login';
-    }
-}
-</script>
-
-=======
   <!-- EDIT MODAL -->
   <div class="modal" id="editStudentModal">
     <div class="modal-content">
@@ -945,316 +566,180 @@ function logout() {
   </div>
 
   <script>
-   // --- SELECT ALL CHECKBOX ---
-document.getElementById('selectAll').addEventListener('change', function () {
-  const checkboxes = document.querySelectorAll('.rowCheckbox');
-  checkboxes.forEach(cb => cb.checked = this.checked);
-});
+  // Dropdown functionality - auto close others & scroll
+  const dropdowns = document.querySelectorAll('.dropdown-btn');
+  dropdowns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+          e.preventDefault();
 
-// Dropdown functionality - auto close others & scroll
-const dropdowns = document.querySelectorAll('.dropdown-btn');
-dropdowns.forEach(btn => {
-  btn.addEventListener('click', function(e) {
-    e.preventDefault();
+          // close all other dropdowns
+          dropdowns.forEach(otherBtn => {
+              if (otherBtn !== this) {
+                  otherBtn.nextElementSibling.classList.remove('show');
+                  otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+              }
+          });
 
-    // close all other dropdowns
-    dropdowns.forEach(otherBtn => {
-      if (otherBtn !== this) {
-        otherBtn.nextElementSibling.classList.remove('show');
-        otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
-      }
+          // toggle clicked dropdown
+          const container = this.nextElementSibling;
+          container.classList.toggle('show');
+          this.querySelector('.fa-caret-down').style.transform =
+              container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+
+          // scroll into view if dropdown is opened
+          if(container.classList.contains('show')){
+              container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+      });
+  });
+
+
+
+
+  document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', function(){
+          document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+      });// Sidebar active link
+  });
+
+  const openModalBtn = document.getElementById('openModalBtn');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const modal = document.getElementById('createStudentModal');
+
+  const editModal = document.getElementById('editStudentModal');
+  const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+
+  const infoModal = document.getElementById('infoModal');
+  const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
+  const sendSMSBtn = document.getElementById('sendSMSBtn');
+
+  // TABLE SEARCH (LIVE) - filters student table rows only
+  const tableSearch = document.getElementById('tableSearch');
+  if (tableSearch) {
+    tableSearch.addEventListener('input', function() {
+      const q = this.value.trim().toLowerCase();
+      document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+        // only check cell text, not attributes — matches visible table content
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+      });
     });
+  }
 
-    // toggle clicked dropdown
-    const container = this.nextElementSibling;
-    container.classList.toggle('show');
-    this.querySelector('.fa-caret-down').style.transform =
-      container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+  // OPEN / CLOSE MODALS
+  openModalBtn.addEventListener('click', () => modal.style.display = 'flex');
+  closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+  closeEditModalBtn.addEventListener('click', () => editModal.style.display = 'none');
+  closeInfoModalBtn.addEventListener('click', () => infoModal.style.display = 'none');
 
-    // scroll into view if dropdown is opened
-    if(container.classList.contains('show')){
-      container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // Close modals when clicking outside
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+    if (e.target === editModal) editModal.style.display = 'none';
+    if (e.target === infoModal) infoModal.style.display = 'none';
+  });
+
+  // EDIT MODAL
+  document.querySelectorAll('.edit').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const row = e.target.closest('tr');
+      const studentId = row.dataset.id;
+
+      document.getElementById('editStudentId').value = studentId;
+      document.getElementById('editStudentFname').value = row.dataset.fname;
+      document.getElementById('editStudentLname').value = row.dataset.lname;
+      document.getElementById('editStudentBirthdate').value = row.dataset.birthdate;
+      document.getElementById('editStudentAddress').value = row.dataset.address;
+      document.getElementById('editStudentContact').value = row.dataset.contact;
+
+      document.getElementById('edit_parent_search').value = row.dataset.parentName;
+      document.getElementById('edit_parent_id').value = row.dataset.parentId || '';
+
+      document.getElementById('editStudentForm').action = `/adviser/students/${studentId}`;
+      editModal.style.display = 'flex';
+    });
+  });
+
+  // INFO BUTTON
+  document.querySelectorAll('.info').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const row = e.target.closest('tr');
+      const guardianName = row.dataset.parentName;
+      const guardianContact = row.dataset.parentContact;
+
+      document.getElementById('infoGuardianName').innerText = guardianName;
+      document.getElementById('infoGuardianContact').innerText = guardianContact;
+
+      infoModal.style.display = 'flex';
+
+      sendSMSBtn.onclick = () => {
+        alert(`📩 SMS will be sent to ${guardianName} (${guardianContact})`);
+      };
+    });
+  });
+
+  // LIVE SEARCH PARENT (Create)
+  document.getElementById('parent_search').addEventListener('keyup', function() {
+    let query = this.value;
+    if(query.length < 2){
+      document.getElementById('parentList').style.display = 'none';
+      document.getElementById('parentList').innerHTML = '';
+      return;
     }
+    fetch(`{{ route('adviser.parentsearch') }}?query=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        let results = '';
+        data.forEach(parent => {
+          // sanitize name when injecting
+          const name = parent.parent_name.replace(/'/g, "\\'");
+          results += `<div class="dropdown-results-item" onclick="selectParent(${parent.parent_id}, '${name}')">${parent.parent_name}</div>`;
+        });
+        document.getElementById('parentList').innerHTML = results;
+        document.getElementById('parentList').style.display = 'block';
+      });
   });
-});
 
-document.querySelectorAll('.sidebar a').forEach(link => {
-  link.addEventListener('click', function(){
-    document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
-    this.classList.add('active');
-  });// Sidebar active link
-});
-
-const openModalBtn = document.getElementById('openModalBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const modal = document.getElementById('createStudentModal');
-
-const editModal = document.getElementById('editStudentModal');
-const closeEditModalBtn = document.getElementById('closeEditModalBtn');
-
-const infoModal = document.getElementById('infoModal');
-const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
-const sendSMSBtn = document.getElementById('sendSMSBtn');
-
-// TABLE SEARCH (LIVE) - filters student table rows only
-const tableSearch = document.getElementById('tableSearch');
-if (tableSearch) {
-  tableSearch.addEventListener('input', function() {
-    const q = this.value.trim().toLowerCase();
-    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(q) ? '' : 'none';
-    });
-  });
-}
-
-// OPEN / CLOSE MODALS
-openModalBtn.addEventListener('click', () => modal.style.display = 'flex');
-closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
-closeEditModalBtn.addEventListener('click', () => editModal.style.display = 'none');
-closeInfoModalBtn.addEventListener('click', () => infoModal.style.display = 'none');
-
-// Close modals when clicking outside
-window.addEventListener('click', (e) => {
-  if (e.target === modal) modal.style.display = 'none';
-  if (e.target === editModal) editModal.style.display = 'none';
-  if (e.target === infoModal) infoModal.style.display = 'none';
-});
-
-// EDIT MODAL
-document.querySelectorAll('.edit').forEach(button => {
-  button.addEventListener('click', (e) => {
-    const row = e.target.closest('tr');
-    const studentId = row.dataset.id;
-
-    document.getElementById('editStudentId').value = studentId;
-    document.getElementById('editStudentFname').value = row.dataset.fname;
-    document.getElementById('editStudentLname').value = row.dataset.lname;
-    document.getElementById('editStudentBirthdate').value = row.dataset.birthdate;
-    document.getElementById('editStudentAddress').value = row.dataset.address;
-    document.getElementById('editStudentContact').value = row.dataset.contact;
-
-    document.getElementById('edit_parent_search').value = row.dataset.parentName;
-    document.getElementById('edit_parent_id').value = row.dataset.parentId || '';
-
-    document.getElementById('editStudentForm').action = `/adviser/students/${studentId}`;
-    editModal.style.display = 'flex';
-  });
-});
-
-// INFO BUTTON
-document.querySelectorAll('.info').forEach(button => {
-  button.addEventListener('click', (e) => {
-    const row = e.target.closest('tr');
-    const guardianName = row.dataset.parentName;
-    const guardianContact = row.dataset.parentContact;
-
-    document.getElementById('infoGuardianName').innerText = guardianName;
-    document.getElementById('infoGuardianContact').innerText = guardianContact;
-
-    infoModal.style.display = 'flex';
-
-    sendSMSBtn.onclick = () => {
-      alert(`📩 SMS will be sent to ${guardianName} (${guardianContact})`);
-    };
-  });
-});
-
-// LIVE SEARCH PARENT (Create)
-document.getElementById('parent_search').addEventListener('keyup', function() {
-  let query = this.value;
-  if(query.length < 2){
+  function selectParent(id, name){
+    document.getElementById('parent_id').value = id;
+    document.getElementById('parent_search').value = name;
     document.getElementById('parentList').style.display = 'none';
-    document.getElementById('parentList').innerHTML = '';
-    return;
   }
-  fetch(`{{ route('adviser.parentsearch') }}?query=${encodeURIComponent(query)}`)
-    .then(res => res.json())
-    .then(data => {
-      let results = '';
-      data.forEach(parent => {
-        const name = parent.parent_name.replace(/'/g, "\\'");
-        results += `<div class="dropdown-results-item" onclick="selectParent(${parent.parent_id}, '${name}')">${parent.parent_name}</div>`;
-      });
-      document.getElementById('parentList').innerHTML = results;
-      document.getElementById('parentList').style.display = 'block';
-    });
-});
 
-function selectParent(id, name){
-  document.getElementById('parent_id').value = id;
-  document.getElementById('parent_search').value = name;
-  document.getElementById('parentList').style.display = 'none';
-}
-
-// LIVE SEARCH for EDIT MODAL
-document.getElementById('edit_parent_search').addEventListener('keyup', function() {
-  let query = this.value;
-  if(query.length < 2){
-    document.getElementById('editParentList').style.display = 'none';
-    document.getElementById('editParentList').innerHTML = '';
-    return;
-  }
-  fetch(`{{ route('adviser.parentsearch') }}?query=${encodeURIComponent(query)}`)
-    .then(res => res.json())
-    .then(data => {
-      let results = '';
-      data.forEach(parent => {
-        const name = parent.parent_name.replace(/'/g, "\\'");
-        results += `<div class="dropdown-results-item" onclick="selectEditParent(${parent.parent_id}, '${name}')">${parent.parent_name}</div>`;
-      });
-      document.getElementById('editParentList').innerHTML = results;
-      document.getElementById('editParentList').style.display = 'block';
-    });
-});
-
-function selectEditParent(id, name){
-  document.getElementById('edit_parent_id').value = id;
-  document.getElementById('edit_parent_search').value = name;
-  document.getElementById('editParentList').style.display = 'none';
-}
-
-function logout(){
-  if(confirm('Are you sure you want to log out?')){
-    window.location.href = '/adviser/login';
-  }
-}
-
-// --- TRASH BUTTON CONFIRMATION ---
-document.querySelectorAll('.btn-trash-small, .action-btn.delete').forEach(btn => {
-  btn.addEventListener('click', function (e) {
-    const confirmTrash = confirm("🗑️ Are you sure you want to move the selected student(s) to Trash?");
-    if (!confirmTrash) {
-      e.preventDefault();
+  // LIVE SEARCH for EDIT MODAL
+  document.getElementById('edit_parent_search').addEventListener('keyup', function() {
+    let query = this.value;
+    if(query.length < 2){
+      document.getElementById('editParentList').style.display = 'none';
+      document.getElementById('editParentList').innerHTML = '';
+      return;
     }
-  });
-});
-
-// Store archived students
-let archivedStudents = [];
-
-// --- TRASH SELECTED ---
-document.querySelector('.btn-trash-small').addEventListener('click', function () {
-  const selectedRows = document.querySelectorAll('.rowCheckbox:checked');
-  if (selectedRows.length === 0) {
-    alert('⚠️ Please select at least one student to trash.');
-    return;
-  }
-
-  selectedRows.forEach(cb => {
-    const row = cb.closest('tr');
-    const studentData = {
-      name: row.cells[1].innerText,
-      birthdate: row.cells[2].innerText,
-      address: row.cells[3].innerText,
-      contact: row.cells[4].innerText,
-    };
-    archivedStudents.push(studentData);
-    row.remove();
+    fetch(`{{ route('adviser.parentsearch') }}?query=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        let results = '';
+        data.forEach(parent => {
+          const name = parent.parent_name.replace(/'/g, "\\'");
+          results += `<div class="dropdown-results-item" onclick="selectEditParent(${parent.parent_id}, '${name}')">${parent.parent_name}</div>`;
+        });
+        document.getElementById('editParentList').innerHTML = results;
+        document.getElementById('editParentList').style.display = 'block';
+      });
   });
 
-  alert('🗑️ Moved selected students to Archives.');
-});
-
-// --- OPEN ARCHIVE MODAL ---
-document.querySelector('.btn-archive').addEventListener('click', function () {
-  const archiveTableBody = document.querySelector('#archiveTable tbody');
-  archiveTableBody.innerHTML = '';
-
-  if (archivedStudents.length === 0) {
-    archiveTableBody.innerHTML = '<tr><td colspan="5">No archived students yet.</td></tr>';
-  } else {
-    archivedStudents.forEach((student, index) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${student.name}</td>
-        <td>${student.birthdate}</td>
-        <td>${student.address}</td>
-        <td>${student.contact}</td>
-        <td>
-          <button class="restore-btn" data-index="${index}">
-            <i class="fas fa-undo"></i> Restore
-          </button>
-        </td>
-      `;
-      archiveTableBody.appendChild(row);
-    });
+  function selectEditParent(id, name){
+    document.getElementById('edit_parent_id').value = id;
+    document.getElementById('edit_parent_search').value = name;
+    document.getElementById('editParentList').style.display = 'none';
   }
 
-  document.getElementById('archiveModal').style.display = 'flex';
-});
-
-// --- RESTORE ONE ---
-document.querySelector('#archiveTable').addEventListener('click', function(e) {
-  if (e.target.closest('.restore-btn')) {
-    const index = e.target.closest('.restore-btn').dataset.index;
-    const student = archivedStudents[index];
-
-    addStudentRow(student); // helper function
-
-    archivedStudents.splice(index, 1);
-    e.target.closest('tr').remove();
+  function logout(){
+    if(confirm('Are you sure you want to log out?')){
+      window.location.href = '/adviser/login';
+    }
   }
-});
-
-// --- RESTORE ALL ---
-document.getElementById('restoreAllBtn').addEventListener('click', function () {
-  if (archivedStudents.length === 0) {
-    alert("⚠️ No archived students to restore.");
-    return;
-  }
-
-  archivedStudents.forEach(student => {
-    addStudentRow(student);
-  });
-
-  archivedStudents = []; // clear archive
-  document.querySelector('#archiveTable tbody').innerHTML = '<tr><td colspan="5">No archived students yet.</td></tr>';
-
-  alert("✅ All archived students restored!");
-});
-
-// --- ARCHIVE SEARCH ---
-document.getElementById('archiveSearch').addEventListener('input', function () {
-  const q = this.value.trim().toLowerCase();
-  document.querySelectorAll('#archiveTable tbody tr').forEach(row => {
-    const name = row.cells[0]?.innerText.toLowerCase() || "";
-    row.style.display = name.includes(q) ? '' : 'none';
-  });
-});
-
-// --- CLOSE ARCHIVE MODAL ---
-document.getElementById('closeArchiveModalBtn').addEventListener('click', function () {
-  document.getElementById('archiveModal').style.display = 'none';
-});
-
-// Close if clicking outside modal
-window.addEventListener('click', (e) => { 
-  const archiveModal = document.getElementById('archiveModal');
-  if (e.target === archiveModal) archiveModal.style.display = 'none';
-});
-
-// --- HELPER: ADD ROW BACK TO MAIN TABLE ---
-function addStudentRow(student) {
-  const studentTableBody = document.querySelector('#studentTable tbody');
-  const newRow = document.createElement('tr');
-  newRow.innerHTML = `
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>${student.name}</td>
-    <td>${student.birthdate}</td>
-    <td>${student.address}</td>
-    <td>${student.contact}</td>
-    <td>
-      <button class="action-btn info"><i class="fas fa-info-circle"></i> Info</button>
-      <button class="action-btn edit"><i class="fas fa-edit"></i> Edit</button>
-      <button class="action-btn delete"><i class="fas fa-trash"></i> Delete</button>
-    </td>
-  `;
-  studentTableBody.appendChild(newRow);
-}
-
   </script>
->>>>>>> 7f659179386581912d84155f915df185ee051ec3
 
   </body>
   </html>
