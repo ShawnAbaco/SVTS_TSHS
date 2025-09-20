@@ -453,39 +453,44 @@ h2 {
   </div>
 
   <!-- VIOLATION RECORDS TABLE -->
-  <div class="violation-table-container">
-    <table id="violationTable">
-      <thead>
-        <tr>
-          <th>Student</th>
-          <th>Violation</th>
-          <th>Incident</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Sanction</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($violations as $v)
-        <tr data-id="{{ $v->violation_id }}" data-student-id="{{ $v->student->student_id }}">
-          <td>{{ $v->student->student_fname }} {{ $v->student->student_lname }}</td>
-          <td>{{ $v->offense->offense_type }}</td>
-          <td>{{ $v->violation_incident }}</td>
-          <td>{{ $v->violation_date }}</td>
-          <td>{{ $v->violation_time }}</td>
-          <td>{{ $v->offense->sanction_consequences }}</td>
-
-          <td>
-            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-            <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+<div class="violation-table-container">
+  <table id="violationTable">
+    <thead>
+        <th style="text-align: center;">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <input type="checkbox" id="selectAll">
+        <button class="btn-trash-small" title="Delete Selected">
+          <i class="fas fa-trash"></i>
+        
+        <th>Student</th>
+        <th>Violation</th>
+        <th>Incident</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Sanction</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach($violations as $v)
+      <tr data-id="{{ $v->violation_id }}" data-student-id="{{ $v->student->student_id }}">
+        <td><input type="checkbox" class="rowCheckbox"></td>
+        <td>{{ $v->student->student_fname }} {{ $v->student->student_lname }}</td>
+        <td>{{ $v->offense->offense_type }}</td>
+        <td>{{ $v->violation_incident }}</td>
+        <td>{{ $v->violation_date }}</td>
+        <td>{{ $v->violation_time }}</td>
+        <td>{{ $v->offense->sanction_consequences }}</td>
+        <td>
+          <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
+        </td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
 </div>
+
 <!-- ADD VIOLATION MODAL -->
 <div class="modal" id="addModal">
   <div class="modal-content">
@@ -597,7 +602,111 @@ h2 {
     </form>
   </div>
 </div>
+<!-- ARCHIVE MODAL -->
+<div class="modal" id="archiveModal">
+  <div class="modal-content" style="max-width: 800px; width: 90%;">
+    <button class="close-btn" onclick="closeModal('archiveModal')">&times;</button>
+    <h2>Archived Violations</h2>
+
+    <!-- Search in archive -->
+    <div class="search-box" style="margin-bottom: 10px;">
+      <input type="text" id="archiveSearch" placeholder="Search archived records...">
+    </div>
+
+    <!-- Archive Table -->
+    <div class="violation-table-container">
+      <table id="archiveTable">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Violation</th>
+            <th>Incident</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Sanction</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Filled dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 <script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const archive = []; // store archived rows
+
+  // Trash button (move selected to archive)
+  document.querySelector(".btn-trash-small").addEventListener("click", function () {
+    const rows = document.querySelectorAll("#violationTable tbody tr");
+    rows.forEach(row => {
+      const checkbox = row.querySelector(".rowCheckbox");
+      if (checkbox && checkbox.checked) {
+        archive.push(row.innerHTML); // save row content
+        row.remove(); // remove from main table
+      }
+    });
+    alert("Selected records moved to archive.");
+  });
+
+  // Open Archive Modal
+  document.getElementById("archivesBtn").addEventListener("click", function () {
+    const tbody = document.querySelector("#archiveTable tbody");
+    tbody.innerHTML = "";
+
+    archive.forEach((rowHtml, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = rowHtml;
+
+      // replace Actions column with Restore button
+      tr.querySelector("td:last-child").innerHTML =
+        `<button class="btn-info restoreBtn" data-index="${index}">
+           <i class="fas fa-undo"></i> Restore
+         </button>`;
+
+      tbody.appendChild(tr);
+    });
+
+    openModal("archiveModal");
+  });
+
+  // Restore from archive
+  document.querySelector("#archiveTable tbody").addEventListener("click", function (e) {
+    if (e.target.closest(".restoreBtn")) {
+      const btn = e.target.closest(".restoreBtn");
+      const index = btn.getAttribute("data-index");
+
+      // restore row to main table
+      const tbody = document.querySelector("#violationTable tbody");
+      const tr = document.createElement("tr");
+      tr.innerHTML = archive[index];
+      tbody.appendChild(tr);
+
+      // remove from archive
+      archive.splice(index, 1);
+      btn.closest("tr").remove();
+    }
+  });
+
+  // Search inside archive
+  document.getElementById("archiveSearch").addEventListener("keyup", function () {
+    let filter = this.value.toLowerCase();
+    document.querySelectorAll("#archiveTable tbody tr").forEach(row => {
+      let text = row.innerText.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
+    });
+  });
+
+  // --- Keep modal helpers ---
+  window.openModal = function(id) {
+    document.getElementById(id).classList.add("show");
+  };
+  window.closeModal = function(id) {
+    document.getElementById(id).classList.remove("show");
+  };
+});
      // Dropdown functionality - auto close others & scroll
 const dropdowns = document.querySelectorAll('.dropdown-btn');
 dropdowns.forEach(btn => {
@@ -759,6 +868,21 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+// --- Select All Checkboxes ---
+document.getElementById("selectAll").addEventListener("change", function () {
+  const checkboxes = document.querySelectorAll(".rowCheckbox");
+  checkboxes.forEach(cb => cb.checked = this.checked);
+});
+
+// --- Keep Select All in sync ---
+document.addEventListener("change", function (e) {
+  if (e.target.classList.contains("rowCheckbox")) {
+    const all = document.querySelectorAll(".rowCheckbox");
+    const checked = document.querySelectorAll(".rowCheckbox:checked");
+    document.getElementById("selectAll").checked = all.length === checked.length;
+  }
+});
+
 </script>
 
 

@@ -6,7 +6,7 @@
   <title>Prefect Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-   * {
+ * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -35,12 +35,10 @@ body::before {
   z-index: -1;
 }
 
+/* Header */
 .page-header {
-background: linear-gradient(135deg, #00f0ff, #00bfff, #1e90ff);
-background-repeat: no-repeat;
-background-attachment: fixed;
-
-  color: #000; /* Black text */
+  background: green;
+  color: #000;
   text-align: center;
   padding: 15px;
   font-weight: bold;
@@ -48,11 +46,12 @@ background-attachment: fixed;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
+/* Adviser login buttons */
 .adviser-login-left, .adviser-login-right {
   position: fixed;
   top: 15px;
   padding: 8px 16px;
-  background: linear-gradient(135deg,rgb(0, 48, 161),rgb(0, 76, 255),rgb(8, 0, 255));
+  background: green;
   color: #000;
   font-weight: bold;
   border-radius: 6px;
@@ -64,9 +63,10 @@ background-attachment: fixed;
 .adviser-login-left { left: 15px; }
 .adviser-login-right { right: 15px; display: none; }
 .adviser-login-left:hover, .adviser-login-right:hover { 
-  background: linear-gradient(135deg, #00d0ff, #009fff, #1874d3);
+  background: blue;
 }
 
+/* Login container */
 .container {
   flex-grow: 1;
   display: flex;
@@ -84,7 +84,7 @@ background-attachment: fixed;
   overflow: hidden;
   box-shadow: 0 8px 18px rgba(0,0,0,0.4);
   background: #fff;
-  color: #000; /* All text inside login box black */
+  color: #000;
 }
 
 .logo-section {
@@ -94,6 +94,7 @@ background-attachment: fixed;
 .logo-section img { width: 220px; height: auto; object-fit: contain; }
 .logo-section h3 { margin-top: 8px; font-size: 14px; font-weight: 600; color: #000; }
 
+/* Form section */
 .form-section {
   padding: 20px;
   background: #fff;
@@ -104,7 +105,12 @@ background-attachment: fixed;
 .form-section label { font-size: 13px; display: block; margin-bottom: 6px; color: #000; }
 
 .input-icon-wrapper { position: relative; }
-.input-icon-wrapper i { position: absolute; top: 50%; transform: translateY(-50%); color: #000; }
+.input-icon-wrapper i { 
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  color: green;
+}
 .input-icon-wrapper i.fa-envelope,
 .input-icon-wrapper i.fa-lock { left: 10px; }
 
@@ -116,7 +122,7 @@ background-attachment: fixed;
   border-radius: 6px;
   border: 1px solid #2e7d32;
   font-size: 14px;
-  color: #000; /* black text */
+  color: #000;
   background: #f9f9f9;
 }
 .input-icon-wrapper input:focus { border-color: #388e3c; outline: none; }
@@ -127,35 +133,42 @@ background-attachment: fixed;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  color: #000; /* black */
+  color: green;
 }
 
 .warning { font-size: 12px; color: #B91C1C; margin-top: 5px; display: none; }
 
-/* Updated login button color */
+/* Login button */
 .form-section button {
   width: 100%;
   padding: 10px;
-  background: linear-gradient(135deg, #00f0ff, #00bfff, #1e90ff);
+  background: green;
   border: none;
   border-radius: 6px;
   font-size: 14px;
   font-weight: bold;
-  color: #000; /* black text */
+  color: #000;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 .form-section button:disabled { background: gray; cursor: not-allowed; }
-.form-section button:hover:enabled { 
-  background: linear-gradient(135deg, #00d0ff, #009fff, #1874d3);
+.form-section button:hover:enabled { background: blue; }
+
+/* Forgot password link */
+.form-section a {
+  color: green;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.form-section a:hover {
+  color: blue;
 }
 
+/* Footer */
 .page-footer {
-  background: linear-gradient(135deg, #00f0ff, #00bfff, #1e90ff);
-background-repeat: no-repeat;
-background-attachment: fixed;
-
-  color: #000; /* black text */
+  background: green;
+  color: #000;
   text-align: center;
   padding: 10px;
   font-size: 13px;
@@ -163,6 +176,7 @@ background-attachment: fixed;
   box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
 }
 
+/* Modals */
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -181,12 +195,21 @@ background-attachment: fixed;
   width: 90%;
   text-align: center;
   box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-  color: #000; /* black text */
+  color: #000;
 }
 .modal-content h2 { color: #000; margin-bottom: 10px; font-size: 16px; }
 .modal-content p { color: #000; font-size: 13px; margin-bottom: 15px; }
-.modal-content button { background: #2e7d32; border: none; color: #000; padding: 6px 14px; border-radius: 5px; font-size: 13px; cursor: pointer; }
-.modal-content button:hover { background: #388e3c; color: #000; }
+.modal-content button { 
+  background: green; 
+  border: none; 
+  color: #000; 
+  padding: 6px 14px; 
+  border-radius: 5px; 
+  font-size: 13px; 
+  cursor: pointer; 
+  transition: background 0.3s ease;
+}
+.modal-content button:hover { background: blue; color: #000; }
 
   </style>
 </head>

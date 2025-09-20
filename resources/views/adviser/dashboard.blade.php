@@ -395,7 +395,7 @@ function logout() {
 new Chart(document.getElementById('pieChart').getContext('2d'), {
   type:'doughnut',
   data:{
-    labels:['Behavioral','Academic','Attendance'],
+    labels:['overall','Complaints','Violations'],
     datasets:[{
       data:[12,8,3],
       backgroundColor:['#FFD700','#1E3A8A','#EF4444'],
