@@ -146,9 +146,8 @@ tr:nth-child(even){background:#f2f2f2;}
   <div class="report-box" data-modal="modal15"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
   <div class="report-box" data-modal="modal16"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
   <div class="report-box" data-modal="modal17"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div>
-  <div class="report-box" data-modal="modal18"><i class="fas fa-search"></i><h3>Violation Records Involving Specific Offense Types</h3></div>
-  <div class="report-box" data-modal="modal19"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
-  <div class="report-box" data-modal="modal20"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
+  <div class="report-box" data-modal="modal18"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
+  <div class="report-box" data-modal="modal19"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
 </div>
 
 
@@ -220,13 +219,11 @@ tr:nth-child(even){background:#f2f2f2;}
         @case(17)
             Summary of Violations per Grade Level
             @break
+
         @case(18)
-            Violation Records Involving Specific Offense Types
-            @break
-        @case(19)
             Violation Records and Assigned Adviser
             @break
-        @case(20)
+        @case(19)
             Violation Records with Violator Information
             @break
     @endswitch
@@ -237,7 +234,7 @@ tr:nth-child(even){background:#f2f2f2;}
     @switch($i)
         @case(1)
         <tr>
-            <th>Anecdotal ID</th>
+
             <th>Complainant Name</th>
             <th>Respondent Name</th>
             <th>Solution</th>
@@ -259,7 +256,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(3)
         <tr>
-            <th>Appointment ID</th>
             <th>Complainant Name</th>
             <th>Respondent Name</th>
             <th>Appointment Date</th>
@@ -278,7 +274,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(5)
         <tr>
-            <th>Complaint ID</th>
             <th>Adviser Name</th>
             <th>Complainant Name</th>
             <th>Respondent Name</th>
@@ -290,7 +285,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(6)
         <tr>
-            <th>Complaint ID</th>
             <th>Complainant Name</th>
             <th>Respondent Name</th>
             <th>Incident Description</th>
@@ -301,7 +295,7 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(7)
         <tr>
-            <th>Complaint ID</th>
+
             <th>Complainant Name</th>
             <th>Respondent Name</th>
             <th>Offense Type</th>
@@ -312,7 +306,7 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(8)
         <tr>
-            <th>Offense ID</th>
+
             <th>Offense Type</th>
             <th>Description</th>
             <th>Total Occurrences</th>
@@ -351,7 +345,7 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(12)
         <tr>
-            <th>Offense Sanction ID</th>
+
             <th>Offense Type</th>
             <th>Sanction Consequences</th>
             <th>Month and Year</th>
@@ -404,18 +398,7 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(18)
         <tr>
-            <th>Violation ID</th>
-            <th>Student Name</th>
-            <th>Offense Type</th>
-            <th>Violation Date</th>
-            <th>Violation Time</th>
-            <th>Incident Description</th>
-        </tr>
-        @break
 
-        @case(19)
-        <tr>
-            <th>Violation ID</th>
             <th>Student Name</th>
             <th>Adviser Name</th>
             <th>Type of Offense</th>
@@ -425,9 +408,9 @@ tr:nth-child(even){background:#f2f2f2;}
         </tr>
         @break
 
-        @case(20)
+        @case(19)
         <tr>
-            <th>Violation ID</th>
+
             <th>Student Name</th>
             <th>Offense Type</th>
             <th>Sanction</th>
@@ -447,24 +430,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
 
 <script>
-/* small helper to safely get different possible property names */
-function getVal(row, colIndex, reportId) {
-    if (reportId === 1) {
-        const keys = [
-            'violation_id',
-            'student_name',
-            'offense_type',
-            'sanction',
-            'incident_description',
-            'violation_date',
-            'violation_time'
-        ];
-        return row[keys[colIndex]] ?? '';
-    }
-    // fallback for other reports
-    return Object.values(row)[colIndex] ?? '';
-}
-
 
 /* dropdown */
 document.querySelectorAll('.dropdown-btn').forEach(btn=>{
@@ -476,7 +441,6 @@ document.querySelectorAll('.dropdown-btn').forEach(btn=>{
   });
 });
 
-/* open modal + fetch */
 /* open modal + fetch */
 async function openReportModal(reportId) {
     const modal = document.getElementById(`modal${reportId}`);
@@ -494,7 +458,7 @@ async function openReportModal(reportId) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.violation_id}</td>
+
                         <td>${row.student_name}</td>
                         <td>${row.offense_type}</td>
                         <td>${row.sanction}</td>
@@ -520,7 +484,6 @@ else if (reportId === 3) {
     data.forEach(row => {
         tbody.innerHTML += `
             <tr>
-                <td>${row.complaint_id}</td>
                 <td>${row.complainant_name}</td>
                 <td>${row.respondent_name}</td>
                 <td>${row.incident_description}</td>
@@ -545,7 +508,6 @@ else if (reportId === 5) {
     data.forEach(row => {
         tbody.innerHTML += `
             <tr>
-                <td>${row.violation_id}</td>
                 <td>${row.student_name}</td>
                 <td>${row.adviser_name}</td>
                 <td>${row.type_of_offense}</td>
@@ -598,7 +560,6 @@ else if (reportId === 5) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.anecdotal_id}</td>
                         <td>${row.complainant_name}</td>
                         <td>${row.respondent_name}</td>
                         <td>${row.solution}</td>
@@ -613,7 +574,6 @@ else if (reportId === 5) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.appointment_id}</td>
                         <td>${row.complainant_name}</td>
                         <td>${row.respondent_name}</td>
                         <td>${row.appointment_date}</td>
@@ -638,7 +598,6 @@ else if (reportId === 5) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.offense_id}</td>
                         <td>${row.offense_type}</td>
                         <td>${row.description}</td>
                         <td>${row.total_occurrences}</td>
@@ -650,7 +609,6 @@ else if (reportId === 5) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.complaint_id}</td>
                         <td>${row.adviser_name}</td>
                         <td>${row.complainant_name}</td>
                         <td>${row.respondent_name}</td>
@@ -704,7 +662,6 @@ else if (reportId === 5) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.complaint_id}</td>
                         <td>${row.complainant_name}</td>
                         <td>${row.respondent}</td>
                         <td>${row.offense_type}</td>
@@ -718,20 +675,6 @@ else if (reportId === 5) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.violation_id}</td>
-                        <td>${row.student_name}</td>
-                        <td>${row.offense_type}</td>
-                        <td>${row.violation_date}</td>
-                        <td>${row.violation_time}</td>
-                        <td>${row.incident_description}</td>
-                    </tr>
-                `;
-            });
-        }
-        else if (reportId === 19) {
-            data.forEach(row => {
-                tbody.innerHTML += `
-                    <tr>
                         <td>${row.first_name}</td>
                         <td>${row.last_name}</td>
                         <td>${row.violation_count}</td>
@@ -740,11 +683,10 @@ else if (reportId === 5) {
                 `;
             });
         }
-        else if (reportId === 20) {
+        else if (reportId === 19) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${row.offense_sanc_id}</td>
                         <td>${row.offense_type}</td>
                         <td>${row.sanction_consequences}</td>
                         <td>${row.month_and_year}</td>

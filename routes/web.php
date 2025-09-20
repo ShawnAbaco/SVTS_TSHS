@@ -11,6 +11,7 @@ use App\Http\Controllers\PrefectReportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ViolationAnecdotalController;
+use App\Http\Controllers\ViolationRecordController;
 
 Route::get('/', function () {
     return view('adviser.login');
@@ -107,9 +108,9 @@ Route::prefix('adviser')->group(function () {
         Route::delete('/adviser/parents/{id}', [ParentController::class, 'destroyParent'])->name('parents.destroy');
 
         // Violation CRUD
-        Route::post('/violations', [AdviserCRUDController::class, 'storeViolation'])->name('adviser.storeViolation');
-        Route::put('/violations/{id}', [AdviserCRUDController::class, 'updateViolation'])->name('adviser.violations.update');
-        Route::delete('/violations/{id}', [AdviserCRUDController::class, 'destroyViolation'])->name('adviser.violations.destroy');
+        Route::post('/violations', [ViolationRecordController::class, 'storeViolation'])->name('adviser.storeViolation');
+        Route::put('/violations/{id}', [ViolationRecordController::class, 'updateViolation'])->name('adviser.violations.update');
+        Route::delete('/violations/{id}', [ViolationRecordController::class, 'destroyViolation'])->name('adviser.violations.destroy');
 
         // Violation Anecdotal
         Route::get('/violationanecdotal', [AdviserController::class, 'violationanecdotal'])->name('violation.anecdotal');

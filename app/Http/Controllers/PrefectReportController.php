@@ -16,7 +16,6 @@ public function generateReportData($reportId)
         case 1: // Anecdotal Records per Complaint Case
             $data = collect(DB::select("
                 SELECT
-                    ca.comp_anec_id AS anecdotal_id,
                     CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
                     CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
                     ca.comp_anec_solution AS solution,
@@ -54,7 +53,6 @@ public function generateReportData($reportId)
         case 3: // Appointments Scheduled for Complaints
             $data = collect(DB::select("
                 SELECT
-                    ca.comp_app_id AS appointment_id,
                     CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
                     CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
                     DATE_FORMAT(ca.comp_app_date, '%M %d, %Y') AS appointment_date,
@@ -89,7 +87,6 @@ public function generateReportData($reportId)
         case 5: // Complaint Records by Adviser
             $data = collect(DB::select("
                 SELECT
-                    c.complaints_id,
                     CONCAT(adv.adviser_fname, ' ', adv.adviser_lname) AS adviser_name,
                     CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
                     CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
@@ -112,7 +109,6 @@ public function generateReportData($reportId)
         case 6: // Complaint Records with Complainant and Respondent
             $data = collect(DB::select("
                 SELECT
-                    c.complaints_id,
                     CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
                     CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
                     c.complaints_incident AS incident_description,
@@ -130,7 +126,6 @@ public function generateReportData($reportId)
         case 7: // Complaints Filed within the Last 30 Days
             $data = collect(DB::select("
                 SELECT
-                    c.complaints_id,
                     CONCAT(s1.student_fname, ' ', s1.student_lname) AS complainant_name,
                     CONCAT(s2.student_fname, ' ', s2.student_lname) AS respondent_name,
                     ows.offense_type,
@@ -150,44 +145,50 @@ public function generateReportData($reportId)
             break;
 
         case 8: // Common Offenses by Frequency
-            $data = collect(DB::select("
-                SELECT
-                    ows.offense_sanc_id AS offense_id,
-                    ows.offense_type,
-                    ows.offense_description,
-                    COUNT(v.violation_id) AS total_occurrences
-                FROM
-                    tbl_violation_record v
-                JOIN
-                    tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
-                GROUP BY
-                    v.offense_sanc_id
-                ORDER BY
-                    total_occurrences DESC
-            "));
-            break;
+    $data = collect(DB::select("
+        SELECT
+            ows.offense_type,
+            ows.offense_description,
+            COUNT(v.violation_id) AS total_occurrences
+        FROM tbl_violation_record v
+        JOIN tbl_offenses_with_sanction ows
+            ON v.offense_sanc_id = ows.offense_sanc_id
+        GROUP BY
+            v.offense_sanc_id,
+            ows.offense_sanc_id,
+            ows.offense_type,
+            ows.offense_description
+        ORDER BY total_occurrences DESC
+    "));
+    break;
 
         case 9: // List of Violators with Repeat Offenses
-            $data = collect(DB::select("
-                SELECT
-                    CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
-                    a.adviser_section AS section,
-                    a.adviser_gradelevel AS grade_level,
-                    COUNT(v.violation_id) AS total_violations,
-                    MIN(DATE_FORMAT(v.violation_date, '%M %d, %Y')) AS first_violation_date,
-                    MAX(DATE_FORMAT(v.violation_date, '%M %d, %Y')) AS most_recent_violation_date
-                FROM
-                    tbl_violation_record v
-                JOIN
-                    tbl_student s ON v.violator_id = s.student_id
-                JOIN
-                    tbl_adviser a ON s.adviser_id = a.adviser_id
-                GROUP BY
-                    s.student_id
-                HAVING
-                    COUNT(v.violation_id) > 1
-            "));
-            break;
+    $data = collect(DB::select("
+        SELECT
+            CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+            a.adviser_section AS section,
+            a.adviser_gradelevel AS grade_level,
+            COUNT(v.violation_id) AS total_violations,
+            MIN(DATE_FORMAT(v.violation_date, '%M %d, %Y')) AS first_violation_date,
+            MAX(DATE_FORMAT(v.violation_date, '%M %d, %Y')) AS most_recent_violation_date
+        FROM
+            tbl_violation_record v
+        JOIN
+            tbl_student s ON v.violator_id = s.student_id
+        JOIN
+            tbl_adviser a ON s.adviser_id = a.adviser_id
+        GROUP BY
+            s.student_id,
+            s.student_fname,
+            s.student_lname,
+            a.adviser_section,
+            a.adviser_gradelevel
+        HAVING
+            COUNT(v.violation_id) > 1
+        ORDER BY
+            total_violations DESC
+    "));
+    break;
 
         case 10: // Offenses and Their Sanction Consequences
             $data = collect(DB::select("
@@ -218,24 +219,27 @@ public function generateReportData($reportId)
             "));
             break;
 
-        case 12: // Sanction Trends Across Time Periods
-            $data = collect(DB::select("
-                SELECT
-                    ows.offense_sanc_id,
-                    ows.offense_type,
-                    ows.sanction_consequences,
-                    DATE_FORMAT(v.violation_date, '%M %Y') AS month_and_year,
-                    COUNT(v.violation_id) AS number_of_sanctions_given
-                FROM
-                    tbl_violation_record v
-                JOIN
-                    tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
-                GROUP BY
-                    ows.offense_sanc_id, month_and_year
-                ORDER BY
-                    month_and_year DESC, number_of_sanctions_given DESC
-            "));
-            break;
+         case 12: // Sanction Trends Across Time Periods
+    $data = collect(DB::select("
+        SELECT
+            ows.offense_type,
+            ows.sanction_consequences,
+            DATE_FORMAT(v.violation_date, '%M %Y') AS month_and_year,
+            COUNT(v.violation_id) AS number_of_sanctions_given
+        FROM
+            tbl_violation_record v
+        JOIN
+            tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
+        GROUP BY
+            ows.offense_sanc_id,
+            ows.offense_type,
+            ows.sanction_consequences,
+            month_and_year
+        ORDER BY
+            month_and_year DESC,
+            number_of_sanctions_given DESC
+    "));
+    break;
 
         case 13: // Students and Their Class Advisers
             $data = collect(DB::select("
@@ -264,45 +268,47 @@ public function generateReportData($reportId)
             "));
             break;
 
-        case 15: // Students with Both Violation and Complaint Records
-            $data = collect(DB::select("
-                SELECT
-                    s.student_fname AS first_name,
-                    s.student_lname AS last_name,
-                    COUNT(DISTINCT v.violation_id) AS violation_count,
-                    COUNT(DISTINCT c.complaints_id) AS complaint_involvement_count
-                FROM
-                    tbl_student s
-                LEFT JOIN
-                    tbl_violation_record v ON s.student_id = v.violator_id
-                LEFT JOIN
-                    tbl_complaints c ON s.student_id = c.complainant_id OR s.student_id = c.respondent_id
-                GROUP BY
-                    s.student_id
-                HAVING
-                    violation_count > 0 AND complaint_involvement_count > 0
-            "));
-            break;
+       case 15: // Students with Both Violation and Complaint Records
+    $data = collect(DB::select("
+        SELECT
+            s.student_fname AS first_name,
+            s.student_lname AS last_name,
+            COUNT(DISTINCT v.violation_id) AS violation_count,
+            COUNT(DISTINCT c.complaints_id) AS complaint_involvement_count
+        FROM
+            tbl_student s
+        LEFT JOIN
+            tbl_violation_record v ON s.student_id = v.violator_id
+        LEFT JOIN
+            tbl_complaints c ON (s.student_id = c.complainant_id OR s.student_id = c.respondent_id)
+        GROUP BY
+            s.student_id, s.student_fname, s.student_lname
+        HAVING
+            violation_count > 0 AND complaint_involvement_count > 0
+    "));
+    break;
 
-        case 16: // Students with the Most Violation Records
-            $data = collect(DB::select("
-                SELECT
-                    CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
-                    a.adviser_section AS adviser_section,
-                    a.adviser_gradelevel AS grade_level,
-                    COUNT(v.violation_id) AS total_violations
-                FROM
-                    tbl_violation_record v
-                JOIN
-                    tbl_student s ON v.violator_id = s.student_id
-                JOIN
-                    tbl_adviser a ON s.adviser_id = a.adviser_id
-                GROUP BY
-                    s.student_id
-                ORDER BY
-                    total_violations DESC
-            "));
-            break;
+
+case 16: // Students with the Most Violation Records
+    $data = collect(DB::select("
+        SELECT
+            CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
+            a.adviser_section AS adviser_section,
+            a.adviser_gradelevel AS grade_level,
+            COUNT(v.violation_id) AS total_violations
+        FROM
+            tbl_violation_record v
+        JOIN
+            tbl_student s ON v.violator_id = s.student_id
+        JOIN
+            tbl_adviser a ON s.adviser_id = a.adviser_id
+        GROUP BY
+            s.student_id, s.student_fname, s.student_lname, a.adviser_section, a.adviser_gradelevel
+        ORDER BY
+            total_violations DESC
+    "));
+    break;
+
 
         case 17: // Summary of Violations per Grade Level
             $data = collect(DB::select("
@@ -325,28 +331,9 @@ public function generateReportData($reportId)
             "));
             break;
 
-        case 18: // Violation Records Involving Specific Offense Types
+        case 18: // Violation Records and Assigned Adviser
             $data = collect(DB::select("
                 SELECT
-                    v.violation_id,
-                    CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
-                    ows.offense_type,
-                    DATE_FORMAT(v.violation_date, '%M %d, %Y') AS violation_date,
-                    TIME_FORMAT(v.violation_time, '%h:%i %p') AS violation_time,
-                    v.violation_incident AS incident_description
-                FROM
-                    tbl_violation_record v
-                JOIN
-                    tbl_student s ON v.violator_id = s.student_id
-                JOIN
-                    tbl_offenses_with_sanction ows ON v.offense_sanc_id = ows.offense_sanc_id
-            "));
-            break;
-
-        case 19: // Violation Records and Assigned Adviser
-            $data = collect(DB::select("
-                SELECT
-                    v.violation_id,
                     CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
                     CONCAT(adv.adviser_fname, ' ', adv.adviser_lname) AS adviser_name,
                     ows.offense_type AS type_of_offense,
@@ -361,10 +348,9 @@ public function generateReportData($reportId)
             "));
             break;
 
-        case 20: // Violation Records with Violator Information
+        case 19: // Violation Records with Violator Information
             $data = collect(DB::select("
                 SELECT
-                    v.violation_id AS violation_id,
                     CONCAT(s.student_fname, ' ', s.student_lname) AS student_name,
                     ows.offense_type AS offense_type,
                     ows.sanction_consequences AS sanction,

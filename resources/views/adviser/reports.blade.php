@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Adviser Dashboard - Reports</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
-  
+
   <style>
     :root {
       --primary-color: #000000;
@@ -117,9 +117,9 @@
   border-left: 2px solid rgba(255,255,255,0.1);
   border-radius: 0 8px 8px 0;
 }
-.dropdown-container.show { 
-  max-height: 400px; 
-  padding-left: 12px; 
+.dropdown-container.show {
+  max-height: 400px;
+  padding-left: 12px;
 }
 .dropdown-container li a {
   font-size: 0.9rem;
@@ -208,6 +208,14 @@
   position: relative; box-shadow: 0 6px 15px rgba(0,0,0,0.3);
   max-height: 90vh; display: flex; flex-direction: column;
 }
+/* Scrollable table inside modal */
+.modal-table-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: calc(90vh - 160px); /* keeps modal within screen */
+  margin-top: 10px;
+}
+
 
 .close { color:#aaa; float:right; font-size:22px; font-weight:bold; cursor:pointer; }
 .close:hover { color:black; }
@@ -297,8 +305,7 @@ tr:nth-child(even){ background-color:#f9f9f9; }
   <div class="report-box" data-modal="modal12"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
   <div class="report-box" data-modal="modal13"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
   <div class="report-box" data-modal="modal14"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
-  <div class="report-box" data-modal="modal15"><i class="fas fa-search"></i><h3>Violation Records Involving Specific Offense Types</h3></div>
-  <div class="report-box" data-modal="modal16"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
+  <div class="report-box" data-modal="modal15"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
 </div>
 
 
@@ -315,28 +322,7 @@ tr:nth-child(even){ background-color:#f9f9f9; }
       <button class="btn btn-danger" onclick="exportCSV('modal{{ $i }}')"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
 
-    <!-- Table ID -->
-    <h2 class="text-xl font-semibold mb-3 text-center">
-        @switch($i)
-            @case(1) Anecdotal Records per Complaint Case @break
-            @case(2) Anecdotal Records per Violation Case @break
-            @case(3) Appointments Scheduled for Complaints @break
-            @case(4) Appointments Scheduled for Violation Cases @break
-            @case(5) Complaint Records with Complainant and Respondent @break
-            @case(6) Complaints Filed within the Last 30 Days @break
-            @case(7) Common Offenses by Frequency @break
-            @case(8) List of Violators with Repeat Offenses @break
-            @case(9) Offenses and Their Sanction Consequences @break
-            @case(10) Parent Contact Info for Students with Active Violations @break
-            @case(11) Sanction Trends Across Time Periods @break
-            @case(12) Students and Their Parents @break
-            @case(13) Students with Both Violation and Complaint Records @break
-            @case(14) Students with the Most Violation Records @break
-            @case(15) Violation Records Involving Specific Offense Types @break
-            @case(16) Violation Records with Violator Information @break
-        @endswitch
-    </h2>
-
+    <div class="modal-table-container">
     <table id="table-{{ $i }}" class="w-full border-collapse">
       <thead>
         @switch($i)
@@ -488,111 +474,204 @@ tr:nth-child(even){ background-color:#f9f9f9; }
       </thead>
       <tbody></tbody>
     </table>
+</div>
   </div>
 </div>
 @endfor
 
 <script>
-  // Dropdown
-  const dropdowns = document.querySelectorAll('.dropdown-btn');
-  dropdowns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      dropdowns.forEach(otherBtn => {
-        if (otherBtn !== this) {
-          otherBtn.nextElementSibling.classList.remove('show');
-          const icon = otherBtn.querySelector('.fa-caret-down');
-          if(icon) icon.style.transform = 'rotate(0deg)';
-        }
-      });
-      const container = this.nextElementSibling;
+  // Dropdown toggle
+  document.querySelectorAll('.dropdown-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const container = btn.nextElementSibling;
       container.classList.toggle('show');
-      const icon = this.querySelector('.fa-caret-down');
-      if(icon) icon.style.transform = container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-      if(container.classList.contains('show')) container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
   });
 
-  // Open modal
-  function openReportModal(reportId){
-    const modal = document.getElementById('modal'+reportId);
-    const table = modal.querySelector('table');
-    const tbody = table.querySelector('tbody');
-    const thead = table.querySelector('thead');
-    const title = document.querySelector('.report-box[data-modal="modal'+reportId+'"] h3').textContent;
+  function openReportModal(reportId) {
+    const modal = document.getElementById('modal' + reportId);
+    const title = document.querySelector(`.report-box[data-modal="modal${reportId}"] h3`).textContent;
     modal.querySelector('.modal-title').textContent = title;
-
-    tbody.innerHTML = '';
-    thead.innerHTML = '';
 
     fetch(`/adviser/reports/data/${reportId}`)
       .then(res => res.ok ? res.json() : Promise.reject('Fetch failed'))
       .then(data => {
-        if(!data.length){
-          tbody.innerHTML = '<tr><td colspan="20" style="text-align:center;">No records found.</td></tr>';
+        const thead = modal.querySelector('thead');
+        const tbody = modal.querySelector('tbody');
+        thead.innerHTML = '';
+        tbody.innerHTML = '';
+
+        // Build table header manually
+        let headers = [];
+        switch (parseInt(reportId)) {
+          case 1: headers = ['Complainant Name','Respondent Name','Solution','Recommendation','Date Recorded','Time Recorded']; break;
+          case 2: headers = ['Student Name','Solution','Recommendation','Date','Time']; break;
+          case 3: headers = ['Complainant Name','Respondent Name','Appointment Date','Appointment Status']; break;
+          case 4: headers = ['Student Name','Appointment Date','Appointment Time','Appointment Status']; break;
+          case 5: headers = ['Complainant Name','Respondent Name','Incident Description','Complaint Date','Complaint Time']; break;
+          case 6: headers = ['Complainant Name','Respondent Name','Type of Offense','Complaint Date','Complaint Time']; break;
+          case 7: headers = ['Offense Type','Description','Total Occurrences']; break;
+          case 8: headers = ['Student Name','Section','Grade Level','Total Violations','First Violation Date','Most Recent Violation Date']; break;
+          case 9: headers = ['Offense Type','Offense Description','Sanction Consequences']; break;
+          case 10: headers = ['Student Name','Parent Name','Parent Contact Info','Violation Date','Violation Time','Violation Status']; break;
+          case 11: headers = ['Offense Type','Sanction Consequences','Month and Year','Number of Sanctions Given']; break;
+          case 12: headers = ['Student Name','Parent Name','Parent Contact Info']; break;
+          case 13: headers = ['First Name','Last Name','Violation Count','Complaint Involvement Count']; break;
+          case 14: headers = ['Student Name','Adviser Section','Grade Level','Total Violations']; break;
+          case 15: headers = ['Student Name','Offense Type','Sanction','Incident Description','Violation Date','Violation Time']; break;
+        }
+
+        // Insert header row
+        thead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+
+        // Build table body manually (match controller column names)
+        if (!data.length) {
+          tbody.innerHTML = `<tr><td colspan="${headers.length}" style="text-align:center;">No records found.</td></tr>`;
           modal.style.display = 'block';
           return;
         }
 
-        // Build table header dynamically based on reportId
-        let headers = [];
-        switch(parseInt(reportId)){
-          case 1: headers = ['Anecdotal ID','Complainant Name','Respondent Name','Solution','Recommendation','Date Recorded','Time Recorded']; break;
-          case 2: headers = ['Student Name','Solution','Recommendation','Date','Time']; break;
-          case 3: headers = ['Appointment ID','Complainant Name','Respondent Name','Appointment Date','Appointment Status']; break;
-          case 4: headers = ['Student Name','Appointment Date','Appointment Time','Appointment Status']; break;
-          case 5: headers = ['Complaint ID','Complainant Name','Respondent Name','Incident Description','Complaint Date','Complaint Time']; break;
-          case 6: headers = ['Complaint ID','Complainant Name','Respondent Name','Type of Offense','Complaint Date','Complaint Time']; break;
-          case 7: headers = ['Offense ID','Offense Type','Description','Total Occurrences']; break;
-          case 8: headers = ['Student Name','Section','Grade Level','Total Violations','First Violation Date','Most Recent Violation Date']; break;
-          case 9: headers = ['Offense Type','Offense Description','Sanction Consequences']; break;
-          case 10: headers = ['Student Name','Parent Name','Parent Contact Info','Violation Date','Violation Time','Violation Status']; break;
-          case 11: headers = ['Offense Sanction ID','Offense Type','Sanction Consequences','Month and Year','Number of Sanctions Given']; break;
-          case 12: headers = ['Student Name','Parent Name','Parent Contact Info']; break;
-          case 13: headers = ['First Name','Last Name','Violation Count','Complaint Involvement Count']; break;
-          case 14: headers = ['Student Name','Adviser Section','Grade Level','Total Violations']; break;
-          case 15: headers = ['Offense Sanction ID','Offense Type','Sanction Consequences','Month and Year','Number of Sanctions Given']; break;
-          case 16: headers = ['Violation ID','Student Name','Offense Type','Sanction','Incident Description','Violation Date','Violation Time']; break;
-        }
 
-        const headerRow = document.createElement('tr');
-        headers.forEach(h=>{ const th = document.createElement('th'); th.textContent = h; headerRow.appendChild(th); });
-        thead.appendChild(headerRow);
+        data.forEach(row => {
+          let tr = document.createElement('tr');
+          switch (parseInt(reportId)) {
+            case 1:
+              tr.innerHTML = `
+                              <td>${row.complainant_name}</td>
+                              <td>${row.respondent_name}</td>
+                              <td>${row.solution}</td>
+                              <td>${row.recommendation}</td>
+                              <td>${row.date_recorded}</td>
+                              <td>${row.time_recorded}</td>`;
+              break;
+            case 2:
+              tr.innerHTML = `<td>${row.student_name}</td>
+                              <td>${row.solution}</td>
+                              <td>${row.recommendation}</td>
+                              <td>${row.date}</td>
+                              <td>${row.time}</td>`;
+              break;
+            case 3:
+              tr.innerHTML = `
+                              <td>${row.complainant_name}</td>
+                              <td>${row.respondent_name}</td>
+                              <td>${row.appointment_date}</td>
+                              <td>${row.appointment_status}</td>`;
+              break;
+            case 4:
+              tr.innerHTML = `<td>${row.student_name}</td>
+                              <td>${row.appointment_date}</td>
+                              <td>${row.appointment_time}</td>
+                              <td>${row.appointment_status}</td>`;
+              break;
+            case 5:
+              tr.innerHTML = `
+                              <td>${row.complainant_name}</td>
+                              <td>${row.respondent_name}</td>
+                              <td>${row.incident_description}</td>
+                              <td>${row.complaint_date}</td>
+                              <td>${row.complaint_time}</td>`;
+              break;
+            case 6:
+              tr.innerHTML = `
+                              <td>${row.complainant_name}</td>
+                              <td>${row.respondent_name}</td>
+                              <td>${row.offense_type}</td>
+                              <td>${row.complaint_date}</td>
+                              <td>${row.complaint_time}</td>`;
+              break;
+            case 7:
+              tr.innerHTML = `
+                              <td>${row.offense_type}</td>
+                              <td>${row.offense_description}</td>
+                              <td>${row.total_occurrences}</td>`;
+              break;
+            case 8:
+              tr.innerHTML = `<td>${row.student_name}</td>
+                              <td>${row.section}</td>
+                              <td>${row.grade_level}</td>
+                              <td>${row.total_violations}</td>
+                              <td>${row.first_violation_date}</td>
+                              <td>${row.most_recent_violation_date}</td>`;
+              break;
+            case 9:
+              tr.innerHTML = `<td>${row.offense_type}</td>
+                              <td>${row.offense_description}</td>
+                              <td>${row.sanction_consequences}</td>`;
+              break;
+            case 10:
+              tr.innerHTML = `<td>${row.student_name}</td>
+                              <td>${row.parent_name}</td>
+                              <td>${row.parent_contactinfo}</td>
+                              <td>${row.violation_date}</td>
+                              <td>${row.violation_time}</td>
+                              <td>${row.violation_status}</td>`;
+              break;
+            case 11:
+            tr.innerHTML = `
+                            <td>${row.offense_type}</td>
+                            <td>${row.sanction_consequences}</td>
+                            <td>${row.month_and_year}</td>
+                            <td>${row.number_of_sanctions_given}</td>`;
+            break;
 
-        // Build table body
-        data.forEach(row=>{
-          const tr = document.createElement('tr');
-          headers.forEach(h=>{
-            let key = h.toLowerCase().replace(/ /g,'_');
-            tr.innerHTML += `<td>${row[key] ?? ''}</td>`;
-          });
+            case 12:
+              tr.innerHTML = `<td>${row.student_name}</td>
+                              <td>${row.parent_name}</td>
+                              <td>${row.parent_contactinfo}</td>`;
+              break;
+            case 13:
+              tr.innerHTML = `<td>${row.first_name}</td>
+                              <td>${row.last_name}</td>
+                              <td>${row.violation_count}</td>
+                              <td>${row.complaint_involvement_count}</td>`;
+              break;
+            case 14:
+              tr.innerHTML = `<td>${row.student_name}</td>
+                              <td>${row.adviser_section}</td>
+                              <td>${row.grade_level}</td>
+                              <td>${row.total_violations}</td>`;
+              break;
+
+            case 15:
+              tr.innerHTML = `
+                              <td>${row.student_name}</td>
+                              <td>${row.offense_type}</td>
+                              <td>${row.sanction}</td>
+                              <td>${row.incident_description}</td>
+                              <td>${row.violation_date}</td>
+                              <td>${row.violation_time}</td>`;
+              break;
+          }
           tbody.appendChild(tr);
         });
 
-        modal.style.display='block';
+        modal.style.display = 'block';
       })
-      .catch(err=>{
-        tbody.innerHTML='<tr><td colspan="20" style="text-align:center;">Error loading data.</td></tr>';
-        modal.style.display='block';
-        console.error(err);
-      });
+      .catch(err => {
+      console.error(err);
+      alert('Failed to load report data. Check console for details.');
+      modal.style.display = 'block'; // still open so user sees something
+    });
   }
 
-  // Attach modal open to report boxes
-  document.querySelectorAll('.report-box').forEach(box=>{
-    box.addEventListener('click', ()=>{
-      const reportId = box.dataset.modal.replace('modal','');
-      openReportModal(reportId);
+  // Attach click listeners
+  document.querySelectorAll('.report-box').forEach(box => {
+    box.addEventListener('click', () => {
+      openReportModal(box.dataset.modal.replace('modal',''));
     });
   });
 
   // Close modal
-  document.addEventListener('click', e=>{
-    if(e.target.classList.contains('close')) e.target.closest('.modal').style.display='none';
-    if(e.target.classList.contains('modal')) e.target.style.display='none';
+  document.querySelectorAll('.modal .close').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.target.closest('.modal').style.display = 'none';
+    });
   });
-
-  // Search
+  window.onclick = e => {
+    if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+  }
+    // Search
   function liveSearch(modalId, query){
     const tbody = document.querySelector('#'+modalId+' tbody');
     query = query.toLowerCase();
@@ -628,6 +707,7 @@ tr:nth-child(even){ background-color:#f9f9f9; }
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
   }
 </script>
+
 
 </body>
 </html>
