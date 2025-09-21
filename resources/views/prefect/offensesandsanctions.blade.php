@@ -376,13 +376,23 @@ tbody tr:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-
+/* Logo */
+.sidebar img {
+  width: 150px;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  display: block;
+  transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
 
   </style>
 </head>
 <body>
   <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
+        <img src="/images/Logo.png" alt="Logo">
   <h2>PREFECT DASHBOARD</h2>
   <ul>
     <div class="section-title">Main</div>

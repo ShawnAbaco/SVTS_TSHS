@@ -233,12 +233,23 @@ input, select, textarea { width: 100%; padding: 10px; border-radius: 6px; border
   .search-buttons { flex-direction: column; align-items: stretch; gap: 8px; }
   .search-buttons input { width: 100%; }
 }
+/* Logo */
+.sidebar img {
+  width: 150px;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  display: block;
+  transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
 </style>
 </head>
 <body>
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
+        <img src="/images/Logo.png" alt="Logo">
   <h2>PREFECT DASHBOARD</h2>
   <ul>
     <div class="section-title">Main</div>

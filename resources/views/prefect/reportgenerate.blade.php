@@ -90,12 +90,24 @@ tr:nth-child(even){background:#f2f2f2;}
 .toolbar button.btn-danger{background:#c0392b;color:#fff;}
 .toolbar button.btn-danger:hover{background:#962d22;}
 @media screen and (max-width:768px){.main-content{margin-left:0;width:100%;grid-template-columns:1fr;padding:15px;}.toolbar input{width:100%;margin-bottom:5px;}}
+
+/* Logo */
+.sidebar img {
+  width: 150px;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  display: block;
+  transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
 </style>
 </head>
 <body>
 
 <!-- Sidebar (unchanged) -->
 <div class="sidebar">
+        <img src="/images/Logo.png" alt="Logo">
   <h2>PREFECT DASHBOARD</h2>
   <ul>
     <div class="section-title">Main</div>

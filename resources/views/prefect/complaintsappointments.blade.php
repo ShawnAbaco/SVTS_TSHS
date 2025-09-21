@@ -192,12 +192,23 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
   .top-controls { flex-direction: column; align-items:flex-start; gap:10px; }
   .top-controls input { width:100%; }
 }
+/* Logo */
+.sidebar img {
+  width: 150px;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  display: block;
+  transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
 </style>
 </head>
 <body>
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
+        <img src="/images/Logo.png" alt="Logo">
   <h2>PREFECT DASHBOARD</h2>
   <ul>
     <div class="section-title">Main</div>
