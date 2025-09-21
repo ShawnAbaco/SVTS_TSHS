@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parent List</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/adviser/parentlist.css') }}">
 
@@ -161,7 +162,120 @@
     </div>
   </div>
 
-<script src="{{ asset('js/adviser/parentlist.js') }}"></script>
+  <script>
 
+    // Dropdown functionality - auto close others & scroll
+const dropdowns = document.querySelectorAll('.dropdown-btn');
+dropdowns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // close all other dropdowns
+        dropdowns.forEach(otherBtn => {
+            if (otherBtn !== this) {
+                otherBtn.nextElementSibling.classList.remove('show');
+                otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // toggle clicked dropdown
+        const container = this.nextElementSibling;
+        container.classList.toggle('show');
+        this.querySelector('.fa-caret-down').style.transform =
+            container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+
+        // scroll into view if dropdown is opened
+        if(container.classList.contains('show')){
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+});
+
+
+
+// Sidebar active link
+document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', function(){
+        document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+    // live search
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+      const filter = this.value.toLowerCase();
+      const rows = document.querySelectorAll("#parentTable tbody tr");
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    });
+
+    function openAddModal() {
+      document.getElementById('addParentForm').reset();
+      document.getElementById('methodField').innerHTML = '';
+      document.getElementById('modalTitle').innerText = 'Add Parent/Guardian';
+      document.querySelector('#addParentForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
+      document.getElementById('addModal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function showInfo(name, birthdate, contact, studentsJson) {
+      const loggedAdviserId = {{ optional(auth()->guard('adviser')->user())->adviser_id ?? 'null' }};
+      document.getElementById('infoName').innerText = name;
+      document.getElementById('infoBirthdate').innerText = birthdate;
+      document.getElementById('infoContact').innerText = contact;
+
+      const childrenList = document.getElementById('infoChildren');
+      childrenList.innerHTML = '';
+      let students = [];
+      try { students = JSON.parse(studentsJson); } catch(e) { students = []; }
+      const filtered = students.filter(s => s.adviser_id == loggedAdviserId);
+      if(filtered.length > 0) {
+        filtered.forEach(student => {
+          const li = document.createElement('li');
+          li.textContent = `${student.name} - Contact: ${student.contact}`;
+          childrenList.appendChild(li);
+        });
+      } else {
+        childrenList.innerHTML = '<li>No children under your supervision</li>';
+      }
+      document.getElementById('smsBtn').onclick = function() {
+        const msg = `Hello ${name}, regarding your child(ren): ${filtered.map(s => s.name).join(', ')}.`;
+        alert(`SMS to ${contact}: ${msg}`);
+      };
+      document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function editGuardian(button) {
+      const row = button.closest('tr');
+      const cells = row.cells;
+      const fullName = cells[0].innerText.trim();
+      const lastSpaceIndex = fullName.lastIndexOf(' ');
+      const firstName = fullName.slice(0, lastSpaceIndex).trim();
+      const lastName = fullName.slice(lastSpaceIndex + 1).trim();
+
+      document.getElementById('parent_id').value = row.dataset.id;
+      document.getElementById('parent_fname').value = firstName;
+      document.getElementById('parent_lname').value = lastName;
+      document.getElementById('parent_birthdate').value = cells[1].innerText.trim();
+      document.getElementById('parent_contactinfo').value = cells[2].innerText.trim();
+
+      const form = document.getElementById('addParentForm');
+      form.action = `/adviser/adviser/parents/${row.dataset.id}`;
+      document.getElementById('methodField').innerHTML = '@method("PUT")';
+      form.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update';
+      document.getElementById('modalTitle').innerText = 'Edit Parent/Guardian';
+      document.getElementById('addModal').style.display = 'flex';
+    }
+
+    function logout() {
+      if(confirm('Are you sure you want to log out?')){
+        window.location.href = '/adviser/login';
+      }
+    }
+  </script>
 </body>
 </html>
