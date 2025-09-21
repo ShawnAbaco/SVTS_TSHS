@@ -164,70 +164,89 @@ body {
 }
 
 /* ================= Modals ================= */
+/* Modal Base Styles */
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex; /* center content */
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 280px;
+    max-width: 350px;
+    padding: 20px 25px;
+    border-radius: 12px;
+    color: #fff;
+    text-align: center;
+    font-size: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    transition: opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
 }
 
 .modal.hidden {
     display: none;
 }
 
+/* Modal message on top */
 .modal p {
     margin: 0;
+    width: 100%;
+    text-align: center;
     font-size: 1rem;
-    color: #fff;
+    font-weight: 500;
 }
 
+/* Buttons in modals */
 .modal button {
     margin-top: 10px;
-    padding: 8px 20px;
-    background-color: #ff4d4f; /* red for errors */
-    color: #fff;
+    padding: 8px 18px;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 8px;
     font-weight: bold;
-    transition: background 0.3s ease;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .modal button:hover {
-    background-color: #ff7875;
+    transform: scale(1.05);
 }
 
-/* Specific styles per modal type */
+/* Specific Modal Colors */
 #errorModal {
-    background: rgba(255, 77, 79, 0.9);
+    background: #ff4d4f;
 }
 
 #attemptModal {
-    background: rgba(255, 165, 0, 0.9); /* orange */
+    background: #ffa500;
 }
 
 #successModal {
-    background: rgba(76, 175, 80, 0.9); /* green */
+    background: #4caf50;
 }
 
-.modal p {
-    text-align: center;
-    font-size: 1.1rem;
+/* Optional: smaller text for success modal */
+#successModal p {
+    font-size: 0.95rem;
 }
 
-.modal button {
-    display: block;
-    margin: 15px auto 0 auto;
+/* Button colors per modal */
+#errorModal button {
+    background: #ff7875;
+    color: #fff;
 }
 
+#attemptModal button {
+    background: #ffc04d;
+    color: #fff;
+}
 
+#successModal button {
+    background: #66bb6a;
+    color: #fff;
+}
 
 .password-wrapper {
     position: relative;
