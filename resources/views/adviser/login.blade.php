@@ -3,188 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Student Discipline System</title>
+    <title>Login - Student Violation Tracking System</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/adviser/login.css') }}">
-</head>
-<body>
-    <!-- Header with Logo, Title, and Login -->
-    <header class="top-bar">
-        <div class="header-left">
-            <img src="{{ asset('images/logo.png') }}" alt="System Logo" class="logo">
-            <h1>Student Discipline & Violation Tracking System</h1>
-        </div>
+<body style="background: url('http://127.0.0.1:8000/images/tshs.jpg') no-repeat center center fixed; background-size: cover;">
 
-<div class="top-right-login">
-    <form id="loginForm" action="{{ route('auth.login') }}" method="POST">
-        @csrf
-        <input type="email" id="email" name="email" placeholder="Email" required>
+<header class="top-bar">
+    <img src="{{ asset('images/logo.png') }}" alt="System Logo">
+    <h1>Student Violation Tracking System</h1>
+</header>
 
-        <div class="password-wrapper">
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <img src="{{ asset('images/hide.png') }}" id="togglePassword" class="toggle-password" alt="Toggle Password">
-        </div>
+<div class="main-container">
+    <!-- Left Section with More Details -->
+    <div class="welcome-text">
+        <h2>Welcome Back!</h2>
+<p>Track and manage student behavior effectively with the Student Violation Tracking System.<br>
+   Access violation records, parent notifications, and reports easily.</p>
 
-        <button type="submit" id="loginBtn">Log In</button>
-    </form>
-</div>
-
-
-
-<!-- Error Modal -->
-<div id="errorModal" class="modal hidden">
-    <p id="errorMessage"></p>
-    <button onclick="closeModal()">Close</button>
-</div>
-
-<!-- Attempt Lockout Modal -->
-<div id="attemptModal" class="modal hidden">
-    <p>Please wait <span id="countdown"></span> seconds before trying again.</p>
-</div>
-
-<!-- Success Modal -->
-<div id="successModal" class="modal hidden">
-    <p>Login successful!</p>
-</div>
-
-    </header>
-
-    <div class="main-container">
-        <!-- Left Info Section -->
-        <div class="left-section">
-            <p class="subtitle">Ensuring accountability, transparency, and discipline monitoring.</p>
-
-            <div class="features">
-                <div class="feature">
-                    <span class="icon">📊</span>
-                    <p><strong>Track Violations</strong> Monitor student discipline records with ease.</p>
-                </div>
-                <div class="feature">
-                    <span class="icon">👨‍🏫</span>
-                    <p><strong>Adviser Reports</strong> Advisers and Prefects can manage cases in real-time.</p>
-                </div>
-                <div class="feature">
-                    <span class="icon">🎓</span>
-                    <p><strong>Strand Info</strong> Supports STEM | HUMSS | ABM | GAS | TVL strands.</p>
-                </div>
+        <!-- School Highlights -->
+        <div class="school-highlights">
+            <div class="highlight">
+                <span>🏫</span>
+                <p><strong>Tagoloan Senior High School</strong><br>Committed to excellence in education.</p>
             </div>
-        </div>
-
-        <!-- Right Picture Boxes (2x2 Grid) -->
-        <div class="right-section">
-            <div class="image-boxes">
-                <div class="box"><img src="{{ asset('images/sample1.jpg') }}" alt="Showcase 1"></div>
-                <div class="box"><img src="{{ asset('images/sample2.jpg') }}" alt="Showcase 2"></div>
-                <div class="box"><img src="{{ asset('images/sample3.jpg') }}" alt="Showcase 3"></div>
-                <div class="box"><img src="{{ asset('images/sample4.jpg') }}" alt="Showcase 4"></div>
+                        <div class="highlight">
+                <span>🎓</span>
+                <p><strong>Student Support</strong><br>Helping students grow with proper guidance.</p>
             </div>
+    <div class="highlight">
+        <span>📞</span>
+        <p><strong>Contact:</strong> 0913-123-4567<br>
+           <strong>Email:</strong> tshs@gmail.com</p>
+    </div>
+
         </div>
     </div>
-    <script>
-   const loginForm = document.getElementById('loginForm');
-  const loginBtn = document.getElementById('loginBtn');
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  const errorModal = document.getElementById('errorModal');
-  const errorMessage = document.getElementById('errorMessage');
-  const attemptModal = document.getElementById('attemptModal');
-  const countdownSpan = document.getElementById('countdown');
-  const successModal = document.getElementById('successModal');
 
-  let attemptCount = 0;
-  const maxAttempts = 5;
-  const lockoutTime = 10; // seconds
+    <!-- Login Card shifted slightly right -->
+    <div class="login-card">
+        <div class="login-header">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo">
+            <h2>Adviser Login</h2>
+            <p>Sign in to access your dashboard</p>
+        </div>
 
-  loginForm.addEventListener('submit', function(e) {
-    e.preventDefault(); // stop normal submit
+<form id="loginForm" action="{{ route('auth.login') }}" method="POST" novalidate>
+    @csrf
+    <div class="form-group">
+    <label for="email">Email Address</label>
+    <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="e.g. adviser@gmail.com"
+        required
+        autocomplete="username"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        title="Invalid email format. Example: adviser@gmail.com"
+    >
+    <small class="error-text" id="emailError">
+        @error('email')
+            {{ $message }}
+        @enderror
+    </small>
+</div>
+
+
+<div class="form-group password-wrapper">
+    <label for="password">Password</label>
+    <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+        autocomplete="current-password"
+        minlength="6"
+        maxlength="50"
+    >
+    <small class="error-text" id="passwordError">
+        @error('password')
+            {{ $message }}
+        @enderror
+    </small>
+    <img src="{{ asset('images/hide.png') }}" id="togglePassword" class="toggle-password" alt="Toggle Password">
+</div>
+
+<button type="submit" id="loginBtn">Log In</button>
+<div class="login-footer" style="margin-top: 12px;">
+    <a href="#">Forgot Password?</a>
+</div>
+
+</form>
+    </div>
+</div>
+
+
+<footer>
+    &copy; {{ date('Y') }} Tagoloan Senior High School • Student Violation Tracking System
+</footer>
+
+<script>
+const loginForm = document.getElementById('loginForm');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const emailError = document.getElementById('emailError');
+const passwordError = document.getElementById('passwordError');
+
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let valid = true;
+    emailError.classList.remove('visible');
+    passwordError.classList.remove('visible');
+
+    if (!email.value.trim()) {
+        emailError.textContent = "Email is required";
+        emailError.classList.add('visible');
+        valid = false;
+    }
+    if (!password.value.trim()) {
+        passwordError.textContent = "Password is required";
+        passwordError.classList.add('visible');
+        valid = false;
+    }
+
+    if (!valid) return; // stop if fields are invalid
 
     const formData = new FormData(loginForm);
-
     fetch("{{ route('adviser.login') }}", {
-      method: "POST",
-      headers: {
-        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-      },
-      body: formData
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+        body: formData
     })
     .then(res => res.json())
     .then(data => {
-      if (data.success) {
-        // Show success modal briefly
-        successModal.style.display = 'flex';
-
-        // Redirect immediately
-        window.location.href = data.redirect;
-
-      } else {
-        attemptCount++;
-
-        if (attemptCount >= maxAttempts) {
-          loginBtn.disabled = true;
-          attemptModal.style.display = 'flex';
-
-          let timeLeft = lockoutTime;
-          countdownSpan.innerText = timeLeft;
-          loginBtn.innerText = `Wait (${timeLeft}s)`;
-
-          const countdownInterval = setInterval(() => {
-            timeLeft--;
-            countdownSpan.innerText = timeLeft;
-            loginBtn.innerText = `Wait (${timeLeft}s)`;
-            if(timeLeft <= 0){
-              clearInterval(countdownInterval);
-              attemptModal.style.display = 'none';
-              loginBtn.disabled = false;
-              loginBtn.innerText = 'Login';
-              attemptCount = 0;
-            }
-          }, 1000);
+        if (data.success) {
+            window.location.href = data.redirect;
         } else {
-          errorMessage.innerText = data.message;
-          errorModal.style.display = 'flex';
+            passwordError.textContent = data.message;
+            passwordError.classList.add('visible');
         }
-      }
     })
-    .catch(err => {
-      console.error("Login error:", err);
-      errorMessage.innerText = "Something went wrong. Please try again.";
-      errorModal.style.display = 'flex';
+    .catch(() => {
+        passwordError.textContent = "Something went wrong. Please try again.";
+        passwordError.classList.add('visible');
     });
-  });
+});
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
 
-  function togglePassword() {
-    const eyeIcon = document.querySelector('.toggle-password');
-    if (passwordInput.type === 'password') {
-      passwordInput.type = 'text';
-      eyeIcon.classList.remove('fa-eye');
-      eyeIcon.classList.add('fa-eye-slash');
+togglePassword.addEventListener('click', () => {
+    // Toggle the type attribute
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+
+    // Optional: toggle the icon
+    if (type === 'password') {
+        togglePassword.src = "{{ asset('images/hide.png') }}";
     } else {
-      passwordInput.type = 'password';
-      eyeIcon.classList.remove('fa-eye-slash');
-      eyeIcon.classList.add('fa-eye');
-    }
-  }
-
-  function closeModal() { errorModal.style.display = 'none'; }
-
-  // Android button switcher
-  if (/android/i.test(navigator.userAgent)) {
-    document.querySelector('.prefect-login-left').style.display = 'none';
-    document.querySelector('.prefect-login-right').style.display = 'block';
-  }
-
-const togglePasswordIcon = document.getElementById('togglePassword');
-
-togglePasswordIcon.addEventListener('click', () => {
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        togglePasswordIcon.src = "{{ asset('images/hide.png') }}"; // your "eye closed" icon
-    } else {
-        passwordInput.type = 'password';
-        togglePasswordIcon.src = "{{ asset('images/show.png') }}"; // your "eye open" icon
+        togglePassword.src = "{{ asset('images/show.png') }}";
     }
 });
-
-  </script>
+</script>
 
 </body>
 </html>

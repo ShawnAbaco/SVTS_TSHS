@@ -23,8 +23,7 @@
   width: 240px;
   height: 100%;
   /* Gradient background */
-  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
-  font-family: "Segoe UI", Tahoma, sans-serif;
+background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  font-family: "Segoe UI", Tahoma, sans-serif;
   z-index: 1000;
   overflow-y: auto;
   transition: all 0.3s ease;

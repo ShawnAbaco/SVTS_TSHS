@@ -23,8 +23,7 @@
   width: 240px;
   height: 100%;
   /* Gradient background */
-  background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
-  font-family: "Segoe UI", Tahoma, sans-serif;
+background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  font-family: "Segoe UI", Tahoma, sans-serif;
   z-index: 1000;
   overflow-y: auto;
   transition: all 0.3s ease;
@@ -213,7 +212,7 @@
 .close:hover { color:black; }
 
 .toolbar {
-  display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap;
+  display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 1rem; flex-wrap: wrap;
 }
 
 .toolbar input {
@@ -231,7 +230,7 @@
 .btn:hover { opacity: 0.9; }
 
 table {
-  width: 100%; border-collapse: collapse; margin-top:15px; font-size: 0.85rem; table-layout: fixed;
+  width: 100%; border-collapse: collapse;  font-size: 0.85rem; table-layout: fixed;
 }
 
 th, td { border:1px solid #ccc; padding:6px; text-align:left; word-wrap: break-word; }

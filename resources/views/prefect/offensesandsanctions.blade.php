@@ -30,8 +30,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 230px;
-background: linear-gradient(135deg, #001f3f, #003366, #0066cc, #3399ff);
-background-repeat: no-repeat;
+background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);background-repeat: no-repeat;
 background-attachment: fixed;
   color: #fff;
   height: 100vh;
@@ -393,8 +392,7 @@ tbody tr:hover {
   <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
         <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT DASHBOARD</h2>
-  <ul>
+  <h2>PREFECT</h2>  <ul>
     <div class="section-title">Main</div>
     <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
     <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>

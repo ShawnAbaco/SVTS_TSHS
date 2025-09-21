@@ -84,44 +84,60 @@
     </div>
   </div>
 
-  <!-- VIOLATION RECORDS TABLE -->
+<!-- VIOLATION RECORDS TABLE -->
 <div class="violation-table-container">
   <table id="violationTable">
     <thead>
+      <tr>
         <th style="text-align: center;">
-      <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-        <input type="checkbox" id="selectAll">
-        <button class="btn-trash-small" title="Delete Selected">
-          <i class="fas fa-trash"></i>
-
+          <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <input type="checkbox" id="selectAll">
+            <button type="button" class="btn-trash-small" title="Delete Selected">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </th>
         <th>Student</th>
         <th>Violation</th>
         <th>Incident</th>
         <th>Date</th>
         <th>Time</th>
         <th>Sanction</th>
+        <th>Status</th> <!-- ✅ Added Status Column -->
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      @foreach($violations as $v)
-      <tr data-id="{{ $v->violation_id }}" data-student-id="{{ $v->student->student_id }}">
-        <td><input type="checkbox" class="rowCheckbox"></td>
-        <td>{{ $v->student->student_fname }} {{ $v->student->student_lname }}</td>
-        <td>{{ $v->offense->offense_type }}</td>
-        <td>{{ $v->violation_incident }}</td>
-        <td>{{ $v->violation_date }}</td>
-        <td>{{ $v->violation_time }}</td>
-        <td>{{ $v->offense->sanction_consequences }}</td>
-        <td>
-          <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-          <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
-        </td>
-      </tr>
-      @endforeach
+      @forelse($violations as $v)
+        <tr data-id="{{ $v->violation_id }}" data-student-id="{{ $v->student->student_id }}">
+          <td><input type="checkbox" class="rowCheckbox"></td>
+          <td>{{ $v->student->student_fname }} {{ $v->student->student_lname }}</td>
+          <td>{{ $v->offense->offense_type ?? 'N/A' }}</td>
+          <td>{{ $v->violation_incident }}</td>
+          <td>{{ \Carbon\Carbon::parse($v->violation_date)->format('M d, Y') }}</td>
+          <td>{{ \Carbon\Carbon::parse($v->violation_time)->format('h:i A') }}</td>
+          <td>{{ $v->offense->sanction_consequences ?? 'N/A' }}</td>
+          <td>
+            @if($v->status === 'active')
+              <span class="status-badge active">Active</span>
+            @else
+              <span class="status-badge inactive">Inactive</span>
+            @endif
+          </td>
+          <td>
+            <button class="btn-edit" data-id="{{ $v->violation_id }}"><i class="fas fa-edit"></i> Edit</button>
+            <button class="btn-delete" data-id="{{ $v->violation_id }}"><i class="fas fa-trash"></i> Delete</button>
+          </td>
+        </tr>
+      @empty
+        <tr>
+          <td colspan="9" style="text-align:center; padding:10px;">No violation records found.</td>
+        </tr>
+      @endforelse
     </tbody>
   </table>
 </div>
+
 
 <!-- ADD VIOLATION MODAL -->
 <div class="modal" id="addModal">

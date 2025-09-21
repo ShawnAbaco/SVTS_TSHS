@@ -72,12 +72,17 @@
 
 
 <!-- Modals -->
-@for($i=1; $i<=16; $i++)
+@for($i=1; $i<=15; $i++)
 <div id="modal{{ $i }}" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <h2 class="modal-title"></h2>
+            <div class="adviser-info" style="margin-bottom: 10px; font-weight: bold; text-align: left; font-size: 15px;">
+  Adviser: <span id="adviser-name"></span> |
+  Grade Level: <span id="adviser-gradelevel"></span> |
+  Section: <span id="adviser-section"></span>
+</div>
 
+            <h2 class="modal-title"></h2>
     <div class="toolbar">
       <input type="text" placeholder="Search..." oninput="liveSearch('modal{{ $i }}', this.value)">
       <button class="btn btn-warning" onclick="printModal('modal{{ $i }}')"><i class="fa fa-print"></i> Print</button>
@@ -85,6 +90,7 @@
     </div>
 
     <div class="modal-table-container">
+
     <table id="table-{{ $i }}" class="w-full border-collapse">
       <thead>
         @switch($i)
@@ -156,8 +162,6 @@
             @case(8)
             <tr>
                 <th>Student Name</th>
-                <th>Section</th>
-                <th>Grade Level</th>
                 <th>Total Violations</th>
                 <th>First Violation Date</th>
                 <th>Most Recent Violation Date</th>
@@ -207,8 +211,6 @@
             @case(14)
             <tr>
                 <th>Student Name</th>
-                <th>Adviser Section</th>
-                <th>Grade Level</th>
                 <th>Total Violations</th>
             </tr>
             @break
@@ -251,7 +253,16 @@
   });
 
   function openReportModal(reportId) {
+
     const modal = document.getElementById('modal' + reportId);
+      // ✅ Fill adviser info in this modal
+  modal.querySelector('#adviser-name').textContent = loggedAdviser.name;
+  modal.querySelector('#adviser-gradelevel').textContent = loggedAdviser.gradelevel;
+  modal.querySelector('#adviser-section').textContent = loggedAdviser.section;
+
+
+
+  // Set modal title
     const title = document.querySelector(`.report-box[data-modal="modal${reportId}"] h3`).textContent;
     modal.querySelector('.modal-title').textContent = title;
 
@@ -273,13 +284,13 @@
           case 5: headers = ['Complainant Name','Respondent Name','Incident Description','Complaint Date','Complaint Time']; break;
           case 6: headers = ['Complainant Name','Respondent Name','Type of Offense','Complaint Date','Complaint Time']; break;
           case 7: headers = ['Offense Type','Description','Total Occurrences']; break;
-          case 8: headers = ['Student Name','Section','Grade Level','Total Violations','First Violation Date','Most Recent Violation Date']; break;
+          case 8: headers = ['Student Name','Total Violations','First Violation Date','Most Recent Violation Date']; break;
           case 9: headers = ['Offense Type','Offense Description','Sanction Consequences']; break;
           case 10: headers = ['Student Name','Parent Name','Parent Contact Info','Violation Date','Violation Time','Violation Status']; break;
           case 11: headers = ['Offense Type','Sanction Consequences','Month and Year','Number of Sanctions Given']; break;
           case 12: headers = ['Student Name','Parent Name','Parent Contact Info']; break;
           case 13: headers = ['First Name','Last Name','Violation Count','Complaint Involvement Count']; break;
-          case 14: headers = ['Student Name','Adviser Section','Grade Level','Total Violations']; break;
+          case 14: headers = ['Student Name','Total Violations']; break;
           case 15: headers = ['Student Name','Offense Type','Sanction','Incident Description','Violation Date','Violation Time']; break;
         }
 
@@ -350,8 +361,6 @@
               break;
             case 8:
               tr.innerHTML = `<td>${row.student_name}</td>
-                              <td>${row.section}</td>
-                              <td>${row.grade_level}</td>
                               <td>${row.total_violations}</td>
                               <td>${row.first_violation_date}</td>
                               <td>${row.most_recent_violation_date}</td>`;
@@ -390,8 +399,6 @@
               break;
             case 14:
               tr.innerHTML = `<td>${row.student_name}</td>
-                              <td>${row.adviser_section}</td>
-                              <td>${row.grade_level}</td>
                               <td>${row.total_violations}</td>`;
               break;
 
@@ -442,17 +449,66 @@
     });
   }
 
-  // Print modal
-  function printModal(modalId){
-    const modal = document.getElementById(modalId);
-    const clone = modal.querySelector('.modal-content').cloneNode(true);
-    clone.querySelectorAll('input,button,.close').forEach(el=>el.remove());
-    const w = window.open('','','width=900,height=700');
-    w.document.write('<html><head><title>Print</title></head><body>');
-    w.document.write(clone.innerHTML);
-    w.document.write('</body></html>');
-    w.document.close(); w.focus(); w.print(); w.close();
-  }
+// Print modal with bordered table
+function printModal(modalId) {
+  const modal = document.getElementById(modalId);
+  const clone = modal.querySelector('.modal-content').cloneNode(true);
+
+  // Remove interactive elements before printing
+  clone.querySelectorAll('input, button, .close').forEach(el => el.remove());
+
+  // Open print window
+  const w = window.open('', '', 'width=900,height=700');
+
+  // Write content with print styles
+  w.document.write(`
+    <html>
+      <head>
+        <title>Print</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+          }
+          h2.modal-title {
+            text-align: center;
+            margin-bottom: 15px;
+          }
+          .adviser-info {
+            font-weight: bold;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            padding: 8px;
+            border-radius: 5px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+          }
+          table, th, td {
+            border: 1px solid #000;
+          }
+          th, td {
+            padding: 8px;
+            text-align: left;
+          }
+          th {
+            background-color: #f0f0f0;
+          }
+        </style>
+      </head>
+      <body>
+        ${clone.innerHTML}
+      </body>
+    </html>
+  `);
+
+  w.document.close();
+  w.focus();
+  w.print();
+  w.close();
+}
 
   // Export CSV
   function exportCSV(modalId){
@@ -468,6 +524,13 @@
     a.download = modalId+'.csv';
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
   }
+
+    // Get adviser data from backend
+  const loggedAdviser = {
+    name: "{{ auth()->guard('adviser')->user()->adviser_fname }} {{ auth()->guard('adviser')->user()->adviser_lname }}",
+    gradelevel: "{{ auth()->guard('adviser')->user()->adviser_gradelevel }}",
+    section: "{{ auth()->guard('adviser')->user()->adviser_section }}"
+  };
 </script>
 
 
