@@ -1,93 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Adviser Login</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Discipline System</title>
     <link rel="stylesheet" href="{{ asset('css/adviser/login.css') }}">
-
 </head>
 <body>
+    <!-- Header with Logo, Title, and Login -->
+    <header class="top-bar">
+        <div class="header-left">
+            <img src="{{ asset('images/logo.png') }}" alt="System Logo" class="logo">
+            <h1>Student Discipline & Violation Tracking System</h1>
+        </div>
 
-  <div class="page-header">TAGOLOAN SENIOR HIGH SCHOOL</div>
+<div class="top-right-login">
+    <form id="loginForm" action="{{ route('auth.login') }}" method="POST">
+        @csrf
+        <input type="email" id="email" name="email" placeholder="Email" required>
 
-  <a href="/prefect/login" class="prefect-login-left">Prefect Login</a>
-  <a href="/prefect/login" class="prefect-login-right">Prefect Login</a>
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <img src="{{ asset('images/hide.png') }}" id="togglePassword" class="toggle-password" alt="Toggle Password">
+        </div>
 
-  <div class="container">
-    <div class="login-box">
-      <div class="logo-section">
-        <img src="/images/Logo.png" alt="TSHS Logo">
-        <h3>STUDENT VIOLATION TRACKING SYSTEM</h3>
-
-      </div>
-      <div class="form-section">
-        <h1>Adviser </h1>
-        <form action="{{ route('adviser.login') }}" method="POST" id="loginForm">
-  @csrf
-  <div class="form-group">
-    <label for="email">Email</label>
-    <div class="input-icon-wrapper">
-      <i class="fa fa-envelope"></i>
-      <input type="email" id="email" name="email" placeholder="Enter your email">
-    </div>
-    <div class="warning" id="emailWarning">Please enter a valid email.</div>
-  </div>
-
-  <div class="form-group">
-    <label for="password">Password</label>
-    <div class="input-icon-wrapper">
-      <i class="fa fa-lock"></i>
-      <input type="password" id="password" name="password" placeholder="Enter your password">
-      <i class="fa fa-eye toggle-password" onclick="togglePassword()"></i>
-    </div>
-    <div class="warning" id="passwordWarning">Password is required.</div>
-  </div>
-
-  <button type="submit" id="loginBtn">Login</button>
-
-  <!-- Forgot Password link -->
-  <div style="text-align:center; margin-top:10px;">
-    <a href="/forgot-password" style="font-size:13px; color:rgb(255, 18, 1); font-weight:bold; text-decoration:none;">
-      Forgot Password?
-    </a>
-  </div>
-</form>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="page-footer">&copy; 2025 DEVELOPMENT OF STUDENT VIOLATION TRACKING SYSTEM</div>
-
-  <!-- Invalid credentials modal -->
-  <div id="errorModal" class="modal">
-    <div class="modal-content">
-      <h2>Error</h2>
-      <p id="errorMessage">Invalid credentials. Please try again.</p>
-      <button onclick="closeModal()">OK</button>
-    </div>
-  </div>
-
-<!-- Success modal -->
-<div id="successModal" class="modal">
-  <div class="modal-content">
-    <h2 style="color:green;">Login Successful</h2>
-    <p>Redirecting to dashboard...</p>
-  </div>
+        <button type="submit" id="loginBtn">Log In</button>
+    </form>
 </div>
 
 
-  <!-- Too many attempts modal -->
-  <div id="attemptModal" class="modal">
-    <div class="modal-content">
-      <h2>Too Many Attempts</h2>
-      <p>Please wait <span id="countdown">10</span> seconds before trying again.</p>
-    </div>
-  </div>
 
-  <script>
+<!-- Error Modal -->
+<div id="errorModal" class="modal hidden">
+    <p id="errorMessage"></p>
+    <button onclick="closeModal()">Close</button>
+</div>
+
+<!-- Attempt Lockout Modal -->
+<div id="attemptModal" class="modal hidden">
+    <p>Please wait <span id="countdown"></span> seconds before trying again.</p>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal hidden">
+    <p>Login successful!</p>
+</div>
+
+    </header>
+
+    <div class="main-container">
+        <!-- Left Info Section -->
+        <div class="left-section">
+            <p class="subtitle">Ensuring accountability, transparency, and discipline monitoring.</p>
+
+            <div class="features">
+                <div class="feature">
+                    <span class="icon">📊</span>
+                    <p><strong>Track Violations</strong> Monitor student discipline records with ease.</p>
+                </div>
+                <div class="feature">
+                    <span class="icon">👨‍🏫</span>
+                    <p><strong>Adviser Reports</strong> Advisers and Prefects can manage cases in real-time.</p>
+                </div>
+                <div class="feature">
+                    <span class="icon">🎓</span>
+                    <p><strong>Strand Info</strong> Supports STEM | HUMSS | ABM | GAS | TVL strands.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Picture Boxes (2x2 Grid) -->
+        <div class="right-section">
+            <div class="image-boxes">
+                <div class="box"><img src="{{ asset('images/sample1.jpg') }}" alt="Showcase 1"></div>
+                <div class="box"><img src="{{ asset('images/sample2.jpg') }}" alt="Showcase 2"></div>
+                <div class="box"><img src="{{ asset('images/sample3.jpg') }}" alt="Showcase 3"></div>
+                <div class="box"><img src="{{ asset('images/sample4.jpg') }}" alt="Showcase 4"></div>
+            </div>
+        </div>
+    </div>
+    <script>
    const loginForm = document.getElementById('loginForm');
   const loginBtn = document.getElementById('loginBtn');
   const emailInput = document.getElementById('email');
@@ -179,6 +171,20 @@
     document.querySelector('.prefect-login-left').style.display = 'none';
     document.querySelector('.prefect-login-right').style.display = 'block';
   }
+
+const togglePasswordIcon = document.getElementById('togglePassword');
+
+togglePasswordIcon.addEventListener('click', () => {
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        togglePasswordIcon.src = "{{ asset('images/hide.png') }}"; // your "eye closed" icon
+    } else {
+        passwordInput.type = 'password';
+        togglePasswordIcon.src = "{{ asset('images/show.png') }}"; // your "eye open" icon
+    }
+});
+
   </script>
+
 </body>
 </html>

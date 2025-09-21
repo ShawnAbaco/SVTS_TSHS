@@ -12,16 +12,20 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ViolationAnecdotalController;
 use App\Http\Controllers\ViolationRecordController;
+use App\Http\Controllers\AuthController;
+
 
 Route::get('/', function () {
     return view('adviser.login');
 });
+    Route::get('/adviser/login', [AdviserController::class, 'showLoginForm'])->name('adviser.login');
+    Route::post('/adviser/login', [AuthController::class, 'login'])->name('auth.login');
+
 
 // ===================== Prefect Routes =====================
 Route::prefix('prefect')->group(function () {
-    // Auth routes (outside middleware)
-    Route::get('/login', [PrefectController::class, 'showLoginForm'])->name('prefect.login');
-    Route::post('/login', [PrefectController::class, 'login'])->name('prefect.login.submit');
+    // Login / Logout
+
     Route::post('/logout', [PrefectController::class, 'logout'])->name('prefect.logout');
 
     // Protected routes
@@ -74,11 +78,12 @@ Route::prefix('prefect')->group(function () {
 
 });
 
+
+
 // ===================== Adviser Routes =====================
 Route::prefix('adviser')->group(function () {
-    // Auth routes (outside middleware)
+    // Login / Logout
     Route::get('/login', [AdviserController::class, 'showLoginForm'])->name('adviser.login');
-    Route::post('/login', [AdviserController::class, 'login'])->name('adviser.login.submit');
     Route::post('/logout', [AdviserController::class, 'logout'])->name('adviser.logout');
 
     // Protected routes

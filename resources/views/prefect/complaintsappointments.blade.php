@@ -387,7 +387,7 @@ function logout() {
     .then(response => {
         if(response.ok) {
             // Redirect to login after successful logout
-            window.location.href = "{{ route('prefect.login') }}";
+            window.location.href = "{{ route('auth.login') }}";
         } else {
             console.error('Logout failed:', response.statusText);
         }

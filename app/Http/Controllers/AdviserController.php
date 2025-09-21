@@ -23,26 +23,6 @@ class AdviserController extends Controller
         return view('adviser.login');
     }
 
-    public function login(Request $request)
-    {
-        $credentials = [
-            'adviser_email' => $request->email,
-            'password'      => $request->password,
-        ];
-
-        if (Auth::guard('adviser')->attempt($credentials)) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login successful!',
-                'redirect' => route('adviser.dashboard')
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid credentials. Please try again.'
-        ]);
-    }
 
     public function dashboard()
     {

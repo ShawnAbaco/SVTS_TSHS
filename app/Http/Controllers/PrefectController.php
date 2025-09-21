@@ -26,26 +26,6 @@ class PrefectController extends Controller
         return view('prefect.login');
     }
 
-    public function login(Request $request)
-    {
-        $credentials = [
-            'prefect_email' => $request->email, // keep your DB column
-            'password' => $request->password,
-        ];
-
-        if (Auth::guard('prefect')->attempt($credentials)) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login successful!',
-                'redirect' => route('prefect.dashboard')
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid credentials. Please try again.'
-        ]);
-    }
     public function logout(Request $request)
 {
     Auth::guard('prefect')->logout();
@@ -57,7 +37,7 @@ class PrefectController extends Controller
      return response()->json([
                 'success' => true,
                 'message' => 'Logout successful!',
-                'redirect' => route('prefect.login')
+                'redirect' => route('adviser.login')
             ]);
 }
 
