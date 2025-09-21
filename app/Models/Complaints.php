@@ -53,4 +53,14 @@ class Complaints extends Model
     {
         return $this->hasOne(ComplaintsAnecdotal::class, 'complaints_id');
     }
+     /** 🔎 Local Scopes for Status Filtering */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', 'inactive');
+    }
 }

@@ -26,4 +26,14 @@ class ViolationAppointment extends Model
     {
         return $this->belongsTo(ViolationRecord::class, 'violation_id');
     }
+     /** 🔎 Local Scopes for Status Filtering */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', 'inactive');
+    }
 }

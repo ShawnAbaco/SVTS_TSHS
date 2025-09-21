@@ -40,4 +40,14 @@ class PrefectOfDiscipline extends Authenticatable
     {
         return $this->hasMany(Complaints::class, 'prefect_id');
     }
+     /** 🔎 Local Scopes for Status Filtering */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', 'inactive');
+    }
 }

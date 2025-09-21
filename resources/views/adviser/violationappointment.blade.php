@@ -56,6 +56,17 @@
     </div>
    <div class="toolbar">
   <div class="toolbar-right">
+     @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
     <input type="text" id="searchInput" placeholder="Search appointments...">
     <button class="btn-primary" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Create </button>
     <button class="btn-primary" style="background:#e63946;"><i class="fas fa-archive"></i> Archive</button>

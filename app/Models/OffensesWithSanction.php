@@ -28,4 +28,14 @@ class OffensesWithSanction extends Model
     {
         return $this->hasMany(Complaints::class, 'offense_sanc_id');
     }
+     /** 🔎 Local Scopes for Status Filtering */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', 'inactive');
+    }
 }

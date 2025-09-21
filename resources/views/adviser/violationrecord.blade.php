@@ -60,6 +60,18 @@
   <div class="header">
     <h2>Violation Logging</h2>
     <div class="actions">
+
+         @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="Search records...">
       </div>

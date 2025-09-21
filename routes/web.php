@@ -129,6 +129,15 @@ Route::prefix('adviser')->group(function () {
         Route::get('/violationappointment', [AdviserController::class, 'violationappointment'])->name('violation.appointment');
         Route::post('/adviser/violation/appointment/store', [ViolationAppointmentController::class, 'storeViolationAppointment'])->name('violation.appointment.store');
 
+        // ARCHIVE
+        Route::put('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
+        Route::get('/students/archived', [StudentController::class, 'archived'])->name('students.archived');
+
+
+        //sms
+        Route::post('/send-sms-to-parent', [ParentController::class, 'sendSms'])
+     ->name('send.sms.to.parent');
+
         // Offense & Sanction
         Route::get('/offensesanction', [AdviserController::class, 'offensesanction'])->name('offense.sanction');
     });

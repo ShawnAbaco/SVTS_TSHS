@@ -56,6 +56,18 @@
         <h2>Offense & Sanction</h2>
       </div>
       <div class="toolbar-right">
+
+         @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
         <input type="text" id="searchInput" placeholder="Search offenses...">
         <button id="printBtn" class="btn btn-warning"><i class="fa fa-print"></i> Print</button>
         <button id="exportBtn" class="btn btn-red"><i class="fa fa-file-export"></i> Export CSV</button>

@@ -57,6 +57,18 @@
    <div class="toolbar">
   <h1>Complaints Anecdotal</h1>
   <div class="toolbar-actions">
+
+     @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
     <input type="text" id="searchInput" placeholder="Search..." />
     <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Add</button>
     <button class="btn-archive" id="archivesBtn"><i class="fas fa-archive"></i> Archives</button>

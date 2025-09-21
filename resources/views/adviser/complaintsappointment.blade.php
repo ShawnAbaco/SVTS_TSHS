@@ -53,6 +53,18 @@
     <div class="toolbar">
   <h1>Complaints Appointments</h1>
   <div class="toolbar-actions">
+
+     @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
     <input type="text" id="searchInput" placeholder="Search appointments...">
     <button class="btn-primary" id="openModalBtn"><i class="fas fa-plus"></i> Create</button>
     <button class="btn-orange" id="archivesBtn"><i class="fas fa-archive"></i> Archives</button>
