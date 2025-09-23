@@ -22,81 +22,124 @@ body {
   color: #111;
 }
 
-/* --- Sidebar (untouched) --- */
-.sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);background-repeat: no-repeat;
+ .sidebar {
+      width: 230px;
+background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
+
+background-repeat: no-repeat;
 background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-  overflow-y: auto;
-}
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
 
-.sidebar h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: #ffffff;
-  text-transform: uppercase;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-  padding-bottom: 10px;
-}
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
 
-.sidebar ul { list-style: none; }
-.sidebar ul li {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #e0e0e0;
-  transition: background 0.3s, transform 0.2s;
-}
-.sidebar ul li i {
-  margin-right: 12px;
-  color: #cfcfcf;
-  min-width: 20px;
-  font-size: 16px;
-}
-.sidebar ul li:hover {
-  background: #2d3f55;
-  transform: translateX(5px);
-  color: #fff;
-}
-.sidebar ul li:hover i { color: #00e0ff; }
-.sidebar ul li.active {
-  background: #00aaff;
-  color: #fff;
-  border-left: 4px solid #ffffff;
-}
-.sidebar ul li.active i { color: #fff; }
-.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
-.section-title {
-  margin: 20px 10px 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 1px;
-}
+    .sidebar ul {
+      list-style: none;
+    }
 
-/* Dropdown */
-.dropdown-container { display: none; list-style: none; padding-left: 25px; }
-.dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
-.dropdown-container li:hover { background: #3a4c66; color: #fff; }
-.dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
-.dropdown-btn.active .arrow { transform: rotate(180deg); }
+    .sidebar ul li {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 15px;
+      color:rgb(255, 255, 255);
+      transition: background 0.3s, transform 0.2s;
+    }
 
-/* Scrollbar */
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+      font-size: 16px;
+    }
 
+    .sidebar ul li:hover {
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
+    }
+
+    .sidebar ul li:hover i {
+      color: #00e0ff;
+    }
+
+    .sidebar ul li.active {
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
+    }
+
+    .sidebar ul li.active i {
+      color: #fff;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+
+    .section-title {
+      margin: 20px 10px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 25px;
+    }
+
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
+    }
+
+    .dropdown-container li:hover {
+      background: #3a4c66;
+      color: #fff;
+    }
+
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
 /* --- Main Content --- */
 .content {
   margin-left: 270px;
@@ -112,8 +155,9 @@ h1 {
 /* --- Top Controls --- */
 .top-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
@@ -123,28 +167,49 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
+  height: 40px;
 }
 
-.top-controls button {
+.top-controls .btn-add {
   border: none;
   padding: 10px 16px;
   font-size: 15px;
   border-radius: 8px;
   cursor: pointer;
   color: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   gap: 6px;
   background: linear-gradient(135deg, #007bff, #00aaff);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   transition: all 0.3s ease;
 }
-.top-controls button:hover {
+.top-controls .btn-add:hover {
   background: linear-gradient(135deg, #0056b3, #007bbf);
   transform: translateY(-2px);
 }
 
-/* --- Table Styling (Big & Modern) --- */
+.top-controls .btn-archive {
+  border: none;
+  padding: 10px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: orange;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  height: 40px;
+}
+.top-controls .btn-archive:hover {
+  background-color: darkorange;
+  transform: translateY(-2px);
+}
+
+/* --- Table Styling --- */
 table {
   width: 100%;
   border-collapse: separate;
@@ -157,14 +222,17 @@ table {
 }
 
 th {
-  background: linear-gradient(135deg, #007bff, #00aaff);
-  color: #fff;
-  padding: 16px 14px;
+  background: #000000 !important;
+  color: #ffffff !important;
+  font-weight: bold !important;
   text-align: left;
+  padding: 16px 14px;
   position: sticky;
   top: 0;
   z-index: 2;
 }
+
+thead tr:hover { background: #000000 !important; transform: none !important; }
 
 td {
   padding: 14px 12px;
@@ -173,31 +241,25 @@ td {
 }
 
 tr:nth-child(even) { background: #f5f8ff; }
-tr:hover {
-  background: #d0e7ff;
-  transform: scale(1.01);
-  transition: all 0.2s ease-in-out;
-}
+tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s ease-in-out; }
 
-/* Status labels */
+/* Status Labels */
 .status-pending {
-  color: #e67e22;
-  background: #fff4e5;
-  padding: 6px 12px;
-  border-radius: 14px;
+  color:rgb(0, 211, 32);
+ 
+  padding: 4px 10px;
+  border-radius: 12px;
   font-weight: 600;
   text-align: center;
-  display: inline-block;
 }
 
 .status-resolved {
-  color: #27ae60;
-  background: #e6f9f0;
-  padding: 6px 12px;
-  border-radius: 14px;
+  color: #fff;           /* White text */
+  background: #28a745;   /* Green background */
+  padding: 4px 10px;
+  border-radius: 12px;
   font-weight: 600;
   text-align: center;
-  display: inline-block;
 }
 
 /* Action buttons */
@@ -217,42 +279,30 @@ tr:hover {
 
 .btn-action i { margin-right: 5px; }
 
-.btn-edit { background: #28a745; }
-.btn-edit:hover { background: #218838; transform: translateY(-2px) scale(1.05); }
-
-.btn-delete { background: #dc3545; }
-.btn-delete:hover { background: #c82333; transform: translateY(-2px) scale(1.05); }
-
-/* Responsive adjustments */
-@media screen and (max-width: 1200px) {
-  table { font-size: 15px; }
-  th, td { padding: 12px 10px; }
+.btn-update {
+  background: orange;
+}
+.btn-update:hover {
+  background: darkorange;
+  transform: translateY(-2px) scale(1.05);
 }
 
-@media screen and (max-width: 768px) {
-  .content { margin-left: 0; padding: 15px; }
-  table { font-size: 14px; }
-  th, td { padding: 10px 8px; }
-  .btn-action { padding: 6px 10px; font-size: 13px; }
-}
+/* Responsive */
+@media screen and (max-width: 1200px) { table { font-size: 15px; } th, td { padding: 12px 10px; } }
+@media screen and (max-width: 768px) { .content { margin-left: 0; padding: 15px; } table { font-size: 14px; } th, td { padding: 10px 8px; } .btn-action { padding: 6px 10px; font-size: 13px; } }
+
 /* Logo */
-.sidebar img {
-  width: 150px;
-  height: auto;
-  margin: 0 auto 0.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
+.sidebar img { width: 150px; height: auto; margin: 0 auto 0.5rem; display: block; transition: transform 0.3s ease; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+
 </style>
 </head>
 <body>
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-        <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>  <ul>
+  <img src="/images/Logo.png" alt="Logo">
+  <h2>PREFECT</h2>
+  <ul>
     <div class="section-title">Main</div>
     <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
     <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
@@ -283,20 +333,16 @@ tr:hover {
 <div class="content">
   <h1>Complaints Management</h1>
 
-  <div class="top-controls" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 20px;">
-  <input type="text" id="searchInput" placeholder="Search Complainant Name..." onkeyup="searchComplainant()" style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; width: 250px;">
-  <button onclick="openModal()" style="border: none; padding: 10px 16px; font-size: 15px; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #007bff, #00aaff); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-    <i class="fas fa-plus"></i> Add Complainant
-  </button>
-  <button onclick="openTrash()" style="border: none; padding: 10px 16px; font-size: 15px; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #dc3545, #ff4d4d); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-    <i class="fas fa-trash"></i> Trash
-  </button>
-</div>
-
+  <div class="top-controls">
+    <input type="text" id="searchInput" placeholder="Search Complainant Name..." onkeyup="searchComplainant()">
+    <button class="btn-add" onclick="openModal()"><i class="fas fa-plus"></i> Add Complainant</button>
+    <button class="btn-archive" onclick="openArchive()"><i class="fas fa-archive"></i> Archive</button>
+  </div>
 
   <table id="complaintsTable">
     <thead>
       <tr>
+        <th><input type="checkbox" id="selectAll"></th>
         <th>ID</th>
         <th>Complainant</th>
         <th>Respondent</th>
@@ -311,6 +357,7 @@ tr:hover {
     <tbody>
       @foreach($complaints as $complaint)
       <tr>
+        <td><input type="checkbox" class="student-checkbox"></td>
         <td>{{ $complaint->complaints_id }}</td>
         <td>{{ $complaint->complainant->student_fname }} {{ $complaint->complainant->student_lname }}</td>
         <td>{{ $complaint->respondent->student_fname }} {{ $complaint->respondent->student_lname }}</td>
@@ -322,8 +369,7 @@ tr:hover {
             {{ $complaint->status ?? 'Pending' }}
         </td>
         <td>
-          <button class="btn-action btn-edit"><i class="fas fa-edit"></i>Edit</button>
-          <button class="btn-action btn-delete"><i class="fas fa-trash"></i>Delete</button>
+          <button class="btn-action btn-update"><i class="fas fa-edit"></i>Update</button>
         </td>
       </tr>
       @endforeach
@@ -332,63 +378,43 @@ tr:hover {
 </div>
 
 <script>
-// Dropdown functionality
+const selectAll = document.getElementById('selectAll');
+const checkboxes = document.querySelectorAll('.student-checkbox');
+selectAll.addEventListener('change', () => { checkboxes.forEach(cb => cb.checked = selectAll.checked); });
+checkboxes.forEach(cb => cb.addEventListener('change', () => {
+  selectAll.checked = document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length;
+}));
+
 const dropdowns = document.querySelectorAll('.dropdown-btn');
-dropdowns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const container = btn.nextElementSibling;
-    dropdowns.forEach(otherBtn => {
-      const otherContainer = otherBtn.nextElementSibling;
-      if (otherBtn !== btn) {
-        otherBtn.classList.remove('active');
-        otherContainer.style.display = 'none';
-      }
-    });
-    btn.classList.toggle('active');
-    container.style.display = container.style.display === 'block' ? 'none' : 'block';
-  });
-});
+dropdowns.forEach(btn => { btn.addEventListener('click', () => {
+  const container = btn.nextElementSibling;
+  dropdowns.forEach(otherBtn => { const otherContainer = otherBtn.nextElementSibling; if (otherBtn !== btn) { otherBtn.classList.remove('active'); otherContainer.style.display = 'none'; }});
+  btn.classList.toggle('active');
+  container.style.display = container.style.display === 'block' ? 'none' : 'block';
+})});
 
 function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
+    if (!confirm("Are you sure you want to logout?")) return;
     fetch("{{ route('prefect.logout') }}", {
         method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
     })
-    .then(response => {
-        if(response.ok) {
-            // Redirect to login after successful logout
-            window.location.href = "{{ route('auth.login') }}";
-        } else {
-            console.error('Logout failed:', response.statusText);
-        }
-    })
+    .then(response => { if(response.ok){ window.location.href = "{{ route('auth.login') }}"; } })
     .catch(error => console.error('Logout failed:', error));
 }
 
-// Search filter
 function searchComplainant() {
   let input = document.getElementById("searchInput").value.toLowerCase();
   let table = document.getElementById("complaintsTable");
   let tr = table.getElementsByTagName("tr");
-
   for (let i = 1; i < tr.length; i++) {
-    let td = tr[i].getElementsByTagName("td")[1];
-    if (td) {
-      let textValue = td.textContent || td.innerText;
-      tr[i].style.display = textValue.toLowerCase().includes(input) ? "" : "none";
-    }
+    let td = tr[i].getElementsByTagName("td")[2];
+    tr[i].style.display = td && td.textContent.toLowerCase().includes(input) ? "" : "none";
   }
 }
 
-function openModal() {
-  alert("Open Add Complainant form/modal here.");
-}
+function openModal() { alert("Open Add Complainant form/modal here."); }
+function openArchive() { alert("Open Archive modal here."); }
 </script>
 
 </body>

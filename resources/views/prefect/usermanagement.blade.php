@@ -7,116 +7,247 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="{{ asset('css/admin/USERS.css') }}">
 <style>
-    /* Inline validation error styling */
-    .error-msg {
-        color: red;
-        font-size: 0.85rem;
-        margin-top: 3px;
-        display: block;
-    }
-
-    input.invalid { border-color: red; }
-
-    /* Modal styling */
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .modal-content {
-        background: #fff;
-        padding: 20px;
-        width: 500px;
-        border-radius: 8px;
-        max-width: 95%;
-    }
-
-    /* Small modal */
-    .small-modal { width: 350px; padding: 15px; }
-    .small-modal .form-group { margin-bottom: 10px; }
-    .small-modal label { font-size: 0.9rem; }
-    .small-modal input, .small-modal select { width: 100%; padding: 6px 8px; font-size: 0.9rem; }
-    .small-modal button { font-size: 0.85rem; padding: 6px 12px; }
-    .small-modal .modal-header { font-size: 1rem; margin-bottom: 8px; }
-
-    .modal-footer { text-align: right; margin-top: 10px; }
-    #successMessage { color: green; margin-bottom: 10px; display: none; }
-
-    /* Reset */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; font-weight: bold; transition: all 0.2s ease-in-out; }
-body { display: flex; background: #f9f9f9; color: #111; }
-
-/* Sidebar */
-.sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-  overflow-y: auto;
+/* ======================= RESET ======================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
 }
 
-.sidebar h2 { margin-bottom: 30px; text-align: center; font-size: 22px; letter-spacing: 1px; color: #ffffff; text-transform: uppercase; border-bottom: 2px solid rgba(255, 255, 255, 0.15); padding-bottom: 10px; }
-.sidebar ul { list-style: none; }
-.sidebar ul li { padding: 12px 14px; display: flex; align-items: center; cursor: pointer; border-radius: 10px; font-size: 15px; color: #e0e0e0; transition: background 0.3s, transform 0.2s; }
-.sidebar ul li i { margin-right: 12px; color: #cfcfcf; min-width: 20px; font-size: 16px; }
-.sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
-.sidebar ul li:hover i { color: #00e0ff; }
-.sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #ffffff; }
-.sidebar ul li.active i { color: #fff; }
-.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
-.section-title { margin: 20px 10px 8px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: rgba(255, 255, 255, 0.6); letter-spacing: 1px; }
+body {
+    display: flex;
+    background: #f9f9f9;
+    color: #111;
+}
 
-/* Dropdown */
-.dropdown-container { display: none; list-style: none; padding-left: 25px; }
-.dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
-.dropdown-container li:hover { background: #3a4c66; color: #fff; }
-.dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
-.dropdown-btn.active .arrow { transform: rotate(180deg); }
+/* ======================= SIDEBAR ======================= */
+ .sidebar {
+      width: 230px;
+background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
 
-/* Scrollbar */
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
+background-repeat: no-repeat;
+background-attachment: fixed;
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
 
-/* Main Content */
-main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250px); }
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
 
-/* Cards */
-.card, .crud-container { background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 25px; }
+    .sidebar ul {
+      list-style: none;
+    }
 
-/* Tables */
-.table, table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
-.table thead, table thead { background: linear-gradient(90deg, #007bff, #00aaff); color: #fff; text-transform: uppercase; font-size: 13px; }
-.table th, .table td, table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #eaeaea; font-weight: 500; }
+    .sidebar ul li {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 15px;
+      color:rgb(255, 255, 255);
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+      font-size: 16px;
+    }
+
+    .sidebar ul li:hover {
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
+    }
+
+    .sidebar ul li:hover i {
+      color: #00e0ff;
+    }
+
+    .sidebar ul li.active {
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
+    }
+
+    .sidebar ul li.active i {
+      color: #fff;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+
+    .section-title {
+      margin: 20px 10px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 25px;
+    }
+
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
+    }
+
+    .dropdown-container li:hover {
+      background: #3a4c66;
+      color: #fff;
+    }
+
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
+
+/* ======================= MAIN CONTENT ======================= */
+main, .main-content {
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
+}
+
+/* Cards & CRUD containers */
+.card, .crud-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 25px;
+}
+
+/* ======================= TABLE ======================= */
+.table, table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Black header, no hover */
+.table thead, table thead {
+    background-color: #000000;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.table thead tr:hover, table thead tr:hover { background-color: #000000; }
+
+.table th, .table td, table th, table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+    font-weight: 500;
+}
+
 .table tr:nth-child(even), table tr:nth-child(even) { background-color: #f9f9f9; }
-.table tr:hover, table tr:hover { background-color: #eef3fb; }
+.table tbody tr:hover, table tbody tr:hover { background-color: #eef3fb; }
 
-/* Buttons */
-.btn { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease-in-out; }
+table thead tr:first-child th:first-child { border-top-left-radius: 10px; }
+table thead tr:first-child th:last-child { border-top-right-radius: 10px; }
+table tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+table tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+/* ======================= BULK ACTION DROPDOWN ======================= */
+.bulk-action-item {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;      /* Makes text bold */
+    color: #000 !important; /* Makes text black */
+}
+
+.bulk-action-item:hover {
+    background: #f0f0f0;
+    color: #000 !important; /* Keep text black on hover */
+}
+
+.bulk-action-dropdown button {
+    color: #fff;
+    font-weight: bold;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+.bulk-action-dropdown .bulk-action-item:hover {
+    background: #f0f0f0;
+}
+
+
+/* ======================= BUTTONS ======================= */
+.btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+}
+
 .btn i { margin-right: 5px; }
+
 .btn-primary { background-color: #007bff; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
 .btn-primary:hover { background-color: #0056b3; transform: translateY(-2px); }
+
 .btn-warning { background-color: #ffc107; color: #212529; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
 .btn-warning:hover { background-color: #e0a800; transform: translateY(-2px); }
-.btn-danger { background-color: #dc3545; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
-.btn-danger:hover { background-color: #bd2130; transform: translateY(-2px); }
+
 .btn-secondary { background-color: #000; color: #fff; }
 
-/* Make search input same height as buttons */
-/* Search + Buttons Container */
+/* ======================= TOP BAR / SEARCH ======================= */
 .search-create {
     display: flex;
-    justify-content: flex-end; /* aligns everything to the right */
+    justify-content: flex-end;
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
@@ -127,7 +258,7 @@ main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250p
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 14px;
-    height: 40px; /* same as buttons */
+    height: 40px;
     width: 250px;
 }
 
@@ -137,50 +268,100 @@ main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250p
     outline: none;
 }
 
-/* Buttons next to each other */
-.top-buttons {
-    display: flex;
-    gap: 10px;
-}
-
+.top-buttons { display: flex; gap: 10px; }
 .top-buttons .btn {
-    height: 40px; /* same as search input */
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 6px;
+    padding: 0 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s;
+}
+.top-buttons .btn.btn-warning { background-color: orange; color: #fff; }
+.top-buttons .btn.btn-warning:hover { background-color: darkorange; }
+.top-buttons .btn i { margin-right: 5px; }
+
+/* ======================= MODAL ======================= */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
 }
 
-
-
-/* Modal */
-.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
 .modal.show, .show-modal { display: flex; animation: fadeIn 0.3s ease-in-out; }
+
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-.modal-content { background-color: #fff; margin: 10% auto; padding: 25px; border-radius: 10px; width: 100%; max-width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
 .modal-header { display: flex; justify-content: space-between; font-size: 20px; margin-bottom: 15px; }
 .modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
 
-/* Forms */
+/* ======================= FORM ======================= */
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; margin-bottom: 5px; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #ccc; font-weight: normal; font-size: 14px; transition: border-color 0.2s; }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #007bff; outline: none; }
-
-/* Responsive */
-@media screen and (max-width:768px) {
-  main, .main-content { margin-left: 0; padding: 15px; width: 100%; }
-  table th, table td, .table th, .table td { font-size: 12px; padding: 8px; }
-  .btn { font-size: 12px; padding: 6px 12px; }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-weight: normal;
+    font-size: 14px;
+    transition: border-color 0.2s;
 }
-/* Logo */
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* ======================= VALIDATION ======================= */
+.error-msg { color: red; font-size: 0.85rem; margin-top: 3px; display: block; }
+input.invalid { border-color: red; }
+#successMessage { color: green; margin-bottom: 10px; display: none; }
+
+/* ======================= SMALL MODAL ======================= */
+.small-modal { width: 350px; padding: 15px; }
+.small-modal .form-group { margin-bottom: 10px; }
+.small-modal label { font-size: 0.9rem; }
+.small-modal input, .small-modal select { width: 100%; padding: 6px 8px; font-size: 0.9rem; }
+.small-modal button { font-size: 0.85rem; padding: 6px 12px; }
+.small-modal .modal-header { font-size: 1rem; margin-bottom: 8px; }
+
+/* ======================= LOGO ======================= */
 .sidebar img {
-  width: 150px;
-  height: auto;
-  margin: 0 auto 0.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+    width: 150px;
+    height: auto;
+    margin: 0 auto 0.5rem;
+    display: block;
+    transition: transform 0.3s ease;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* ======================= RESPONSIVE ======================= */
+@media screen and (max-width:768px) {
+    main, .main-content { margin-left: 0; padding: 15px; width: 100%; }
+    table th, table td, .table th, .table td { font-size: 12px; padding: 8px; }
+    .btn { font-size: 12px; padding: 6px 12px; }
+    .flex, .search-create { flex-direction: column; gap: 8px; }
 }
 </style>
 </head>
@@ -188,8 +369,9 @@ main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250p
 
 <!-- Sidebar -->
 <div class="sidebar">
-        <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>    <ul>
+    <img src="/images/Logo.png" alt="Logo">
+    <h2>PREFECT</h2>
+    <ul>
         <div class="section-title">Main</div>
         <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
         <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
@@ -215,53 +397,64 @@ main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250p
 
 <!-- Main Content -->
 <main>
-
-            <h2>List of Advisers</h2>
+    <h2>List of Advisers</h2>
     <div style="padding:20px;">
-      <!-- Search and Create/Delete -->
-<div class="search-create">
-    <input type="text" id="searchInput" placeholder="Search adviser name...">
-    <div class="top-buttons">
-        <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Create</button>
-        <button class="btn btn-danger" onclick="bulkDelete()"><i class="fas fa-trash"></i> Delete</button>
-    </div>
-</div>
-
+        <!-- Search and Create -->
+        <div class="search-create">
+            <input type="text" id="searchInput" placeholder="Search adviser name...">
+            <div class="top-buttons">
+                <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Create</button>
+                <button id="archiveBtn" class="btn btn-warning"><i class="fas fa-archive"></i> Archive</button>
+            </div>
+        </div>
 
         <div id="successMessage">Created successfully!</div>
 
+        <div class="table-responsive">
+            <table class="table" id="list-advisers">
+                <thead>
+                    <tr>
+                       <th>
+  <input type="checkbox" id="selectAll">
+  <!-- 3-dots trash dropdown -->
+  <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
+    <button id="bulkActionBtn">&#8942;</button>
+    <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
+      <div class="bulk-action-item" style="padding:5px 10px; cursor:pointer;">Trash</div>
+    </div>
+  </div>
+</th>
 
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                            <th>Grade</th>
-                            <th>Section</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($advisers as $adviser)
-                        <tr>
-                            <td>{{ $adviser->adviser_fname . ' ' . $adviser->adviser_lname }}</td>
-                            <td>{{ $adviser->adviser_email }}</td>
-                            <td>{{ $adviser->adviser_contactinfo }}</td>
-                            <td>{{ $adviser->adviser_gradelevel }}</td>
-                            <td>{{ $adviser->adviser_section }}</td>
-                            <td>
-                                <button class="btn btn-primary" onclick="showEditModal('{{ $adviser->id }}','{{ $adviser->email }}')"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="btn btn-warning" onclick="showResetModal('{{ $adviser->id }}')"><i class="fas fa-key"></i> Reset Password</button>
-                                <button class="btn btn-danger" onclick="deleteAdviser('{{ $adviser->id }}')"><i class="fas fa-trash"></i> Delete</button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </section>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Grade</th>
+                        <th>Section</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($advisers as $adviser)
+                    <tr>
+                        <td><input type="checkbox" class="student-checkbox"></td>
+                        <td>{{ $adviser->adviser_fname . ' ' . $adviser->adviser_lname }}</td>
+                        <td>{{ $adviser->adviser_email }}</td>
+                        <td>{{ $adviser->adviser_contactinfo }}</td>
+                        <td>{{ $adviser->adviser_gradelevel }}</td>
+                        <td>{{ $adviser->adviser_section }}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="showEditModal('{{ $adviser->id }}','{{ $adviser->email }}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-warning" onclick="showResetModal('{{ $adviser->id }}')">
+                                <i class="fas fa-key"></i> Reset Password
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </main>
 
@@ -288,7 +481,7 @@ main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250p
             </div>
             <div class="form-group">
                 <label for="contact_number">Contact:</label>
-                <input type="text" name="contact_number" id="contact_number" placeholder="09XXXXXXXXX" required pattern="^09\d{9}$" title="Format: 09XXXXXXXXX (11 digits)">
+                <input type="text" name="contact_number" id="contact_number" placeholder="09XXXXXXXXX" required pattern="^09\d{9}$">
                 <small class="error-msg" id="contactError"></small>
             </div>
             <div class="form-group">
@@ -308,11 +501,11 @@ main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250p
             </div>
             <div class="form-group">
                 <label for="section">Section:</label>
-                <input type="text" name="section" id="section" placeholder="e.g. A, STEM-1" required pattern="[A-Za-z0-9\s-]+">
+                <input type="text" name="section" id="section" placeholder="Section" required>
                 <small class="error-msg" id="sectionError"></small>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-warning" onclick="closeModal()">Cancel</button>
                 <button type="submit" class="btn btn-primary">Create</button>
             </div>
         </form>
@@ -320,171 +513,59 @@ main, .main-content { margin-left: 250px; padding: 30px; width: calc(100% - 250p
 </div>
 
 <script>
-    // Sidebar dropdown
-    const sidebar = document.querySelector('.sidebar');
-    const dropdowns = document.querySelectorAll('.dropdown-btn');
-
-    dropdowns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const container = btn.nextElementSibling;
-            dropdowns.forEach(otherBtn => {
-                const otherContainer = otherBtn.nextElementSibling;
-                if (otherBtn !== btn) {
-                    otherBtn.classList.remove('active');
-                    otherContainer.style.display = 'none';
-                }
-            });
-            btn.classList.toggle('active');
-            container.style.display = container.style.display === 'block' ? 'none' : 'block';
-            const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
-            sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
-        });
+// Sidebar dropdown
+var dropdowns = document.getElementsByClassName("dropdown-btn");
+for (let i = 0; i < dropdowns.length; i++) {
+    dropdowns[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        let dropdownContent = this.nextElementSibling;
+        dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
     });
-
-    // Modal
-    function openModal() { document.getElementById("createAdviserModal").style.display = "flex"; }
-    function closeModal() { document.getElementById("createAdviserModal").style.display = "none"; }
-
-    // Password toggle
-    document.getElementById("togglePassword").addEventListener("click", function () {
-        const passwordField = document.getElementById("password");
-        const type = passwordField.type === "password" ? "text" : "password";
-        passwordField.type = type;
-        this.textContent = type === "password" ? "Show" : "Hide";
-    });
-
-    // Form submission with AJAX
-    const form = document.getElementById('adviserForm');
-    const fnameInput = document.getElementById('fname');
-    const lnameInput = document.getElementById('lname');
-    const contactInput = document.getElementById('contact_number');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const gradeSelect = document.getElementById('grade');
-    const sectionInput = document.getElementById('section');
-    const successMsg = document.getElementById('successMessage');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        let valid = true;
-        const namePattern = /^[A-Za-z\s]+$/;
-
-        function validateField(input, pattern=null, errorId, emptyMsg, patternMsg=null){
-            if(!input.value.trim()){
-                document.getElementById(errorId).textContent = emptyMsg;
-                input.classList.add('invalid'); valid=false;
-            } else if(pattern && !pattern.test(input.value.trim())){
-                document.getElementById(errorId).textContent = patternMsg;
-                input.classList.add('invalid'); valid=false;
-            } else {
-                document.getElementById(errorId).textContent = '';
-                input.classList.remove('invalid');
-            }
-        }
-
-        validateField(fnameInput,namePattern,'fnameError','Please fill out this field','Only letters and spaces allowed');
-        validateField(lnameInput,namePattern,'lnameError','Please fill out this field','Only letters and spaces allowed');
-        validateField(emailInput,null,'emailError','Please fill out this field');
-        validateField(contactInput,/^09\d{9}$/,'contactError','Please fill out this field','Format: 09XXXXXXXXX (11 digits)');
-        validateField(passwordInput,null,'passwordError','Please fill out this field');
-        validateField(gradeSelect,null,'gradeError','Please select grade');
-        validateField(sectionInput,/^[A-Za-z0-9\s-]+$/,'sectionError','Please fill out this field','Invalid format');
-
-        if(!valid) return;
-
-        fetch('/admin/advisers',{
-            method:'POST',
-            headers:{ 'Content-Type':'application/json', 'X-CSRF-TOKEN':'{{ csrf_token() }}' },
-            body: JSON.stringify({
-                adviser_fname: fnameInput.value,
-                adviser_lname: lnameInput.value,
-                adviser_email: emailInput.value,
-                adviser_contactinfo: contactInput.value,
-                adviser_password: passwordInput.value,
-                adviser_gradelevel: gradeSelect.value,
-                adviser_section: sectionInput.value
-            })
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            if(data.success){
-                successMsg.style.display='block';
-                setTimeout(()=>successMsg.style.display='none',3000);
-                form.reset();
-                closeModal();
-            } else { alert('Failed to create adviser'); }
-        })
-        .catch(err=>console.error(err));
-    });
-
-    function showEditModal(id,email){
-        const newEmail = prompt("Enter new email:", email);
-        if(newEmail && newEmail!==email){
-            fetch(`/admin/advisers/${id}`,{
-                method:"PUT",
-                headers:{"Content-Type":"application/json","X-CSRF-TOKEN":"{{ csrf_token() }}"},
-                body: JSON.stringify({email:newEmail})
-            }).then(res=>res.json()).then(data=>{
-                alert(data.success ? "Updated successfully." : "Failed to update.");
-                if(data.success) location.reload();
-            });
-        }
-    }
-
-    function showResetModal(id){
-        const newPassword = prompt("Enter a new password:");
-        if(newPassword){
-            fetch(`/admin/advisers/${id}/reset-password`,{
-                method:"PATCH",
-                headers:{"Content-Type":"application/json","X-CSRF-TOKEN":"{{ csrf_token() }}"},
-                body: JSON.stringify({password:newPassword})
-            }).then(res=>res.json()).then(data=>{
-                alert(data.success ? "Password reset successfully." : "Failed to reset.");
-            });
-        }
-    }
-
-    function deleteAdviser(id){
-        if(confirm("Are you sure you want to delete this adviser?")){
-            fetch(`/admin/advisers/${id}`,{ method:"DELETE", headers:{"X-CSRF-TOKEN":"{{ csrf_token() }}"}})
-            .then(res=>res.json()).then(data=>{
-                alert(data.success ? "Deleted successfully" : "Failed to delete.");
-                if(data.success) location.reload();
-            });
-        }
-    }
-
-function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
-    fetch("{{ route('prefect.logout') }}", {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if(response.ok) {
-            // Redirect to login after successful logout
-            window.location.href = "{{ route('auth.login') }}";
-        } else {
-            console.error('Logout failed:', response.statusText);
-        }
-    })
-    .catch(error => console.error('Logout failed:', error));
 }
 
-    // Live search for advisers by name
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const filter = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#list-advisers tbody tr');
-        rows.forEach(row => {
-            const name = row.cells[0].textContent.toLowerCase();
-            row.style.display = name.includes(filter) ? '' : 'none';
-        });
-    });
+// Select All checkbox
+document.getElementById('selectAll').addEventListener('change', function() {
+    document.querySelectorAll('.student-checkbox').forEach(cb => cb.checked = this.checked);
+});
+
+// Modal controls
+function openModal() { document.getElementById('createAdviserModal').classList.add('show-modal'); }
+function closeModal() { document.getElementById('createAdviserModal').classList.remove('show-modal'); }
+
+// Toggle password
+document.getElementById('togglePassword').addEventListener('click', function() {
+    let password = document.getElementById('password');
+    if(password.type === 'password') {
+        password.type = 'text';
+        this.textContent = 'Hide';
+    } else {
+        password.type = 'password';
+        this.textContent = 'Show';
+    }
+});
+const bulkActionBtn = document.getElementById('bulkActionBtn');
+const bulkActionMenu = document.getElementById('bulkActionMenu');
+
+bulkActionBtn.addEventListener('click', () => {
+  bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
+});
+
+// Trash functionality
+bulkActionMenu.querySelector('.bulk-action-item').addEventListener('click', () => {
+  document.querySelectorAll('.student-checkbox:checked').forEach(cb => {
+    cb.closest('tr').remove();
+  });
+  bulkActionMenu.style.display = 'none';
+});
+
+// Close dropdown if clicked outside
+document.addEventListener('click', (e) => {
+  if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
+    bulkActionMenu.style.display = 'none';
+  }
+});
+
 </script>
+
 </body>
 </html>

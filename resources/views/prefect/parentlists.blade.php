@@ -6,271 +6,340 @@
   <title>Parent List</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-   /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      transition: all 0.2s ease-in-out;
+/* ======================= RESET & BASE ======================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+body {
+    display: flex;
+    background: #f9f9f9;
+    color: #111;
+}
+
+/* ======================= SIDEBAR ======================= */
+ .sidebar {
+      width: 230px;
+background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
+
+background-repeat: no-repeat;
+background-attachment: fixed;
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
     }
 
-    body {
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      padding: 12px 14px;
       display: flex;
-      background: #f9f9f9;
-      color: #111;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 15px;
+      color:rgb(255, 255, 255);
+      transition: background 0.3s, transform 0.2s;
     }
 
-    /* Sidebar */
-.sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-  overflow-y: auto;
-}
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+      font-size: 16px;
+    }
 
-.sidebar h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: #ffffff;
-  text-transform: uppercase;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-  padding-bottom: 10px;
-}
+    .sidebar ul li:hover {
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
+    }
 
-.sidebar ul { list-style: none; }
-.sidebar ul li {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #e0e0e0;
-  transition: background 0.3s, transform 0.2s;
-}
-.sidebar ul li i {
-  margin-right: 12px;
-  color: #cfcfcf;
-  min-width: 20px;
-  font-size: 16px;
-}
-.sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
-.sidebar ul li:hover i { color: #00e0ff; }
-.sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #ffffff; }
-.sidebar ul li.active i { color: #fff; }
-.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
-.section-title {
-  margin: 20px 10px 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 1px;
-}
+    .sidebar ul li:hover i {
+      color: #00e0ff;
+    }
 
-/* Dropdown */
-.dropdown-container { display: none; list-style: none; padding-left: 25px; }
-.dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
-.dropdown-container li:hover { background: #3a4c66; color: #fff; }
-.dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
-.dropdown-btn.active .arrow { transform: rotate(180deg); }
+    .sidebar ul li.active {
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
+    }
 
-/* Scrollbar */
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
+    .sidebar ul li.active i {
+      color: #fff;
+    }
 
-/* Main Content */
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+
+    .section-title {
+      margin: 20px 10px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 25px;
+    }
+
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
+    }
+
+    .dropdown-container li:hover {
+      background: #3a4c66;
+      color: #fff;
+    }
+
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
+
+/* ======================= MAIN CONTENT ======================= */
 .main-content {
-  margin-left: 250px;
-  padding: 30px;
-  width: calc(100% - 250px);
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
 }
 
 .crud-container {
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .crud-container h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: #0a1e2d;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #0a1e2d;
 }
 
-/* Right-aligned search */
+/* Flex container (search + buttons) */
 .flex {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.flex input.form-control {
-  padding: 6px 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 13px;
-}
-.flex input.form-control:focus {
-  outline: none;
-  border-color: #ffcc00;
-  box-shadow: 0 0 5px #ffcc00;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    justify-content: flex-end;
 }
 
-/* Table */
+.flex input.form-control {
+    height: 45px;
+    font-size: 16px;
+    padding: 0 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.flex input.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px #007bff;
+}
+
+/* Archive button */
+#archiveBtn {
+    height: 45px;
+    font-size: 16px;
+    padding: 0 15px;
+    border-radius: 5px;
+    background-color: orange;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+#archiveBtn:hover { background-color: darkorange; }
+#archiveBtn i { margin-right: 5px; }
+
+/* ======================= TABLE ======================= */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    background: #fff;
+}
+
+/* Black header, no hover */
+table thead {
+    background-color: #000000; /* black */
+    color: #ffffff;             /* white text */
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+table thead tr:hover {
+    background-color: #000000; /* no hover effect */
 }
 
 table th, table td {
-  padding: 12px 10px;
-  text-align: center;
-  border: 1px solid #ccc;
-  font-weight: 500;
+    padding: 14px 12px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-table thead {
-  background: linear-gradient(90deg, #007BFF, #00aaff);
-  color: #fff;
-  text-transform: uppercase;
-  font-size: 13px;
+table th:first-child, table td:first-child {
+    text-align: left;
+    padding-left: 20px;
 }
 
-table tr:nth-child(even) { background-color: #f7f9fc; }
-table tr:hover { background-color: #e3f2fd; }
+table tr:nth-child(even) { background-color: #f9f9f9; }
+table tbody tr:hover { background-color: #e6f0ff; cursor: pointer; }
 
-/* Buttons */
-.btn {
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
+/* Rounded corners */
+table thead tr:first-child th:first-child { border-top-left-radius: 8px; }
+table thead tr:first-child th:last-child { border-top-right-radius: 8px; }
+table tr:last-child td:first-child { border-bottom-left-radius: 8px; }
+table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
 
-.btn i { margin-right: 5px; }
-
-.btn-info { background-color: #17a2b8; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
-.btn-info:hover { background-color: #138496; transform: translateY(-2px); }
-
-.btn-warning { background-color: #ffc107; color: #000; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
-.btn-warning:hover { background-color: #e0a800; transform: translateY(-2px); }
-
-.btn-danger { background-color: #dc3545; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
-.btn-danger:hover { background-color: #c82333; transform: translateY(-2px); }
-
-/* Modal */
+/* ======================= MODAL ======================= */
 .modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .modal.show { display: flex; animation: fadeIn 0.3s ease-in-out; }
-
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
 .modal-content {
-  background: #fff;
-  padding: 25px;
-  width: 100%;
-  max-width: 500px;
-  border-radius: 10px;
-  position: relative;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    background: #fff;
+    padding: 25px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
 .modal-content h5 { margin-bottom: 15px; color: #007bff; }
-
 .modal-content .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  cursor: pointer;
-  font-size: 20px;
-  color: #555;
-  transition: 0.2s;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #555;
+    transition: 0.2s;
 }
-
 .modal-content .close:hover { color: #000; }
 
 .info-box p { margin: 8px 0; font-size: 15px; }
 
-/* Responsive */
-@media screen and (max-width:768px) {
-  .main-content { margin-left: 0; padding: 15px; }
-  table th, table td { font-size: 12px; padding: 8px; }
-  .btn { font-size: 12px; padding: 4px 8px; }
-  .flex { justify-content: flex-start; flex-direction: column; gap: 8px; }
-}
-/* Logo */
+/* ======================= LOGO ======================= */
 .sidebar img {
-  width: 150px;
-  height: auto;
-  margin: 0 auto 0.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+    width: 150px;
+    height: auto;
+    margin: 0 auto 0.5rem;
+    display: block;
+    transition: transform 0.3s ease;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
+
+/* ======================= RESPONSIVE ======================= */
+@media screen and (max-width:768px) {
+    .main-content { margin-left: 0; padding: 15px; }
+    table th, table td { font-size: 12px; padding: 8px; }
+    .btn { font-size: 12px; padding: 4px 8px; }
+    .flex { justify-content: flex-start; flex-direction: column; gap: 8px; }
+}
+
+
   </style>
 </head>
 <body>
 
   <!-- Sidebar -->
 <div class="sidebar">
-            <img src="/images/Logo.png" alt="Logo">
+    <img src="/images/Logo.png" alt="Logo">
+    <h2>PREFECT</h2>
+    <ul>
+        <div class="section-title">Main</div>
+        <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+        <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+        <li class="active"><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
+        <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
 
-  <h2>PREFECT</h2>  <ul>
-    <div class="section-title">Main</div>
+        <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
+          <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
+          <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+        </ul>
 
-    <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-    <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
-    <li class="active"><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
-    <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
+        <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+        <ul class="dropdown-container">
+          <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
+          <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
+          <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
+        </ul>
 
-    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
-      <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
-      <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+        <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+        <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
     </ul>
-
-    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
-      <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
-      <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
-    </ul>
-
-    <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-    <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-  </ul>
 </div>
 
   <!-- Main Content -->
@@ -281,49 +350,55 @@ table tr:hover { background-color: #e3f2fd; }
       <!-- Search Bar -->
       <div class="flex">
         <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
+        <button id="archiveBtn" class="btn btn-warning">
+            <i class="fas fa-archive" style="margin-right:5px;"></i> Archive
+        </button>
       </div>
 
       <table>
         <thead>
           <tr>
+            <th>
+  <input type="checkbox" id="selectAll">
+  <!-- 3-dots trash dropdown -->
+  <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
+    <button id="bulkActionBtn">&#8942;</button>
+    <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
+      <div class="bulk-action-item" style="padding:5px 10px; cursor:pointer;">Trash</div>
+    </div>
+  </div>
+</th>
+
             <th>#</th>
             <th>Parent Fullname</th>
             <th>Contact Number</th>
             <th>Birthdate</th>
             <th>Student</th>
             <th>Adviser</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           @forelse($parents as $index => $parent)
-          <tr>
-            <td>{{ $index + 1 }}</td>
-            <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
-            <td>{{ $parent->parent_contactinfo }}</td>
-            <td>{{ $parent->parent_birthdate }}</td>
-            <td>
-              @forelse($parent->students as $student)
-                {{ $student->student_fname }} {{ $student->student_lname }}<br>
-              @empty N/A @endforelse
-            </td>
-            <td>
-              @forelse($parent->students as $student)
-                @if($student->adviser)
-                  {{ $student->adviser->adviser_fname }} {{ $student->adviser->adviser_lname }}<br>
-                @else N/A<br> @endif
-              @empty N/A @endforelse
-            </td>
-            <td>
-              <button class="btn btn-info" onclick="showInfo(
-                `@foreach($parent->students as $student){{ $student->student_fname }} {{ $student->student_lname }}<br>@endforeach`,
-                `@foreach($parent->students as $student){{ $student->adviser ? $student->adviser->adviser_fname.' '.$student->adviser->adviser_lname : 'N/A' }}<br>@endforeach`,
-                '{{ $parent->parent_fname }} {{ $parent->parent_lname }}'
-              )"><i class="fas fa-info-circle"></i> Info</button>
-              <button class="btn btn-warning"><i class="fas fa-edit"></i> Edit</button>
-              <button class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
-            </td>
-          </tr>
+        <tr class="clickable-row">
+    <td><input type="checkbox" class="student-checkbox"></td>
+    <td>{{ $index + 1 }}</td>
+    <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
+    <td>{{ $parent->parent_contactinfo }}</td>
+    <td>{{ $parent->parent_birthdate }}</td>
+    <td>
+      @forelse($parent->students as $student)
+        {{ $student->student_fname }} {{ $student->student_lname }}<br>
+      @empty N/A @endforelse
+    </td>
+    <td>
+      @forelse($parent->students as $student)
+        @if($student->adviser)
+          {{ $student->adviser->adviser_fname }} {{ $student->adviser->adviser_lname }}<br>
+        @else N/A<br> @endif
+      @empty N/A @endforelse
+    </td>
+</tr>
+
           @empty
           <tr>
             <td colspan="7" style="text-align:center;">No parents found.</td>
@@ -331,7 +406,6 @@ table tr:hover { background-color: #e3f2fd; }
           @endforelse
         </tbody>
       </table>
-    </div>
   </div>
 
   <!-- Info Modal -->
@@ -348,29 +422,59 @@ table tr:hover { background-color: #e3f2fd; }
   </div>
 
   <script>
-  // Dropdown functionality
-  const dropdowns = document.querySelectorAll('.dropdown-btn');
-  dropdowns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling;
-      dropdowns.forEach(otherBtn => {
-        const otherContainer = otherBtn.nextElementSibling;
-        if (otherBtn !== btn) {
-          otherBtn.classList.remove('active');
-          otherContainer.style.display = 'none';
-        }
-      });
-      btn.classList.toggle('active');
-      container.style.display = container.style.display === 'block' ? 'none' : 'block';
-    });
+    // Make rows clickable but ignore clicks on checkboxes
+document.querySelectorAll('.clickable-row').forEach(row => {
+  row.addEventListener('click', (e) => {
+    if(e.target.type !== 'checkbox') { // ignore if clicked on checkbox
+      const student = row.children[5].innerHTML;
+      const adviser = row.children[6].innerHTML;
+      const parent = row.children[2].innerText;
+      showInfo(student, adviser, parent);
+    }
   });
+});
 
-  function showInfo(student, adviser, parent) {
+    // Select All functionality
+const selectAll = document.getElementById('selectAll');
+const checkboxes = document.querySelectorAll('.student-checkbox');
+
+selectAll.addEventListener('change', () => {
+  checkboxes.forEach(cb => cb.checked = selectAll.checked);
+});
+
+checkboxes.forEach(cb => {
+  cb.addEventListener('change', () => {
+    if (!cb.checked) {
+      selectAll.checked = false;
+    } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
+      selectAll.checked = true;
+    }
+  });
+});
+
+// Dropdown functionality
+const dropdowns = document.querySelectorAll('.dropdown-btn');
+dropdowns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const container = btn.nextElementSibling;
+    dropdowns.forEach(otherBtn => {
+      const otherContainer = otherBtn.nextElementSibling;
+      if (otherBtn !== btn) {
+        otherBtn.classList.remove('active');
+        otherContainer.style.display = 'none';
+      }
+    });
+    btn.classList.toggle('active');
+    container.style.display = container.style.display === 'block' ? 'none' : 'block';
+  });
+});
+
+function showInfo(student, adviser, parent) {
     document.getElementById("studentName").innerHTML = student;
     document.getElementById("adviserName").innerHTML = adviser;
     document.getElementById("parentName").textContent = parent;
     document.getElementById("infoModal").classList.add("show");
-  }
+}
 
 function logout() {
     const confirmLogout = confirm("Are you sure you want to logout?");
@@ -385,7 +489,6 @@ function logout() {
     })
     .then(response => {
         if(response.ok) {
-            // Redirect to login after successful logout
             window.location.href = "{{ route('auth.login') }}";
         } else {
             console.error('Logout failed:', response.statusText);
@@ -393,15 +496,38 @@ function logout() {
     })
     .catch(error => console.error('Logout failed:', error));
 }
-  // Search functionality
-  const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener('input', () => {
+
+// Search functionality
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
     document.querySelectorAll('table tbody tr').forEach(row => {
-      const name = row.children[1].innerText.toLowerCase(); // parent fullname column
-      row.style.display = name.includes(query) ? '' : 'none';
+        const name = row.children[2].innerText.toLowerCase(); // parent fullname column
+        row.style.display = name.includes(query) ? '' : 'none';
     });
+});
+const bulkActionBtn = document.getElementById('bulkActionBtn');
+const bulkActionMenu = document.getElementById('bulkActionMenu');
+
+bulkActionBtn.addEventListener('click', () => {
+  bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
+});
+
+// Trash functionality
+bulkActionMenu.querySelector('.bulk-action-item').addEventListener('click', () => {
+  document.querySelectorAll('.student-checkbox:checked').forEach(cb => {
+    cb.closest('tr').remove();
   });
+  bulkActionMenu.style.display = 'none';
+});
+
+// Close dropdown if clicked outside
+document.addEventListener('click', (e) => {
+  if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
+    bulkActionMenu.style.display = 'none';
+  }
+});
+
   </script>
 
 </body>

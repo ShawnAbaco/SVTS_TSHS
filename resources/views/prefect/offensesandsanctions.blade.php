@@ -9,9 +9,7 @@
 
   <!-- Small layout helpers for the toolbar -->
   <style>
-
-
-   /* Reset */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -28,124 +26,124 @@ body {
 }
 
 /* Sidebar */
-.sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);background-repeat: no-repeat;
+ .sidebar {
+      width: 230px;
+background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
+
+background-repeat: no-repeat;
 background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-  overflow-y: auto;
-}
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
 
-.sidebar h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: #ffffff;
-  text-transform: uppercase;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-  padding-bottom: 10px;
-}
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
 
-.sidebar ul {
-  list-style: none;
-}
+    .sidebar ul {
+      list-style: none;
+    }
 
-.sidebar ul li {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #e0e0e0;
-  transition: background 0.3s, transform 0.2s;
-}
+    .sidebar ul li {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 15px;
+      color:rgb(255, 255, 255);
+      transition: background 0.3s, transform 0.2s;
+    }
 
-.sidebar ul li i {
-  margin-right: 12px;
-  color: #cfcfcf;
-  min-width: 20px;
-  font-size: 16px;
-}
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+      font-size: 16px;
+    }
 
-.sidebar ul li:hover {
-  background: #2d3f55; /* lighter block color hover */
-  transform: translateX(5px);
-  color: #fff;
-}
+    .sidebar ul li:hover {
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
+    }
 
-.sidebar ul li:hover i {
-  color: #00e0ff; /* neon blue icon highlight */
-}
+    .sidebar ul li:hover i {
+      color: #00e0ff;
+    }
 
-.sidebar ul li.active {
-  background: #00aaff; /* strong solid highlight */
-  color: #fff;
-  border-left: 4px solid #ffffff;
-}
+    .sidebar ul li.active {
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
+    }
 
-.sidebar ul li.active i {
-  color: #fff;
-}
+    .sidebar ul li.active i {
+      color: #fff;
+    }
 
-.sidebar ul li a {
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-}
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
 
-.section-title {
-  margin: 20px 10px 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 1px;
-}
+    .section-title {
+      margin: 20px 10px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
 
-/* Dropdown */
-.dropdown-container {
-  display: none;
-  list-style: none;
-  padding-left: 25px;
-}
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 25px;
+    }
 
-.dropdown-container li {
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 8px;
-  color: #ddd;
-}
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
+    }
 
-.dropdown-container li:hover {
-  background: #3a4c66; /* block hover inside dropdown */
-  color: #fff;
-}
+    .dropdown-container li:hover {
+      background: #3a4c66;
+      color: #fff;
+    }
 
-.dropdown-btn .arrow {
-  margin-left: auto;
-  transition: transform 0.3s;
-}
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
 
-.dropdown-btn.active .arrow {
-  transform: rotate(180deg);
-}
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
 
-/* Scrollbar */
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 3px;
-}
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
 
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
 /* Main Content */
 .main-content {
   margin-left: 260px;
@@ -188,58 +186,49 @@ background-attachment: fixed;
   transition: background 0.3s;
 }
 
-.form-row button:hover {
-  background-color: #0056b3;
-}
+.form-row button:hover { background-color: #0056b3; }
 
-/* ===== High Resolution Table (Updated) ===== */
+/* ===== Updated Table Style ===== */
 table {
   width: 100%;
-  min-width: 900px; /* ensure table doesn’t shrink too small */
-  max-width: 1400px; /* optional, to keep it visually balanced */
+  min-width: 900px;
+  max-width: 1400px;
   margin-top: 20px;
-  font-size: 16px; /* bigger font */
+  font-size: 16px;
   background: #fff;
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 thead {
-  background: linear-gradient(90deg, #007BFF, #00aaff);
-  color: #fff;
+  background: #000;          /* plain black */
+  color: #fff;               /* bold white text */
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 15px;
 }
 
 th, td {
-  padding: 18px 20px; /* more spacing */
+  padding: 18px 20px;
   text-align: center;
 }
 
-tbody tr:nth-child(even) {
-  background: #f2f6ff; /* slightly different for better readability */
-}
+tbody tr:nth-child(even) { background: #f2f6ff; }
 
 tbody tr:hover {
-  background: #e6f0ff; /* subtle hover effect */
+  background: #e6f0ff;
   transform: scale(1.001);
   transition: 0.2s ease-in-out;
 }
 
-th:first-child {
-  border-top-left-radius: 10px;
-}
+th { font-weight: bold; }
+th:first-child { border-top-left-radius: 10px; }
+th:last-child { border-top-right-radius: 10px; }
 
-th:last-child {
-  border-top-right-radius: 10px;
-}
-
-
-/* ===== High Resolution Buttons ===== */
+/* ===== Buttons ===== */
 .btn {
   padding: 8px 14px;
   border-radius: 6px;
@@ -292,9 +281,7 @@ th:last-child {
   align-items: center;
 }
 
-.modal.show {
-  display: flex;
-}
+.modal.show { display: flex; }
 
 .modal-content {
   background: #fff;
@@ -305,9 +292,7 @@ th:last-child {
   position: relative;
 }
 
-.modal-content h5 {
-  margin-bottom: 15px;
-}
+.modal-content h5 { margin-bottom: 15px; }
 
 .modal-content .close {
   position: absolute;
@@ -317,14 +302,9 @@ th:last-child {
   font-size: 18px;
 }
 
-.mb-3 {
-  margin-bottom: 15px;
-}
+.mb-3 { margin-bottom: 15px; }
 
-label {
-  display: block;
-  margin-bottom: 5px;
-}
+label { display: block; margin-bottom: 5px; }
 
 input[type="text"],
 input[type="date"] {
@@ -343,30 +323,16 @@ input[type="date"] {
   flex-wrap: wrap;
   margin: 10px 0 20px;
 }
-th, td {
-  padding: 20px 25px;    /* more spacing for bigger table */
-  text-align: center;
-}
 
-thead {
-  font-size: 16px;       /* slightly bigger headers */
-}
-
-tbody tr:hover {
-  background: #dbeaff;    /* slightly more visible hover */
-}
-/* Left group: Add button + Search + other buttons */
+/* Search + Buttons */
 .toolbar .left {
   display: flex;
   align-items: center;
-  gap: 10px; /* spacing between Add, Search, and other buttons */
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-/* Remove the right group since search is now beside Add */
-.toolbar .right {
-  display: none;
-}
+.toolbar .right { display: none; }
 
 #searchInput {
   width: 180px;
@@ -375,6 +341,7 @@ tbody tr:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
 /* Logo */
 .sidebar img {
   width: 150px;
@@ -385,6 +352,31 @@ tbody tr:hover {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
+
+/* Toolbar Buttons Unified */
+.toolbar input#searchInput,
+.toolbar .btn,
+.toolbar .btn-archive {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.25s ease-in-out;
+}
+
+.btn-archive {
+  background-color: orange;
+  color: #fff;
+}
+
+.toolbar { margin-bottom: 15px; justify-content: flex-start; gap: 10px; flex-wrap: wrap; }
+
 
   </style>
 </head>
@@ -423,19 +415,18 @@ tbody tr:hover {
   <div class="main-content">
 
       <h2>Offenses & Sanctions</h2>
-<!-- Toolbar: Add + Search together, all buttons right-aligned -->
-<div class="toolbar" style="justify-content: flex-end;">
-  <div class="left" style="display: flex; align-items: center; gap: 10px;">
-    <input type="text" id="searchInput" placeholder="Search offenses..." style="width: 180px; padding: 8px; font-size: 14px;">
+<!-- Toolbar (Right side) -->
+<div class="toolbar" style="justify-content: flex-end; margin-bottom: 15px;">
+    <input type="text" id="searchInput" placeholder="Search offenses..." class="form-control">
     <button class="btn btn-primary" id="openModalBtn"><i class="fa fa-plus"></i> Add</button>
-
     <button class="btn btn-warning" id="printBtn"><i class="fa fa-print"></i> Print</button>
     <button class="btn btn-danger" id="exportBtn"><i class="fa fa-file-export"></i> Export</button>
-    <button onclick="openTrash()" style="border: none; padding: 8px 12px; font-size: 14px; border-radius: 6px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 5px; background: linear-gradient(135deg, #dc3545, #ff4d4d); box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-      <i class="fas fa-trash"></i> Trash
-    </button>
-  </div>
+    <button class="btn btn-archive" onclick="openArchive()"><i class="fas fa-archive"></i> Archive</button>
 </div>
+
+
+
+
 
 <!-- Table -->
 <table id="offenseTable" style="min-width: 1000px; max-width: 1500px; font-size: 16px;">
@@ -447,6 +438,7 @@ tbody tr:hover {
       <table id="offenseTable">
         <thead>
           <tr>
+            <th><input type="checkbox" id="selectAll"></th> <!-- Select All -->
             <th>ID</th>
             <th>Offense Type</th>
             <th>Description</th>
@@ -457,14 +449,15 @@ tbody tr:hover {
         <tbody>
           @forelse($offenses as $offense)
             <tr>
+              <td><input type="checkbox" class="student-checkbox"></td>
               <td>{{ $offense->offense_sanc_id }}</td>
               <td>{{ $offense->offense_type }}</td>
               <td>{{ $offense->offense_description }}</td>
               <td>{{ $offense->sanction_consequences }}</td>
               <td>
-                <button class="btn btn-warning edit-btn"><i class="fa fa-edit"></i> Edit</button>
-                <button class="btn btn-danger delete-btn"><i class="fa fa-trash"></i> Delete</button>
-              </td>
+  <button class="btn btn-warning btn-update"><i class="fa fa-edit"></i> Update</button>
+</td>
+
             </tr>
           @empty
             <tr>
@@ -501,6 +494,25 @@ tbody tr:hover {
   </div>
 
   <script>
+    // Select All functionality
+const selectAll = document.getElementById('selectAll');
+const checkboxes = document.querySelectorAll('.student-checkbox');
+
+selectAll.addEventListener('change', () => {
+  checkboxes.forEach(cb => cb.checked = selectAll.checked);
+});
+
+// Keep Select All synced
+checkboxes.forEach(cb => {
+  cb.addEventListener('change', () => {
+    if (!cb.checked) {
+      selectAll.checked = false;
+    } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
+      selectAll.checked = true;
+    }
+  });
+});
+
 // Dropdown functionality with sidebar scroll and only one open at a time
   const sidebar = document.querySelector('.sidebar');
   const dropdowns = document.querySelectorAll('.dropdown-btn');
@@ -561,27 +573,22 @@ searchInput.addEventListener("keyup", () => {
   });
 });
 
-// Edit & Delete
+// Edit (now Update) functionality
 tableBody.addEventListener("click", (e) => {
-  const editBtn = e.target.closest(".edit-btn");
-  const deleteBtn = e.target.closest(".delete-btn");
-
-  if (editBtn) {
-    editingRow = editBtn.closest("tr");
+  const updateBtn = e.target.closest(".btn-update");
+  if (updateBtn) {
+    editingRow = updateBtn.closest("tr");
     const cells = editingRow.querySelectorAll("td");
     document.getElementById("editId").value = cells[0].textContent.trim();
-    document.getElementById("offenseType").value = cells[1].textContent.trim();
-    document.getElementById("description").value = cells[2].textContent.trim();
-    document.getElementById("consequences").value = cells[3].textContent.trim();
-    document.getElementById("modalTitle").textContent = "Edit Offense & Sanction";
+    document.getElementById("offenseType").value = cells[2].textContent.trim();
+    document.getElementById("description").value = cells[3].textContent.trim();
+    document.getElementById("consequences").value = cells[4].textContent.trim();
+    document.getElementById("modalTitle").textContent = "Update Offense & Sanction";
     document.getElementById("saveBtn").textContent = "Update";
     modal.classList.add("show");
   }
-
-  if (deleteBtn) {
-    deleteBtn.closest("tr").remove();
-  }
 });
+
 
 // Save (Add/Update)
 form.addEventListener("submit", (e) => {

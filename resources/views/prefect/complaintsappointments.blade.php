@@ -23,91 +23,187 @@ body {
 }
 
 /* --- Sidebar --- */
-.sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);
+ .sidebar {
+      width: 230px;
+background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
+
 background-repeat: no-repeat;
 background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-  overflow-y: auto;
-}
-.sidebar h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: #fff;
-  text-transform: uppercase;
-  border-bottom: 2px solid rgba(255,255,255,0.15);
-  padding-bottom: 10px;
-}
-.sidebar ul { list-style: none; }
-.sidebar ul li {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #e0e0e0;
-  transition: background 0.3s, transform 0.2s;
-}
-.sidebar ul li i { margin-right: 12px; color: #cfcfcf; min-width: 20px; font-size: 16px; }
-.sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
-.sidebar ul li:hover i { color: #00e0ff; }
-.sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #fff; }
-.sidebar ul li.active i { color: #fff; }
-.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
-.section-title { margin: 20px 10px 8px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
-.dropdown-container { display: none; list-style: none; padding-left: 25px; }
-.dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
-.dropdown-container li:hover { background: #3a4c66; color: #fff; }
-.dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
-.dropdown-btn.active .arrow { transform: rotate(180deg); }
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
 
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 15px;
+      color:rgb(255, 255, 255);
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+      font-size: 16px;
+    }
+
+    .sidebar ul li:hover {
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
+    }
+
+    .sidebar ul li:hover i {
+      color: #00e0ff;
+    }
+
+    .sidebar ul li.active {
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
+    }
+
+    .sidebar ul li.active i {
+      color: #fff;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+
+    .section-title {
+      margin: 20px 10px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 25px;
+    }
+
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
+    }
+
+    .dropdown-container li:hover {
+      background: #3a4c66;
+      color: #fff;
+    }
+
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
 /* --- Content --- */
 .content { margin-left: 260px; padding: 30px; }
 h1 { text-align: center; margin-bottom: 25px; font-size: 28px; color: #007bff; }
 
-/* --- Top controls --- */
+/* Top Controls */
 .top-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: 10px;
   margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: 10px;
 }
+
+/* Search input */
 .top-controls input {
   padding: 10px 15px;
   width: 300px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
+  height: 40px; 
 }
-.top-controls button {
+
+/* Add / Create Appointment button */
+.top-controls .btn-add {
   border: none;
   padding: 10px 16px;
   font-size: 15px;
   border-radius: 8px;
   cursor: pointer;
   color: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   gap: 6px;
   background: linear-gradient(135deg,#007bff,#00aaff);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   transition: all 0.3s ease;
+  height: 40px;
 }
-.top-controls button:hover {
+.top-controls .btn-add:hover {
   background: linear-gradient(135deg,#0056b3,#007bbf);
+  transform: translateY(-2px);
+}
+
+/* Archive button */
+.top-controls .btn-archive {
+  border: none;
+  padding: 10px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: orange;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  height: 40px; 
+}
+.top-controls .btn-archive:hover {
+  background-color: darkorange;
   transform: translateY(-2px);
 }
 
@@ -123,15 +219,19 @@ table {
   font-size: 16px;
   table-layout: fixed;
 }
+
 th {
-  background: linear-gradient(135deg,#007bff,#00aaff);
+  background: #000;
   color: #fff;
   padding: 16px 14px;
   text-align: center;
   position: sticky;
   top: 0;
   z-index: 2;
+  font-weight: bold;
+  border: none;
 }
+
 td {
   padding: 14px 12px;
   border-bottom: 1px solid #e3e3e3;
@@ -139,10 +239,17 @@ td {
   text-align: center;
   word-wrap: break-word;
 }
+
 td:first-child { text-align: center; }
 td:nth-child(2) { text-align: left; }
+
 tr:nth-child(even) { background: #f5f8ff; }
-tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s ease-in-out; }
+
+tr:hover { 
+  background: #d0e7ff; 
+  transform: scale(1.01); 
+  transition: all 0.2s ease-in-out; 
+}
 
 /* --- Status --- */
 .status-pending { color: #e67e22; background: #fff4e5; padding: 6px 12px; border-radius: 14px; font-weight: 600; display: inline-block; }
@@ -164,10 +271,9 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
   transition: all 0.2s ease-in-out;
 }
 .btn-action i { margin-right: 5px; }
-.btn-edit { background: #ffc107; }
-.btn-edit:hover { background: #e0a800; transform: translateY(-2px) scale(1.05); }
-.btn-delete { background: #dc3545; }
-.btn-delete:hover { background: #c82333; transform: translateY(-2px) scale(1.05); }
+/* Updated button */
+.btn-update { background-color: orange; }
+.btn-update:hover { background-color: darkorange; transform: translateY(-2px) scale(1.05); }
 
 /* --- Modal --- */
 .modal-overlay {
@@ -192,6 +298,7 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
   .top-controls { flex-direction: column; align-items:flex-start; gap:10px; }
   .top-controls input { width:100%; }
 }
+
 /* Logo */
 .sidebar img {
   width: 150px;
@@ -209,7 +316,8 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
         <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>  <ul>
+  <h2>PREFECT</h2>  
+  <ul>
     <div class="section-title">Main</div>
     <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
     <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
@@ -236,18 +344,23 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
 <!-- Main Content -->
 <div class="content">
   <h1>Complaints Appointments</h1>
-<div class="top-controls" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 20px;">
-  <input type="text" id="searchInput" placeholder="Search Complainant Name..." onkeyup="searchComplainant()" style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; width: 250px;">
-   <button onclick="openAppointmentModal()"><i class="fas fa-plus"></i> Create Appointment</button>
-  </button>
-  <button onclick="openTrash()" style="border: none; padding: 10px 16px; font-size: 15px; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #dc3545, #ff4d4d); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-    <i class="fas fa-trash"></i> Trash
-  </button>
 
+  <div class="top-controls">
+    <input type="text" id="searchInput" placeholder="Search Complainant Name..." onkeyup="searchTable()">
+
+    <button class="btn-add" onclick="openAppointmentModal()">
+      <i class="fas fa-plus"></i> Create Appointment
+    </button>
+
+    <button class="btn-archive" onclick="openArchive()">
+      <i class="fas fa-archive"></i> Archive
+    </button>
+  </div>
 
   <table id="appointmentsTable">
     <thead>
       <tr>
+        <th><input type="checkbox" id="selectAll"></th>
         <th>ID</th>
         <th>Complaint</th>
         <th>Date</th>
@@ -259,18 +372,14 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
     <tbody>
       @foreach($appointments as $appointment)
       <tr>
+        <td><input type="checkbox" class="student-checkbox"></td>
         <td>{{ $loop->iteration }}</td>
         <td>{{ $appointment->complaint->complaints_incident }}</td>
         <td>{{ $appointment->comp_app_date }}</td>
         <td>{{ $appointment->comp_app_time }}</td>
         <td class="{{ strtolower($appointment->comp_app_status) }}">{{ $appointment->comp_app_status }}</td>
         <td>
-          <button class="btn-action btn-edit" onclick="openEditModal({{ $appointment->comp_app_id }}, '{{ $appointment->complaints_id }}', '{{ $appointment->comp_app_date }}', '{{ $appointment->comp_app_time }}', '{{ $appointment->comp_app_status }}')"><i class="fas fa-edit"></i>Edit</button>
-          <form action="{{ route('complaints.appointments.destroy', $appointment->comp_app_id) }}" method="POST" style="display:inline-block;">
-            @csrf
-            @method('DELETE')
-            <button class="btn-action btn-delete" type="submit" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i>Delete</button>
-          </form>
+          <button class="btn-action btn-update" onclick="openEditModal({{ $appointment->comp_app_id }}, '{{ $appointment->complaints_id }}', '{{ $appointment->comp_app_date }}', '{{ $appointment->comp_app_time }}', '{{ $appointment->comp_app_status }}')"><i class="fas fa-edit"></i>Update</button>
         </td>
       </tr>
       @endforeach
@@ -345,6 +454,21 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
 </div>
 
 <script>
+  // Select All functionality
+const selectAll = document.getElementById('selectAll');
+const checkboxes = document.querySelectorAll('.student-checkbox');
+
+selectAll.addEventListener('change', () => {
+  checkboxes.forEach(cb => cb.checked = selectAll.checked);
+});
+
+checkboxes.forEach(cb => {
+  cb.addEventListener('change', () => {
+    if (!cb.checked) selectAll.checked = false;
+    else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) selectAll.checked = true;
+  });
+});
+
 const dropdowns = document.querySelectorAll('.dropdown-btn');
 dropdowns.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -357,6 +481,7 @@ dropdowns.forEach(btn => {
     container.style.display = container.style.display === 'block' ? 'none' : 'block';
   });
 });
+
 function openAppointmentModal(){ document.getElementById('appointmentModal').style.display='flex'; }
 function closeAppointmentModal(){ document.getElementById('appointmentModal').style.display='none'; }
 function openEditModal(id, complaintId, date, time, status){
@@ -368,13 +493,14 @@ function openEditModal(id, complaintId, date, time, status){
   document.getElementById('editStatus').value=status;
 }
 function closeEditModal(){ document.getElementById('editModal').style.display='none'; }
+
 function searchTable(){
   let input=document.getElementById('searchInput').value.toLowerCase();
   let table=document.getElementById('appointmentsTable');
   let rows=table.getElementsByTagName('tr');
   for(let i=1;i<rows.length;i++){
-    let idCell=rows[i].getElementsByTagName('td')[0];
-    let complaintCell=rows[i].getElementsByTagName('td')[1];
+    let idCell=rows[i].getElementsByTagName('td')[1]; // ID column
+    let complaintCell=rows[i].getElementsByTagName('td')[2]; // Complaint column
     if(idCell && complaintCell){
       let idText=idCell.textContent.toLowerCase();
       let complaintText=complaintCell.textContent.toLowerCase();
@@ -382,7 +508,8 @@ function searchTable(){
     }
   }
 }
-  // Logout
+
+// Logout
 function logout() {
     const confirmLogout = confirm("Are you sure you want to logout?");
     if (!confirmLogout) return;
@@ -395,16 +522,11 @@ function logout() {
         }
     })
     .then(response => {
-        if(response.ok) {
-            // Redirect to login after successful logout
-            window.location.href = "{{ route('auth.login') }}";
-        } else {
-            console.error('Logout failed:', response.statusText);
-        }
+        if(response.ok) window.location.href = "{{ route('auth.login') }}";
+        else console.error('Logout failed:', response.statusText);
     })
     .catch(error => console.error('Logout failed:', error));
 }
-
 </script>
 </body>
 </html>

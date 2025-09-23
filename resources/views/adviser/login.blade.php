@@ -45,7 +45,7 @@
     <div class="login-card">
         <div class="login-header">
             <img src="{{ asset('images/logo.png') }}" alt="Logo">
-            <h2>Adviser Login</h2>
+            <h2> Login</h2>
             <p>Sign in to access your dashboard</p>
         </div>
 

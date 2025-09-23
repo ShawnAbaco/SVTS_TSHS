@@ -23,41 +23,124 @@ body {
 }
 
 /* --- Sidebar --- */
-.sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-  overflow-y: auto;
-}
+ .sidebar {
+      width: 230px;
+background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
 
-.sidebar h2 { margin-bottom: 30px; text-align: center; font-size: 22px; letter-spacing: 1px; color: #fff; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.15); padding-bottom: 10px; }
-.sidebar ul { list-style: none; }
-.sidebar ul li { padding: 12px 14px; display: flex; align-items: center; cursor: pointer; border-radius: 10px; font-size: 15px; color: #e0e0e0; transition: background 0.3s, transform 0.2s; }
-.sidebar ul li i { margin-right: 12px; color: #cfcfcf; min-width: 20px; font-size: 16px; }
-.sidebar ul li:hover { background: #2d3f55; transform: translateX(5px); color: #fff; }
-.sidebar ul li:hover i { color: #00e0ff; }
-.sidebar ul li.active { background: #00aaff; color: #fff; border-left: 4px solid #fff; }
-.sidebar ul li.active i { color: #fff; }
-.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
-.section-title { margin: 20px 10px 8px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
+background-repeat: no-repeat;
+background-attachment: fixed;
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      padding: 25px 15px;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
 
-/* Dropdown */
-.dropdown-container { display: none; list-style: none; padding-left: 25px; }
-.dropdown-container li { padding: 10px; font-size: 14px; border-radius: 8px; color: #ddd; }
-.dropdown-container li:hover { background: #3a4c66; color: #fff; }
-.dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
-.dropdown-btn.active .arrow { transform: rotate(180deg); }
+    .sidebar h2 {
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 10px;
+    }
 
-/* Scrollbar */
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
+    .sidebar ul {
+      list-style: none;
+    }
 
+    .sidebar ul li {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 15px;
+      color:rgb(255, 255, 255);
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .sidebar ul li i {
+      margin-right: 12px;
+      color:rgb(255, 255, 255);
+      min-width: 20px;
+      font-size: 16px;
+    }
+
+    .sidebar ul li:hover {
+      background: #2d3f55;
+      transform: translateX(5px);
+      color: #fff;
+    }
+
+    .sidebar ul li:hover i {
+      color: #00e0ff;
+    }
+
+    .sidebar ul li.active {
+      background: #00aaff;
+      color: #fff;
+      border-left: 4px solid #ffffff;
+    }
+
+    .sidebar ul li.active i {
+      color: #fff;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+    }
+
+    .section-title {
+      margin: 20px 10px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .dropdown-container {
+      display: none;
+      list-style: none;
+      padding-left: 25px;
+    }
+
+    .dropdown-container li {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #ddd;
+    }
+
+    .dropdown-container li:hover {
+      background: #3a4c66;
+      color: #fff;
+    }
+
+    .dropdown-btn .arrow {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+
+    .dropdown-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
 /* --- Main Content --- */
 .main-content {
   margin-left: 260px;
@@ -66,51 +149,61 @@ background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  backgr
 
 h2 { font-size: 26px; margin-bottom: 20px; color: #007bff; }
 
-/* --- Top Controls --- */
+/* Top controls container */
 .top-controls {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
-.top-controls input {
-  padding: 10px 15px;
-  width: 250px;
-  border: 1px solid #ccc;
+/* Search input */
+.top-controls input[type="text"] {
+  padding: 10px;
+  width: 300px;
   border-radius: 6px;
+  border: 1px solid #ccc;
+  height: 40px;
   font-size: 14px;
 }
 
-.top-controls button {
-  border: none;
+/* Create button */
+.top-controls .create-btn {
+  height: 40px;
   padding: 10px 16px;
-  font-size: 15px;
   border-radius: 8px;
-  cursor: pointer;
+  background-color: #007bff;
   color: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  display: flex;
+  border: none;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
-
-.top-controls .create-btn {
-  background: linear-gradient(135deg, #007bff, #00aaff);
-}
 .top-controls .create-btn:hover {
-  background: linear-gradient(135deg, #0056b3, #007bbf);
-  transform: translateY(-2px);
+  background-color: #0056b3;
+  transform: translateY(-1px) scale(1.02);
 }
 
-.top-controls .trash-btn {
-  background: linear-gradient(135deg, #dc3545, #ff4c4c);
+/* Archive button */
+.top-controls .archive-btn {
+  height: 40px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background-color: orange;
+  color: #fff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-.top-controls .trash-btn:hover {
-  background: linear-gradient(135deg, #c82333, #ff1c1c);
-  transform: translateY(-2px);
+.top-controls .archive-btn:hover {
+  background-color: darkorange;
+  transform: translateY(-1px) scale(1.02);
 }
 
 /* --- Table Styling --- */
@@ -126,13 +219,14 @@ table {
 }
 
 th {
-  background: linear-gradient(135deg, #007bff, #00aaff);
-  color: #fff;
+  background: #000000; /* plain black */
+  color: #ffffff;      /* white text */
   padding: 14px 12px;
   text-align: left;
   position: sticky;
   top: 0;
   z-index: 2;
+  border: none;
 }
 
 td {
@@ -144,10 +238,10 @@ td {
 tr:nth-child(even) { background: #f9faff; }
 tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s ease-in-out; }
 
-/* --- Status Labels --- */
+/* Status Labels */
 .status-pending {
-  color: #e67e22;
-  background: #fff4e5;
+  color:rgb(0, 211, 32);
+ 
   padding: 4px 10px;
   border-radius: 12px;
   font-weight: 600;
@@ -155,13 +249,14 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
 }
 
 .status-resolved {
-  color: #27ae60;
-  background: #e6f9f0;
+  color: #fff;           /* White text */
+  background: #28a745;   /* Green background */
   padding: 4px 10px;
   border-radius: 12px;
   font-weight: 600;
   text-align: center;
 }
+
 
 /* --- Action Buttons --- */
 .btn-action {
@@ -180,11 +275,14 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
 
 .btn-action i { margin-right: 4px; }
 
-.btn-edit { background: #28a745; }
-.btn-edit:hover { background: #218838; transform: translateY(-2px) scale(1.05); }
-
-.btn-delete { background: #dc3545; }
-.btn-delete:hover { background: #c82333; transform: translateY(-2px) scale(1.05); }
+/* Updated Button */
+.btn-update { 
+  background: orange; 
+}
+.btn-update:hover { 
+  background: darkorange; 
+  transform: translateY(-2px) scale(1.05); 
+}
 
 /* --- Responsive --- */
 @media screen and (max-width: 768px) {
@@ -194,6 +292,7 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
   .top-controls input { width: 100%; }
   .btn-action { padding: 6px 10px; font-size: 13px; }
 }
+
 /* Logo */
 .sidebar img {
   width: 150px;
@@ -204,12 +303,14 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
+
 </style>
 </head>
 <body>
 <div class="sidebar">
         <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>  <ul>
+  <h2>PREFECT</h2>  
+  <ul>
     <div class="section-title">Main</div>
 
     <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
@@ -239,16 +340,20 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
 
 <div class="main-content">
   <h2>Violation Anecdotal Reports</h2>
-
   <div class="top-controls">
     <input type="text" id="searchInput" placeholder="Search student name...">
-    <button class="create-btn" onclick="openCreateForm()"><i class="fas fa-plus"></i> Create Violation Anecdotal</button>
-    <button class="trash-btn" onclick="deleteSelected()"><i class="fas fa-trash"></i> Trash</button>
+    <button class="create-btn" onclick="openCreateForm()">
+        <i class="fas fa-plus"></i> Create Violation Anecdotal
+    </button>
+    <button class="archive-btn" onclick="archiveSelected()">
+        <i class="fas fa-archive"></i> Archive
+    </button>
   </div>
 
   <table id="anecTable">
     <thead>
       <tr>
+         <th><input type="checkbox" id="selectAll"></th> <!-- Select All -->
         <th>Student Name</th>
         <th>Violation</th>
         <th>Respondent</th>
@@ -263,6 +368,7 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
     <tbody>
       @foreach($violation_anecdotals as $anec)
       <tr>
+        <td><input type="checkbox" class="student-checkbox"></td>
         <td>{{ $anec->violation->student->student_fname }} {{ $anec->violation->student->student_lname }}</td>
         <td>{{ $anec->violation->offense->offense_type }}</td>
         <td>{{ $anec->violation->student->adviser->adviser_fname ?? 'Prefect' }}</td>
@@ -274,8 +380,7 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
             {{ $anec->violation->status ?? 'Pending' }}
         </td>
         <td>
-          <button class="btn-action btn-edit"><i class="fas fa-edit"></i>Edit</button>
-          <button class="btn-action btn-delete"><i class="fas fa-trash"></i>Delete</button>
+          <button class="btn-action btn-update"><i class="fas fa-edit"></i>Update</button>
         </td>
       </tr>
       @endforeach
@@ -284,6 +389,24 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
 </div>
 
 <script>
+  // Select All functionality
+  const selectAll = document.getElementById('selectAll');
+  const checkboxes = document.querySelectorAll('.student-checkbox');
+
+  selectAll.addEventListener('change', () => {
+    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+  });
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (!cb.checked) {
+        selectAll.checked = false;
+      } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
+        selectAll.checked = true;
+      }
+    });
+  });
+
   // Dropdown
   const dropdowns = document.querySelectorAll('.dropdown-btn');
   dropdowns.forEach(btn => {
@@ -302,7 +425,7 @@ tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s eas
   });
 
   // Logout
-function logout() {
+  function logout() {
     const confirmLogout = confirm("Are you sure you want to logout?");
     if (!confirmLogout) return;
 
@@ -315,20 +438,20 @@ function logout() {
     })
     .then(response => {
         if(response.ok) {
-            // Redirect to login after successful logout
             window.location.href = "{{ route('auth.login') }}";
         } else {
             console.error('Logout failed:', response.statusText);
         }
     })
     .catch(error => console.error('Logout failed:', error));
-}
+  }
+
   // Search filter
   document.getElementById("searchInput").addEventListener("keyup", function() {
     let filter = this.value.toLowerCase();
     let rows = document.querySelectorAll("#anecTable tbody tr");
     rows.forEach(row => {
-      let studentName = row.cells[0].innerText.toLowerCase();
+      let studentName = row.cells[1].innerText.toLowerCase();
       row.style.display = studentName.includes(filter) ? "" : "none";
     });
   });

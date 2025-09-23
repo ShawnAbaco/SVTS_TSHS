@@ -25,9 +25,9 @@
 
     .sidebar {
       width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);
-background-repeat: no-repeat;
-background-attachment: fixed;
+      background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
       color: #fff;
       height: 100vh;
       position: fixed;
@@ -48,10 +48,7 @@ background-attachment: fixed;
       padding-bottom: 10px;
     }
 
-    .sidebar ul {
-      list-style: none;
-    }
-
+    .sidebar ul { list-style: none; }
     .sidebar ul li {
       padding: 12px 14px;
       display: flex;
@@ -76,26 +73,15 @@ background-attachment: fixed;
       color: #fff;
     }
 
-    .sidebar ul li:hover i {
-      color: #00e0ff;
-    }
-
+    .sidebar ul li:hover i { color: #00e0ff; }
     .sidebar ul li.active {
       background: #00aaff;
       color: #fff;
       border-left: 4px solid #ffffff;
     }
 
-    .sidebar ul li.active i {
-      color: #fff;
-    }
-
-    .sidebar ul li a {
-      text-decoration: none;
-      color: inherit;
-      flex: 1;
-    }
-
+    .sidebar ul li.active i { color: #fff; }
+    .sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
     .section-title {
       margin: 20px 10px 8px;
       font-size: 11px;
@@ -104,38 +90,20 @@ background-attachment: fixed;
       color: rgba(255, 255, 255, 0.6);
       letter-spacing: 1px;
     }
-
-    .dropdown-container {
-      display: none;
-      list-style: none;
-      padding-left: 25px;
-    }
-
+    .dropdown-container { display: none; list-style: none; padding-left: 25px; }
     .dropdown-container li {
       padding: 10px;
       font-size: 14px;
       border-radius: 8px;
       color: #ddd;
     }
-
-    .dropdown-container li:hover {
-      background: #3a4c66;
-      color: #fff;
-    }
-
+    .dropdown-container li:hover { background: #3a4c66; color: #fff; }
     .dropdown-btn .arrow {
       margin-left: auto;
       transition: transform 0.3s;
     }
-
-    .dropdown-btn.active .arrow {
-      transform: rotate(180deg);
-    }
-
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-
+    .dropdown-btn.active .arrow { transform: rotate(180deg); }
+    .sidebar::-webkit-scrollbar { width: 6px; }
     .sidebar::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.25);
       border-radius: 3px;
@@ -154,41 +122,30 @@ background-attachment: fixed;
       margin-bottom: 20px;
     }
 
-    .topbar h1 {
-      font-size: 22px;
-      margin-bottom: 4px;
+    .topbar h1 { font-size: 22px; margin-bottom: 4px; }
+    .topbar p { font-size: 13px; color: #555; }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
     }
 
-    .topbar p {
-      font-size: 13px;
-      color: #555;
+    .user-info img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #003366;
+      cursor: pointer;
     }
 
-   .user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
-  }
-
-  .user-info img {
-    width: 70px;   /* bigger size */
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #003366; /* adds border for emphasis */
-    cursor: pointer;
-  }
-
-  .user-info span {
-    font-size: 20px;  /* bigger name text */
-    font-weight: bold;
-    color: #111;
-  }
-
-  .user-info:hover {
-    opacity: 0.8;
-  }
+    .user-info span {
+      font-size: 20px;
+      font-weight: bold;
+      color: #111;
+    }
 
     .cards {
       display: grid;
@@ -199,7 +156,7 @@ background-attachment: fixed;
 
     .card {
       border-radius: 8px;
-      padding: 15px;
+      padding: 20px;
       border: 1px solid #ddd;
       display: flex;
       justify-content: space-between;
@@ -208,25 +165,11 @@ background-attachment: fixed;
       transition: transform 0.2s;
     }
 
-    .card:hover {
-      transform: scale(1.02);
-    }
+    .card:hover { transform: scale(1.02); }
 
-    .card h3 {
-      font-size: 12px;
-      color: #000;
-    }
-
-    .card p {
-      font-size: 20px;
-      margin: 4px 0;
-      color: #000;
-    }
-
-    .card i {
-      font-size: 20px;
-      color: #000;
-    }
+    .card h3 { font-size: 14px; color: #fff; }
+    .card p { font-size: 22px; margin: 6px 0; color: #fff; }
+    .card i { font-size: 24px; color: #fff; }
 
     .card:nth-child(1) { background-color:rgb(0, 145, 255); }
     .card:nth-child(2) { background-color:rgb(246, 3, 3); }
@@ -244,6 +187,8 @@ background-attachment: fixed;
       align-items: flex-start;
       background: #fff;
       border: 1px solid #ddd;
+      height: 280px;
+      padding: 15px;
     }
 
     .grid .card-header {
@@ -253,37 +198,22 @@ background-attachment: fixed;
       margin-bottom: 10px;
     }
 
-    .grid .card-header h3 {
-      font-size: 14px;
-      color: #111;
-    }
-
+    .grid .card-header h3 { font-size: 14px; color: #111; }
     .grid .card-header a {
       font-size: 12px;
       color: #000;
       text-decoration: none;
     }
+    .grid .card-header a:hover { text-decoration: underline; }
 
-    .grid .card-header a:hover {
-      text-decoration: underline;
-    }
-
-    .table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
+    .table { width: 100%; border-collapse: collapse; }
     .table th, .table td {
       padding: 8px;
       text-align: left;
       border-bottom: 1px solid #ccc;
       font-size: 13px;
     }
-
-    .table tr:hover {
-      background: #f2f2f2;
-      cursor: pointer;
-    }
+    .table tr:hover { background: #f2f2f2; cursor: pointer; }
 
     .status {
       padding: 4px 10px;
@@ -297,52 +227,23 @@ background-attachment: fixed;
     .resolved { background-color:rgb(1, 255, 60); }
     .escalated { background-color:rgb(255, 0, 25); }
 
-    .appointments {
+    #violationChart { max-width: 220px; max-height: 220px; margin: 0 auto; }
+
+    /* Upcoming Appointments */
+    .cards.upcoming {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
+      margin-top: 20px;
+      margin-bottom: 40px;
     }
 
-    .appt-card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 12px;
-      border: 1px solid #ddd;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .appt-card:hover {
-      background: #f0f0f0;
-      transform: scale(1.01);
-    }
-
-    .appt-card h4 {
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #111;
-    }
-
-    .appt-card .time {
-      font-size: 12px;
-      color: #555;
-      margin-bottom: 8px;
-    }
-
-    .appt-card .status {
-      float: right;
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      font-weight: bold;
-      color: #fff;
-      background-color:rgb(0, 0, 0);
-    }
-
-    #violationChart {
-      max-width: 220px;
-      max-height: 220px;
-      margin: 0 auto;
+    .cards.upcoming .card {
+      height: 150px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 15px;
     }
 
     /* Modal Styles */
@@ -368,13 +269,8 @@ background-attachment: fixed;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    .modal-content h2 {
-      margin-bottom: 15px;
-    }
-
-    .modal-content p {
-      font-size: 14px;
-    }
+    .modal-content h2 { margin-bottom: 15px; }
+    .modal-content p { font-size: 14px; }
 
     .close {
       color: #aaa;
@@ -384,27 +280,27 @@ background-attachment: fixed;
       cursor: pointer;
     }
 
-    .close:hover {
-      color: #000;
-    }
+    .close:hover { color: #000; }
+
     /* Logo */
-.sidebar img {
-  width: 150px;
-  height: auto;
-  margin: 0 auto 0.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
+    .sidebar img {
+      width: 150px;
+      height: auto;
+      margin: 0 auto 0.5rem;
+      display: block;
+      transition: transform 0.3s ease;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
   </style>
 </head>
 <body>
 
   <!-- Sidebar -->
   <div class="sidebar">
-        <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>    <ul>
+    <img src="/images/Logo.png" alt="Logo">
+    <h2>PREFECT</h2>
+    <ul>
       <div class="section-title">Main</div>
       <li class="active"><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
       <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
@@ -436,7 +332,6 @@ background-attachment: fixed;
     <div class="topbar">
       <div>
         <h1>Dashboard</h1>
-
       </div>
       <div class="user-info">
         <img id="profileImage" src="https://i.pravatar.cc/35" alt="Profile" onclick="changeProfileImage()" />
@@ -481,73 +376,34 @@ background-attachment: fixed;
 
       <div class="card">
         <div class="card-header">
-          <h3>Recent Violations</h3>
+          <h3>Recent Violations & Complaints</h3>
           <a href="#">View All</a>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Violation Type</th>
-              <th>Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Alex Johnson</td>
-              <td>Attendance</td>
-              <td>Jan 15, 2025</td>
-              <td><span class="status pending">Pending</span></td>
-            </tr>
-            <tr>
-              <td>Sarah Miller</td>
-              <td>Behavior</td>
-              <td>Jan 12, 2025</td>
-              <td><span class="status resolved">Resolved</span></td>
-            </tr>
-            <tr>
-              <td>Mike Thompson</td>
-              <td>Dress Code</td>
-              <td>Jan 10, 2025</td>
-              <td><span class="status escalated">Escalated</span></td>
-            </tr>
-            <tr>
-              <td>Emily Wilson</td>
-              <td>Attendance</td>
-              <td>Jan 8, 2025</td>
-              <td><span class="status resolved">Resolved</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <canvas id="recentChart" style="width:100%; max-width: 100%; height: 250px;"></canvas>
       </div>
     </div>
 
-    <!-- Appointments -->
-    <h3 style="margin-bottom: 10px;">Upcoming Appointments</h3>
-    <div class="appointments">
-      <div class="appt-card">
-        <h4>Violation Discussion</h4>
-        <p class="time">Jan 18, 2025 - 10:00 AM</p>
-        <p>Alex Johnson <br><small>with Mr. Peterson</small></p>
-        <span class="status pending">Scheduled</span>
+    <!-- Upcoming Appointments BELOW charts -->
+    <h2 style="margin:20px 0; font-size:18px; color:#111;">Upcoming Appointments</h2>
+    <div class="cards upcoming">
+      <div class="card" style="background-color:#00aaff;">
+        <div><h3>John Doe</h3><p>Sep 25, 10:00 AM</p></div>
+        <i class="fas fa-calendar-alt"></i>
       </div>
-      <div class="appt-card">
-        <h4>Complaint Review</h4>
-        <p class="time">Jan 19, 2025 - 2:30 PM</p>
-        <p>Sarah Miller <br><small>with Mrs. Johnson</small></p>
-        <span class="status pending">Scheduled</span>
+      <div class="card" style="background-color:#ff9900;">
+        <div><h3>Jane Smith</h3><p>Sep 26, 1:30 PM</p></div>
+        <i class="fas fa-calendar-alt"></i>
       </div>
-      <div class="appt-card">
-        <h4>Parent Conference</h4>
-        <p class="time">Jan 20, 2025 - 11:15 AM</p>
-        <p>Mike Thompson <br><small>with Principal Davis</small></p>
-        <span class="status pending">Pending</span>
+      <div class="card" style="background-color:#ff3366;">
+        <div><h3>Michael Lee</h3><p>Sep 27, 9:00 AM</p></div>
+        <i class="fas fa-calendar-alt"></i>
+      </div>
+      <div class="card" style="background-color:#33cc33;">
+        <div><h3>Sarah Brown</h3><p>Sep 28, 11:00 AM</p></div>
+        <i class="fas fa-calendar-alt"></i>
       </div>
     </div>
   </div>
-
-
 
   <!-- Info Modal -->
   <div id="infoModal" class="modal">
@@ -559,7 +415,7 @@ background-attachment: fixed;
   </div>
 
 <script>
-  // Chart.js
+  // Chart.js Doughnut
   const ctx = document.getElementById('violationChart').getContext('2d');
   new Chart(ctx, {
     type: 'doughnut',
@@ -572,6 +428,29 @@ background-attachment: fixed;
       }]
     },
     options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Recent Violations Line Chart
+  const recentCtx = document.getElementById('recentChart').getContext('2d');
+  new Chart(recentCtx, {
+    type: 'line',
+    data: {
+        labels: ['Jan 1','Jan 5','Jan 10','Jan 15','Jan 20','Jan 25','Jan 30'],
+        datasets: [
+            { label: 'Violations', data: [5,8,6,10,7,9,12], borderColor: '#FF0000', backgroundColor: 'rgba(255,0,0,0.2)', fill: true, tension: 0.3 },
+            { label: 'Complaints', data: [2,3,4,3,5,4,6], borderColor: '#0000FF', backgroundColor: 'rgba(0,0,255,0.2)', fill: true, tension: 0.3 }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' }, tooltip: { mode: 'index', intersect: false } },
+        interaction: { mode: 'nearest', axis: 'x', intersect: false },
+        scales: {
+            x: { display: true, title: { display: true, text: 'Date' } },
+            y: { display: true, title: { display: true, text: 'Count' }, beginAtZero: true }
+        }
+    }
   });
 
   // Dropdown
@@ -590,28 +469,6 @@ background-attachment: fixed;
       container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
   });
-//logout
-function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
-    fetch("{{ route('adviser.logout') }}", {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if(response.ok) {
-            // Redirect to login after successful logout
-            window.location.href = "{{ route('auth.login') }}";
-        } else {
-            console.error('Logout failed:', response.statusText);
-        }
-    })
-    .catch(error => console.error('Logout failed:', error));
-}
 
   // Profile image & name
   function changeProfileImage() { document.getElementById('imageInput').click(); }
@@ -628,60 +485,26 @@ function logout() {
     if(newName) document.querySelector('.user-info span').innerText = newName;
   }
 
-  // Welcome modal
-  window.addEventListener('DOMContentLoaded', () => {
-    const welcomeModal = document.getElementById('welcomeModal');
-    if(welcomeModal){
-      welcomeModal.style.display = 'block';
-      setTimeout(() => { welcomeModal.style.display = 'none'; }, 3000);
-    }
-  });
+  // Logout
+  function logout() {
+    const confirmLogout = confirm("Are you sure you want to logout?");
+    if (!confirmLogout) return;
+    fetch("{{ route('adviser.logout') }}", {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+    })
+    .then(response => { if(response.ok){ window.location.href = "{{ route('auth.login') }}"; } })
+    .catch(error => console.error('Logout failed:', error));
+  }
 
   // Info modal logic
   const modal = document.getElementById("infoModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalBody = document.getElementById("modalBody");
   const closeBtn = document.querySelector(".close");
-
-  function openModal(title, content){
-    modalTitle.innerText = title;
-    modalBody.innerHTML = content;
-    modal.style.display = "block";
-  }
-
   closeBtn.onclick = () => modal.style.display = "none";
   window.onclick = (event) => { if(event.target === modal) modal.style.display = "none"; }
 
-  // Attach modal to cards, appointments, table rows
-  document.querySelectorAll('.card, .appt-card, .table tr').forEach(el => {
-    el.addEventListener('click', (e) => {
-      const type = el.querySelector('h3, h4, td')?.innerText || 'Details';
-      let content = '';
-
-      if(el.classList.contains('appt-card')){
-        content = `
-          <p><strong>Title:</strong> ${el.querySelector('h4').innerText}</p>
-          <p><strong>Time:</strong> ${el.querySelector('.time').innerText}</p>
-          <p>${el.querySelector('p').innerHTML}</p>
-          <p><strong>Status:</strong> ${el.querySelector('.status').innerText}</p>
-        `;
-      } else if(el.classList.contains('card') && el.querySelector('canvas')){
-        content = 'Chart content can be detailed here.';
-      } else if(el.tagName === 'TR'){
-        const cells = el.querySelectorAll('td');
-        content = `
-          <p><strong>Student:</strong> ${cells[0].innerText}</p>
-          <p><strong>Violation Type:</strong> ${cells[1].innerText}</p>
-          <p><strong>Date:</strong> ${cells[2].innerText}</p>
-          <p><strong>Status:</strong> ${cells[3].innerText}</p>
-        `;
-      } else {
-        content = el.innerHTML;
-      }
-
-      openModal(type, content);
-    });
-  });
 </script>
 </body>
 </html>
