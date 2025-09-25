@@ -36,14 +36,26 @@ class AdviserController extends Controller
 
         return view('adviser.dashboard', compact('studentsCount','violationsCount','complaintsCount'));
     }
+public function studentlist()
+{
+    $adviserId = Auth::guard('adviser')->id();
 
-    public function studentlist()
-    {
-        $adviserId = Auth::guard('adviser')->id();
-        $students = Student::where('adviser_id', $adviserId)->with('parent')->get();
+    // Active and Cleared students
+    $activeStudents = Student::where('adviser_id', $adviserId)
+        ->whereIn('status', ['active', 'cleared'])
+        ->with('parent')
+        ->get();
 
-        return view('adviser.studentlist', compact('students'));
-    }
+    // Archived students (inactive or completed)
+    $archivedStudents = Student::where('adviser_id', $adviserId)
+        ->whereIn('status', ['inactive', 'completed'])
+        ->with('parent')
+        ->get();
+
+    return view('adviser.studentlist', compact('activeStudents', 'archivedStudents'));
+}
+
+
 
     public function parentlist()
 {

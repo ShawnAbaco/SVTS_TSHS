@@ -5,330 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-/* ======================= RESET ======================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
-}
+    <link rel="stylesheet" href="{{ asset('css/prefect/studentmanagement.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-body {
-    display: flex;
-    background: #f9f9f9;
-    color: #111;
-}
-
-/* ======================= SIDEBAR ======================= */
-  .sidebar {
-      width: 230px;
-background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
-
-background-repeat: no-repeat;
-background-attachment: fixed;
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-      overflow-y: auto;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar ul li {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-      font-size: 15px;
-      color:rgb(255, 255, 255);
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .sidebar ul li i {
-      margin-right: 12px;
-      color:rgb(255, 255, 255);
-      min-width: 20px;
-      font-size: 16px;
-    }
-
-    .sidebar ul li:hover {
-      background: #2d3f55;
-      transform: translateX(5px);
-      color: #fff;
-    }
-
-    .sidebar ul li:hover i {
-      color: #00e0ff;
-    }
-
-    .sidebar ul li.active {
-      background: #00aaff;
-      color: #fff;
-      border-left: 4px solid #ffffff;
-    }
-
-    .sidebar ul li.active i {
-      color: #fff;
-    }
-
-    .sidebar ul li a {
-      text-decoration: none;
-      color: inherit;
-      flex: 1;
-    }
-
-    .section-title {
-      margin: 20px 10px 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 1px;
-    }
-
-    .dropdown-container {
-      display: none;
-      list-style: none;
-      padding-left: 25px;
-    }
-
-    .dropdown-container li {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      color: #ddd;
-    }
-
-    .dropdown-container li:hover {
-      background: #3a4c66;
-      color: #fff;
-    }
-
-    .dropdown-btn .arrow {
-      margin-left: auto;
-      transition: transform 0.3s;
-    }
-
-    .dropdown-btn.active .arrow {
-      transform: rotate(180deg);
-    }
-
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
-    }
-
-/* ======================= MAIN CONTENT ======================= */
-main {
-    margin-left: 230px;
-    padding: 20px;
-    width: calc(100% - 230px);
-}
-
-main h2 { margin-bottom: 15px; }
-
-.flex {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    justify-content: flex-end;
-}
-
-input.form-control {
-    height: 45px;
-    font-size: 16px;
-    padding: 0 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-input.form-control:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px #007bff;
-}
-
-select.form-select {
-    height: 45px;
-    font-size: 16px;
-    padding: 0 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-select.form-select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px #007bff;
-}
-
-/* ======================= FORMAL TABLE DESIGN ======================= */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 8px;
-    overflow: hidden;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
-    background: #fff;
-}
-
-table thead {
-    background-color: #000000;
-    color: #ffffff;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-}
-
-table thead tr:hover { background-color: #000000; }
-
-table th, table td {
-    padding: 14px 16px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-table tr:nth-child(even) { background-color: #f9f9f9; }
-table tbody tr:hover { background-color: #e6f0ff; }
-
-table thead tr:first-child th:first-child { border-top-left-radius: 8px; }
-table thead tr:first-child th:last-child { border-top-right-radius: 8px; }
-table tr:last-child td:first-child { border-bottom-left-radius: 8px; }
-table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
-
-/* ======================= MODAL ======================= */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-.modal.show-modal { display: flex; }
-
-.modal-content {
-    background: #fff;
-    border-radius: 10px;
-    width: 450px;
-    max-width: 90%;
-    padding: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.modal-header, .modal-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.modal-header h5 { font-size: 16px; }
-.modal-body p { margin-bottom: 10px; font-size: 14px; }
-
-.btn-close {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #555;
-}
-
-.modal-footer .btn { min-width: 90px; }
-
-/* ======================= ARCHIVE BUTTON ======================= */
-#archiveBtn {
-    background-color: orange;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    height: 45px;
-    font-size: 16px;
-    padding: 0 15px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s;
-}
-#archiveBtn:hover { background-color: darkorange; }
-#archiveBtn i { margin-right: 5px; }
-
-.sidebar img {
-    width: 150px;
-    height: auto;
-    margin: 0 auto 0.5rem;
-    display: block;
-    transition: transform 0.3s ease;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-}
-
-/* ======================= BULK ACTION DROPDOWN ======================= */
-.bulk-action-item {
-    padding: 5px 10px;
-    cursor: pointer;
-    font-weight: bold;      /* Makes text bold */
-    color: #000 !important; /* Makes text black */
-}
-
-.bulk-action-item:hover {
-    background: #f0f0f0;
-    color: #000 !important; /* Keep text black on hover */
-}
-
-.bulk-action-dropdown button {
-    color: #fff;
-    font-weight: bold;
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-}
-.bulk-action-dropdown .bulk-action-item:hover {
-    background: #f0f0f0;
-}
-
-/* ======================= STATUS COLORS ======================= */
-.status-cell.not-completed { color: red; font-weight: bold; }
-.status-cell.completed { color: blue; font-weight: bold; }
-
-  </style>
 </head>
 <body>
 
@@ -387,9 +66,7 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
             <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
               <button id="bulkActionBtn">&#8942;</button>
               <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
-               <div class="bulk-action-item" data-action="completed">Completed</div>
-               <div class="bulk-action-item" data-action="not-completed">Not Completed</div>
-               <div class="bulk-action-item" data-action="trash">Trash</div>
+               <div class="bulk-action-item" data-action="completed">Cleared</div>
               </div>
             </div>
           </th>
@@ -401,19 +78,87 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
         </tr>
       </thead>
       <tbody>
-        @foreach($students as $student)
-        <tr data-section="{{ $student->adviser->adviser_section }}" 
-            onclick="showFullInfo(this)" style="cursor:pointer;">
-          <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
-          <td>{{ $student->student_id }}</td>
-          <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
-          <td>{{ $student->adviser->adviser_gradelevel }}</td>
-          <td>{{ $student->adviser->adviser_section }}</td>
-          <td class="status-cell not-completed">Not Completed</td>
-        </tr>
-        @endforeach
+      @foreach($students as $student)
+<tr
+  data-id="{{ $student->student_id }}"
+  data-section="{{ $student->adviser->adviser_section }}"
+  onclick="showFullInfo(this)"
+  style="cursor:pointer;"
+>
+  <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
+  <td>{{ $student->student_id }}</td>
+  <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
+  <td>{{ $student->adviser->adviser_gradelevel }}</td>
+  <td>{{ $student->adviser->adviser_section }}</td>
+  <td>
+    <span class="status-badge {{ $student->status === 'active' ? 'active' : 'inactive' }}">
+      {{ ucfirst($student->status) }}
+    </span>
+  </td>
+</tr>
+@endforeach
+
       </tbody>
     </table>
+
+
+    <!-- ARCHIVES MODAL -->
+<div class="modal" id="archivesModal">
+  <div class="modal-content" style="max-width: 900px; width: 100%;">
+    <span class="close-btn" id="closeArchivesModal">&times;</span>
+    <div class="modal-header">Archived Students</div>
+
+    <!-- Search & Actions -->
+    <div class="toolbar-actions" style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+      <input id="archiveSearch" type="search" placeholder="Search archived students..." style="flex:1; padding:6px;">
+
+      <!-- Section Filter Dropdown -->
+      <select id="archiveSectionFilter" style="max-width:200px; padding:6px;">
+
+            <option value="">All Sections</option>
+            @foreach($sections as $section)
+              <option value="{{ $section }}">{{ $section }}</option>
+            @endforeach
+        </select>
+
+      <button id="restoreBtn" class="btn-primary"><i class="fas fa-undo"></i> Restore</button>
+
+    </div>
+
+    <!-- Archived Students Table -->
+    <table id="archiveTable">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="archiveSelectAll"></th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Section</th>
+        </tr>
+      </thead>
+      <tbody>
+@foreach($archivedStudents as $student)
+    @if($student->status === 'Cleared')
+        <tr
+            data-id="{{ $student->student_id }}"
+            data-name="{{ $student->student_fname }} {{ $student->student_lname }}"
+            data-status="{{ $student->status }}"
+            data-section="{{ $student->adviser->adviser_section ?? '' }}"
+        >
+            <td><input type="checkbox" class="archive-checkbox"></td>
+            <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
+            <td>
+                <span class="status-badge cleared">{{ $student->status }}</span>
+            </td>
+            <td>{{ $student->adviser->adviser_section ?? '-' }}</td>
+        </tr>
+    @endif
+@endforeach
+</tbody>
+
+    </table>
+  </div>
+</div>
+
 
     <!-- Info Modal -->
     <div class="modal" id="infoModal">
@@ -447,51 +192,73 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
       });
     });
 
-    // Bulk Action Menu
-    const bulkActionBtn = document.getElementById('bulkActionBtn');
-    const bulkActionMenu = document.getElementById('bulkActionMenu');
+// Bulk Action Menu
+const bulkActionBtn = document.getElementById('bulkActionBtn');
+const bulkActionMenu = document.getElementById('bulkActionMenu');
 
-    bulkActionBtn.addEventListener('click', () => {
-      bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
-    });
+bulkActionBtn.addEventListener('click', () => {
+  bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
+});
 
-    bulkActionMenu.querySelectorAll('.bulk-action-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const action = item.getAttribute('data-action');
-        const checkedRows = document.querySelectorAll('.student-checkbox:checked');
+document.addEventListener('click', (e) => {
+  if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
+    bulkActionMenu.style.display = 'none';
+  }
+});
 
-        checkedRows.forEach(cb => {
-          const row = cb.closest('tr');
-          const statusCell = row.querySelector('.status-cell');
+document.querySelectorAll('.status-cell').forEach(cell => {
+  if (cell.textContent.trim() === 'Trash') {
+    cell.classList.add('Trash');
+  }
+});
 
-          if(action === 'completed') {
-            statusCell.textContent = 'Completed';
-            statusCell.classList.remove('not-completed');
-            statusCell.classList.add('completed');
-          } else if(action === 'not-completed') {
-            statusCell.textContent = 'Not Completed';
-            statusCell.classList.remove('completed');
-            statusCell.classList.add('not-completed');
-          } else if(action === 'trash') {
-            row.remove();
-          }
-        });
+// Bulk action dropdown handling
+// Bulk action dropdown handling
+document.querySelectorAll('.bulk-action-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const action = item.dataset.action;
+    const selected = document.querySelectorAll('.student-checkbox:checked');
 
-        bulkActionMenu.style.display = 'none';
+    if (selected.length === 0) {
+      alert("⚠️ Please select at least one student.");
+      return;
+    }
+
+    if (action === "completed") {
+      if (!confirm("Are you sure you want to mark selected students as Cleared?")) return;
+
+      // Collect selected student IDs
+      const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+      console.log(ids); // optional: debug
+
+      fetch(`/prefect/students/bulk-clear-status`, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids, status: 'Cleared' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("✅ Selected students marked as Cleared.");
+          location.reload(); // refresh to show updated status
+        } else {
+          alert("❌ Failed to update: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("❌ Something went wrong.");
       });
-    });
 
-    document.addEventListener('click', (e) => {
-      if(!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
-        bulkActionMenu.style.display = 'none';
-      }
-    });
+      // Hide bulk menu after action
+      bulkActionMenu.style.display = 'none';
+    }
+  });
+});
 
-    document.querySelectorAll('.status-cell').forEach(cell => {
-      if(cell.textContent.trim() === 'Not Completed') {
-        cell.classList.add('not-completed');
-      }
-    });
 
     // Dropdowns
     document.querySelectorAll('.dropdown-btn').forEach(btn => {
@@ -548,6 +315,50 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
     }
     searchInput.addEventListener('input', filterTable);
     sectionFilter.addEventListener('change', filterTable);
+
+
+// Archives Modal
+const archiveBtn = document.getElementById('archiveBtn');
+const archivesModal = document.getElementById('archivesModal');
+const closeArchivesModal = document.getElementById('closeArchivesModal');
+
+// Show modal when Archive button is clicked
+archiveBtn.addEventListener('click', () => {
+  archivesModal.classList.add('show-modal');
+});
+
+// Close modal when "×" is clicked
+closeArchivesModal.addEventListener('click', () => {
+  archivesModal.classList.remove('show-modal');
+});
+
+// Optional: Close modal when clicking outside modal content
+window.addEventListener('click', (e) => {
+  if (e.target === archivesModal) {
+    archivesModal.classList.remove('show-modal');
+  }
+});
+
+// Archive search & section filter
+const archiveSearch = document.getElementById('archiveSearch');
+const archiveSectionFilter = document.getElementById('archiveSectionFilter');
+
+function filterArchiveTable() {
+  const query = archiveSearch.value.toLowerCase();
+  const selectedSection = archiveSectionFilter.value;
+
+  document.querySelectorAll('#archiveTable tbody tr').forEach(row => {
+    const name = row.dataset.name.toLowerCase();
+    const rowSection = row.dataset.section;
+
+    // Show row if name matches search AND section matches filter (or filter is empty)
+    row.style.display = (name.includes(query) && (selectedSection === '' || rowSection === selectedSection)) ? '' : 'none';
+  });
+}
+
+archiveSearch.addEventListener('input', filterArchiveTable);
+archiveSectionFilter.addEventListener('change', filterArchiveTable);
+
 
   </script>
 

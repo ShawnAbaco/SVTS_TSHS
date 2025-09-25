@@ -70,6 +70,8 @@ Route::prefix('prefect')->group(function () {
 
         // Students
         Route::delete('/students/{student}', [PrefectController::class, 'destroy'])->name('student.delete');
+        Route::patch('/students/bulk-clear-status', [StudentController::class, 'bulkClearStatus'])
+    ->name('prefect.students.bulkClearStatus');
 
         // Offenses & Sanctions
         Route::get('/offensesandsanctions', [PrefectController::class, 'offensesandsanctions'])->name('offenses.sanctions');
@@ -106,7 +108,11 @@ Route::prefix('adviser')->group(function () {
         // CRUD student
         Route::post('/students', [StudentController::class, 'store'])->name('students.store');
         Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
-        Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+        Route::delete('/students/{id}/trash', [StudentController::class, 'trash'])->name('students.trash');
+Route::patch('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
+Route::delete('/students/{id}/delete', [StudentController::class, 'forceDelete'])->name('students.forceDelete');
+Route::patch('/students/bulk-update-status', [StudentController::class, 'bulkUpdateStatus'])->name('students.bulkUpdateStatus');
+
 
         // CRUD parent
         Route::post('/adviser/parents', [ParentController::class, 'parentStore'])->name('parents.store');

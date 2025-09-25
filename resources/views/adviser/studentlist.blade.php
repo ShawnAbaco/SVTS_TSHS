@@ -49,22 +49,20 @@
 </li>    </ul>
   </nav>
 
+
   <!-- MAIN CONTENT -->
 <!-- MAIN CONTENT -->
+
 <main class="main-content">
   <div class="toolbar">
 
     <h1>Student List</h1>
     <div class="toolbar-actions">
-        @if (session('success'))
+
+
+  @if (session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
-    </div>
-@endif
-
-@if (session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
     </div>
 @endif
 
@@ -78,6 +76,21 @@
   <table id="studentTable">
     <thead>
       <tr>
+                  <th>
+<div style="display: inline-flex; align-items: center; gap: 8px;">
+  <input type="checkbox" id="selectAll">
+
+  <!-- BULK ACTION 3 DOTS -->
+  <div class="bulk-action-dropdown" style="position: relative;">
+    <button id="bulkActionBtn">&#8942;</button>
+    <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
+      <div class="bulk-action-item" data-action="completed">Completed</div>
+      <div class="bulk-action-item" data-action="trash">Trash</div>
+    </div>
+  </div>
+</div>
+
+          </th>
         <th>Name</th>
         <th>Sex</th>
         <th>Birthdate</th>
@@ -88,7 +101,7 @@
       </tr>
     </thead>
     <tbody>
-      @foreach($students as $student)
+  @foreach($activeStudents as $student)
       <tr
         data-id="{{ $student->student_id }}"
         data-fname="{{ $student->student_fname }}"
@@ -102,6 +115,7 @@
         data-parent-contact="{{ $student->parent ? $student->parent->parent_contactinfo : '' }}"
         data-parent-id="{{ $student->parent ? $student->parent->parent_id : '' }}"
       >
+                <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
         <td>{{ $student->student_fname . " " . $student->student_lname }}</td>
         <td>{{ $student->student_sex ?? 'N/A' }}</td>
 <td>{{ \Carbon\Carbon::parse($student->student_birthdate)->format('M d, Y') }}</td>
@@ -115,17 +129,68 @@
         <td>
           <button class="action-btn info"><i class="fas fa-info-circle"></i> Info</button>
           <button class="action-btn edit"><i class="fas fa-edit"></i> Edit</button>
-          <form method="POST" action="{{ route('students.destroy', $student->student_id) }}" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i> Delete</button>
-          </form>
+
         </td>
       </tr>
       @endforeach
     </tbody>
   </table>
 </main>
+
+<!-- ARCHIVES MODAL -->
+<div class="modal" id="archivesModal">
+  <div class="modal-content" style="max-width: 900px; width: 100%;">
+    <span class="close-btn" id="closeArchivesModal">&times;</span>
+    <div class="modal-header">Archived Students</div>
+@if (session('success'))
+  <div class="alert alert-success" id="successAlert">
+      {{ session('success') }}
+  </div>
+@endif
+
+
+    <!-- Search & Actions -->
+    <div class="toolbar-actions" style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+      <input id="archiveSearch" type="search" placeholder="Search archived students..." style="flex:1; padding:6px;">
+      <button id="restoreBtn" class="btn-primary"><i class="fas fa-undo"></i> Restore</button>
+      <button id="deleteBtn" class="btn-danger"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+
+    <!-- Archived Students Table -->
+    <table id="archiveTable">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="archiveSelectAll"></th>
+          <th>Name</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+<tbody>
+  @foreach($archivedStudents as $student)
+    <tr
+      data-id="{{ $student->student_id }}"
+      data-fname="{{ $student->student_fname }}"
+      data-lname="{{ $student->student_lname }}"
+      data-status="{{ $student->status }}"
+    >
+      <td><input type="checkbox" class="archive-checkbox"></td>
+      <td>{{ $student->student_fname . " " . $student->student_lname }}</td>
+      <td>
+<span class="status-badge {{ $student->status }}">
+    {{ ucfirst($student->status) }}
+</span>
+
+      </td>
+    </tr>
+  @endforeach
+</tbody>
+
+
+    </table>
+  </div>
+</div>
+
+
 <!-- CREATE STUDENT MODAL -->
 <div class="modal" id="createStudentModal">
   <div class="modal-content">
@@ -200,7 +265,7 @@
         <label>Status</label>
         <select name="status" required>
           <option value="active" selected>Active</option>
-          <option value="inactive">Inactive</option>
+
         </select>
       </div>
 
@@ -211,7 +276,6 @@
     </form>
   </div>
 </div>
-
 
   <!-- INFO MODAL -->
   <div class="modal" id="infoModal">
@@ -325,6 +389,103 @@
   </div>
 </div>
 <script>
+        // Select All
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.student-checkbox');
+    selectAll.addEventListener('change', () => {
+      checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    });
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        if (!cb.checked) {
+          selectAll.checked = false;
+        } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
+          selectAll.checked = true;
+        }
+      });
+    });
+// Bulk Action Menu
+const bulkActionBtn = document.getElementById('bulkActionBtn');
+const bulkActionMenu = document.getElementById('bulkActionMenu');
+
+bulkActionBtn.addEventListener('click', () => {
+  bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
+});
+
+document.addEventListener('click', (e) => {
+  if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
+    bulkActionMenu.style.display = 'none';
+  }
+});
+
+document.querySelectorAll('.status-cell').forEach(cell => {
+  if (cell.textContent.trim() === 'Trash') {
+    cell.classList.add('Trash');
+  }
+});
+
+// Dropdowns
+document.querySelectorAll('.dropdown-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const container = btn.nextElementSibling;
+    document.querySelectorAll('.dropdown-btn').forEach(other => {
+      if (other !== btn) {
+        other.classList.remove('active');
+        other.nextElementSibling.style.display = 'none';
+      }
+    });
+    btn.classList.toggle('active');
+    container.style.display = container.style.display === 'block' ? 'none' : 'block';
+  });
+});
+
+// Bulk Action Items
+document.querySelectorAll('.bulk-action-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const action = item.dataset.action; // "completed" or "trash"
+    const selected = document.querySelectorAll('.student-checkbox:checked');
+
+    if (selected.length === 0) {
+      alert("⚠️ Please select at least one student.");
+      return;
+    }
+
+    // Collect IDs
+    const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+
+    // Map actions to statuses
+    let status;
+    if (action === "completed") status = "completed";
+    if (action === "trash") status = "inactive";
+
+    fetch(`/adviser/students/bulk-update-status`, {
+      method: 'PATCH',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids, status })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        // Refresh the page to update UI
+        location.reload();
+      } else {
+        alert("❌ Update failed: " + data.message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Something went wrong.");
+    });
+  });
+});
+
+
+
+
   // Dropdown functionality - auto close others & scroll
   const dropdowns = document.querySelectorAll('.dropdown-btn');
   dropdowns.forEach(btn => {
@@ -497,9 +658,121 @@
     document.getElementById('edit_parent_id').value = id;
     document.getElementById('edit_parent_search').value = name;
     document.getElementById('editParentList').style.display = 'none';
+
+
+
   }
 
-  
+  // ARCHIVES MODAL
+const archivesModal = document.getElementById('archivesModal');
+const closeArchivesModal = document.getElementById('closeArchivesModal');
+const openArchivesBtn = document.querySelector('.btn-archive');
+
+openArchivesBtn.addEventListener('click', () => archivesModal.style.display = 'flex');
+closeArchivesModal.addEventListener('click', () => archivesModal.style.display = 'none');
+
+window.addEventListener('click', (e) => {
+  if (e.target === archivesModal) archivesModal.style.display = 'none';
+});
+
+// Search archived students
+document.getElementById('archiveSearch').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  document.querySelectorAll('#archiveTable tbody tr').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(q) ? '' : 'none';
+  });
+});
+// Select All in archive
+const archiveSelectAll = document.getElementById('archiveSelectAll');
+
+archiveSelectAll.addEventListener('change', () => {
+  document.querySelectorAll('.archive-checkbox').forEach(cb => cb.checked = archiveSelectAll.checked);
+});
+
+// Restore action
+document.getElementById('restoreBtn').addEventListener('click', () => {
+  const selected = document.querySelectorAll('.archive-checkbox:checked');
+  if (selected.length === 0) {
+    alert("⚠️ Please select at least one student to restore.");
+    return;
+  }
+
+  const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+
+  fetch(`/adviser/students/bulk-update-status`, {
+    method: 'PATCH',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ids, status: 'active' })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert(data.message);
+      location.reload(); // 🔄 refresh page after success
+    } else {
+      alert("❌ Restore failed: " + data.message);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Something went wrong.");
+  });
+});
+
+// Delete action
+// Delete action — send one DELETE request per id (uses existing /students/{id}/delete route)
+document.getElementById('deleteBtn').addEventListener('click', async () => {
+  const selected = document.querySelectorAll('.archive-checkbox:checked');
+  if (selected.length === 0) {
+    alert("⚠️ Please select at least one student to delete.");
+    return;
+  }
+
+  if (!confirm("Are you sure you want to permanently delete selected students?")) return;
+
+  const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+  const token = document.querySelector('meta[name="csrf-token"]').content;
+
+  try {
+    const requests = ids.map(id =>
+      fetch(`/adviser/students/${id}/delete`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': token,
+          'Content-Type': 'application/json',
+        }
+      }).then(res => {
+        if (!res.ok) return res.text().then(t => { throw new Error(t || 'Delete failed') });
+        return res.json();
+      })
+    );
+
+    await Promise.all(requests);
+
+    alert("✅ Selected students deleted successfully.");
+    location.reload(); // refresh so archived list updates
+  } catch (err) {
+    console.error(err);
+    alert("❌ Something went wrong while deleting: " + (err.message || ''));
+  }
+});
+
+
+// Auto-hide success message after 3 seconds
+const successAlert = document.getElementById('successAlert');
+if (successAlert) {
+  setTimeout(() => {
+    successAlert.style.transition = "opacity 0.5s";
+    successAlert.style.opacity = "0";
+    setTimeout(() => successAlert.remove(), 500);
+  }, 3000);
+}
+
+
   function logout(){
     if(confirm('Are you sure you want to log out?')){
       window.location.href = '/adviser/login';

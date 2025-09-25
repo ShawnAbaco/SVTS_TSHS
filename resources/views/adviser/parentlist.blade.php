@@ -131,13 +131,12 @@
         </form>
     </td>
 </tr>
-
-
     @endforeach
   </tbody>
 </table>
   </div>
 
+  
 
   <!-- ADD  MODAL -->
 <div class="modal" id="addModal">

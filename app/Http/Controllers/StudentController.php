@@ -72,7 +72,7 @@ public function store(Request $request)
         return redirect()->back()->with('success', 'Student updated successfully!');
     }
 
-public function destroy($id)
+    public function trash($id)
 {
     $student = Student::findOrFail($id);
 
@@ -83,38 +83,82 @@ public function destroy($id)
 
     return redirect()->route('student.list')->with('success', '🗑️ Student moved to archive successfully.');
 }
+
+public function bulkUpdateStatus(Request $request)
+{
+    $ids = $request->input('ids'); // array of selected student IDs
+    $status = $request->input('status'); // "completed" or "inactive"
+
+    if (!$ids || !is_array($ids)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No students selected.'
+        ], 400);
+    }
+
+    Student::whereIn('student_id', $ids)->update([
+        'status' => $status,
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => count($ids) . " students updated to {$status}.",
+    ]);
+}
+
+public function forceDelete($id)
+{
+    $student = Student::findOrFail($id);
+    $student->delete(); // actually remove from DB
+    return response()->json([
+        'success' => true,
+        'message' => 'Student deleted successfully.'
+    ]);
+}
+
 public function restore($id)
 {
     $student = Student::findOrFail($id);
 
-    $student->update([
-        'status' => 'active',
+    $student->status = 'active';
+    $student->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Student restored successfully.'
     ]);
-
-    return redirect()->route('student.list')->with('success', '✅ Student restored successfully.');
 }
 
 
-public function archived()
+// prefect
+public function bulkClearStatus(Request $request)
 {
-    $archivedStudents = Student::where('status', 'inactive')
-        ->leftJoin('tbl_parent', 'tbl_student.parent_id', '=', 'tbl_parent.parent_id')
-        ->select(
-            'tbl_student.student_id',
-            'tbl_student.student_fname',
-            'tbl_student.student_lname',
-            'tbl_student.student_sex',
-            'tbl_parent.parent_fname',
-            'tbl_parent.parent_lname'
-        )
-        ->get()
-        ->map(function ($student) {
-            $student->parent_name = trim($student->parent_fname . ' ' . $student->parent_lname);
-            return $student;
-        });
+    $ids = $request->input('ids', []);
+    $status = $request->input('status', 'Cleared'); // default to Cleared
 
-    return response()->json($archivedStudents);
+    if (empty($ids)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No students selected.'
+        ]);
+    }
+
+    try {
+        // Update the status of all selected students
+        Student::whereIn('student_id', $ids)->update(['status' => $status]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Selected students have been marked as '{$status}'."
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update student status: ' . $e->getMessage()
+        ]);
+    }
 }
+
 
 
 }
