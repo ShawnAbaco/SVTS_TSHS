@@ -76,7 +76,19 @@
     <!-- Table -->
     <table id="complaintsTable">
       <thead>
+
         <tr>
+
+        <th style="text-align: center;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <input type="checkbox" id="selectAll">
+            <button type="button" class="btn-trash-small" title="Delete Selected">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+
+
+          </th>
           <th>Complainant</th>
           <th>Respondent</th>
           <th>Offense</th>
@@ -90,6 +102,7 @@
       <tbody>
         @foreach($complaints as $c)
         <tr>
+                            <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
           <td>{{ $c->complainant->student_fname ?? 'N/A' }} {{ $c->complainant->student_lname ?? '' }}</td>
           <td>{{ $c->respondent->student_fname ?? 'N/A' }} {{ $c->respondent->student_lname ?? '' }}</td>
           <td>{{ $c->offense->offense_type ?? 'N/A' }}</td>

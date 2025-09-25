@@ -81,6 +81,15 @@
         <table id="appointmentTable">
           <thead>
             <tr>
+                        <th style="text-align: center;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <input type="checkbox" id="selectAll">
+            <button type="button" class="btn-trash-small" title="Delete Selected">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </th>
+
               <th>#</th><th>Student</th><th>Parent</th><th>Contact</th>
               <th>Incident</th><th>Offense</th><th>Date</th><th>Time</th>
               <th>Status</th><th>Actions</th>
@@ -89,6 +98,7 @@
           <tbody id="appointmentList">
             @foreach($appointments as $index => $app)
             <tr>
+                                <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
               <td>{{ $index + 1 }}</td>
               <td>{{ $app->violation->student->student_fname }} {{ $app->violation->student->student_lname }}</td>
               <td>{{ $app->violation->student->parent->parent_fname ?? 'N/A' }} {{ $app->violation->student->parent->parent_lname ?? '' }}</td>

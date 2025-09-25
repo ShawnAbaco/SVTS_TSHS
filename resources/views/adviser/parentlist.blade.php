@@ -82,6 +82,21 @@
 <table id="parentTable">
   <thead>
     <tr>
+            <th>
+<div style="display: inline-flex; align-items: center; gap: 8px;">
+  <input type="checkbox" id="selectAll">
+
+  <!-- BULK ACTION 3 DOTS -->
+  <div class="bulk-action-dropdown" style="position: relative;">
+    <button id="bulkActionBtn">&#8942;</button>
+    <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
+      <div class="bulk-action-item" data-action="completed">Completed</div>
+      <div class="bulk-action-item" data-action="trash">Trash</div>
+    </div>
+  </div>
+</div>
+
+          </th>
       <th>Parent/Guardian Name</th>
       <th>Sex</th>
       <th>Relationship</th>
@@ -100,6 +115,8 @@
         "status" => $parent->status
     ])'
     data-students='@json($parent->students)'>
+                    <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
+
     <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
     <td>{{ $parent->parent_sex }}</td>
     <td>{{ $parent->parent_relationship }}</td>
@@ -136,7 +153,7 @@
 </table>
   </div>
 
-  
+
 
   <!-- ADD  MODAL -->
 <div class="modal" id="addModal">

@@ -109,6 +109,17 @@
     <table id="anecdotalTable" class="complaints-table">
       <thead>
         <tr>
+
+        <th style="text-align: center;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <input type="checkbox" id="selectAll">
+            <button type="button" class="btn-trash-small" title="Delete Selected">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+
+
+          </th>
           <th>ID</th>
           <th>Complainant</th>
           <th>Respondent</th>
@@ -122,6 +133,7 @@
       <tbody>
         @foreach($anecdotal as $item)
         <tr>
+                            <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
           <td>{{ $item->comp_anec_id }}</td>
           <td>{{ $item->complaint->complainant->student_fname ?? 'N/A' }} {{ $item->complaint->complainant->student_lname ?? '' }}</td>
           <td>{{ $item->complaint->respondent->student_fname ?? 'N/A' }} {{ $item->complaint->respondent->student_lname ?? '' }}</td>

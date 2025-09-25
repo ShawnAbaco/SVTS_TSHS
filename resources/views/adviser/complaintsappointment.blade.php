@@ -111,6 +111,14 @@
     <table id="appointmentTable">
       <thead>
         <tr>
+                       <th style="text-align: center;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <input type="checkbox" id="selectAll">
+            <button type="button" class="btn-trash-small" title="Delete Selected">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </th>
           <th>ID</th>
           <th>Complainant</th>
           <th>Respondent</th>
@@ -125,6 +133,7 @@
       <tbody>
         @foreach($comp_appointments as $comp_appointment)
         <tr>
+                            <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
           <td>{{ $comp_appointment->comp_app_id }}</td>
           <td>{{ $comp_appointment->complaint->complainant->student_fname ?? 'N/A' }} {{ $comp_appointment->complaint->complainant->student_lname ?? '' }}</td>
           <td>{{ $comp_appointment->complaint->respondent->student_fname ?? 'N/A' }} {{ $comp_appointment->complaint->respondent->student_lname ?? '' }}</td>

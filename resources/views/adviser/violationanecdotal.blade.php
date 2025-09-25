@@ -81,6 +81,14 @@
     <table>
       <thead>
         <tr>
+                    <th style="text-align: center;">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <input type="checkbox" id="selectAll">
+            <button type="button" class="btn-trash-small" title="Delete Selected">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </th>
           <th>ID</th>
           <th>Violator Name</th>
           <th>Parent Name</th>
@@ -94,6 +102,7 @@
       <tbody id="anecdotalTable">
         @forelse($anecdotal as $a)
         <tr data-id="{{ $a->violation_anec_id }}">
+                            <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
           <td>{{ $a->violation_anec_id }}</td>
           <td>{{ $a->violation->student->student_fname }} {{ $a->violation->student->student_lname }}</td>
           <td>{{ $a->violation->student->parent->parent_fname ?? '' }} {{ $a->violation->student->parent->parent_lname ?? '' }}</td>

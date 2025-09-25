@@ -76,7 +76,7 @@
   <table id="studentTable">
     <thead>
       <tr>
-                  <th>
+    <th>
 <div style="display: inline-flex; align-items: center; gap: 8px;">
   <input type="checkbox" id="selectAll">
 

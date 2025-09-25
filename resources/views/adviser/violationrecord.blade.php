@@ -110,6 +110,7 @@
     <tbody>
       @forelse($violations as $v)
         <tr data-id="{{ $v->violation_id }}" data-student-id="{{ $v->student->student_id }}">
+
           <td><input type="checkbox" class="rowCheckbox"></td>
           <td>{{ $v->student->student_fname }} {{ $v->student->student_lname }}</td>
           <td>{{ $v->offense->offense_type ?? 'N/A' }}</td>
