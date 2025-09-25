@@ -359,6 +359,46 @@ function filterArchiveTable() {
 archiveSearch.addEventListener('input', filterArchiveTable);
 archiveSectionFilter.addEventListener('change', filterArchiveTable);
 
+// Select All in archive
+const archiveSelectAll = document.getElementById('archiveSelectAll');
+
+archiveSelectAll.addEventListener('change', () => {
+  document.querySelectorAll('.archive-checkbox').forEach(cb => cb.checked = archiveSelectAll.checked);
+});
+
+// Restore action
+document.getElementById('restoreBtn').addEventListener('click', () => {
+  const selected = document.querySelectorAll('.archive-checkbox:checked');
+  if (selected.length === 0) {
+    alert("⚠️ Please select at least one student to restore.");
+    return;
+  }
+
+  const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+
+  fetch(`/prefect/students/bulk-update-status`, {
+    method: 'PATCH',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ids, status: 'active' })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert(data.message);
+      location.reload(); // 🔄 refresh page after success
+    } else {
+      alert("❌ Restore failed: " + data.message);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Something went wrong.");
+  });
+});
+
 
   </script>
 

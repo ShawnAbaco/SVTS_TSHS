@@ -159,6 +159,27 @@ public function bulkClearStatus(Request $request)
     }
 }
 
+public function restoreStudents(Request $request)
+{
+    $ids = $request->input('ids', []); // array of student IDs
+
+    if (empty($ids)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No students selected.'
+        ], 400);
+    }
+
+    // Restore all students with status 'Cleared'
+    Student::whereIn('student_id', $ids)
+        ->where('status', 'Cleared')
+        ->update(['status' => 'active']);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Selected students restored successfully.'
+    ]);
+}
 
 
 }

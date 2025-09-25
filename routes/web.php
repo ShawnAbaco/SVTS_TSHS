@@ -72,6 +72,10 @@ Route::prefix('prefect')->group(function () {
         Route::delete('/students/{student}', [PrefectController::class, 'destroy'])->name('student.delete');
         Route::patch('/students/bulk-clear-status', [StudentController::class, 'bulkClearStatus'])
     ->name('prefect.students.bulkClearStatus');
+Route::patch('/students/bulk-update-status', [StudentController::class, 'restoreStudents'])
+    ->name('prefect.students.bulkRestoreStatus');
+
+
 
         // Offenses & Sanctions
         Route::get('/offensesandsanctions', [PrefectController::class, 'offensesandsanctions'])->name('offenses.sanctions');
