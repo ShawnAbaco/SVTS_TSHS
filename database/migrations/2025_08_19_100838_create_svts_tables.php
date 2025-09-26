@@ -30,13 +30,14 @@ return new class extends Migration
         // Offenses with Sanction
         // =========================
         Schema::create('tbl_offenses_with_sanction', function (Blueprint $table) {
-            $table->bigIncrements('offense_sanc_id');
-            $table->string('offense_type', 255);
-            $table->text('offense_description');
-            $table->text('sanction_consequences');
-            $table->timestamps();
-        });
-
+    $table->bigIncrements('offense_sanc_id');
+    $table->string('offense_type', 255);
+    $table->text('offense_description');
+    $table->text('sanction_consequences');
+    $table->integer('group_number')->default(1);  // 👈 Add this
+    $table->integer('stage_number')->default(1);  // 👈 Add this
+    $table->timestamps();
+});
         // =========================
         // Adviser
         // =========================

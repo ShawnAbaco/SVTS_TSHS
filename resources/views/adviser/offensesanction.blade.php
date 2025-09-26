@@ -74,30 +74,31 @@
       </div>
     </div>
 
-    <table id="offenseTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Offense Type</th>
-          <th>Description</th>
-          <th>Consequences</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse($offenses as $offense)
-          <tr>
-            <td>{{ $offense->offense_sanc_id }}</td>
-            <td>{{ $offense->offense_type }}</td>
-            <td>{{ $offense->offense_description }}</td>
-            <td>{{ $offense->sanction_consequences }}</td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="4" style="text-align:center;">No offenses found</td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
+   <table id="offenseTable">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Offense Type</th>
+      <th>Description</th>
+      <th>Consequences</th>
+    </tr>
+  </thead>
+  <tbody>
+    @forelse($offenses as $index => $offense)
+      <tr>
+        <td>{{ $index + 1 }}</td>
+        <td>{{ $offense->offense_type }}</td>
+        <td>{{ $offense->offense_description }}</td>
+        <td>{{ $offense->sanctions ?? '-' }}</td>
+      </tr>
+    @empty
+      <tr>
+        <td colspan="4" style="text-align:center;">No offenses found</td>
+      </tr>
+    @endforelse
+  </tbody>
+</table>
+
   </div>
 </div>
 
