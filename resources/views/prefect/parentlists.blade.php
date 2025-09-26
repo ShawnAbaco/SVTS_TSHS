@@ -5,309 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parent List</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-/* ======================= RESET & BASE ======================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
-}
-
-body {
-    display: flex;
-    background: #f9f9f9;
-    color: #111;
-}
-
-/* ======================= SIDEBAR ======================= */
- .sidebar {
-      width: 230px;
-background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
-
-background-repeat: no-repeat;
-background-attachment: fixed;
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-      overflow-y: auto;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar ul li {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-      font-size: 15px;
-      color:rgb(255, 255, 255);
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .sidebar ul li i {
-      margin-right: 12px;
-      color:rgb(255, 255, 255);
-      min-width: 20px;
-      font-size: 16px;
-    }
-
-    .sidebar ul li:hover {
-      background: #2d3f55;
-      transform: translateX(5px);
-      color: #fff;
-    }
-
-    .sidebar ul li:hover i {
-      color: #00e0ff;
-    }
-
-    .sidebar ul li.active {
-      background: #00aaff;
-      color: #fff;
-      border-left: 4px solid #ffffff;
-    }
-
-    .sidebar ul li.active i {
-      color: #fff;
-    }
-
-    .sidebar ul li a {
-      text-decoration: none;
-      color: inherit;
-      flex: 1;
-    }
-
-    .section-title {
-      margin: 20px 10px 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 1px;
-    }
-
-    .dropdown-container {
-      display: none;
-      list-style: none;
-      padding-left: 25px;
-    }
-
-    .dropdown-container li {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      color: #ddd;
-    }
-
-    .dropdown-container li:hover {
-      background: #3a4c66;
-      color: #fff;
-    }
-
-    .dropdown-btn .arrow {
-      margin-left: auto;
-      transition: transform 0.3s;
-    }
-
-    .dropdown-btn.active .arrow {
-      transform: rotate(180deg);
-    }
-
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
-    }
-
-/* ======================= MAIN CONTENT ======================= */
-.main-content {
-    margin-left: 250px;
-    padding: 30px;
-    width: calc(100% - 250px);
-}
-
-.crud-container {
-    background: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.crud-container h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #0a1e2d;
-}
-
-/* Flex container (search + buttons) */
-.flex {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    justify-content: flex-end;
-}
-
-.flex input.form-control {
-    height: 45px;
-    font-size: 16px;
-    padding: 0 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.flex input.form-control:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px #007bff;
-}
-
-/* Archive button */
-#archiveBtn {
-    height: 45px;
-    font-size: 16px;
-    padding: 0 15px;
-    border-radius: 5px;
-    background-color: orange;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s;
-}
-#archiveBtn:hover { background-color: darkorange; }
-#archiveBtn i { margin-right: 5px; }
-
-/* ======================= TABLE ======================= */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 8px;
-    overflow: hidden;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
-    background: #fff;
-}
-
-/* Black header, no hover */
-table thead {
-    background-color: #000000; /* black */
-    color: #ffffff;             /* white text */
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-}
-
-table thead tr:hover {
-    background-color: #000000; /* no hover effect */
-}
-
-table th, table td {
-    padding: 14px 12px;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-table th:first-child, table td:first-child {
-    text-align: left;
-    padding-left: 20px;
-}
-
-table tr:nth-child(even) { background-color: #f9f9f9; }
-table tbody tr:hover { background-color: #e6f0ff; cursor: pointer; }
-
-/* Rounded corners */
-table thead tr:first-child th:first-child { border-top-left-radius: 8px; }
-table thead tr:first-child th:last-child { border-top-right-radius: 8px; }
-table tr:last-child td:first-child { border-bottom-left-radius: 8px; }
-table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
-
-/* ======================= MODAL ======================= */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal.show { display: flex; animation: fadeIn 0.3s ease-in-out; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-.modal-content {
-    background: #fff;
-    padding: 25px;
-    width: 100%;
-    max-width: 500px;
-    border-radius: 10px;
-    position: relative;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-}
-
-.modal-content h5 { margin-bottom: 15px; color: #007bff; }
-.modal-content .close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    cursor: pointer;
-    font-size: 20px;
-    color: #555;
-    transition: 0.2s;
-}
-.modal-content .close:hover { color: #000; }
-
-.info-box p { margin: 8px 0; font-size: 15px; }
-
-/* ======================= LOGO ======================= */
-.sidebar img {
-    width: 150px;
-    height: auto;
-    margin: 0 auto 0.5rem;
-    display: block;
-    transition: transform 0.3s ease;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-}
-
-/* ======================= RESPONSIVE ======================= */
-@media screen and (max-width:768px) {
-    .main-content { margin-left: 0; padding: 15px; }
-    table th, table td { font-size: 12px; padding: 8px; }
-    .btn { font-size: 12px; padding: 4px 8px; }
-    .flex { justify-content: flex-start; flex-direction: column; gap: 8px; }
-}
-
-
-  </style>
+    <link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
+ 
 </head>
 <body>
 
@@ -343,83 +42,113 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
 </div>
 
   <!-- Main Content -->
-  <div class="main-content">
-
+<div class="main-content">
+  <header class="main-header">
+    <div class="header-left">
       <h2>Parent List</h2>
+    </div>
+    <div class="header-right">
+      <div class="user-info" onclick="toggleProfileDropdown()">
+        <img src="/images/user.jpg" alt="User">
+        <span>{{ Auth::user()->name }}</span>
+        <i class="fas fa-caret-down"></i>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="{{ route('profile.settings') }}">Profile</a>
+      </div>
+    </div>
+  </header>
+      
 
-      <!-- Search Bar -->
-      <div class="flex">
+  <!-- Table Container -->
+   
+  <div class="table-container">
+    <!-- Table Header with Search and Archive Button -->
+    <div class="table-header">
+      
+      <div class="table-controls">
+        <i class="fas fa-search"></i>
         <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
-        <button id="archiveBtn" class="btn btn-warning">
-            <i class="fas fa-archive" style="margin-right:5px;"></i> Archive
+      </div>
+      <div class="table-controls">
+        <button id="archiveBtn">
+          <i class="fas fa-archive"></i> Archive
         </button>
       </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>
-  <input type="checkbox" id="selectAll">
-  <!-- 3-dots trash dropdown -->
-  <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
-    <button id="bulkActionBtn">&#8942;</button>
-    <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
-      <div class="bulk-action-item" style="padding:5px 10px; cursor:pointer;">Trash</div>
     </div>
-  </div>
-</th>
 
-            <th>#</th>
-            <th>Parent Fullname</th>
-            <th>Contact Number</th>
-            <th>Birthdate</th>
-            <th>Student</th>
-            <th>Adviser</th>
+    <!-- Table -->
+   <div class="table-container">
+    
+      <table id="studentTable" class="fixed-header">
+      <thead>
+        <tr>
+        
+          <th>
+            <input type="checkbox" id="selectAll">
+            <!-- 3-dots trash dropdown -->
+            <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
+                <button id="bulkActionBtn">&#8942;</button>
+                <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
+                  <div class="bulk-action-item" data-action="completed">Trash</div>
+                </div>
+              </div>
+          </th>
+          <th>#</th>
+          <th>Parent Fullname</th>
+          <th>Contact Number</th>
+          <th>Birthdate</th>
+          <th>Student</th>
+          <th>Adviser</th>
+        </tr>
+      </thead>
+</table>
+ <div class="student-table-wrapper">
+    <table id="studentTable">
+      <tbody>
+        @forelse($parents as $index => $parent)
+          <tr class="clickable-row">
+            <td><input type="checkbox" class="student-checkbox"></td>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
+            <td>{{ $parent->parent_contactinfo }}</td>
+            <td>{{ $parent->parent_birthdate }}</td>
+            <td>
+              @forelse($parent->students as $student)
+                {{ $student->student_fname }} {{ $student->student_lname }}<br>
+              @empty N/A @endforelse
+            </td>
+            <td>
+              @forelse($parent->students as $student)
+                @if($student->adviser)
+                  {{ $student->adviser->adviser_fname }} {{ $student->adviser->adviser_lname }}<br>
+                @else N/A<br> @endif
+              @empty N/A @endforelse
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          @forelse($parents as $index => $parent)
-        <tr class="clickable-row">
-    <td><input type="checkbox" class="student-checkbox"></td>
-    <td>{{ $index + 1 }}</td>
-    <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
-    <td>{{ $parent->parent_contactinfo }}</td>
-    <td>{{ $parent->parent_birthdate }}</td>
-    <td>
-      @forelse($parent->students as $student)
-        {{ $student->student_fname }} {{ $student->student_lname }}<br>
-      @empty N/A @endforelse
-    </td>
-    <td>
-      @forelse($parent->students as $student)
-        @if($student->adviser)
-          {{ $student->adviser->adviser_fname }} {{ $student->adviser->adviser_lname }}<br>
-        @else N/A<br> @endif
-      @empty N/A @endforelse
-    </td>
-</tr>
-
-          @empty
+        @empty
           <tr>
             <td colspan="7" style="text-align:center;">No parents found.</td>
           </tr>
-          @endforelse
-        </tbody>
-      </table>
+        @endforelse
+      </tbody>
+    </table>
+</div>
   </div>
+</div>
 
-  <!-- Info Modal -->
-  <div class="modal" id="infoModal">
-    <div class="modal-content">
-      <span class="close" onclick="document.getElementById('infoModal').classList.remove('show')">&times;</span>
-      <h5>Student Information</h5>
-      <div class="info-box">
-        <p><strong>Student Name:</strong> <span id="studentName">N/A</span></p>
-        <p><strong>Adviser:</strong> <span id="adviserName">N/A</span></p>
-        <p><strong>Parent:</strong> <span id="parentName">N/A</span></p>
-      </div>
+<!-- Info Modal -->
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <button class="btn-close" onclick="document.getElementById('infoModal').classList.remove('show-modal')">&times;</button>
+    <h5>Student Information</h5>
+    <div class="modal-body">
+      <p><strong>Student Name:</strong> <span id="studentName">N/A</span></p>
+      <p><strong>Adviser:</strong> <span id="adviserName">N/A</span></p>
+      <p><strong>Parent:</strong> <span id="parentName">N/A</span></p>
     </div>
   </div>
+</div>
 
   <script>
     // Make rows clickable but ignore clicks on checkboxes
@@ -506,10 +235,13 @@ searchInput.addEventListener('input', () => {
         row.style.display = name.includes(query) ? '' : 'none';
     });
 });
+
+// Bulk action functionality
 const bulkActionBtn = document.getElementById('bulkActionBtn');
 const bulkActionMenu = document.getElementById('bulkActionMenu');
 
-bulkActionBtn.addEventListener('click', () => {
+bulkActionBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
   bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
 });
 
@@ -525,6 +257,21 @@ bulkActionMenu.querySelector('.bulk-action-item').addEventListener('click', () =
 document.addEventListener('click', (e) => {
   if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
     bulkActionMenu.style.display = 'none';
+  }
+});
+
+// Profile dropdown functionality
+function toggleProfileDropdown() {
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+// Close profile dropdown if clicked outside
+document.addEventListener('click', (e) => {
+  const userInfo = document.querySelector('.user-info');
+  const dropdown = document.getElementById('profileDropdown');
+  if (!userInfo.contains(e.target)) {
+    dropdown.style.display = 'none';
   }
 });
 

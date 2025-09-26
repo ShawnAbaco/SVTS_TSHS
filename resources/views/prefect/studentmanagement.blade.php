@@ -5,160 +5,192 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/prefect/studentmanagement.css') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <img src="/images/Logo.png" alt="Logo">
-    <h2>PREFECT</h2>
-    <ul>
-      <div class="section-title">Main</div>
-      <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-      <li class="active"><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
-      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
-      <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
 
-      <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
-      <ul class="dropdown-container">
-        <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
-        <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
-        <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
-      </ul>
+<!-- Sidebar -->
+<div class="sidebar">
+  <img src="/images/Logo.png" alt="Logo">
+  <h2>PREFECT</h2>
+  <ul>
+    <div class="section-title">Main</div>
+    <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+    <li class="active"><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+    <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
+    <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
 
-      <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
-      <ul class="dropdown-container">
-        <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
-        <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
-        <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
-      </ul>
-
-      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-      <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+    <ul class="dropdown-container">
+      <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
+      <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
+      <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
     </ul>
-  </div>
 
-  <main>
-    <h2>Student Management</h2>
-    <div class="flex" style="justify-content: flex-end; gap: 10px; margin-bottom: 15px;">
-        <input type="text" id="searchInput" placeholder="Search students..." class="form-control">
-        <select id="sectionFilter" class="form-select" style="max-width:200px;">
-            <option value="">All Sections</option>
-            @foreach($sections as $section)
-              <option value="{{ $section }}">{{ $section }}</option>
-            @endforeach
-        </select>
-        <button id="archiveBtn" class="btn btn-warning">
-            <i class="fas fa-archive"></i> Archive
-        </button>
-    </div>
+    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+    <ul class="dropdown-container">
+      <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
+      <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
+      <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
+    </ul>
 
-    <table id="studentTable">
-      <thead>
-        <tr>
-          <th>
-            <input type="checkbox" id="selectAll">
-            <!-- BULK ACTION 3 DOTS -->
-            <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
-              <button id="bulkActionBtn">&#8942;</button>
-              <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
-               <div class="bulk-action-item" data-action="completed">Cleared</div>
-              </div>
-            </div>
-          </th>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Grade Level</th>
-          <th>Section</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-      @foreach($students as $student)
-<tr
-  data-id="{{ $student->student_id }}"
-  data-section="{{ $student->adviser->adviser_section }}"
-  onclick="showFullInfo(this)"
-  style="cursor:pointer;"
->
-  <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
-  <td>{{ $student->student_id }}</td>
-  <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
-  <td>{{ $student->adviser->adviser_gradelevel }}</td>
-  <td>{{ $student->adviser->adviser_section }}</td>
-  <td>
-    <span class="status-badge {{ $student->status === 'active' ? 'active' : 'inactive' }}">
-      {{ ucfirst($student->status) }}
-    </span>
-  </td>
-</tr>
-@endforeach
-
-      </tbody>
-    </table>
-
-
-    <!-- ARCHIVES MODAL -->
-<div class="modal" id="archivesModal">
-  <div class="modal-content" style="max-width: 900px; width: 100%;">
-    <span class="close-btn" id="closeArchivesModal">&times;</span>
-    <div class="modal-header">Archived Students</div>
-
-    <!-- Search & Actions -->
-    <div class="toolbar-actions" style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
-      <input id="archiveSearch" type="search" placeholder="Search archived students..." style="flex:1; padding:6px;">
-
-      <!-- Section Filter Dropdown -->
-      <select id="archiveSectionFilter" style="max-width:200px; padding:6px;">
-
-            <option value="">All Sections</option>
-            @foreach($sections as $section)
-              <option value="{{ $section }}">{{ $section }}</option>
-            @endforeach
-        </select>
-
-      <button id="restoreBtn" class="btn-primary"><i class="fas fa-undo"></i> Restore</button>
-
-    </div>
-
-    <!-- Archived Students Table -->
-    <table id="archiveTable">
-      <thead>
-        <tr>
-          <th><input type="checkbox" id="archiveSelectAll"></th>
-          <th>Name</th>
-          <th>Status</th>
-          <th>Section</th>
-        </tr>
-      </thead>
-      <tbody>
-@foreach($archivedStudents as $student)
-    @if($student->status === 'Cleared')
-        <tr
-            data-id="{{ $student->student_id }}"
-            data-name="{{ $student->student_fname }} {{ $student->student_lname }}"
-            data-status="{{ $student->status }}"
-            data-section="{{ $student->adviser->adviser_section ?? '' }}"
-        >
-            <td><input type="checkbox" class="archive-checkbox"></td>
-            <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
-            <td>
-                <span class="status-badge cleared">{{ $student->status }}</span>
-            </td>
-            <td>{{ $student->adviser->adviser_section ?? '-' }}</td>
-        </tr>
-    @endif
-@endforeach
-</tbody>
-
-    </table>
-  </div>
+    <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+    <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+  </ul>
 </div>
 
+
+<div class="main-content">
+  <!-- ======= HEADER ======= -->
+  <header class="main-header">
+    <div class="header-left">
+      <h2>Student Management</h2>
+    </div>
+    <div class="header-right">
+      <div class="user-info" onclick="toggleProfileDropdown()">
+        <img src="/images/user.jpg" alt="User">
+        <span>{{ Auth::user()->name }}</span>
+        <i class="fas fa-caret-down"></i>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="{{ route('profile.settings') }}">Profile</a>
+      </div>
+    </div>
+  </header>
+
+
+    <!-- Table Container -->
+    <div class="table-container">
+      <!-- Table Header with Controls -->
+      <div class="table-header">
+        <div class="table-controls">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
+      </div>
+     
+         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px;margin-top: 12px;">
+  <select id="sectionFilter" class="form-select" style="max-width:150px;">
+    <option value="">All Sections</option>
+    @foreach($sections as $section)
+      <option value="{{ $section }}">{{ $section }}</option>
+    @endforeach
+  </select>
+
+  <button id="archiveBtn" class="btn btn-warning">
+    <i class="fas fa-archive"></i> Archive
+  </button>
+</div>
+
+      </div>
+
+     <!-- Wrap your student table in a scrollable container -->
+<div class="table-container">
+
+  <table id="studentTable" class="fixed-header">
+
+    <thead>
+      <tr>
+       <th>
+            <input type="checkbox" id="selectAll">
+            <!-- 3-dots trash dropdown -->
+            <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
+                <button id="bulkActionBtn">&#8942;</button>
+                <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
+                  <div class="bulk-action-item" data-action="completed">Trash</div>
+                </div>
+              </div>
+          </th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Grade Level</th>
+        <th>Section</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+     </table>
+     <div class="student-table-wrapper">
+    <table id="studentTable">
+    <tbody>
+      @foreach($students as $student)
+        <tr data-id="{{ $student->student_id }}">
+          <td><input type="checkbox" class="student-checkbox"></td>
+          <td>{{ $student->student_id }}</td>
+          <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
+          <td>{{ $student->adviser->adviser_gradelevel }}</td>
+          <td>{{ $student->adviser->adviser_section }}</td>
+          <td>
+            <span class="status-badge {{ $student->status === 'active' ? 'active' : 'inactive' }}">
+              {{ ucfirst($student->status) }}
+            </span>
+          </td>
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
+  </div>
+    </div>
+    </div>
+
+    <!-- ARCHIVES MODAL -->
+    <div class="modal" id="archivesModal">
+      <div class="archive-modal-content">
+        <div class="archive-modal-header">
+          <span>Archived Students</span>
+          <span class="close-btn" id="closeArchivesModal">&times;</span>
+        </div>
+        
+        <div class="archive-modal-body">
+          <!-- Search & Actions -->
+          <div class="toolbar-actions">
+            <input id="archiveSearch" type="search" placeholder="Search archived students..." style="flex:1;">
+            <select id="archiveSectionFilter" style="max-width:200px;">
+              <option value="">All Sections</option>
+              @foreach($sections as $section)
+                <option value="{{ $section }}">{{ $section }}</option>
+              @endforeach
+            </select>
+            <button id="restoreBtn" class="btn-primary"><i class="fas fa-undo"></i> Restore</button>
+          </div>
+
+          <!-- Archived Students Table -->
+          <div class="archive-table-container">
+            <table id="archiveTable" class="archive-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="archiveSelectAll"></th>
+                  <th>Name</th>
+                  <th>Status</th>
+                  <th>Section</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($archivedStudents as $student)
+                  @if($student->status === 'Cleared')
+                    <tr
+                      data-id="{{ $student->student_id }}"
+                      data-name="{{ $student->student_fname }} {{ $student->student_lname }}"
+                      data-status="{{ $student->status }}"
+                      data-section="{{ $student->adviser->adviser_section ?? '' }}"
+                    >
+                      <td><input type="checkbox" class="archive-checkbox"></td>
+                      <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
+                      <td>
+                        <span class="status-badge cleared">{{ $student->status }}</span>
+                      </td>
+                      <td>{{ $student->adviser->adviser_section ?? '-' }}</td>
+                    </tr>
+                  @endif
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Info Modal -->
     <div class="modal" id="infoModal">
@@ -173,234 +205,248 @@
         </div>
       </div>
     </div>
-  </main>
 
-  <script>
-    // Select All
-    const selectAll = document.getElementById('selectAll');
-    const checkboxes = document.querySelectorAll('.student-checkbox');
-    selectAll.addEventListener('change', () => {
-      checkboxes.forEach(cb => cb.checked = selectAll.checked);
+</div>
+
+<script>
+  // Select All
+  const selectAll = document.getElementById('selectAll');
+  const checkboxes = document.querySelectorAll('.student-checkbox');
+  selectAll.addEventListener('change', () => {
+    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+  });
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (!cb.checked) {
+        selectAll.checked = false;
+      } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
+        selectAll.checked = true;
+      }
     });
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        if (!cb.checked) {
-          selectAll.checked = false;
-        } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
-          selectAll.checked = true;
-        }
-      });
-    });
+  });
 
-// Bulk Action Menu
-const bulkActionBtn = document.getElementById('bulkActionBtn');
-const bulkActionMenu = document.getElementById('bulkActionMenu');
+  // Bulk Action Menu
+  const bulkActionBtn = document.getElementById('bulkActionBtn');
+  const bulkActionMenu = document.getElementById('bulkActionMenu');
 
-bulkActionBtn.addEventListener('click', () => {
-  bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
-});
+  bulkActionBtn.addEventListener('click', () => {
+    bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
+  });
 
-document.addEventListener('click', (e) => {
-  if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
-    bulkActionMenu.style.display = 'none';
-  }
-});
-
-document.querySelectorAll('.status-cell').forEach(cell => {
-  if (cell.textContent.trim() === 'Trash') {
-    cell.classList.add('Trash');
-  }
-});
-
-// Bulk action dropdown handling
-// Bulk action dropdown handling
-document.querySelectorAll('.bulk-action-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const action = item.dataset.action;
-    const selected = document.querySelectorAll('.student-checkbox:checked');
-
-    if (selected.length === 0) {
-      alert("⚠️ Please select at least one student.");
-      return;
-    }
-
-    if (action === "completed") {
-      if (!confirm("Are you sure you want to mark selected students as Cleared?")) return;
-
-      // Collect selected student IDs
-      const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
-      console.log(ids); // optional: debug
-
-      fetch(`/prefect/students/bulk-clear-status`, {
-        method: 'PATCH',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ids, status: 'Cleared' })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          alert("✅ Selected students marked as Cleared.");
-          location.reload(); // refresh to show updated status
-        } else {
-          alert("❌ Failed to update: " + data.message);
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert("❌ Something went wrong.");
-      });
-
-      // Hide bulk menu after action
+  document.addEventListener('click', (e) => {
+    if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
       bulkActionMenu.style.display = 'none';
     }
   });
-});
 
+  document.querySelectorAll('.status-cell').forEach(cell => {
+    if (cell.textContent.trim() === 'Trash') {
+      cell.classList.add('Trash');
+    }
+  });
 
-    // Dropdowns
-    document.querySelectorAll('.dropdown-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const container = btn.nextElementSibling;
-        document.querySelectorAll('.dropdown-btn').forEach(other => {
-          if (other !== btn) {
-            other.classList.remove('active');
-            other.nextElementSibling.style.display = 'none';
+  // Bulk action dropdown handling
+  document.querySelectorAll('.bulk-action-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const action = item.dataset.action;
+      const selected = document.querySelectorAll('.student-checkbox:checked');
+
+      if (selected.length === 0) {
+        alert("⚠️ Please select at least one student.");
+        return;
+      }
+
+      if (action === "completed") {
+        if (!confirm("Are you sure you want to mark selected students as Cleared?")) return;
+
+        // Collect selected student IDs
+        const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+        console.log(ids); // optional: debug
+
+        fetch(`/prefect/students/bulk-clear-status`, {
+          method: 'PATCH',
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ids, status: 'Cleared' })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert("✅ Selected students marked as Cleared.");
+            location.reload(); // refresh to show updated status
+          } else {
+            alert("❌ Failed to update: " + data.message);
           }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("❌ Something went wrong.");
         });
-        btn.classList.toggle('active');
-        container.style.display = container.style.display === 'block' ? 'none' : 'block';
-      });
+
+        // Hide bulk menu after action
+        bulkActionMenu.style.display = 'none';
+      }
     });
+  });
 
-    function logout() {
-      if (!confirm("Are you sure you want to logout?")) return;
-      fetch("{{ route('prefect.logout') }}", {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
-      }).then(res => res.ok ? window.location.href = "{{ route('auth.login') }}" : console.error('Logout failed'))
-        .catch(err => console.error('Logout failed:', err));
-    }
-
-    // Info Modal
-    function showFullInfo(row) {
-      const cells = row.children;
-      const infoHtml = `
-        <p><strong>ID:</strong> ${cells[1].innerText}</p>
-        <p><strong>Name:</strong> ${cells[2].innerText}</p>
-        <p><strong>Grade Level:</strong> ${cells[3].innerText}</p>
-        <p><strong>Section:</strong> ${cells[4].innerText}</p>
-        <p><strong>Status:</strong> ${cells[5].innerText}</p>
-      `;
-      document.getElementById('infoModalBody').innerHTML = infoHtml;
-      document.getElementById('infoModal').classList.add('show-modal');
-    }
-    function closeInfoModal() {
-      document.getElementById('infoModal').classList.remove('show-modal');
-    }
-
-    // Search & filter
-    const searchInput = document.getElementById('searchInput');
-    const sectionFilter = document.getElementById('sectionFilter');
-    function filterTable() {
-      const query = searchInput.value.toLowerCase();
-      const section = sectionFilter.value;
-      document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-        const name = row.children[2].innerText.toLowerCase();
-        const sec = row.children[4].innerText;
-        row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
+  // Dropdowns
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
+      document.querySelectorAll('.dropdown-btn').forEach(other => {
+        if (other !== btn) {
+          other.classList.remove('active');
+          other.nextElementSibling.style.display = 'none';
+        }
       });
-    }
-    searchInput.addEventListener('input', filterTable);
-    sectionFilter.addEventListener('change', filterTable);
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
+    });
+  });
 
+  function logout() {
+    if (!confirm("Are you sure you want to logout?")) return;
+    fetch("{{ route('prefect.logout') }}", {
+      method: 'POST',
+      headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+    }).then(res => res.ok ? window.location.href = "{{ route('auth.login') }}" : console.error('Logout failed'))
+      .catch(err => console.error('Logout failed:', err));
+  }
 
-// Archives Modal
-const archiveBtn = document.getElementById('archiveBtn');
-const archivesModal = document.getElementById('archivesModal');
-const closeArchivesModal = document.getElementById('closeArchivesModal');
+  // Info Modal
+  function showFullInfo(row) {
+    const cells = row.children;
+    const infoHtml = `
+      <p><strong>ID:</strong> ${cells[1].innerText}</p>
+      <p><strong>Name:</strong> ${cells[2].innerText}</p>
+      <p><strong>Grade Level:</strong> ${cells[3].innerText}</p>
+      <p><strong>Section:</strong> ${cells[4].innerText}</p>
+      <p><strong>Status:</strong> ${cells[5].innerText}</p>
+    `;
+    document.getElementById('infoModalBody').innerHTML = infoHtml;
+    document.getElementById('infoModal').classList.add('show-modal');
+  }
+  
+  function closeInfoModal() {
+    document.getElementById('infoModal').classList.remove('show-modal');
+  }
 
-// Show modal when Archive button is clicked
-archiveBtn.addEventListener('click', () => {
-  archivesModal.classList.add('show-modal');
-});
+  // Search & filter
+  const searchInput = document.getElementById('searchInput');
+  const sectionFilter = document.getElementById('sectionFilter');
+  
+  function filterTable() {
+    const query = searchInput.value.toLowerCase();
+    const section = sectionFilter.value;
+    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+      const name = row.children[2].innerText.toLowerCase();
+      const sec = row.children[4].innerText;
+      row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
+    });
+  }
+  
+  searchInput.addEventListener('input', filterTable);
+  sectionFilter.addEventListener('change', filterTable);
 
-// Close modal when "×" is clicked
-closeArchivesModal.addEventListener('click', () => {
-  archivesModal.classList.remove('show-modal');
-});
+  // Archives Modal
+  const archiveBtn = document.getElementById('archiveBtn');
+  const archivesModal = document.getElementById('archivesModal');
+  const closeArchivesModal = document.getElementById('closeArchivesModal');
 
-// Optional: Close modal when clicking outside modal content
-window.addEventListener('click', (e) => {
-  if (e.target === archivesModal) {
+  // Show modal when Archive button is clicked
+  archiveBtn.addEventListener('click', () => {
+    archivesModal.classList.add('show-modal');
+  });
+
+  // Close modal when "×" is clicked
+  closeArchivesModal.addEventListener('click', () => {
     archivesModal.classList.remove('show-modal');
-  }
-});
-
-// Archive search & section filter
-const archiveSearch = document.getElementById('archiveSearch');
-const archiveSectionFilter = document.getElementById('archiveSectionFilter');
-
-function filterArchiveTable() {
-  const query = archiveSearch.value.toLowerCase();
-  const selectedSection = archiveSectionFilter.value;
-
-  document.querySelectorAll('#archiveTable tbody tr').forEach(row => {
-    const name = row.dataset.name.toLowerCase();
-    const rowSection = row.dataset.section;
-
-    // Show row if name matches search AND section matches filter (or filter is empty)
-    row.style.display = (name.includes(query) && (selectedSection === '' || rowSection === selectedSection)) ? '' : 'none';
   });
-}
 
-archiveSearch.addEventListener('input', filterArchiveTable);
-archiveSectionFilter.addEventListener('change', filterArchiveTable);
-
-// Select All in archive
-const archiveSelectAll = document.getElementById('archiveSelectAll');
-
-archiveSelectAll.addEventListener('change', () => {
-  document.querySelectorAll('.archive-checkbox').forEach(cb => cb.checked = archiveSelectAll.checked);
-});
-
-// Restore action
-document.getElementById('restoreBtn').addEventListener('click', () => {
-  const selected = document.querySelectorAll('.archive-checkbox:checked');
-  if (selected.length === 0) {
-    alert("⚠️ Please select at least one student to restore.");
-    return;
-  }
-
-  const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
-
-  fetch(`/prefect/students/bulk-update-status`, {
-    method: 'PATCH',
-    headers: {
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ids, status: 'active' })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message);
-      location.reload(); // 🔄 refresh page after success
-    } else {
-      alert("❌ Restore failed: " + data.message);
+  // Optional: Close modal when clicking outside modal content
+  window.addEventListener('click', (e) => {
+    if (e.target === archivesModal) {
+      archivesModal.classList.remove('show-modal');
     }
-  })
-  .catch(err => {
-    console.error(err);
-    alert("❌ Something went wrong.");
   });
-});
 
+  // Archive search & section filter
+  const archiveSearch = document.getElementById('archiveSearch');
+  const archiveSectionFilter = document.getElementById('archiveSectionFilter');
 
-  </script>
+  function filterArchiveTable() {
+    const query = archiveSearch.value.toLowerCase();
+    const selectedSection = archiveSectionFilter.value;
 
+    document.querySelectorAll('#archiveTable tbody tr').forEach(row => {
+      const name = row.dataset.name.toLowerCase();
+      const rowSection = row.dataset.section;
+
+      // Show row if name matches search AND section matches filter (or filter is empty)
+      row.style.display = (name.includes(query) && (selectedSection === '' || rowSection === selectedSection)) ? '' : 'none';
+    });
+  }
+
+  archiveSearch.addEventListener('input', filterArchiveTable);
+  archiveSectionFilter.addEventListener('change', filterArchiveTable);
+
+  // Select All in archive
+  const archiveSelectAll = document.getElementById('archiveSelectAll');
+
+  archiveSelectAll.addEventListener('change', () => {
+    document.querySelectorAll('.archive-checkbox').forEach(cb => cb.checked = archiveSelectAll.checked);
+  });
+
+  // Restore action
+  document.getElementById('restoreBtn').addEventListener('click', () => {
+    const selected = document.querySelectorAll('.archive-checkbox:checked');
+    if (selected.length === 0) {
+      alert("⚠️ Please select at least one student to restore.");
+      return;
+    }
+
+    const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+
+    fetch(`/prefect/students/bulk-update-status`, {
+      method: 'PATCH',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids, status: 'active' })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        location.reload(); // 🔄 refresh page after success
+      } else {
+        alert("❌ Restore failed: " + data.message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Something went wrong.");
+    });
+  });
+
+  // Toggle profile dropdown
+  function toggleProfileDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Close profile dropdown when clicking elsewhere
+  document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('profileDropdown');
+    const userInfo = document.querySelector('.user-info');
+    
+    if (!userInfo.contains(e.target) && dropdown.style.display === 'block') {
+      dropdown.style.display = 'none';
+    }
+  });
+</script>
 </body>
 </html>
