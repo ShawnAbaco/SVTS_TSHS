@@ -117,7 +117,11 @@ body {
   padding: 0 20px;
   z-index: 900;
 }
-.main-header h2 { font-size: 20px; font-weight: bold; }
+.main-header h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
 
 .header-right { display: flex; align-items: center; gap: 15px; position: relative; }
 .user-info { display: flex; align-items: center; gap: 8px; cursor: pointer; }
@@ -201,11 +205,11 @@ select.form-select:focus {
   gap: 10px;
 }
 
-.table-controls { 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
-  flex-wrap: wrap; 
+.table-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 table {
@@ -230,7 +234,7 @@ table thead tr:hover { background: #000; }
 table th, table td {
   padding: 14px 16px;
   border-bottom: 1px solid #e0e0e0;
-  text-align: left;
+  text-align: center;
 }
 
 table tr:nth-child(even) { background: #f9f9f9; }
@@ -373,7 +377,7 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
   flex-wrap: wrap;
   align-items: center;
 }
-.toolbar-actions input, 
+.toolbar-actions input,
 .toolbar-actions select {
   padding: 8px;
   border: 1px solid #ddd;
