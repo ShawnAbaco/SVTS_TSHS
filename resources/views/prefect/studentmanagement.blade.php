@@ -70,7 +70,7 @@
         <i class="fas fa-search"></i>
         <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
       </div>
-     
+
          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px;margin-top: 12px;">
   <select id="sectionFilter" class="form-select" style="max-width:150px;">
     <option value="">All Sections</option>
@@ -142,7 +142,7 @@
           <span>Archived Students</span>
           <span class="close-btn" id="closeArchivesModal">&times;</span>
         </div>
-        
+
         <div class="archive-modal-body">
           <!-- Search & Actions -->
           <div class="toolbar-actions">
@@ -328,7 +328,7 @@
     document.getElementById('infoModalBody').innerHTML = infoHtml;
     document.getElementById('infoModal').classList.add('show-modal');
   }
-  
+
   function closeInfoModal() {
     document.getElementById('infoModal').classList.remove('show-modal');
   }
@@ -336,7 +336,7 @@
   // Search & filter
   const searchInput = document.getElementById('searchInput');
   const sectionFilter = document.getElementById('sectionFilter');
-  
+
   function filterTable() {
     const query = searchInput.value.toLowerCase();
     const section = sectionFilter.value;
@@ -346,7 +346,7 @@
       row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
     });
   }
-  
+
   searchInput.addEventListener('input', filterTable);
   sectionFilter.addEventListener('change', filterTable);
 
@@ -442,7 +442,7 @@
   document.addEventListener('click', (e) => {
     const dropdown = document.getElementById('profileDropdown');
     const userInfo = document.querySelector('.user-info');
-    
+
     if (!userInfo.contains(e.target) && dropdown.style.display === 'block') {
       dropdown.style.display = 'none';
     }
