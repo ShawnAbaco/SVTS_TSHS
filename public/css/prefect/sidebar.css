@@ -20,7 +20,8 @@ body {
 /* ======================= SIDEBAR ======================= */
 .sidebar {
   width: 230px;
-  background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
+  background: linear-gradient(135deg, #004d00, #007700, #00aa00, #00cc33);
+
   color: #fff;
   height: 100vh;
   position: fixed;
@@ -109,7 +110,8 @@ body {
   left: 230px;
   right: 0;
   height: 80px;
-  background: rgb(0, 65, 7);
+  background: linear-gradient(135deg, #004d00, #007700, #00aa00, #00cc33);
+
   border-bottom: 1px solid #ddd;
   display: flex;
   align-items: center;
@@ -223,7 +225,7 @@ table {
 }
 
 table thead {
-  background: #000;
+  background: #000000;
   color: #fff;
   text-transform: uppercase;
   font-weight: 600;
@@ -259,7 +261,7 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
 /* Keep the table header fixed */
 
 .fixed-header thead th {
-  background: #000;
+  background: #089c00;
   color: #fff;
 }
 

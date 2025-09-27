@@ -20,13 +20,14 @@ body {
 /* ======================= SIDEBAR ======================= */
 .sidebar {
   width: 230px;
- background: linear-gradient(135deg, #1a237e 0%, #3949ab 33%, #5c6bc0 66%, #7986cb 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #3949ab 33%, #5c6bc0 66%, #7986cb 100%);
   color: #fff;
   height: 100vh;
   position: fixed;
   padding: 25px 15px;
   box-shadow: 2px 0 15px rgba(0,0,0,0.5);
   overflow-y: auto;
+  font-weight: 600; /* make all sidebar text bolder by default */
 }
 
 .sidebar img {
@@ -42,7 +43,8 @@ body {
 .sidebar h2 {
   margin-bottom: 30px;
   text-align: center;
-  font-size: 22px;
+  font-size: 26px; /* increased size */
+  font-weight: 700; /* bolder */
   text-transform: uppercase;
   letter-spacing: 1px;
   border-bottom: 2px solid rgba(255, 255, 255, 0.15);
@@ -50,49 +52,63 @@ body {
 }
 
 .sidebar ul { list-style: none; }
+
 .sidebar ul li {
-  padding: 12px 14px;
+  padding: 14px 16px; /* slightly more padding */
   display: flex;
   align-items: center;
   cursor: pointer;
   border-radius: 10px;
-  font-size: 15px;
-  color: #fff;
+  font-size: 17px; /* increased size */
+  font-weight: 600; /* bolder */
+  color: #000000;
   transition: background 0.3s, transform 0.2s;
 }
+
 .sidebar ul li i {
   margin-right: 12px;
   min-width: 20px;
-  font-size: 16px;
+  font-size: 18px; /* slightly larger icons */
 }
+
 .sidebar ul li:hover {
   background: #2d3f55;
   transform: translateX(5px);
 }
+
 .sidebar ul li:hover i { color: #00e0ff; }
+
 .sidebar ul li.active {
   background: #00aaff;
   border-left: 4px solid #fff;
 }
-.sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
+
+.sidebar ul li a { 
+  text-decoration: none; 
+  color: inherit; 
+  flex: 1; 
+  font-weight: 600; /* bold links */
+}
 
 .section-title {
   margin: 20px 10px 8px;
-  font-size: 11px;
+  font-size: 13px; /* bigger section titles */
   text-transform: uppercase;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.6);
+  font-weight: 700; /* bolder */
+  color: rgba(255, 255, 255, 0.8);
   letter-spacing: 1px;
 }
 
 .dropdown-container { display: none; padding-left: 25px; }
 .dropdown-container li {
-  padding: 10px;
-  font-size: 14px;
+  padding: 12px; /* slightly bigger padding */
+  font-size: 15px; /* bigger dropdown text */
+  font-weight: 600; /* bold */
   border-radius: 8px;
   color: #ddd;
 }
 .dropdown-container li:hover { background: #3a4c66; color: #fff; }
+
 .dropdown-btn .arrow { margin-left: auto; transition: transform 0.3s; }
 .dropdown-btn.active .arrow { transform: rotate(180deg); }
 
@@ -101,6 +117,7 @@ body {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 3px;
 }
+
 
 /* ======================= HEADER ======================= */
 .main-header {
