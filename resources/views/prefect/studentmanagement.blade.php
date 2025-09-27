@@ -111,7 +111,7 @@
       <option value="{{ $section }}">{{ $section }}</option>
     @endforeach
   </select>
-
+ <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Add Violation</button>
   <button id="archiveBtn" class="btn btn-warning">
     <i class="fas fa-archive"></i> Archive
   </button>
@@ -198,6 +198,7 @@
               @endforeach
             </select>
             <button id="restoreBtn" class="btn-primary"><i class="fas fa-undo"></i> Restore</button>
+            <button id="deleteBtn" class="btn-primary"><i class="fas fa-trash"></i> Delete</button>
           </div>
 
           <!-- Archived Students Table -->
