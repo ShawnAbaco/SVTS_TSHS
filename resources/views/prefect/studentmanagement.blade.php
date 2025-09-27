@@ -141,12 +141,13 @@
         <th>Grade Level</th>
         <th>Section</th>
         <th>Status</th>
+        <th>Action</th> <!-- New Action column -->
       </tr>
     </thead>
      </table>
      <div class="student-table-wrapper">
     <table id="studentTable">
-    <tbody>
+  <tbody>
   @foreach($students as $student)
     <tr
       data-id="{{ $student->student_id }}"
@@ -168,6 +169,11 @@
         <span class="status-badge {{ $student->status === 'active' ? 'active' : 'inactive' }}">
           {{ ucfirst($student->status) }}
         </span>
+      </td>
+      <td>
+        <button class="btn-edit" onclick="editStudent('{{ $student->student_id }}')">
+          <i class="fas fa-edit"></i> Edit
+        </button>
       </td>
     </tr>
   @endforeach
@@ -529,6 +535,7 @@ document.querySelectorAll('#studentTable tbody tr').forEach(row => {
 function closeInfoModal() {
   document.getElementById('infoModal').classList.remove('show-modal');
 }
+
 </script>
 </body>
 </html>

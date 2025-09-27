@@ -6,6 +6,7 @@
   <title>Offenses & Sanctions</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 <link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
 
 </head>
 <body>
@@ -55,7 +56,37 @@
       </div>
     </div>
   </header>
-
+<!-- Summary Cards -->
+<div class="summary-cards">
+  <div class="summary-card">
+    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+    <div class="card-content">
+      <h3>Total Students</h3>
+      <p>{{ $offenses->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#28a745;"><i class="fas fa-check-circle"></i></div>
+    <div class="card-content">
+      <h3>Active</h3>
+      <p>{{ $offenses->where('status', 'active')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#ffc107;"><i class="fas fa-archive"></i></div>
+    <div class="card-content">
+      <h3>Cleared / Archived</h3>
+      <p>{{ $offenses->where('status', 'Cleared')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#007bff;"><i class="fas fa-layer-group"></i></div>
+    <div class="card-content">
+      <h3>Sections</h3>
+      <p>{{ $offenses->count() }}</p>
+    </div>
+  </div>
+</div>
   <!-- Table Controls -->
   <div class="table-container">
     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">

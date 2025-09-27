@@ -6,6 +6,7 @@
 <title>User Management</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
@@ -17,9 +18,9 @@
   <ul>
     <div class="section-title">Main</div>
     <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-    <li class="active"><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+    <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
     <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
-    <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
+    <li class="active" ><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
 
     <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
     <ul class="dropdown-container">
@@ -57,7 +58,37 @@
       </div>
     </div>
   </header>
-
+<!-- Summary Cards -->
+<div class="summary-cards">
+  <div class="summary-card">
+    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+    <div class="card-content">
+      <h3>Total Students</h3>
+      <p>{{ $advisers->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#28a745;"><i class="fas fa-check-circle"></i></div>
+    <div class="card-content">
+      <h3>Active</h3>
+      <p>{{ $advisers->where('status', 'active')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#ffc107;"><i class="fas fa-archive"></i></div>
+    <div class="card-content">
+      <h3>Cleared / Archived</h3>
+      <p>{{ $advisers->where('status', 'Cleared')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#007bff;"><i class="fas fa-layer-group"></i></div>
+    <div class="card-content">
+      <h3>Sections</h3>
+      <p>{{ $advisers->count() }}</p>
+    </div>
+  </div>
+</div>
   <!-- Table Container -->
   <div class="table-container">
     <div class="table-header">
@@ -90,26 +121,40 @@
             <th>Grade Level</th>
             <th>Section</th>
             <th>Status</th>
+            <th>Action</th> <!-- New Action column -->
           </tr>
         </thead>
         <tbody>
-          <tr data-email="juan@example.com" data-address="123 Street" data-contact="09171234567" onclick="showFullInfo(this)">
-            <td><input type="checkbox" class="rowCheckbox"></td>
-            <td>1001</td>
-            <td>Juan Dela Cruz</td>
-            <td>Grade 7</td>
-            <td>Section A</td>
-            <td>Active</td>
-          </tr>
-          <tr data-email="maria@example.com" data-address="456 Avenue" data-contact="09179876543" onclick="showFullInfo(this)">
-            <td><input type="checkbox" class="rowCheckbox"></td>
-            <td>1002</td>
-            <td>Maria Santos</td>
-            <td>Grade 8</td>
-            <td>Section B</td>
-            <td>Inactive</td>
-          </tr>
-        </tbody>
+  <tr data-email="juan@example.com" data-address="123 Street" data-contact="09171234567">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>1001</td>
+    <td>Juan Dela Cruz</td>
+    <td>Grade 7</td>
+    <td>Section A</td>
+    <td>Active</td>
+    <!-- Action column -->
+    <td>
+      <button class="btn-edit" onclick="editStudentRow(this)">
+        <i class="fas fa-edit"></i> Edit
+      </button>
+    </td>
+  </tr>
+  <tr data-email="maria@example.com" data-address="456 Avenue" data-contact="09179876543">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>1002</td>
+    <td>Maria Santos</td>
+    <td>Grade 8</td>
+    <td>Section B</td>
+    <td>Inactive</td>
+    <!-- Action column -->
+    <td>
+      <button class="btn-edit" onclick="editStudentRow(this)">
+        <i class="fas fa-edit"></i> Edit
+      </button>
+    </td>
+  </tr>
+</tbody>
+
       </table>
     </div>
   </div>
