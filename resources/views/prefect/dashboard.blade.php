@@ -6,293 +6,9 @@
   <title>Prefect Dashboard</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      transition: all 0.2s ease-in-out;
-    }
+  <link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
 
-    body {
-      display: flex;
-      background: #f9f9f9;
-      color: #111;
-    }
-
-    .sidebar {
-      width: 230px;
-      background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-      overflow-y: auto;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
-    }
-
-    .sidebar ul { list-style: none; }
-    .sidebar ul li {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-      font-size: 15px;
-      color:rgb(255, 255, 255);
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .sidebar ul li i {
-      margin-right: 12px;
-      color:rgb(255, 255, 255);
-      min-width: 20px;
-      font-size: 16px;
-    }
-
-    .sidebar ul li:hover {
-      background: #2d3f55;
-      transform: translateX(5px);
-      color: #fff;
-    }
-
-    .sidebar ul li:hover i { color: #00e0ff; }
-    .sidebar ul li.active {
-      background: #00aaff;
-      color: #fff;
-      border-left: 4px solid #ffffff;
-    }
-
-    .sidebar ul li.active i { color: #fff; }
-    .sidebar ul li a { text-decoration: none; color: inherit; flex: 1; }
-    .section-title {
-      margin: 20px 10px 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 1px;
-    }
-    .dropdown-container { display: none; list-style: none; padding-left: 25px; }
-    .dropdown-container li {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      color: #ddd;
-    }
-    .dropdown-container li:hover { background: #3a4c66; color: #fff; }
-    .dropdown-btn .arrow {
-      margin-left: auto;
-      transition: transform 0.3s;
-    }
-    .dropdown-btn.active .arrow { transform: rotate(180deg); }
-    .sidebar::-webkit-scrollbar { width: 6px; }
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
-    }
-
-    .main {
-      margin-left: 220px;
-      padding: 20px;
-      width: calc(100% - 220px);
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 20px;
-    }
-
-    .topbar h1 { font-size: 22px; margin-bottom: 4px; }
-    .topbar p { font-size: 13px; color: #555; }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      cursor: pointer;
-    }
-
-    .user-info img {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #003366;
-      cursor: pointer;
-    }
-
-    .user-info span {
-      font-size: 20px;
-      font-weight: bold;
-      color: #111;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .card {
-      border-radius: 8px;
-      padding: 20px;
-      border: 1px solid #ddd;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .card:hover { transform: scale(1.02); }
-
-    .card h3 { font-size: 14px; color: #fff; }
-    .card p { font-size: 22px; margin: 6px 0; color: #fff; }
-    .card i { font-size: 24px; color: #fff; }
-
-    .card:nth-child(1) { background-color:rgb(0, 145, 255); }
-    .card:nth-child(2) { background-color:rgb(246, 3, 3); }
-    .card:nth-child(3) { background-color:rgb(0, 255, 60); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .grid .card {
-      flex-direction: column;
-      align-items: flex-start;
-      background: #fff;
-      border: 1px solid #ddd;
-      height: 280px;
-      padding: 15px;
-    }
-
-    .grid .card-header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .grid .card-header h3 { font-size: 14px; color: #111; }
-    .grid .card-header a {
-      font-size: 12px;
-      color: #000;
-      text-decoration: none;
-    }
-    .grid .card-header a:hover { text-decoration: underline; }
-
-    .table { width: 100%; border-collapse: collapse; }
-    .table th, .table td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ccc;
-      font-size: 13px;
-    }
-    .table tr:hover { background: #f2f2f2; cursor: pointer; }
-
-    .status {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .pending { background-color:rgb(0, 0, 0); }
-    .resolved { background-color:rgb(1, 255, 60); }
-    .escalated { background-color:rgb(255, 0, 25); }
-
-    #violationChart { max-width: 220px; max-height: 220px; margin: 0 auto; }
-
-    /* Upcoming Appointments */
-    .cards.upcoming {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-top: 20px;
-      margin-bottom: 40px;
-    }
-
-    .cards.upcoming .card {
-      height: 150px;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 15px;
-    }
-
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 10000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 8px;
-      width: 40%;
-      min-width: 300px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    .modal-content h2 { margin-bottom: 15px; }
-    .modal-content p { font-size: 14px; }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .close:hover { color: #000; }
-
-    /* Logo */
-    .sidebar img {
-      width: 150px;
-      height: auto;
-      margin: 0 auto 0.5rem;
-      display: block;
-      transition: transform 0.3s ease;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: crisp-edges;
-    }
-  </style>
 </head>
 <body>
 
@@ -328,18 +44,25 @@
   </div>
 
   <!-- Main Content -->
-  <div class="main">
-    <div class="topbar">
-      <div>
-        <h1>Dashboard</h1>
+  <div class="main-content">
+    <!-- ======= HEADER ======= -->
+  <header class="main-header">
+    <div class="header-left">
+      <h2>Dashoard Overview</h2>
+    </div>
+    <div class="header-right">
+      <div class="user-info" onclick="toggleProfileDropdown()">
+        <img src="/images/user.jpg" alt="User">
+        <span>{{ Auth::user()->name }}</span>
+        <i class="fas fa-caret-down"></i>
       </div>
-      <div class="user-info">
-        <img id="profileImage" src="https://i.pravatar.cc/35" alt="Profile" onclick="changeProfileImage()" />
-        <span onclick="changeProfileName()">Angel</span>
-        <input type="file" id="imageInput" accept="image/*" style="display:none" />
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="{{ route('profile.settings') }}">Profile</a>
       </div>
     </div>
+  </header>
 
+<br>
     <!-- Stats Cards -->
     <div class="cards">
       <div class="card">
@@ -384,7 +107,7 @@
     </div>
 
     <!-- Upcoming Appointments BELOW charts -->
-    <h2 style="margin:20px 0; font-size:18px; color:#111;">Upcoming Appointments</h2>
+    <h2 style="margin:20px 0; margin-left:20px; font-size:18px; color:#111;">Upcoming Appointments</h2>
     <div class="cards upcoming">
       <div class="card" style="background-color:#00aaff;">
         <div><h3>John Doe</h3><p>Sep 25, 10:00 AM</p></div>

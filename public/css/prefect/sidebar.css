@@ -14,7 +14,7 @@ body {
   display: flex;
   background: #f9f9f9;
   color: #111;
-    overflow: hidden; /* 🚫 Disable body scroll */
+    overflow-y: auto; /* 🚫 Disable body scroll */
 }
 
 /* ======================= SIDEBAR ======================= */
@@ -158,8 +158,9 @@ body {
   margin-top: 80px;     /* push below fixed header */
   padding: 20px;
   width: calc(100% - 230px);
-    overflow: hidden; /* 🚫 Disable body scroll */
+    overflow-y: auto; /* 🚫 Disable body scroll */
 }
+
 main h2 { margin-bottom: 15px; }
 
 .flex {
@@ -173,7 +174,8 @@ main h2 { margin-bottom: 15px; }
 input.form-control,
 select.form-select {
   height: 45px;
-  width: 900px;
+  margin-left: 150px;
+  width: 500px;
   font-size: 16px;
   padding: 0 15px;
   border-radius: 5px;
@@ -190,9 +192,9 @@ select.form-select:focus {
 .table-container {
   background: #fff;
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-  margin-top: 20px;
+  margin-top: 1px;
   overflow: visible;   /* ✅ no scrollbars, let table grow naturally */
 }
 
@@ -200,7 +202,7 @@ select.form-select:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
   flex-wrap: wrap;
   gap: 10px;
 }
@@ -248,7 +250,7 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
 
 
 .student-table-wrapper {
-  max-height: 400px;   /* adjust height as needed */
+  max-height: 450px;   /* adjust height as needed */
   overflow-y: auto;
   overflow-x: auto;    /* keeps horizontal scroll if table is wide */
   border: 1px solid #ddd;
@@ -411,3 +413,254 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
 .status-badge.active { background: #4CAF50; }
 .status-badge.inactive { background: #f44336; }
 .status-badge.completed { background: #FF9800; }
+
+/* ======================= MODAL BASE ======================= */
+.modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6); /* dark overlay */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #ffffff; /* white modal */
+  padding: 25px 30px;
+  border-radius: 14px;
+  max-width: 800px;
+  width: 90%;
+  color: #333;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: var(--primary-color, #007bff);
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* Close Button */
+.close {
+  position: absolute;
+  top: 12px; right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.3s;
+}
+.close:hover {
+  color: #333;
+}
+
+/* ======================= FORM GRID ======================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 6px rgba(0,123,255,0.3);
+}
+
+/* ======================= ACTION BUTTONS ======================= */
+.form-actions {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-create {
+  background: var(--primary-color, #007bff);
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-create:hover {
+  background: #0056b3;
+}
+
+.btn-cancel {
+  background: #f1f1f1;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background: #e4e4e4;
+  border-color: #bbb;
+}
+ 
+
+
+
+
+
+/* ======================= INFO MODAL ======================= */
+#infoModal .modal-content {
+    background: #ffffff;
+    color: #111;
+    padding: 25px 30px;
+    width: 450px;
+    max-width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    position: relative;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#infoModal .modal-content p {
+    margin: 8px 0;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+#infoModal .modal-content p strong {
+    display: inline-block;
+    width: 100px;
+    color: #333;
+}
+
+#infoModal .modal-content p a {
+    color: #1e90ff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#infoModal .modal-content p a:hover {
+    text-decoration: underline;
+}
+
+#infoModal .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#infoModal .close:hover {
+    color: #000;
+}
+
+.show-modal {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Optional: subtle fade-in */
+#infoModal {
+    transition: opacity 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    #infoModal .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+}
+ /* ======================= PRINT BUTTON ======================= */
+.btn-print {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ff8f1e; /* Dodger Blue */
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-print i {
+    font-size: 14px;
+}
+
+.btn-print:hover {
+   
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-print:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+@media print {
+  body * {
+    visibility: hidden; /* hide everything */
+  }
+
+  /* Show only the table and its children */
+  .student-table-wrapper, .student-table-wrapper * {
+    visibility: visible;
+  }
+
+  /* Position the table at the top-left of the page */
+  .student-table-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

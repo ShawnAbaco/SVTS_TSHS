@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
 </head>
 <body>
 
@@ -61,17 +62,49 @@
     </div>
   </header>
 
+<!-- Summary Cards -->
+<div class="summary-cards">
+  <div class="summary-card">
+    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+    <div class="card-content">
+      <h3>Total Students</h3>
+      <p>{{ $students->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#28a745;"><i class="fas fa-check-circle"></i></div>
+    <div class="card-content">
+      <h3>Active</h3>
+      <p>{{ $students->where('status', 'active')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#ffc107;"><i class="fas fa-archive"></i></div>
+    <div class="card-content">
+      <h3>Cleared / Archived</h3>
+      <p>{{ $students->where('status', 'Cleared')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#007bff;"><i class="fas fa-layer-group"></i></div>
+    <div class="card-content">
+      <h3>Sections</h3>
+      <p>{{ $sections->count() }}</p>
+    </div>
+  </div>
+</div>
 
     <!-- Table Container -->
     <div class="table-container">
       <!-- Table Header with Controls -->
       <div class="table-header">
         <div class="table-controls">
-        <i class="fas fa-search"></i>
+          <h3>Student Table</h3>
+
         <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
       </div>
 
-         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px;margin-top: 12px;">
+         <div style="display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 0px;margin-top: 0px;">
   <select id="sectionFilter" class="form-select" style="max-width:150px;">
     <option value="">All Sections</option>
     @foreach($sections as $section)
@@ -114,21 +147,32 @@
      <div class="student-table-wrapper">
     <table id="studentTable">
     <tbody>
-      @foreach($students as $student)
-        <tr data-id="{{ $student->student_id }}">
-          <td><input type="checkbox" class="student-checkbox"></td>
-          <td>{{ $student->student_id }}</td>
-          <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
-          <td>{{ $student->adviser->adviser_gradelevel }}</td>
-          <td>{{ $student->adviser->adviser_section }}</td>
-          <td>
-            <span class="status-badge {{ $student->status === 'active' ? 'active' : 'inactive' }}">
-              {{ ucfirst($student->status) }}
-            </span>
-          </td>
-        </tr>
-      @endforeach
-    </tbody>
+  @foreach($students as $student)
+    <tr
+      data-id="{{ $student->student_id }}"
+      data-name="{{ $student->student_fname }} {{ $student->student_lname }}"
+      data-grade="{{ $student->adviser->adviser_gradelevel }}"
+      data-section="{{ $student->adviser->adviser_section }}"
+      data-status="{{ ucfirst($student->status) }}"
+      data-parent-name="{{ $student->parent->name ?? '-' }}"
+      data-parent-contact="{{ $student->parent->contact ?? '-' }}"
+      data-parent-address="{{ $student->parent->address ?? '-' }}"
+      data-adviser-name="{{ $student->adviser->adviser_name ?? '-' }}"
+    >
+      <td><input type="checkbox" class="student-checkbox"></td>
+      <td>{{ $student->student_id }}</td>
+      <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
+      <td>{{ $student->adviser->adviser_gradelevel }}</td>
+      <td>{{ $student->adviser->adviser_section }}</td>
+      <td>
+        <span class="status-badge {{ $student->status === 'active' ? 'active' : 'inactive' }}">
+          {{ ucfirst($student->status) }}
+        </span>
+      </td>
+    </tr>
+  @endforeach
+</tbody>
+
   </table>
 </div>
   </div>
@@ -447,6 +491,43 @@
       dropdown.style.display = 'none';
     }
   });
+  // Show info modal when row is clicked (excluding checkbox)
+document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+  row.addEventListener('click', (e) => {
+    if (e.target.type === 'checkbox') return; // ignore clicks on checkboxes
+
+    const id = row.dataset.id;
+    const name = row.dataset.name;
+    const grade = row.dataset.grade;
+    const section = row.dataset.section;
+    const status = row.dataset.status;
+    const parentName = row.dataset.parentName || '-';
+    const parentContact = row.dataset.parentContact || '-';
+    const parentAddress = row.dataset.parentAddress || '-';
+    const adviserName = row.dataset.adviserName || '-';
+
+    const infoHtml = `
+      <p><strong>ID:</strong> ${id}</p>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Grade Level:</strong> ${grade}</p>
+      <p><strong>Section:</strong> ${section}</p>
+      <p><strong>Status:</strong> ${status}</p>
+      <hr>
+      <p><strong>Parent Name:</strong> ${parentName}</p>
+      <p><strong>Parent Contact:</strong> <a href="tel:${parentContact}">${parentContact}</a></p>
+      <p><strong>Parent Address:</strong> ${parentAddress}</p>
+      <p><strong>Adviser Name:</strong> ${adviserName}</p>
+    `;
+
+    document.getElementById('infoModalBody').innerHTML = infoHtml;
+    document.getElementById('infoModal').classList.add('show-modal');
+  });
+});
+
+// Close modal function
+function closeInfoModal() {
+  document.getElementById('infoModal').classList.remove('show-modal');
+}
 </script>
 </body>
 </html>

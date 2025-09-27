@@ -5,400 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Offenses & Sanctions</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+<link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
 
-
-  <!-- Small layout helpers for the toolbar -->
-  <style>
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
-
-body {
-  display: flex;
-  background: #f9f9f9;
-  color: #111;
-}
-
-/* Sidebar */
- .sidebar {
-      width: 230px;
-background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
-
-background-repeat: no-repeat;
-background-attachment: fixed;
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-      overflow-y: auto;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar ul li {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-      font-size: 15px;
-      color:rgb(255, 255, 255);
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .sidebar ul li i {
-      margin-right: 12px;
-      color:rgb(255, 255, 255);
-      min-width: 20px;
-      font-size: 16px;
-    }
-
-    .sidebar ul li:hover {
-      background: #2d3f55;
-      transform: translateX(5px);
-      color: #fff;
-    }
-
-    .sidebar ul li:hover i {
-      color: #00e0ff;
-    }
-
-    .sidebar ul li.active {
-      background: #00aaff;
-      color: #fff;
-      border-left: 4px solid #ffffff;
-    }
-
-    .sidebar ul li.active i {
-      color: #fff;
-    }
-
-    .sidebar ul li a {
-      text-decoration: none;
-      color: inherit;
-      flex: 1;
-    }
-
-    .section-title {
-      margin: 20px 10px 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 1px;
-    }
-
-    .dropdown-container {
-      display: none;
-      list-style: none;
-      padding-left: 25px;
-    }
-
-    .dropdown-container li {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      color: #ddd;
-    }
-
-    .dropdown-container li:hover {
-      background: #3a4c66;
-      color: #fff;
-    }
-
-    .dropdown-btn .arrow {
-      margin-left: auto;
-      transition: transform 0.3s;
-    }
-
-    .dropdown-btn.active .arrow {
-      transform: rotate(180deg);
-    }
-
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
-    }
-/* Main Content */
-.main-content {
-  margin-left: 260px;
-  padding: 20px;
-}
-
-.crud-container {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.crud-container h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-}
-
-.form-row {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.form-row input,
-.form-row button {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  flex: 1;
-}
-
-.form-row button {
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.form-row button:hover { background-color: #0056b3; }
-
-/* ===== Updated Table Style ===== */
-table {
-  width: 100%;
-  min-width: 900px;
-  max-width: 1400px;
-  margin-top: 20px;
-  font-size: 16px;
-  background: #fff;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-thead {
-  background: #000;          /* plain black */
-  color: #fff;               /* bold white text */
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 15px;
-}
-
-th, td {
-  padding: 18px 20px;
-  text-align: center;
-}
-
-tbody tr:nth-child(even) { background: #f2f6ff; }
-
-tbody tr:hover {
-  background: #e6f0ff;
-  transform: scale(1.001);
-  transition: 0.2s ease-in-out;
-}
-
-th { font-weight: bold; }
-th:first-child { border-top-left-radius: 10px; }
-th:last-child { border-top-right-radius: 10px; }
-
-/* ===== Buttons ===== */
-.btn {
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: all 0.25s ease-in-out;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #007BFF, #0056b3);
-  color: #fff;
-}
-.btn-primary:hover {
-  background: linear-gradient(135deg, #0056b3, #003d80);
-  transform: translateY(-2px);
-}
-
-.btn-warning {
-  background: linear-gradient(135deg, #ffc107, #e0a800);
-  color: #000;
-}
-.btn-warning:hover {
-  background: linear-gradient(135deg, #e0a800, #c69500);
-  transform: translateY(-2px);
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #dc3545, #a71d2a);
-  color: #fff;
-}
-.btn-danger:hover {
-  background: linear-gradient(135deg, #a71d2a, #7a101d);
-  transform: translateY(-2px);
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal.show { display: flex; }
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  width: 100%;
-  max-width: 500px;
-  border-radius: 8px;
-  position: relative;
-}
-
-.modal-content h5 { margin-bottom: 15px; }
-
-.modal-content .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.mb-3 { margin-bottom: 15px; }
-
-label { display: block; margin-bottom: 5px; }
-
-input[type="text"],
-input[type="date"] {
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Toolbar */
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 10px 0 20px;
-}
-
-/* Search + Buttons */
-.toolbar .left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.toolbar .right { display: none; }
-
-#searchInput {
-  width: 180px;
-  padding: 8px 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Logo */
-.sidebar img {
-  width: 150px;
-  height: auto;
-  margin: 0 auto 0.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
-
-/* Toolbar Buttons Unified */
-.toolbar input#searchInput,
-.toolbar .btn,
-.toolbar .btn-archive {
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  transition: all 0.25s ease-in-out;
-}
-
-.btn-archive {
-  background-color: orange;
-  color: #fff;
-}
-
-.toolbar { margin-bottom: 15px; justify-content: flex-start; gap: 10px; flex-wrap: wrap; }
-
-
-  </style>
 </head>
 <body>
-  <!-- Sidebar -->
+ <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-        <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>  <ul>
+  <img src="/images/Logo.png" alt="Logo">
+  <h2>PREFECT</h2>
+  <ul>
     <div class="section-title">Main</div>
     <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
     <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
     <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
     <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
 
-    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
+    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-right arrow"></i></li>
     <ul class="dropdown-container">
       <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
       <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
       <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
     </ul>
 
-    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
+    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-right arrow"></i></li>
     <ul class="dropdown-container">
       <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
       <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
@@ -411,304 +40,200 @@ input[type="date"] {
   </ul>
 </div>
 
-  <!-- Main Content -->
-  <div class="main-content">
+<div class="main-content">
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-left"><h2>Offenses & Sanctions</h2></div>
+    <div class="header-right">
+      <div class="user-info" onclick="toggleProfileDropdown()">
+        <img src="/images/user.jpg" alt="User">
+        <span>{{ Auth::user()->name }}</span>
+        <i class="fas fa-caret-down"></i>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="{{ route('profile.settings') }}">Profile</a>
+      </div>
+    </div>
+  </header>
 
-      <h2>Offenses & Sanctions</h2>
-<!-- Toolbar (Right side) -->
-<div class="toolbar" style="justify-content: flex-end; margin-bottom: 15px;">
-    <input type="text" id="searchInput" placeholder="Search offenses..." class="form-control">
-    <button class="btn btn-primary" id="openModalBtn"><i class="fa fa-plus"></i> Add</button>
-    <button class="btn btn-warning" id="printBtn"><i class="fa fa-print"></i> Print</button>
-    <button class="btn btn-danger" id="exportBtn"><i class="fa fa-file-export"></i> Export</button>
-    <button class="btn btn-archive" onclick="openArchive()"><i class="fas fa-archive"></i> Archive</button>
-</div>
+  <!-- Table Controls -->
+  <div class="table-container">
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+      <div>
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search offenses..." class="form-control">
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Create</button>
+        <button id="archiveBtn" class="btn-warning"><i class="fas fa-archive"></i> Archive</button>
+        <button id="PrntBtn" class="btn-print"><i class="fas fa-print"></i> Print</button>
+      </div>
+    </div>
 
-
-
-
-
-<!-- Table -->
-<table id="offenseTable" style="min-width: 1000px; max-width: 1500px; font-size: 16px;">
-  <thead>
-    <tr>
-
-
-
-      <table id="offenseTable">
+    <div class="student-table-wrapper">
+      <table id="offenseTable" class="fixed-header">
         <thead>
           <tr>
-            <th><input type="checkbox" id="selectAll"></th> <!-- Select All -->
+            <th><input type="checkbox" id="selectAll"></th>
             <th>ID</th>
-            <th>Offense Type</th>
-            <th>Description</th>
-            <th>Consequences</th>
-            <th>Actions</th>
+            <th>Offense Name</th>
+            <th>Category</th>
+            <th>Points</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          @forelse($offenses as $offense)
-            <tr>
-              <td><input type="checkbox" class="student-checkbox"></td>
-              <td>{{ $offense->offense_sanc_id }}</td>
-              <td>{{ $offense->offense_type }}</td>
-              <td>{{ $offense->offense_description }}</td>
-              <td>{{ $offense->sanction_consequences }}</td>
-              <td>
-  <button class="btn btn-warning btn-update"><i class="fa fa-edit"></i> Update</button>
-</td>
-
-            </tr>
-          @empty
-            <tr>
-              <td colspan="5" style="text-align:center;">No offenses found</td>
-            </tr>
-          @endforelse
+          <tr data-description="Late submission of assignment" data-sanction="Warning - 1 point" onclick="showOffenseInfo(this)">
+            <td><input type="checkbox" class="rowCheckbox"></td>
+            <td>1</td>
+            <td>Late Submission</td>
+            <td>Minor</td>
+            <td>1</td>
+            <td>Active</td>
+          </tr>
+          <tr data-description="Cheating on exam" data-sanction="Suspension - 5 points" onclick="showOffenseInfo(this)">
+            <td><input type="checkbox" class="rowCheckbox"></td>
+            <td>2</td>
+            <td>Cheating</td>
+            <td>Major</td>
+            <td>5</td>
+            <td>Active</td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
+</div>
 
-  <!-- Add/Edit Modal -->
-  <div class="modal" id="violationModal">
-    <div class="modal-content">
-      <span class="close" id="closeModalBtn">&times;</span>
-      <h5 id="modalTitle">Add Offense & Sanction</h5>
-      <form id="violationForm">
-        <input type="hidden" id="editId">
-        <div class="mb-3">
-          <label for="offenseType">Offense Type</label>
-          <input type="text" id="offenseType" required>
-        </div>
-        <div class="mb-3">
-          <label for="description">Description</label>
-          <input type="text" id="description" required>
-        </div>
-        <div class="mb-3">
-          <label for="consequences">Consequences</label>
-          <input type="text" id="consequences" required>
-        </div>
-        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
-      </form>
-    </div>
+<!-- CREATE MODAL -->
+<div class="modal" id="createModal">
+  <div class="modal-content">
+    <span class="close" id="closeCreate">&times;</span>
+    <form id="createForm" class="form-grid">
+      <div class="form-column">
+        <div class="form-group"><label>Offense Name</label><input type="text" name="offenseName" required></div>
+        <div class="form-group"><label>Category</label><select name="category" required><option>Minor</option><option>Major</option><option>Severe</option></select></div>
+        <div class="form-group"><label>Description</label><textarea name="description"></textarea></div>
+      </div>
+      <div class="form-column">
+        <div class="form-group"><label>Sanction Name</label><input type="text" name="sanctionName" required></div>
+        <div class="form-group"><label>Sanction Type</label><select name="sanctionType" required><option>Warning</option><option>Detention</option><option>Suspension</option></select></div>
+        <div class="form-group"><label>Points/Severity</label><input type="number" name="points" min="1" required></div>
+      </div>
+      <div class="form-actions" style="margin-top:10px;">
+        <button type="button" class="btn-cancel" id="closeCreateBtn">Cancel</button>
+        <button type="submit" class="btn-create">Save</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <script>
-    // Select All functionality
-const selectAll = document.getElementById('selectAll');
-const checkboxes = document.querySelectorAll('.student-checkbox');
+<!-- INFO MODAL -->
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <span class="close" id="closeInfoModalBtn">&times;</span>
+    <div id="infoModalBody"></div>
+  </div>
+</div>
 
-selectAll.addEventListener('change', () => {
-  checkboxes.forEach(cb => cb.checked = selectAll.checked);
-});
-
-// Keep Select All synced
-checkboxes.forEach(cb => {
-  cb.addEventListener('change', () => {
-    if (!cb.checked) {
-      selectAll.checked = false;
-    } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
-      selectAll.checked = true;
-    }
-  });
-});
-
-// Dropdown functionality with sidebar scroll and only one open at a time
-  const sidebar = document.querySelector('.sidebar');
-  const dropdowns = document.querySelectorAll('.dropdown-btn');
-
-  dropdowns.forEach(btn => {
+<script>
+  // SIDEBAR DROPDOWN
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling;
-
-      // Close other dropdowns
-      dropdowns.forEach(otherBtn => {
-        const otherContainer = otherBtn.nextElementSibling;
-        if (otherBtn !== btn) {
-          otherBtn.classList.remove('active');
-          otherContainer.style.display = 'none';
-        }
-      });
-
-      // Toggle current dropdown
       btn.classList.toggle('active');
-      container.style.display = container.style.display === 'block' ? 'none' : 'block';
-
-      // Sidebar scrollable when at least 1 dropdown is open
-      const openDropdowns = document.querySelectorAll('.dropdown-container[style*="block"]').length;
-      sidebar.style.overflowY = openDropdowns >= 1 ? 'auto' : 'hidden';
+      const dropdown = btn.nextElementSibling;
+      dropdown.style.display = dropdown.style.display==='block'?'none':'block';
     });
   });
 
-// ✅ Modal, Table, Print, Export, and Edit/Add logic
-const openModalBtn = document.getElementById("openModalBtn");
-const closeModalBtn = document.getElementById("closeModalBtn");
-const modal = document.getElementById("violationModal");
-const tableBody = document.querySelector("#offenseTable tbody");
-const form = document.getElementById("violationForm");
-const searchInput = document.getElementById("searchInput");
-const printBtn = document.getElementById("printBtn");
-const exportBtn = document.getElementById("exportBtn");
-let editingRow = null;
-
-// Open modal for Add
-openModalBtn.addEventListener("click", () => {
-  form.reset();
-  document.getElementById("modalTitle").textContent = "Add Offense & Sanction";
-  document.getElementById("saveBtn").textContent = "Save";
-  modal.classList.add("show");
-  editingRow = null;
-});
-
-// Close modal
-closeModalBtn.addEventListener("click", () => modal.classList.remove("show"));
-window.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
-
-// Live search
-searchInput.addEventListener("keyup", () => {
-  const filter = searchInput.value.toLowerCase();
-  document.querySelectorAll("#offenseTable tbody tr").forEach(row => {
-    const text = row.textContent.toLowerCase();
-    row.style.display = text.includes(filter) ? "" : "none";
+  // PROFILE DROPDOWN
+  function toggleProfileDropdown(){
+    document.getElementById('profileDropdown').classList.toggle('show');
+  }
+  document.addEventListener('click', e=>{
+    const dropdown=document.getElementById('profileDropdown');
+    const userInfo=document.querySelector('.user-info');
+    if(dropdown && userInfo && !userInfo.contains(e.target)) dropdown.classList.remove('show');
   });
-});
 
-// Edit (now Update) functionality
-tableBody.addEventListener("click", (e) => {
-  const updateBtn = e.target.closest(".btn-update");
-  if (updateBtn) {
-    editingRow = updateBtn.closest("tr");
-    const cells = editingRow.querySelectorAll("td");
-    document.getElementById("editId").value = cells[0].textContent.trim();
-    document.getElementById("offenseType").value = cells[2].textContent.trim();
-    document.getElementById("description").value = cells[3].textContent.trim();
-    document.getElementById("consequences").value = cells[4].textContent.trim();
-    document.getElementById("modalTitle").textContent = "Update Offense & Sanction";
-    document.getElementById("saveBtn").textContent = "Update";
-    modal.classList.add("show");
+  // PRINT TABLE
+  document.getElementById('PrntBtn').addEventListener('click', ()=> window.print());
+
+  // SELECT ALL CHECKBOX
+  function updateRowCheckboxes(){
+    const selectAll=document.getElementById('selectAll');
+    const rowCheckboxes=document.querySelectorAll('.rowCheckbox');
+    selectAll?.addEventListener('change', ()=> rowCheckboxes.forEach(cb=>cb.checked=selectAll.checked));
   }
-});
+  updateRowCheckboxes();
 
-
-// Save (Add/Update)
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const type = document.getElementById("offenseType").value.trim();
-  const desc = document.getElementById("description").value.trim();
-  const cons = document.getElementById("consequences").value.trim();
-
-  if (!type || !desc || !cons) return;
-
-  if (editingRow) {
-    const cells = editingRow.querySelectorAll("td");
-    cells[1].textContent = type;
-    cells[2].textContent = desc;
-    cells[3].textContent = cons;
-  } else {
-    const id = nextRowId();
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${id}</td>
-      <td>${escapeHtml(type)}</td>
-      <td>${escapeHtml(desc)}</td>
-      <td>${escapeHtml(cons)}</td>
-      <td>
-        <button class="btn btn-warning edit-btn"><i class="fa fa-edit"></i> Edit</button>
-        <button class="btn btn-danger delete-btn"><i class="fa fa-trash"></i> Delete</button>
-      </td>
+  // SHOW INFO MODAL
+  const infoModal=document.getElementById('infoModal');
+  const infoModalBody=document.getElementById('infoModalBody');
+  document.getElementById('closeInfoModalBtn').addEventListener('click', ()=> infoModal.classList.remove('show-modal'));
+  function showOffenseInfo(row){
+    const cells=row.children;
+    infoModalBody.innerHTML=`
+      <p><strong>ID:</strong> ${cells[1].innerText}</p>
+      <p><strong>Offense Name:</strong> ${cells[2].innerText}</p>
+      <p><strong>Category:</strong> ${cells[3].innerText}</p>
+      <p><strong>Points:</strong> ${cells[4].innerText}</p>
+      <p><strong>Status:</strong> ${cells[5].innerText}</p>
+      <p><strong>Description:</strong> ${row.dataset.description||'N/A'}</p>
+      <p><strong>Sanction:</strong> ${row.dataset.sanction||'N/A'}</p>
     `;
-    tableBody.appendChild(row);
+    infoModal.classList.add('show-modal');
   }
+  window.addEventListener('click', e=>{if(e.target===infoModal) infoModal.classList.remove('show-modal');});
 
-  modal.classList.remove("show");
-  form.reset();
-  editingRow = null;
-});
+  // CREATE MODAL
+  const createModal=document.getElementById('createModal');
+  const createBtn=document.getElementById('createBtn');
+  const closeCreateBtn=document.getElementById('closeCreateBtn');
+  createBtn.addEventListener('click', ()=> createModal.classList.add('show-modal'));
+  document.getElementById('closeCreate')?.addEventListener('click', ()=> createModal.classList.remove('show-modal'));
+  closeCreateBtn.addEventListener('click', ()=> createModal.classList.remove('show-modal'));
+  window.addEventListener('click', e=>{if(e.target===createModal) createModal.classList.remove('show-modal');});
 
-// Print
-printBtn.addEventListener("click", () => {
-  const table = document.getElementById("offenseTable").cloneNode(true);
-  table.querySelectorAll("tr").forEach(tr => tr.lastElementChild && tr.lastElementChild.remove());
-  const style = `<style>body{font-family:Arial;padding:16px;}h2{margin-bottom:12px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #000;padding:8px;text-align:left;}thead th{background:#f1f1f1;}</style>`;
-  const win = window.open("", "", "height=800,width=1000");
-  win.document.write("<html><head><title>Offenses & Sanctions</title>");
-  win.document.write(style);
-  win.document.write("</head><body>");
-  win.document.write("<h2>Offenses & Sanctions</h2>");
-  win.document.body.appendChild(table);
-  win.document.write("</body></html>");
-  win.document.close();
-  win.focus();
-  win.print();
-});
+  // CREATE FORM SUBMIT
+  const createForm=document.getElementById('createForm');
+  let offenseId=document.querySelectorAll('#offenseTable tbody tr').length+1;
+  createForm?.addEventListener('submit', e=>{
+    e.preventDefault();
+    const data=Object.fromEntries(new FormData(createForm).entries());
+    const row=document.createElement('tr');
+    row.dataset.description=data.description;
+    row.dataset.sanction=`${data.sanctionName} - ${data.points} points`;
+    row.innerHTML=`
+      <td><input type="checkbox" class="rowCheckbox"></td>
+      <td>${offenseId}</td>
+      <td>${data.offenseName}</td>
+      <td>${data.category}</td>
+      <td>${data.points}</td>
+      <td>Active</td>
+    `;
+    row.addEventListener('click', ()=> showOffenseInfo(row));
+    document.querySelector('#offenseTable tbody').appendChild(row);
+    offenseId++;
+    createForm.reset();
+    createModal.classList.remove('show-modal');
+    updateRowCheckboxes();
+  });
 
-// Export CSV
-exportBtn.addEventListener("click", () => {
-  const csv = tableToCSV(document.getElementById("offenseTable"));
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "offenses_sanctions.csv";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
+  // SEARCH TABLE
+  document.getElementById('searchInput')?.addEventListener('input', e=>{
+    const q=e.target.value.toLowerCase();
+    document.querySelectorAll('#offenseTable tbody tr').forEach(row=>{
+      row.style.display=row.innerText.toLowerCase().includes(q)?'':'none';
+    });
+  });
 
-function tableToCSV(table) {
-  const rows = Array.from(table.querySelectorAll("tr"));
-  return rows.map((row, idx) => {
-    const cells = Array.from(row.querySelectorAll(idx === 0 ? "th" : "td"));
-    if (cells.length && cells[cells.length - 1].textContent.trim().match(/^(Actions|Edit|Delete)/i)) cells.pop();
-    return cells.map(c => csvEscape(c.textContent.trim())).join(",");
-  }).join("\n");
-}
-
-function csvEscape(text) {
-  const needsQuote = /[",\n]/.test(text);
-  const escaped = text.replace(/"/g, '""');
-  return needsQuote ? `"${escaped}"` : escaped;
-}
-
-function nextRowId() {
-  const ids = Array.from(tableBody.querySelectorAll("tr td:first-child"))
-    .map(td => parseInt(td.textContent.trim(), 10))
-    .filter(n => !isNaN(n));
-  return ids.length ? Math.max(...ids) + 1 : 1;
-}
-
-function escapeHtml(str) {
-  return str.replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#39;");
-}
-
-// ✅ Logout
-function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
-    fetch("{{ route('prefect.logout') }}", {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if(response.ok) {
-            // Redirect to login after successful logout
-            window.location.href = "{{ route('auth.login') }}";
-        } else {
-            console.error('Logout failed:', response.statusText);
-        }
-    })
-    .catch(error => console.error('Logout failed:', error));
-}
+  // LOGOUT
+  function logout(){
+    if(!confirm("Are you sure you want to logout?")) return;
+    fetch("{{ route('prefect.logout') }}",{method:'POST',headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}'}})
+      .then(()=> window.location.href="{{ route('auth.login') }}");
+  }
 </script>
-
 </body>
 </html>
