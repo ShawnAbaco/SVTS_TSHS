@@ -93,8 +93,9 @@
   <div class="table-container">
     <div class="table-header">
       <div class="table-controls">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search students..." class="form-control">
+         <h3>Adviser's Table</h3>
+
+        <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
       </div>
       <div style="display: flex; justify-content: flex-end; gap: 10px; margin:12px 0;">
         <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Create</button>
@@ -157,6 +158,37 @@
 
       </table>
     </div>
+  </div>
+</div>
+<!-- Edit Adviser Modal -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <span class="close" id="closeEditModal">&times;</span>
+    <form id="editForm" class="form-grid">
+      <div class="form-column">
+        <div class="form-group"><label>Last Name</label><input type="text" name="lastName" required></div>
+        <div class="form-group"><label>First Name</label><input type="text" name="firstName" required></div>
+        <div class="form-group"><label>Middle Name</label><input type="text" name="middleName"></div>
+        <div class="form-group"><label>Email</label><input type="email" name="email"></div>
+        <div class="form-group"><label>Address</label><input type="text" name="address"></div>
+      </div>
+      <div class="form-column">
+        <div class="form-group"><label>Contact</label><input type="text" name="contact"></div>
+        <div class="form-group"><label>Grade Level</label><select name="gradeLevel" required>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+        </select></div>
+        <div class="form-group"><label>Section</label><input type="text" name="section" required></div>
+        <div class="form-group"><label>Status</label><select name="status">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Cleared">Cleared</option>
+        </select></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" id="closeEditModalBtn">Cancel</button>
+        <button type="submit" class="btn-create">Save Changes</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -401,6 +433,53 @@ if(createForm) {
     updateRowCheckboxes();
   });
 }
+// Edit Modal
+const editModal = document.getElementById('editModal');
+const closeEditModal = document.getElementById('closeEditModal');
+const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+const editForm = document.getElementById('editForm');
+let currentEditRow = null;
+
+function editStudentRow(btn) {
+  const row = btn.closest('tr');
+  currentEditRow = row;
+
+  const cells = row.children;
+  const nameParts = cells[2].innerText.split(' ');
+  editForm.elements.firstName.value = nameParts[0] || '';
+  editForm.elements.middleName.value = nameParts.length === 3 ? nameParts[1] : '';
+  editForm.elements.lastName.value = nameParts.length === 3 ? nameParts[2] : nameParts[1] || '';
+  editForm.elements.email.value = row.dataset.email || '';
+  editForm.elements.address.value = row.dataset.address || '';
+  editForm.elements.contact.value = row.dataset.contact || '';
+  editForm.elements.gradeLevel.value = cells[3].innerText;
+  editForm.elements.section.value = cells[4].innerText;
+  editForm.elements.status.value = cells[5].innerText;
+
+  editModal.classList.add('show-modal');
+}
+
+// Close Edit Modal
+closeEditModal.addEventListener('click', () => editModal.classList.remove('show-modal'));
+closeEditModalBtn.addEventListener('click', () => editModal.classList.remove('show-modal'));
+window.addEventListener('click', e => { if(e.target===editModal) editModal.classList.remove('show-modal'); });
+
+// Save Edit
+editForm.addEventListener('submit', e => {
+  e.preventDefault();
+  if(!currentEditRow) return;
+
+  const data = Object.fromEntries(new FormData(editForm).entries());
+  currentEditRow.children[2].innerText = `${data.firstName} ${data.middleName} ${data.lastName}`.replace("  ", " ");
+  currentEditRow.children[3].innerText = data.gradeLevel;
+  currentEditRow.children[4].innerText = data.section;
+  currentEditRow.children[5].innerText = data.status;
+  currentEditRow.dataset.email = data.email;
+  currentEditRow.dataset.address = data.address;
+  currentEditRow.dataset.contact = data.contact;
+
+  editModal.classList.remove('show-modal');
+});
 
 </script>
 

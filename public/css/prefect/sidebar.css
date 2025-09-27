@@ -174,8 +174,8 @@ main h2 { margin-bottom: 15px; }
 input.form-control,
 select.form-select {
   height: 45px;
-  margin-left: 150px;
-  width: 500px;
+  margin-left: 0px;
+  width: 600px;
   font-size: 16px;
   padding: 0 15px;
   border-radius: 5px;

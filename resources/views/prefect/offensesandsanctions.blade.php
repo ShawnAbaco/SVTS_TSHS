@@ -87,18 +87,23 @@
     </div>
   </div>
 </div>
-  <!-- Table Controls -->
+<!-- Table Container -->
   <div class="table-container">
-    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-      <div>
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search offenses..." class="form-control">
+    <div class="table-header">
+      <div class="table-controls">
+         <h3>Offenses&Sanctions Table</h3>
+
+        <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
       </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin:12px 0;">
+      
       <div style="display:flex; gap:10px;">
         <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Create</button>
         <button id="archiveBtn" class="btn-warning"><i class="fas fa-archive"></i> Archive</button>
         <button id="PrntBtn" class="btn-print"><i class="fas fa-print"></i> Print</button>
       </div>
+    </div>
     </div>
 
     <div class="student-table-wrapper">
@@ -111,30 +116,124 @@
             <th>Category</th>
             <th>Points</th>
             <th>Status</th>
+            <td>Action</td>
           </tr>
         </thead>
-        <tbody>
-          <tr data-description="Late submission of assignment" data-sanction="Warning - 1 point" onclick="showOffenseInfo(this)">
-            <td><input type="checkbox" class="rowCheckbox"></td>
-            <td>1</td>
-            <td>Late Submission</td>
-            <td>Minor</td>
-            <td>1</td>
-            <td>Active</td>
-          </tr>
-          <tr data-description="Cheating on exam" data-sanction="Suspension - 5 points" onclick="showOffenseInfo(this)">
-            <td><input type="checkbox" class="rowCheckbox"></td>
-            <td>2</td>
-            <td>Cheating</td>
-            <td>Major</td>
-            <td>5</td>
-            <td>Active</td>
-          </tr>
-        </tbody>
+        <!-- Add "Action" column and Edit buttons in table rows -->
+<<tbody>
+  <tr>
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>1</td>
+    <td>Late Submission</td>
+    <td>Minor</td>
+    <td>1</td>
+    <td>Active</td>
+    <td>
+      <button class="btn-edit" onclick="editOffenseRow(this)">
+        <i class="fas fa-edit"></i> Edit
+      </button>
+    </td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>2</td>
+    <td>Cheating</td>
+    <td>Major</td>
+    <td>5</td>
+    <td>Active</td>
+    <td>
+      <button class="btn-edit" onclick="editOffenseRow(this)">
+        <i class="fas fa-edit"></i> Edit
+      </button>
+    </td>
+  </tr>
+</tbody>
+
+
       </table>
     </div>
   </div>
 </div>
+<!-- ARCHIVES MODAL -->
+<div class="modal" id="archivesModal">
+  <div class="archive-modal-content">
+    <div class="archive-modal-header">
+      <span>Archived Offenses</span>
+      <span class="close-btn" id="closeArchivesModal">&times;</span>
+    </div>
+
+    <div class="archive-modal-body">
+      <!-- Search & Actions -->
+      <div class="toolbar-actions" style="display:flex; gap:10px; margin-bottom:10px;">
+        <input id="archiveSearch" type="search" placeholder="Search archived offenses..." style="flex:1;">
+        <button id="restoreBtn" class="btn-primary"><i class="fas fa-undo"></i> Restore</button>
+        <button id="deleteBtn" class="btn-primary"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+
+      <!-- Archived Offenses Table -->
+      <div class="archive-table-container">
+        <table id="archiveTable" class="archive-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="archiveSelectAll"></th>
+              <th>ID</th>
+              <th>Offense Name</th>
+              <th>Category</th>
+              <th>Points</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Archived offenses will be dynamically populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT OFFENSE MODAL -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <span class="close" id="closeEditModal">&times;</span>
+    <form id="editForm" class="form-grid">
+      <div class="form-column">
+        <div class="form-group"><label>Offense Name</label><input type="text" name="offenseName" required></div>
+        <div class="form-group"><label>Category</label>
+          <select name="category" required>
+            <option>Minor</option>
+            <option>Major</option>
+            <option>Severe</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Description</label><textarea name="description"></textarea></div>
+      </div>
+      <div class="form-column">
+        <div class="form-group"><label>Sanction Name</label><input type="text" name="sanctionName" required></div>
+        <div class="form-group"><label>Sanction Type</label>
+          <select name="sanctionType" required>
+            <option>Warning</option>
+            <option>Detention</option>
+            <option>Suspension</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Points/Severity</label><input type="number" name="points" min="1" required></div>
+        <div class="form-group"><label>Status</label>
+          <select name="status">
+            <option>Active</option>
+            <option>Inactive</option>
+            <option>Cleared</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions" style="margin-top:10px;">
+        <button type="button" class="btn-cancel" id="closeEditModalBtn">Cancel</button>
+        <button type="submit" class="btn-create">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
 <!-- CREATE MODAL -->
 <div class="modal" id="createModal">
@@ -265,6 +364,128 @@
     fetch("{{ route('prefect.logout') }}",{method:'POST',headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}'}})
       .then(()=> window.location.href="{{ route('auth.login') }}");
   }
+  // EDIT MODAL FUNCTIONALITY
+const editModal = document.getElementById('editModal');
+const closeEditModal = document.getElementById('closeEditModal');
+const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+const editForm = document.getElementById('editForm');
+let currentEditRow = null;
+
+function editOffenseRow(btn) {
+  const row = btn.closest('tr');
+  currentEditRow = row;
+
+  // Prefill edit form
+  editForm.elements.offenseName.value = row.children[2].innerText;
+  editForm.elements.category.value = row.children[3].innerText;
+  editForm.elements.points.value = row.children[4].innerText;
+  editForm.elements.status.value = row.children[5].innerText;
+
+  const [sanctionName] = (row.dataset.sanction || '').split(' - ');
+  editForm.elements.sanctionName.value = sanctionName || '';
+  editForm.elements.description.value = row.dataset.description || '';
+
+  editModal.classList.add('show-modal');
+}
+
+// Close Edit Modal
+closeEditModal.addEventListener('click', () => editModal.classList.remove('show-modal'));
+closeEditModalBtn.addEventListener('click', () => editModal.classList.remove('show-modal'));
+window.addEventListener('click', e => { if(e.target === editModal) editModal.classList.remove('show-modal'); });
+
+// Save changes
+editForm.addEventListener('submit', e => {
+  e.preventDefault();
+  if(!currentEditRow) return;
+
+  const data = Object.fromEntries(new FormData(editForm).entries());
+
+  currentEditRow.children[2].innerText = data.offenseName;
+  currentEditRow.children[3].innerText = data.category;
+  currentEditRow.children[4].innerText = data.points;
+  currentEditRow.children[5].innerText = data.status;
+  currentEditRow.dataset.description = data.description;
+  currentEditRow.dataset.sanction = `${data.sanctionName} - ${data.points} points`;
+
+  editModal.classList.remove('show-modal');
+});
+// ARCHIVES MODAL LOGIC
+const archivesModal = document.getElementById('archivesModal');
+const closeArchivesModal = document.getElementById('closeArchivesModal');
+const archiveSelectAll = document.getElementById('archiveSelectAll');
+const archiveTableBody = document.querySelector('#archiveTable tbody');
+
+// Open archives modal
+document.getElementById('archiveBtn').addEventListener('click', () => {
+  archivesModal.classList.add('show-modal');
+  populateArchiveTable();
+});
+
+// Close archives modal
+closeArchivesModal.addEventListener('click', () => archivesModal.classList.remove('show-modal'));
+window.addEventListener('click', e => { if(e.target === archivesModal) archivesModal.classList.remove('show-modal'); });
+
+// Populate archived offenses into modal table
+function populateArchiveTable() {
+  archiveTableBody.innerHTML = '';
+  document.querySelectorAll('#offenseTable tbody tr').forEach(row => {
+    if(row.children[5].innerText === 'Cleared') {
+      const clone = row.cloneNode(true);
+      clone.querySelector('td:last-child').remove(); // Remove action buttons in modal
+      clone.querySelector('input.rowCheckbox').classList.add('archive-checkbox');
+      clone.querySelector('input.rowCheckbox').classList.remove('rowCheckbox');
+      archiveTableBody.appendChild(clone);
+    }
+  });
+}
+
+// Archive select all checkbox
+archiveSelectAll.addEventListener('change', () => {
+  archiveTableBody.querySelectorAll('.archive-checkbox').forEach(cb => cb.checked = archiveSelectAll.checked);
+});
+
+// Restore archived offenses
+document.getElementById('restoreBtn').addEventListener('click', () => {
+  const selectedRows = Array.from(archiveTableBody.querySelectorAll('.archive-checkbox'))
+    .filter(cb => cb.checked)
+    .map(cb => cb.closest('tr'));
+
+  if(selectedRows.length === 0) return alert('Select at least one offense to restore.');
+
+  if(!confirm(`Restore ${selectedRows.length} offense(s)?`)) return;
+
+  selectedRows.forEach(row => {
+    const offenseId = row.children[1].innerText;
+    const originalRow = Array.from(document.querySelectorAll('#offenseTable tbody tr'))
+      .find(r => r.children[1].innerText === offenseId);
+    if(originalRow) {
+      originalRow.children[5].innerText = 'Active';
+      originalRow.classList.remove('archived-row');
+    }
+  });
+
+  populateArchiveTable();
+});
+
+// Delete archived offenses permanently
+document.getElementById('deleteBtn').addEventListener('click', () => {
+  const selectedRows = Array.from(archiveTableBody.querySelectorAll('.archive-checkbox'))
+    .filter(cb => cb.checked)
+    .map(cb => cb.closest('tr'));
+
+  if(selectedRows.length === 0) return alert('Select at least one offense to delete.');
+
+  if(!confirm(`Permanently delete ${selectedRows.length} offense(s)?`)) return;
+
+  selectedRows.forEach(row => {
+    const offenseId = row.children[1].innerText;
+    const originalRow = Array.from(document.querySelectorAll('#offenseTable tbody tr'))
+      .find(r => r.children[1].innerText === offenseId);
+    if(originalRow) originalRow.remove();
+    row.remove();
+  });
+});
+
 </script>
 </body>
 </html>

@@ -100,19 +100,17 @@
       <div class="table-header">
         <div class="table-controls">
           <h3>Student Table</h3>
-
         <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
       </div>
 
          <div style="display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 0px;margin-top: 0px;">
-  <select id="sectionFilter" class="form-select" style="max-width:150px;">
+  <select id="sectionFilter" class="form-select" style="max-width:200px;">
     <option value="">All Sections</option>
     @foreach($sections as $section)
       <option value="{{ $section }}">{{ $section }}</option>
     @endforeach
   </select>
- <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Add Violation</button>
-  <button id="archiveBtn" class="btn btn-warning">
+<button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Create</button>  <button id="archiveBtn" class="btn btn-warning">
     <i class="fas fa-archive"></i> Archive
   </button>
 </div>
@@ -136,7 +134,7 @@
                 </div>
               </div>
           </th>
-        <th>ID</th>
+        <th>#</th>
         <th>Name</th>
         <th>Grade Level</th>
         <th>Section</th>
@@ -184,7 +182,77 @@
   </div>
     </div>
     </div>
+    <!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5>Edit Student</h5>
+      <button class="btn-close" id="closeEditModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="editForm" class="form-grid">
+        <input type="hidden" name="studentId" id="editStudentId">
+        <div class="form-column">
+          <div class="form-group"><label>Last Name</label><input type="text" name="lastName" id="editLastName" required></div>
+          <div class="form-group"><label>First Name</label><input type="text" name="firstName" id="editFirstName" required></div>
+          <div class="form-group"><label>Middle Name</label><input type="text" name="middleName" id="editMiddleName"></div>
+          <div class="form-group"><label>Email</label><input type="email" name="email" id="editEmail"></div>
+          <div class="form-group"><label>Address</label><input type="text" name="address" id="editAddress"></div>
+        </div>
+        <div class="form-column">
+          <div class="form-group"><label>Contact</label><input type="text" name="contact" id="editContact"></div>
+          <div class="form-group"><label>Grade Level</label>
+            <select name="gradeLevel" id="editGradeLevel" required>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Section</label><input type="text" name="section" id="editSection" required></div>
+          <div class="form-group"><label>Status</label>
+            <select name="status" id="editStatus" required>
+              <option value="Active">Active</option>
+              <option value="Cleared">Cleared</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="closeEditForm">Cancel</button>
+          <button type="submit" class="btn-create">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
+<!-- Modals: Create, Archives, Info (unchanged from your code) -->
+<div class="modal" id="createModal">
+  <div class="modal-content">
+    <span class="close" id="closeCreate">&times;</span>
+    <form id="createForm" class="form-grid">
+      <div class="form-column">
+        <div class="form-group"><label>Last Name</label><input type="text" name="lastName" required></div>
+        <div class="form-group"><label>First Name</label><input type="text" name="firstName" required></div>
+        <div class="form-group"><label>Middle Name</label><input type="text" name="middleName"></div>
+        <div class="form-group"><label>Email</label><input type="email" name="email"></div>
+        <div class="form-group"><label>Address</label><input type="text" name="address"></div>
+        <div class="form-group"><label>Password</label><input type="password" name="password"></div>
+      </div>
+      <div class="form-column">
+        <div class="form-group"><label>Contact</label><input type="text" name="contact"></div>
+        <div class="form-group"><label>Grade Level</label><select name="gradeLevel" required>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+        </select></div>
+        <div class="form-group"><label>Section</label><input type="text" name="section" required></div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" id="closeCreate">Cancel</button>
+        <button type="submit" class="btn-create">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
     <!-- ARCHIVES MODAL -->
     <div class="modal" id="archivesModal">
       <div class="archive-modal-content">
@@ -260,282 +328,302 @@
 </div>
 
 <script>
-  // Select All
-  const selectAll = document.getElementById('selectAll');
+/* ==================== SELECT ALL ==================== */
+const selectAll = document.getElementById('selectAll');
+function updateRowCheckboxes() {
   const checkboxes = document.querySelectorAll('.student-checkbox');
   selectAll.addEventListener('change', () => {
     checkboxes.forEach(cb => cb.checked = selectAll.checked);
   });
   checkboxes.forEach(cb => {
     cb.addEventListener('change', () => {
-      if (!cb.checked) {
-        selectAll.checked = false;
-      } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
+      if (!cb.checked) selectAll.checked = false;
+      else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
         selectAll.checked = true;
       }
     });
   });
+}
+updateRowCheckboxes();
 
-  // Bulk Action Menu
-  const bulkActionBtn = document.getElementById('bulkActionBtn');
-  const bulkActionMenu = document.getElementById('bulkActionMenu');
+/* ==================== BULK ACTION MENU ==================== */
+const bulkActionBtn = document.getElementById('bulkActionBtn');
+const bulkActionMenu = document.getElementById('bulkActionMenu');
 
-  bulkActionBtn.addEventListener('click', () => {
-    bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
-  });
+bulkActionBtn.addEventListener('click', () => {
+  bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
+});
 
-  document.addEventListener('click', (e) => {
-    if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
-      bulkActionMenu.style.display = 'none';
-    }
-  });
-
-  document.querySelectorAll('.status-cell').forEach(cell => {
-    if (cell.textContent.trim() === 'Trash') {
-      cell.classList.add('Trash');
-    }
-  });
-
-  // Bulk action dropdown handling
-  document.querySelectorAll('.bulk-action-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const action = item.dataset.action;
-      const selected = document.querySelectorAll('.student-checkbox:checked');
-
-      if (selected.length === 0) {
-        alert("⚠️ Please select at least one student.");
-        return;
-      }
-
-      if (action === "completed") {
-        if (!confirm("Are you sure you want to mark selected students as Cleared?")) return;
-
-        // Collect selected student IDs
-        const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
-        console.log(ids); // optional: debug
-
-        fetch(`/prefect/students/bulk-clear-status`, {
-          method: 'PATCH',
-          headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ids, status: 'Cleared' })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            alert("✅ Selected students marked as Cleared.");
-            location.reload(); // refresh to show updated status
-          } else {
-            alert("❌ Failed to update: " + data.message);
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          alert("❌ Something went wrong.");
-        });
-
-        // Hide bulk menu after action
-        bulkActionMenu.style.display = 'none';
-      }
-    });
-  });
-
-  // Dropdowns
-  document.querySelectorAll('.dropdown-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling;
-      document.querySelectorAll('.dropdown-btn').forEach(other => {
-        if (other !== btn) {
-          other.classList.remove('active');
-          other.nextElementSibling.style.display = 'none';
-        }
-      });
-      btn.classList.toggle('active');
-      container.style.display = container.style.display === 'block' ? 'none' : 'block';
-    });
-  });
-
-  function logout() {
-    if (!confirm("Are you sure you want to logout?")) return;
-    fetch("{{ route('prefect.logout') }}", {
-      method: 'POST',
-      headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
-    }).then(res => res.ok ? window.location.href = "{{ route('auth.login') }}" : console.error('Logout failed'))
-      .catch(err => console.error('Logout failed:', err));
+document.addEventListener('click', (e) => {
+  if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
+    bulkActionMenu.style.display = 'none';
   }
+});
 
-  // Info Modal
-  function showFullInfo(row) {
-    const cells = row.children;
-    const infoHtml = `
-      <p><strong>ID:</strong> ${cells[1].innerText}</p>
-      <p><strong>Name:</strong> ${cells[2].innerText}</p>
-      <p><strong>Grade Level:</strong> ${cells[3].innerText}</p>
-      <p><strong>Section:</strong> ${cells[4].innerText}</p>
-      <p><strong>Status:</strong> ${cells[5].innerText}</p>
-    `;
-    document.getElementById('infoModalBody').innerHTML = infoHtml;
-    document.getElementById('infoModal').classList.add('show-modal');
-  }
+document.querySelectorAll('.bulk-action-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const action = item.dataset.action;
+    const selected = document.querySelectorAll('.student-checkbox:checked');
 
-  function closeInfoModal() {
-    document.getElementById('infoModal').classList.remove('show-modal');
-  }
-
-  // Search & filter
-  const searchInput = document.getElementById('searchInput');
-  const sectionFilter = document.getElementById('sectionFilter');
-
-  function filterTable() {
-    const query = searchInput.value.toLowerCase();
-    const section = sectionFilter.value;
-    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-      const name = row.children[2].innerText.toLowerCase();
-      const sec = row.children[4].innerText;
-      row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
-    });
-  }
-
-  searchInput.addEventListener('input', filterTable);
-  sectionFilter.addEventListener('change', filterTable);
-
-  // Archives Modal
-  const archiveBtn = document.getElementById('archiveBtn');
-  const archivesModal = document.getElementById('archivesModal');
-  const closeArchivesModal = document.getElementById('closeArchivesModal');
-
-  // Show modal when Archive button is clicked
-  archiveBtn.addEventListener('click', () => {
-    archivesModal.classList.add('show-modal');
-  });
-
-  // Close modal when "×" is clicked
-  closeArchivesModal.addEventListener('click', () => {
-    archivesModal.classList.remove('show-modal');
-  });
-
-  // Optional: Close modal when clicking outside modal content
-  window.addEventListener('click', (e) => {
-    if (e.target === archivesModal) {
-      archivesModal.classList.remove('show-modal');
-    }
-  });
-
-  // Archive search & section filter
-  const archiveSearch = document.getElementById('archiveSearch');
-  const archiveSectionFilter = document.getElementById('archiveSectionFilter');
-
-  function filterArchiveTable() {
-    const query = archiveSearch.value.toLowerCase();
-    const selectedSection = archiveSectionFilter.value;
-
-    document.querySelectorAll('#archiveTable tbody tr').forEach(row => {
-      const name = row.dataset.name.toLowerCase();
-      const rowSection = row.dataset.section;
-
-      // Show row if name matches search AND section matches filter (or filter is empty)
-      row.style.display = (name.includes(query) && (selectedSection === '' || rowSection === selectedSection)) ? '' : 'none';
-    });
-  }
-
-  archiveSearch.addEventListener('input', filterArchiveTable);
-  archiveSectionFilter.addEventListener('change', filterArchiveTable);
-
-  // Select All in archive
-  const archiveSelectAll = document.getElementById('archiveSelectAll');
-
-  archiveSelectAll.addEventListener('change', () => {
-    document.querySelectorAll('.archive-checkbox').forEach(cb => cb.checked = archiveSelectAll.checked);
-  });
-
-  // Restore action
-  document.getElementById('restoreBtn').addEventListener('click', () => {
-    const selected = document.querySelectorAll('.archive-checkbox:checked');
     if (selected.length === 0) {
-      alert("⚠️ Please select at least one student to restore.");
+      alert("⚠️ Please select at least one student.");
       return;
     }
 
-    const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+    if (action === "completed") {
+      if (!confirm("Are you sure you want to mark selected students as Cleared?")) return;
 
-    fetch(`/prefect/students/bulk-update-status`, {
-      method: 'PATCH',
-      headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ids, status: 'active' })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        alert(data.message);
-        location.reload(); // 🔄 refresh page after success
-      } else {
-        alert("❌ Restore failed: " + data.message);
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert("❌ Something went wrong.");
-    });
-  });
+      const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+      fetch(`/prefect/students/bulk-clear-status`, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids, status: 'Cleared' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("✅ Selected students marked as Cleared.");
+          location.reload();
+        } else alert("❌ Failed to update: " + data.message);
+      })
+      .catch(err => { console.error(err); alert("❌ Something went wrong."); });
 
-  // Toggle profile dropdown
-  function toggleProfileDropdown() {
-    const dropdown = document.getElementById('profileDropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-  }
-
-  // Close profile dropdown when clicking elsewhere
-  document.addEventListener('click', (e) => {
-    const dropdown = document.getElementById('profileDropdown');
-    const userInfo = document.querySelector('.user-info');
-
-    if (!userInfo.contains(e.target) && dropdown.style.display === 'block') {
-      dropdown.style.display = 'none';
+      bulkActionMenu.style.display = 'none';
     }
-  });
-  // Show info modal when row is clicked (excluding checkbox)
-document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-  row.addEventListener('click', (e) => {
-    if (e.target.type === 'checkbox') return; // ignore clicks on checkboxes
-
-    const id = row.dataset.id;
-    const name = row.dataset.name;
-    const grade = row.dataset.grade;
-    const section = row.dataset.section;
-    const status = row.dataset.status;
-    const parentName = row.dataset.parentName || '-';
-    const parentContact = row.dataset.parentContact || '-';
-    const parentAddress = row.dataset.parentAddress || '-';
-    const adviserName = row.dataset.adviserName || '-';
-
-    const infoHtml = `
-      <p><strong>ID:</strong> ${id}</p>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Grade Level:</strong> ${grade}</p>
-      <p><strong>Section:</strong> ${section}</p>
-      <p><strong>Status:</strong> ${status}</p>
-      <hr>
-      <p><strong>Parent Name:</strong> ${parentName}</p>
-      <p><strong>Parent Contact:</strong> <a href="tel:${parentContact}">${parentContact}</a></p>
-      <p><strong>Parent Address:</strong> ${parentAddress}</p>
-      <p><strong>Adviser Name:</strong> ${adviserName}</p>
-    `;
-
-    document.getElementById('infoModalBody').innerHTML = infoHtml;
-    document.getElementById('infoModal').classList.add('show-modal');
   });
 });
 
-// Close modal function
+/* ==================== ROW CLICK INFO MODAL ==================== */
+function attachRowClick(row) {
+  row.addEventListener('click', (e) => {
+    // Ignore checkboxes
+    if (e.target.type === 'checkbox' || e.target.closest('input[type="checkbox"]')) return;
+    // Ignore Action column or Edit buttons
+    if (e.target.closest('td:last-child') || e.target.closest('.btn-edit')) return;
+
+    const infoHtml = `
+      <p><strong>ID:</strong> ${row.dataset.id}</p>
+      <p><strong>Name:</strong> ${row.dataset.name}</p>
+      <p><strong>Grade Level:</strong> ${row.dataset.grade}</p>
+      <p><strong>Section:</strong> ${row.dataset.section}</p>
+      <p><strong>Status:</strong> ${row.dataset.status}</p>
+      <hr>
+      <p><strong>Parent Name:</strong> ${row.dataset.parentName || '-'}</p>
+      <p><strong>Parent Contact:</strong> <a href="tel:${row.dataset.parentContact || '-'}">${row.dataset.parentContact || '-'}</a></p>
+      <p><strong>Parent Address:</strong> ${row.dataset.parentAddress || '-'}</p>
+      <p><strong>Adviser Name:</strong> ${row.dataset.adviserName || '-'}</p>
+    `;
+    document.getElementById('infoModalBody').innerHTML = infoHtml;
+    document.getElementById('infoModal').classList.add('show-modal');
+  });
+}
+
+// Attach existing rows
+document.querySelectorAll('#studentTable tbody tr').forEach(row => attachRowClick(row));
+
 function closeInfoModal() {
   document.getElementById('infoModal').classList.remove('show-modal');
 }
 
+/* ==================== SEARCH & FILTER ==================== */
+const searchInput = document.getElementById('searchInput');
+const sectionFilter = document.getElementById('sectionFilter');
+
+function filterTable() {
+  const query = searchInput.value.toLowerCase();
+  const section = sectionFilter.value;
+  document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+    const name = row.dataset.name.toLowerCase();
+    const sec = row.dataset.section;
+    row.style.display = (name.includes(query) && (section === '' || sec === section)) ? '' : 'none';
+  });
+}
+
+searchInput.addEventListener('input', filterTable);
+sectionFilter.addEventListener('change', filterTable);
+
+/* ==================== CREATE FORM ==================== */
+const createBtn = document.getElementById('createBtn');
+const createModal = document.getElementById('createModal');
+const closeCreateBtns = document.querySelectorAll('#closeCreate');
+
+if (createBtn) createBtn.addEventListener('click', () => createModal.classList.add('show-modal'));
+closeCreateBtns.forEach(btn => btn.addEventListener('click', () => createModal.classList.remove('show-modal')));
+window.addEventListener('click', e => { if(e.target===createModal) createModal.classList.remove('show-modal'); });
+
+const createForm = document.getElementById('createForm');
+if (createForm) {
+  let studentId = document.querySelectorAll('#studentTable tbody tr').length + 1;
+  createForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(createForm).entries());
+    const fullName = `${data.firstName} ${data.middleName} ${data.lastName}`.replace("  ", " ");
+
+    const row = document.createElement('tr');
+    row.dataset.id = studentId;
+    row.dataset.name = fullName;
+    row.dataset.grade = data.gradeLevel;
+    row.dataset.section = data.section;
+    row.dataset.status = 'Active';
+    row.dataset.parentName = data.parentName || '-';
+    row.dataset.parentContact = data.parentContact || '-';
+    row.dataset.parentAddress = data.parentAddress || '-';
+    row.dataset.adviserName = data.adviserName || '-';
+
+    row.innerHTML = `
+      <td><input type="checkbox" class="student-checkbox"></td>
+      <td>${studentId}</td>
+      <td>${fullName}</td>
+      <td>${data.gradeLevel}</td>
+      <td>${data.section}</td>
+      <td><span class="status-badge active">Active</span></td>
+      <td><button class="btn-edit" onclick="editStudent('${studentId}')"><i class="fas fa-edit"></i> Edit</button></td>
+    `;
+
+    attachRowClick(row); // attach modal click
+    document.querySelector("#studentTable tbody").appendChild(row);
+    createForm.reset();
+    createModal.classList.remove('show-modal');
+    updateRowCheckboxes();
+    studentId++;
+  });
+}
+
+/* ==================== ARCHIVES MODAL & RESTORE ==================== */
+const archiveBtn = document.getElementById('archiveBtn');
+const archivesModal = document.getElementById('archivesModal');
+const closeArchivesModal = document.getElementById('closeArchivesModal');
+const archiveSearch = document.getElementById('archiveSearch');
+const archiveSectionFilter = document.getElementById('archiveSectionFilter');
+const archiveSelectAll = document.getElementById('archiveSelectAll');
+const restoreBtn = document.getElementById('restoreBtn');
+
+archiveBtn.addEventListener('click', () => archivesModal.classList.add('show-modal'));
+closeArchivesModal.addEventListener('click', () => archivesModal.classList.remove('show-modal'));
+window.addEventListener('click', e => { if(e.target===archivesModal) archivesModal.classList.remove('show-modal'); });
+
+function filterArchiveTable() {
+  const query = archiveSearch.value.toLowerCase();
+  const selectedSection = archiveSectionFilter.value;
+  document.querySelectorAll('#archiveTable tbody tr').forEach(row => {
+    const name = row.dataset.name.toLowerCase();
+    const rowSection = row.dataset.section;
+    row.style.display = (name.includes(query) && (selectedSection === '' || rowSection === selectedSection)) ? '' : 'none';
+  });
+}
+
+archiveSearch.addEventListener('input', filterArchiveTable);
+archiveSectionFilter.addEventListener('change', filterArchiveTable);
+
+archiveSelectAll.addEventListener('change', () => {
+  document.querySelectorAll('.archive-checkbox').forEach(cb => cb.checked = archiveSelectAll.checked);
+});
+
+restoreBtn.addEventListener('click', () => {
+  const selected = document.querySelectorAll('.archive-checkbox:checked');
+  if (selected.length === 0) {
+    alert("⚠️ Please select at least one student to restore.");
+    return;
+  }
+  const ids = Array.from(selected).map(cb => cb.closest('tr').dataset.id);
+  fetch(`/prefect/students/bulk-update-status`, {
+    method: 'PATCH',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ids, status: 'active' })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert(data.message);
+      location.reload();
+    } else alert("❌ Restore failed: " + data.message);
+  })
+  .catch(err => { console.error(err); alert("❌ Something went wrong."); });
+});
+
+/* ==================== PROFILE DROPDOWN ==================== */
+function toggleProfileDropdown() {
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('profileDropdown');
+  const userInfo = document.querySelector('.user-info');
+  if (!userInfo.contains(e.target) && dropdown.style.display === 'block') {
+    dropdown.style.display = 'none';
+  }
+});
+/* ==================== EDIT STUDENT ==================== */
+const editModal = document.getElementById('editModal');
+const closeEditModalBtn = document.getElementById('closeEditModal');
+const closeEditFormBtn = document.getElementById('closeEditForm');
+const editForm = document.getElementById('editForm');
+
+function editStudent(studentId) {
+  const row = document.querySelector(`#studentTable tbody tr[data-id='${studentId}']`);
+  if (!row) return;
+
+  // Pre-fill form fields
+  document.getElementById('editStudentId').value = row.dataset.id;
+  const nameParts = row.dataset.name.split(' ');
+  document.getElementById('editFirstName').value = nameParts[0] || '';
+  document.getElementById('editMiddleName').value = nameParts.length === 3 ? nameParts[1] : '';
+  document.getElementById('editLastName').value = nameParts.length === 3 ? nameParts[2] : nameParts[1] || '';
+  document.getElementById('editGradeLevel').value = row.dataset.grade;
+  document.getElementById('editSection').value = row.dataset.section;
+  document.getElementById('editStatus').value = row.dataset.status;
+  document.getElementById('editContact').value = row.dataset.parentContact || '';
+  document.getElementById('editAddress').value = row.dataset.parentAddress || '';
+  document.getElementById('editEmail').value = row.dataset.email || '';
+
+  editModal.classList.add('show-modal');
+}
+
+// Close Edit Modal
+closeEditModalBtn.addEventListener('click', () => editModal.classList.remove('show-modal'));
+closeEditFormBtn.addEventListener('click', () => editModal.classList.remove('show-modal'));
+window.addEventListener('click', e => { if(e.target === editModal) editModal.classList.remove('show-modal'); });
+
+// Handle Edit Form Submission
+editForm.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const studentId = document.getElementById('editStudentId').value;
+  const row = document.querySelector(`#studentTable tbody tr[data-id='${studentId}']`);
+  if (!row) return;
+
+  const firstName = document.getElementById('editFirstName').value;
+  const middleName = document.getElementById('editMiddleName').value;
+  const lastName = document.getElementById('editLastName').value;
+  const fullName = `${firstName} ${middleName} ${lastName}`.replace(/\s+/g,' ').trim();
+  const grade = document.getElementById('editGradeLevel').value;
+  const section = document.getElementById('editSection').value;
+  const status = document.getElementById('editStatus').value;
+
+  // Update the row
+  row.dataset.name = fullName;
+  row.dataset.grade = grade;
+  row.dataset.section = section;
+  row.dataset.status = status;
+
+  row.querySelector('td:nth-child(3)').textContent = fullName;
+  row.querySelector('td:nth-child(4)').textContent = grade;
+  row.querySelector('td:nth-child(5)').textContent = section;
+  row.querySelector('td:nth-child(6) .status-badge').textContent = status;
+  row.querySelector('td:nth-child(6) .status-badge').className = `status-badge ${status.toLowerCase()}`;
+
+  editModal.classList.remove('show-modal');
+});
+
 </script>
+
+
 </body>
 </html>
