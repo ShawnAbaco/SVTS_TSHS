@@ -540,7 +540,7 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
   background: #e4e4e4;
   border-color: #bbb;
 }
- 
+
 
 
 
@@ -638,7 +638,7 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
 }
 
 .btn-print:hover {
-   
+
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
