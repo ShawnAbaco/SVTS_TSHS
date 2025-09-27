@@ -6,407 +6,397 @@
   <title>Parent List</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/adviser/parentlist.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/adviser/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/adviser/cards.css') }}">
 
 </head>
 <body>
-  <!-- SIDEBAR -->
-
-<nav class="sidebar" role="navigation">
-    <div style="text-align: center; margin-bottom: 1rem;">
-        <img src="/images/Logo.png" alt="Logo">
-        <p>ADVISER</p>
+  <!-- Sidebar -->
+<div class="sidebar">
+  <img src="/images/Logo.png" alt="Logo">
+  <h2>PREFECT</h2>
+  <ul>
+    <div class="section-title">Main</div>
+    <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+    <li><a href="{{ route('student.list') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+    <li class="active"><a href="{{ route('parent.list') }}"><i class="fas fa-users"></i> Parent List</a></li>
+    <li><a href="{{ route('violation.record') }}"><i class="fas fa-book"></i>Violation Record</a></li>
+    <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i>Complaints</a></li>
+    <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+    <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+  </ul>
+</div>
+   <!-- Main Content -->
+<div class="main-content">
+  <header class="main-header">
+    <div class="header-left">
+      <h2>Parent List</h2>
     </div>
-    <ul>
-        <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
-        <li><a href="{{ route('parent.list') }}" class="active"><i class="fas fa-user-friends"></i> Parent List</a></li>
-
-        <!-- Violations Dropdown -->
-        <li>
-            <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
-            <ul class="dropdown-container">
-                <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
-                <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
-                <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
-            </ul>
-        </li>
-
-        <!-- Complaints Dropdown -->
-        <li>
-            <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
-            <ul class="dropdown-container">
-                <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
-                <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
-                <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
-            </ul>
-        </li>
-
-        <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
-        <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-<li>
-    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
-</li>    </ul>
-</nav>
-
-  <div class="main-content">
-    <div class="header">
-      <h1>Parent List</h1>
-      <div class="actions">
-         @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
+    <div class="header-right">
+      <div class="user-info" onclick="toggleProfileDropdown()">
+        <img src="/images/user.jpg" alt="User">
+        <span>{{ Auth::user()->name }}</span>
+        <i class="fas fa-caret-down"></i>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="{{ route('profile.settings') }}">Profile</a>
+      </div>
     </div>
-@endif
-
-@if (session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
+  </header>
+      <!-- Summary Cards -->
+<div class="summary-cards">
+  <div class="summary-card">
+    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+    <div class="card-content">
+      <h3>Total Students</h3>
+      <p>{{ $parents->count() }}</p>
     </div>
-@endif
-        <input type="text" id="searchInput" placeholder="Search parent...">
-        <button class="btn btn-info" onclick="openAddModal()">
-          <i class="fas fa-plus-circle"></i> Add Parent/Guardian
-        </button>
-        <button class="btn btn-archive">
-          <i class="fas fa-archive"></i> Archives
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#28a745;"><i class="fas fa-check-circle"></i></div>
+    <div class="card-content">
+      <h3>Active</h3>
+      <p>{{ $parents->where('status', 'active')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#ffc107;"><i class="fas fa-archive"></i></div>
+    <div class="card-content">
+      <h3>Cleared / Archived</h3>
+      <p>{{ $parents->where('status', 'Cleared')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#007bff;"><i class="fas fa-layer-group"></i></div>
+    <div class="card-content">
+      <h3>Sections</h3>
+      <p>{{ $parents->count() }}</p>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Table Container -->
+   
+  <div class="table-container">
+    <!-- Table Header with Search and Archive Button -->
+    <div class="table-header">
+      
+      <div class="table-controls">
+         <h3>Parents Table</h3>
+
+        <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
+      </div>
+      
+      <div class="table-controls">
+        <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Create</button>  
+        <button id="archiveBtn">
+          <i class="fas fa-archive"></i> Archive
         </button>
       </div>
     </div>
 
-<table id="parentTable">
-  <thead>
-    <tr>
-            <th>
-<div style="display: inline-flex; align-items: center; gap: 8px;">
-  <input type="checkbox" id="selectAll">
-
-  <!-- BULK ACTION 3 DOTS -->
-  <div class="bulk-action-dropdown" style="position: relative;">
-    <button id="bulkActionBtn">&#8942;</button>
-    <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
-      <div class="bulk-action-item" data-action="completed">Completed</div>
-      <div class="bulk-action-item" data-action="trash">Trash</div>
-    </div>
-  </div>
-</div>
-
+    <!-- Table -->
+   <div class="table-container">
+    
+      <table id="studentTable" class="fixed-header">
+      <thead>
+        <tr>
+        
+          <th>
+            <input type="checkbox" id="selectAll">
+            <!-- 3-dots trash dropdown -->
+            <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
+                <button id="bulkActionBtn">&#8942;</button>
+                <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
+                  <div class="bulk-action-item" data-action="completed">Trash</div>
+                </div>
+              </div>
           </th>
-      <th>Parent/Guardian Name</th>
-      <th>Sex</th>
-      <th>Relationship</th>
-      <th>Birthdate</th>
-      <th>Contact Number</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach($parents as $parent)
-<tr data-id="{{ $parent->parent_id }}"
-    data-parent='@json([
-        "sex" => $parent->parent_sex,
-        "relationship" => $parent->parent_relationship,
-        "status" => $parent->status
-    ])'
-    data-students='@json($parent->students)'>
-                    <td><input type="checkbox" class="student-checkbox" onclick="event.stopPropagation()"></td>
-
-    <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
-    <td>{{ $parent->parent_sex }}</td>
-    <td>{{ $parent->parent_relationship }}</td>
-    <td>{{ $parent->parent_birthdate }}</td>
-    <td>{{ $parent->parent_contactinfo }}</td>
-    <td>
-        <span class="status-badge {{ $parent->status }}">
-            {{ ucfirst($parent->status) }}
-        </span>
-    </td>
-    <td class="actions">
-<button class="btn btn-info" onclick="showInfo(
-    '{{ $parent->parent_fname }} {{ $parent->parent_lname }}',
-    '{{ $parent->parent_birthdate }}',
-    '{{ $parent->parent_contactinfo }}',
-    this.closest('tr').dataset.parent,
-    this.closest('tr').dataset.students
-)"><i class="fas fa-info-circle"></i> Info</button>
-
-        <button class="btn btn-edit" onclick="editGuardian(this)">
-            <i class="fas fa-edit"></i> Edit
-        </button>
-        <form method="POST" action="{{ route('parents.destroy', $parent->parent_id) }}" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i> Delete
-            </button>
-        </form>
-    </td>
-</tr>
-    @endforeach
-  </tbody>
+          <th>#</th>
+          <th>Parent Fullname</th>
+          <th>Contact Number</th>
+          <th>Birthdate</th>
+          <th>Student</th>
+          <th>Adviser</th>
+          <th>Action</th> <!-- New Action column -->
+        </tr>
+      </thead>
 </table>
-  </div>
+ <div class="student-table-wrapper">
+    <table id="studentTable">
+      <tbody>
+  @forelse($parents as $index => $parent)
+    <tr class="clickable-row" data-id="{{ $parent->id }}">
+      <td><input type="checkbox" class="student-checkbox"></td>
+      <td>{{ $index + 1 }}</td>
+      <td>{{ $parent->parent_fname }} {{ $parent->parent_lname }}</td>
+      <td>{{ $parent->parent_contactinfo }}</td>
+      <td>{{ $parent->parent_birthdate }}</td>
+      <td>
+        @forelse($parent->students as $student)
+          {{ $student->student_fname }} {{ $student->student_lname }}<br>
+        @empty N/A @endforelse
+      </td>
+      <td>
+        @forelse($parent->students as $student)
+          @if($student->adviser)
+            {{ $student->adviser->adviser_fname }} {{ $student->adviser->adviser_lname }}<br>
+          @else N/A<br> @endif
+        @empty N/A @endforelse
+      </td>
+      <!-- Action column -->
+      <td>
+        <button class="btn-edit" onclick="editParent('{{ $parent->id }}')">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+      </td>
+    </tr>
+  @empty
+    <tr>
+      <td colspan="8" style="text-align:center;">No parents found.</td>
+    </tr>
+  @endforelse
+</tbody>
 
-
-
-  <!-- ADD  MODAL -->
-<div class="modal" id="addModal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('addModal')">&times;</span>
-    <h2 id="modalTitle">Add Parent/Guardian</h2>
-    <form id="addParentForm" method="POST" action="{{ route('parents.store') }}">
-      @csrf
-      <input type="hidden" name="parent_id" id="parent_id" value="">
-
-      <!-- First Name -->
-      <input type="text" name="parent_fname" id="parent_fname" placeholder="First Name"
-             required pattern="^[A-Za-z\s]+$"
-             title="Only letters and spaces are allowed">
-
-      <!-- Last Name -->
-      <input type="text" name="parent_lname" id="parent_lname" placeholder="Last Name"
-             required pattern="^[A-Za-z\s]+$"
-             title="Only letters and spaces are allowed">
-
-      <!-- Sex -->
-      <select name="parent_sex" id="parent_sex" required>
-        <option value="" disabled selected>Select Sex</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
-
-      <!-- Relationship -->
-      <input type="text" name="parent_relationship" id="parent_relationship"
-             placeholder="Relationship (e.g., Father, Mother, Guardian)"
-             required pattern="^[A-Za-z\s]+$"
-             title="Only letters and spaces are allowed">
-
-      <!-- Birthdate -->
-      <input type="date" name="parent_birthdate" id="parent_birthdate"
-             max="<?php echo date('Y-m-d'); ?>" required
-             title="Birthdate cannot be in the future">
-
-      <!-- Contact Info -->
-      <input type="text" name="parent_contactinfo" id="parent_contactinfo"
-             placeholder="Contact Number"
-             required pattern="^[0-9]{11}$"
-             title="Contact number must be exactly 11 digits (e.g., 09123456789)">
-
-      <!-- Status -->
-      <select name="status" id="status" required>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-      </select>
-
-      <span id="methodField"></span>
-      <button type="submit" class="btn btn-info"><i class="fas fa-save"></i> Save</button>
-    </form>
+    </table>
+</div>
   </div>
 </div>
 
-<!-- INFO MODAL -->
+<!-- Info Modal for Parent Details -->
 <div class="modal" id="infoModal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('infoModal')">&times;</span>
-        <h2>Parent/Guardian Info</h2>
-        <div class="info-section">
-            <p><strong>Name:</strong> <span id="infoName"></span></p>
-            <p><strong>Sex:</strong> <span id="infoSex"></span></p>
-            <p><strong>Relationship:</strong> <span id="infoRelationship"></span></p>
-            <p><strong>Birthdate:</strong> <span id="infoBirthdate"></span></p>
-            <p><strong>Contact:</strong> <span id="infoContact"></span></p>
-            <p><strong>Status:</strong> <span id="infoStatus" class="status-badge"></span></p>
-        </div>
-
-        <h3>Children under this parent</h3>
-        <table class="info-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Contact</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="infoChildren">
-                <!-- dynamically populated -->
-            </tbody>
-        </table>
-
-        <button class="btn btn-info" id="smsBtn"><i class="fas fa-sms"></i> Send SMS</button>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5>Parent Information</h5>
+      <button class="btn-close" onclick="closeInfoModal()">&times;</button>
     </div>
+    <div class="modal-body" id="infoModalBody">
+      <p><strong>Parent Name:</strong> <span id="infoParentName">N/A</span></p>
+      <p><strong>Contact:</strong> <span id="infoContact">N/A</span></p>
+      <p><strong>Birthdate:</strong> <span id="infoBirthdate">N/A</span></p>
+      <p><strong>Gender:</strong> <span id="infoGender">N/A</span></p>
+      <p><strong>Address:</strong> <span id="infoAddress">N/A</span></p>
+      <hr>
+      <p><strong>Children:</strong></p>
+      <ul id="infoChildren">
+        <li>N/A</li>
+      </ul>
+      <p><strong>Advisers:</strong></p>
+      <ul id="infoAdvisers">
+        <li>N/A</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
-
-
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5>Edit Parent</h5>
+      <button class="btn-close" onclick="closeEditModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="editForm">
+        <input type="hidden" name="parentId" id="editParentId">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" name="firstName" id="editFirstName" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" name="lastName" id="editLastName" required>
+        </div>
+        <div class="form-group">
+          <label>Contact</label>
+          <input type="text" name="contact" id="editContact">
+        </div>
+        <div class="form-group">
+          <label>Birthdate</label>
+          <input type="date" name="birthdate" id="editBirthdate">
+        </div>
+        <div class="form-actions" style="margin-top:10px;">
+          <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn-create">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
   <script>
+  /* ==================== EDIT PARENT ==================== */
+  function editParent(id) {
+    const row = document.querySelector(`tr[data-id='${id}']`);
+    if (!row) return;
 
-    // Dropdown functionality - auto close others & scroll
-const dropdowns = document.querySelectorAll('.dropdown-btn');
-dropdowns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
+    // Fill modal with existing data
+    document.getElementById('editParentId').value = id;
+    document.getElementById('editFirstName').value = row.children[2].innerText.split(' ')[0];
+    document.getElementById('editLastName').value = row.children[2].innerText.split(' ').slice(1).join(' ');
+    document.getElementById('editContact').value = row.children[3].innerText;
+    document.getElementById('editBirthdate').value = row.children[4].innerText;
 
-        // close all other dropdowns
-        dropdowns.forEach(otherBtn => {
-            if (otherBtn !== this) {
-                otherBtn.nextElementSibling.classList.remove('show');
-                otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
-            }
-        });
+    // Show modal
+    document.getElementById('editModal').classList.add('show-modal');
+  }
 
-        // toggle clicked dropdown
-        const container = this.nextElementSibling;
-        container.classList.toggle('show');
-        this.querySelector('.fa-caret-down').style.transform =
-            container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+  function closeEditModal() {
+    document.getElementById('editModal').classList.remove('show-modal');
+  }
 
-        // scroll into view if dropdown is opened
-        if(container.classList.contains('show')){
-            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editParentId').value;
+    const firstName = document.getElementById('editFirstName').value;
+    const lastName = document.getElementById('editLastName').value;
+    const contact = document.getElementById('editContact').value;
+    const birthdate = document.getElementById('editBirthdate').value;
+
+    const row = document.querySelector(`tr[data-id='${id}']`);
+    row.children[2].innerText = `${firstName} ${lastName}`;
+    row.children[3].innerText = contact;
+    row.children[4].innerText = birthdate;
+
+    closeEditModal();
+  });
+
+  /* ==================== INFO MODAL ==================== */
+  function showParentInfo(row) {
+    document.getElementById("infoParentName").textContent = row.dataset.name || "N/A";
+    document.getElementById("infoContact").textContent = row.dataset.contact || "N/A";
+    document.getElementById("infoBirthdate").textContent = row.dataset.birthdate || "N/A";
+    document.getElementById("infoGender").textContent = row.dataset.gender || "N/A";
+    document.getElementById("infoAddress").textContent = row.dataset.address || "N/A";
+
+    // Populate children
+    const childrenUl = document.getElementById("infoChildren");
+    childrenUl.innerHTML = "";
+    const childrenNames = row.dataset.children ? row.dataset.children.split('|') : [];
+    if (childrenNames.length) {
+      childrenNames.forEach(child => childrenUl.innerHTML += `<li>${child}</li>`);
+    } else childrenUl.innerHTML = "<li>N/A</li>";
+
+    // Populate advisers
+    const advisersUl = document.getElementById("infoAdvisers");
+    advisersUl.innerHTML = "";
+    const advisers = row.dataset.advisers ? row.dataset.advisers.split('|') : [];
+    if (advisers.length) {
+      advisers.forEach(ad => advisersUl.innerHTML += `<li>${ad}</li>`);
+    } else advisersUl.innerHTML = "<li>N/A</li>";
+
+    document.getElementById("infoModal").classList.add("show-modal");
+  }
+
+  function closeInfoModal() {
+    document.getElementById("infoModal").classList.remove("show-modal");
+  }
+
+  // Only trigger info modal for certain columns
+  document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+    row.addEventListener('click', e => {
+      if(e.target.type === 'checkbox' || e.target.closest('.btn-edit')) return;
+      showParentInfo(row);
+    });
+  });
+
+  /* ==================== SELECT ALL CHECKBOX ==================== */
+  const selectAll = document.getElementById('selectAll');
+  const checkboxes = document.querySelectorAll('.student-checkbox');
+
+  selectAll.addEventListener('change', () => {
+    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+  });
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      selectAll.checked = document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length;
+    });
+  });
+
+  /* ==================== DROPDOWN ==================== */
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling;
+      document.querySelectorAll('.dropdown-btn').forEach(otherBtn => {
+        const otherContainer = otherBtn.nextElementSibling;
+        if (otherBtn !== btn) {
+          otherBtn.classList.remove('active');
+          otherContainer.style.display = 'none';
         }
-    });
-});
-
-
-
-// Sidebar active link
-document.querySelectorAll('.sidebar a').forEach(link => {
-    link.addEventListener('click', function(){
-        document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-    });
-});
-    // live search
-    document.getElementById('searchInput').addEventListener('keyup', function() {
-      const filter = this.value.toLowerCase();
-      const rows = document.querySelectorAll("#parentTable tbody tr");
-      rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(filter) ? '' : 'none';
       });
+      btn.classList.toggle('active');
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
     });
+  });
 
-    function openAddModal() {
-      document.getElementById('addParentForm').reset();
-      document.getElementById('methodField').innerHTML = '';
-      document.getElementById('modalTitle').innerText = 'Add Parent/Guardian';
-      document.querySelector('#addParentForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
-      document.getElementById('addModal').style.display = 'flex';
+  /* ==================== SEARCH ==================== */
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
+      const name = row.children[2].innerText.toLowerCase();
+      row.style.display = name.includes(query) ? '' : 'none';
+    });
+  });
+
+  /* ==================== BULK ACTION ==================== */
+  const bulkActionBtn = document.getElementById('bulkActionBtn');
+  const bulkActionMenu = document.getElementById('bulkActionMenu');
+
+  bulkActionBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  bulkActionMenu.querySelector('.bulk-action-item').addEventListener('click', () => {
+    document.querySelectorAll('.student-checkbox:checked').forEach(cb => cb.closest('tr').remove());
+    bulkActionMenu.style.display = 'none';
+  });
+
+  document.addEventListener('click', e => {
+    if (!bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
+      bulkActionMenu.style.display = 'none';
     }
+  });
 
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
+  /* ==================== PROFILE DROPDOWN ==================== */
+  function toggleProfileDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
 
-   function showInfo(name, birthdate, contact, parentJson, studentsJson) {
-    const loggedAdviserId = {{ optional(auth()->guard('adviser')->user())->adviser_id ?? 'null' }};
-    const parentData = JSON.parse(parentJson);
-    let students = [];
-    try { students = JSON.parse(studentsJson); } catch(e) { students = []; }
+  document.addEventListener('click', e => {
+    const userInfo = document.querySelector('.user-info');
+    const dropdown = document.getElementById('profileDropdown');
+    if (!userInfo.contains(e.target)) dropdown.style.display = 'none';
+  });
 
-    const filteredStudents = students.filter(s => s.adviser_id == loggedAdviserId);
-
-    // Populate modal fields
-    document.getElementById('infoName').innerText = name;
-    document.getElementById('infoSex').innerText = parentData.sex || 'N/A';
-    document.getElementById('infoRelationship').innerText = parentData.relationship || 'N/A';
-    document.getElementById('infoBirthdate').innerText = birthdate;
-    document.getElementById('infoContact').innerText = contact;
-    document.getElementById('infoStatus').innerText = parentData.status || 'active';
-    document.getElementById('infoStatus').className = `status-badge ${parentData.status || 'active'}`;
-
-    const childrenList = document.getElementById('infoChildren');
-    childrenList.innerHTML = '';
-
-    if(filteredStudents.length > 0) {
-        filteredStudents.forEach(student => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${student.student_fname} ${student.student_lname}</td>
-                <td>${student.student_contactinfo}</td>
-                <td><span class="status-badge ${student.status || 'active'}">${student.status || 'Active'}</span></td>
-            `;
-            childrenList.appendChild(tr);
-        });
-    } else {
-        childrenList.innerHTML = '<tr><td colspan="4" style="text-align:center;">No children under your advisory</td></tr>';
-    }
-
-    // SMS button dynamically bound
-    const smsBtn = document.getElementById('smsBtn');
-    smsBtn.onclick = function() {
-        const message = `Hello ${name}, regarding your child(ren): ${filteredStudents.map(s => s.student_fname + ' ' + s.student_lname).join(', ')}.`;
-        alert(`SMS to ${contact}: ${message}`);
-    };
-
-    document.getElementById('infoModal').style.display = 'flex';
-}
-
-
-
-
-
-function editGuardian(button) {
-  const row = button.closest('tr');
-  const cells = row.cells;
-  const fullName = cells[0].innerText.trim();
-  const lastSpaceIndex = fullName.lastIndexOf(' ');
-  const firstName = fullName.slice(0, lastSpaceIndex).trim();
-  const lastName = fullName.slice(lastSpaceIndex + 1).trim();
-
-  // Parse JSON from data-parent for extra fields
-  const parentData = JSON.parse(row.dataset.parent || '{}');
-
-  // Fill modal inputs
-  document.getElementById('parent_id').value = row.dataset.id;
-  document.getElementById('parent_fname').value = firstName;
-  document.getElementById('parent_lname').value = lastName;
-  document.getElementById('parent_birthdate').value = cells[3].innerText.trim();
-  document.getElementById('parent_contactinfo').value = cells[4].innerText.trim();
-
-  // Populate new fields from JSON
-  document.getElementById('parent_sex').value = parentData.sex || '';
-  document.getElementById('parent_relationship').value = parentData.relationship || '';
-  document.getElementById('status').value = parentData.status || 'active';
-
-  // Update form for PUT
-  const form = document.getElementById('addParentForm');
-  form.action = `/adviser/adviser/parents/${row.dataset.id}`;
-  document.getElementById('methodField').innerHTML = '@method("PUT")';
-  form.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update';
-  document.getElementById('modalTitle').innerText = 'Edit Parent/Guardian';
-  document.getElementById('addModal').style.display = 'flex';
-}
-
-
-
-document.getElementById('smsBtn').onclick = function() {
-    const parentId = {{ $parent->parent_id }};
-    const message = `Hello ${name}, regarding your child(ren): ${filtered.map(s => s.name).join(', ')}.`;
-
-    fetch('{{ route('send.sms.to.parent') }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ parent_id: parentId, message: message })
-    }).then(res => res.json()).then(data => alert(data.message));
-};
-
-
-
-    function logout() {
-      if(confirm('Are you sure you want to log out?')){
-        window.location.href = '/adviser/login';
+  /* ==================== LOGOUT ==================== */
+  function logout() {
+    if (!confirm("Are you sure you want to logout?")) return;
+    fetch("{{ route('prefect.logout') }}", {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        'Accept': 'application/json'
       }
-    }
-  </script>
+    }).then(res => res.ok ? window.location.href = "{{ route('auth.login') }}" : console.error('Logout failed'))
+      .catch(err => console.error(err));
+  }
+
+  /* ==================== ARCHIVE FUNCTIONALITY ==================== */
+  const archiveBtn = document.getElementById('archiveBtn');
+  archiveBtn.addEventListener('click', () => {
+    document.querySelectorAll('.student-checkbox:checked').forEach(cb => {
+      const row = cb.closest('tr');
+      row.style.display = 'none'; // hide archived
+      row.dataset.status = 'Archived'; // optional: mark as archived
+    });
+    selectAll.checked = false;
+  });
+</script>
+
+
 </body>
 </html>

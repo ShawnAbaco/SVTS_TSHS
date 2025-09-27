@@ -10,43 +10,22 @@
 
 </head>
 <body>
-<!-- SIDEBAR -->
-<nav class="sidebar" role="navigation">
-    <div style="text-align: center; margin-bottom: 1rem;">
-        <img src="/images/Logo.png" alt="Logo">
-        <p>ADVISER</p>
-    </div>
-    <ul>
-        <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
-        <li><a href="{{ route('parent.list') }}" ><i class="fas fa-user-friends"></i> Parent List</a></li>
-        <li>
-            <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-container">
-                <li><a href="{{ route('violation.record') }}">Violation Record</a></li>
-                <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
-                <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-container">
-                <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
-                <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
-                <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
-            </ul>
-        </li>
-        <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
-        <li><a href="{{ route('adviser.reports') }}" class="active"><i class="fas fa-chart-bar"></i> Reports</a></li>
-<li>
-    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
-</li>    </ul>
-</nav>
+<!-- Sidebar -->
+<div class="sidebar">
+  <img src="/images/Logo.png" alt="Logo">
+  <h2>PREFECT</h2>
+  <ul>
+    <div class="section-title">Main</div>
+    <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+    <li><a href="{{ route('student.list') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+    <li><a href="{{ route('parent.list') }}"><i class="fas fa-users"></i> Parent List</a></li>
+    <li><a href="{{ route('violation.record') }}"><i class="fas fa-book"></i>Violation Record</a></li>
+    <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i>Complaints</a></li>
+    <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+    <li class="active"><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+  </ul>
+</div>
 <div class="main-content">
   <!-- Page Header -->
   <div class="page-header">

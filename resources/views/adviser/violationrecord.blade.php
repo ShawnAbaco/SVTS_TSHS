@@ -5,535 +5,232 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Violation Logging</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/adviser/violationrecord.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/adviser/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/adviser/cards.css') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 <body>
 
- <!-- SIDEBAR -->
+ <!-- Sidebar -->
+<div class="sidebar">
+  <img src="/images/Logo.png" alt="Logo">
+  <h2>PREFECT</h2>
+  <ul>
+    <div class="section-title">Main</div>
+    <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+    <li><a href="{{ route('student.list') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+    <li><a href="{{ route('parent.list') }}"><i class="fas fa-users"></i> Parent List</a></li>
+    <li class="active"><a href="{{ route('violation.record') }}"><i class="fas fa-book"></i>Violation Record</a></li>
+    <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i>Complaints</a></li>
+    <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+    <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+  </ul>
+</div>
 
-<nav class="sidebar" role="navigation">
-    <div style="text-align: center; margin-bottom: 1rem;">
-        <img src="/images/Logo.png" alt="Logo">
-        <p>ADVISER</p>
-    </div>
-    <ul>
-        <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="{{ route('student.list') }}"><i class="fas fa-users"></i> Student List</a></li>
-        <li><a href="{{ route('parent.list') }}" ><i class="fas fa-user-friends"></i> Parent List</a></li>
-
-        <!-- Violations Dropdown -->
-        <li>
-            <a href="#" class="dropdown-btn"><i class="fas fa-exclamation-triangle"></i> Violations <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
-            <ul class="dropdown-container">
-                 <li><a href="{{ route('violation.record') }}" class="active">Violation Records</a></li>
-                <li><a href="{{ route('violation.appointment') }}">Violation Appointment</a></li>
-                <li><a href="{{ route('violation.anecdotal') }}">Violation Anecdotal</a></li>
-            </ul>
-        </li>
-
-        <!-- Complaints Dropdown -->
-        <li>
-            <a href="#" class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down" style="margin-left:auto;"></i></a>
-            <ul class="dropdown-container">
-                <li><a href="{{ route('complaints.all') }}">Complaints</a></li>
-                <li><a href="{{ route('complaints.appointment') }}">Complaint Appointment</a></li>
-                <li><a href="{{ route('complaints.anecdotal') }}">Complaints Anecdotal</a></li>
-            </ul>
-        </li>
-
-        <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-gavel"></i> Offense & Sanction</a></li>
-        <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-<li>
-    <form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
-</li>    </ul>
-</nav>
-
-<!-- MAIN CONTENT -->
+<!-- Main Content -->
 <div class="main-content">
-  <div class="header">
-    <h2>Violation Logging</h2>
-    <div class="actions">
-
-         @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if (session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
-    </div>
-@endif
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search records...">
+  <header class="main-header">
+    <div class="header-left"><h2>Violation Records</h2></div>
+    <div class="header-right">
+      <div class="user-info" onclick="toggleProfileDropdown()">
+        <img src="/images/user.jpg" alt="User">
+        <span>{{ Auth::user()->name }}</span>
+        <i class="fas fa-caret-down"></i>
       </div>
-      <button class="btn btn-info" onclick="openAddModal()">
-        <i class="fas fa-plus-circle"></i> Add Violation Record
-        <button class="btn-archive" id="archivesBtn">
-  <i class="fas fa-archive"></i> Archives
-</button>
-
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="{{ route('profile.settings') }}">Profile</a>
+      </div>
+    </div>
+  </header>
+  <!-- Summary Cards -->
+<div class="summary-cards">
+  <div class="summary-card">
+    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+    <div class="card-content">
+      <h3>Total Students</h3>
+      <p>{{ $students->count() }}</p>
     </div>
   </div>
-
-<!-- VIOLATION RECORDS TABLE -->
-<div class="violation-table-container">
-  <table id="violationTable">
-    <thead>
-      <tr>
-        <th style="text-align: center;">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <input type="checkbox" id="selectAll">
-            <button type="button" class="btn-trash-small" title="Delete Selected">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </th>
-        <th>Student</th>
-        <th>Violation</th>
-        <th>Incident</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Sanction</th>
-        <th>Status</th> <!-- ✅ Added Status Column -->
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @forelse($violations as $v)
-        <tr data-id="{{ $v->violation_id }}" data-student-id="{{ $v->student->student_id }}">
-
-          <td><input type="checkbox" class="rowCheckbox"></td>
-          <td>{{ $v->student->student_fname }} {{ $v->student->student_lname }}</td>
-          <td>{{ $v->offense->offense_type ?? 'N/A' }}</td>
-          <td>{{ $v->violation_incident }}</td>
-          <td>{{ \Carbon\Carbon::parse($v->violation_date)->format('M d, Y') }}</td>
-          <td>{{ \Carbon\Carbon::parse($v->violation_time)->format('h:i A') }}</td>
-          <td>{{ $v->offense->sanction_consequences ?? 'N/A' }}</td>
-          <td>
-            @if($v->status === 'active')
-              <span class="status-badge active">Active</span>
-            @else
-              <span class="status-badge inactive">Inactive</span>
-            @endif
-          </td>
-          <td>
-            <button class="btn-edit" data-id="{{ $v->violation_id }}"><i class="fas fa-edit"></i> Edit</button>
-            <button class="btn-delete" data-id="{{ $v->violation_id }}"><i class="fas fa-trash"></i> Delete</button>
-          </td>
-        </tr>
-      @empty
-        <tr>
-          <td colspan="9" style="text-align:center; padding:10px;">No violation records found.</td>
-        </tr>
-      @endforelse
-    </tbody>
-  </table>
-</div>
-
-
-<!-- ADD VIOLATION MODAL -->
-<div class="modal" id="addModal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeModal('addModal')">&times;</button>
-    <h2>Add Violation Record</h2>
-    <form id="addViolationForm" method="POST" action="{{ route('adviser.storeViolation') }}">
-      @csrf
-
-      <!-- Student Selection -->
-      <div class="form-group">
-        <label for="student">Student</label>
-        <select name="student_id" required>
-          <option value="">Select Student</option>
-          @foreach($students as $s)
-            <option value="{{ $s->student_id }}">{{ $s->student_fname }} {{ $s->student_lname }}</option>
-          @endforeach
-        </select>
-      </div>
-
-      <!-- Offense Selection -->
-      <div class="form-group">
-        <label for="offense">Offense</label>
-        <select name="offense_sanc_id" required>
-          <option value="">Select Offense</option>
-          @foreach($offenses as $o)
-            <option value="{{ $o->offense_sanc_id }}">{{ $o->offense_type }}</option>
-          @endforeach
-        </select>
-      </div>
-
-      <!-- Incident -->
-      <div class="form-group">
-        <label for="incident">Incident</label>
-        <input type="text" name="violation_incident" placeholder="Incident Details" required
-               pattern="^[A-Za-z0-9\s.,#()!?-]+$"
-               title="Only letters, numbers, spaces, commas, periods, dashes, (), !, and ? are allowed">
-      </div>
-
-      <!-- Date -->
-      <div class="form-group">
-        <label for="date">Date</label>
-        <input type="date" name="violation_date"
-               max="<?php echo date('Y-m-d'); ?>" required
-               title="Date cannot be in the future">
-      </div>
-
-      <!-- Time -->
-      <div class="form-group">
-        <label for="time">Time</label>
-        <input type="time" name="violation_time" required>
-      </div>
-
-      <!-- Save Button -->
-      <div class="form-group">
-        <button type="submit" class="btn"><i class="fas fa-save"></i> Save</button>
-      </div>
-    </form>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#28a745;"><i class="fas fa-check-circle"></i></div>
+    <div class="card-content">
+      <h3>Active</h3>
+      <p>{{ $students->where('status', 'active')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#ffc107;"><i class="fas fa-archive"></i></div>
+    <div class="card-content">
+      <h3>Cleared / Archived</h3>
+      <p>{{ $students->where('status', 'Cleared')->count() }}</p>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="card-icon" style="color:#007bff;"><i class="fas fa-layer-group"></i></div>
+    <div class="card-content">
+      <h3>Sections</h3>
+      <p>{{ $violations->count() }}</p>
+    </div>
   </div>
 </div>
 
-<!-- EDIT VIOLATION MODAL -->
-<div class="modal" id="editModal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
-    <h2>Edit Violation Record</h2>
-    <form id="editViolationForm">
-      @csrf
-      @method('PUT')
-      <input type="hidden" name="violation_id" id="editViolationId">
-
-      <div class="form-group">
-        <label for="student">Student</label>
-        <select name="student_id" id="editStudent" required>
-          <option value="">Select Student</option>
-          @foreach($students as $s)
-            <option value="{{ $s->student_id }}">{{ $s->student_fname }} {{ $s->student_lname }}</option>
-          @endforeach
-        </select>
+  <!-- Table Controls -->
+  <div class="table-container">
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+      <div>
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search students..." class="form-control">
       </div>
-
-      <div class="form-group">
-        <label for="offense">Offense</label>
-        <select name="offense_sanc_id" id="editOffense" required>
-          <option value="">Select Offense</option>
-          @foreach($offenses as $o)
-            <option value="{{ $o->offense_sanc_id }}">{{ $o->offense_type }}</option>
-          @endforeach
-        </select>
+      <div style="display:flex; gap:10px;">
+        <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Add Violation</button>
+        <button id="archiveBtn" class="btn-warning"><i class="fas fa-archive"></i> Archive</button>
+        <button id="PrntBtn" class="btn-primary"><i class="fas fa-print"></i> Print</button>
       </div>
-
-      <div class="form-group">
-        <label for="incident">Incident</label>
-        <input type="text" name="violation_incident" id="editIncident" required>
-      </div>
-
-      <div class="form-group">
-        <label for="date">Date</label>
-        <input type="date" name="violation_date" id="editDate" required>
-      </div>
-
-      <div class="form-group">
-        <label for="time">Time</label>
-        <input type="time" name="violation_time" id="editTime" required>
-      </div>
-
-      <div class="form-group">
-        <button type="submit" class="btn"><i class="fas fa-save"></i> Update</button>
-      </div>
-    </form>
-  </div>
-</div>
-<!-- ARCHIVE MODAL -->
-<div class="modal" id="archiveModal">
-  <div class="modal-content" style="max-width: 800px; width: 90%;">
-    <button class="close-btn" onclick="closeModal('archiveModal')">&times;</button>
-    <h2>Archived Violations</h2>
-
-    <!-- Search in archive -->
-    <div class="search-box" style="margin-bottom: 10px;">
-      <input type="text" id="archiveSearch" placeholder="Search archived records...">
     </div>
 
-    <!-- Archive Table -->
-    <div class="violation-table-container">
-      <table id="archiveTable">
+
+    <!-- Violation Table -->
+    <div class="student-table-wrapper">
+      <table id="violationTable" class="fixed-header">
         <thead>
           <tr>
-            <th>Student</th>
-            <th>Violation</th>
-            <th>Incident</th>
-            <th>Date</th>
-            <th>Time</th>
+            <th><input type="checkbox" id="selectAll"></th>
+            <th>ID</th>
+            <th>Student Name</th>
+            <th>Grade</th>
+            <th>Section</th>
+            <th>Offense</th>
+            <th>Category</th>
+            <th>Points</th>
             <th>Sanction</th>
-            <th>Actions</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Filled dynamically -->
+          <!-- Sample row -->
+          <tr data-description="Late submission" data-sanction="Warning - 1 point" onclick="showViolationInfo(this)">
+            <td><input type="checkbox" class="rowCheckbox"></td>
+            <td>1</td><td>Juan Dela Cruz</td><td>10</td><td>A</td>
+            <td>Late Submission</td><td>Minor</td><td>1</td><td>Warning</td><td>Active</td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<!-- CREATE VIOLATION MODAL -->
+<div class="modal" id="createModal">
+  <div class="modal-content">
+    <span class="close" id="closeCreate">&times;</span>
+    <form id="createForm" class="form-grid">
+      <div class="form-column">
+        <div class="form-group"><label>Student Name</label><input type="text" name="studentName" required></div>
+        <div class="form-group"><label>Grade</label><input type="number" name="grade" min="1" max="12" required></div>
+        <div class="form-group"><label>Section</label><input type="text" name="section" required></div>
+        <div class="form-group"><label>Offense</label><input type="text" name="offense" required></div>
+      </div>
+      <div class="form-column">
+        <div class="form-group"><label>Category</label>
+          <select name="category"><option>Minor</option><option>Major</option><option>Severe</option></select>
+        </div>
+        <div class="form-group"><label>Points</label><input type="number" name="points" min="1" required></div>
+        <div class="form-group"><label>Sanction</label><input type="text" name="sanction" required></div>
+        <div class="form-group"><label>Description</label><textarea name="description"></textarea></div>
+      </div>
+      <div class="form-actions" style="margin-top:10px;">
+        <button type="button" class="btn-secondary" id="closeCreateBtn">Cancel</button>
+        <button type="submit" class="btn-create">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- INFO MODAL -->
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <h3>Violation Info</h3>
+    <div id="infoModalBody"></div>
+    <div style="text-align:right; margin-top:10px;">
+      <button class="btn-secondary" onclick="closeInfoModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-  const archive = []; // store archived rows
-
-  // Trash button (move selected to archive)
-  document.querySelector(".btn-trash-small").addEventListener("click", function () {
-    const rows = document.querySelectorAll("#violationTable tbody tr");
-    rows.forEach(row => {
-      const checkbox = row.querySelector(".rowCheckbox");
-      if (checkbox && checkbox.checked) {
-        archive.push(row.innerHTML); // save row content
-        row.remove(); // remove from main table
-      }
-    });
-    alert("Selected records moved to archive.");
-  });
-
-  // Open Archive Modal
-  document.getElementById("archivesBtn").addEventListener("click", function () {
-    const tbody = document.querySelector("#archiveTable tbody");
-    tbody.innerHTML = "";
-
-    archive.forEach((rowHtml, index) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = rowHtml;
-
-      // replace Actions column with Restore button
-      tr.querySelector("td:last-child").innerHTML =
-        `<button class="btn-info restoreBtn" data-index="${index}">
-           <i class="fas fa-undo"></i> Restore
-         </button>`;
-
-      tbody.appendChild(tr);
-    });
-
-    openModal("archiveModal");
-  });
-
-  // Restore from archive
-  document.querySelector("#archiveTable tbody").addEventListener("click", function (e) {
-    if (e.target.closest(".restoreBtn")) {
-      const btn = e.target.closest(".restoreBtn");
-      const index = btn.getAttribute("data-index");
-
-      // restore row to main table
-      const tbody = document.querySelector("#violationTable tbody");
-      const tr = document.createElement("tr");
-      tr.innerHTML = archive[index];
-      tbody.appendChild(tr);
-
-      // remove from archive
-      archive.splice(index, 1);
-      btn.closest("tr").remove();
-    }
-  });
-
-  // Search inside archive
-  document.getElementById("archiveSearch").addEventListener("keyup", function () {
-    let filter = this.value.toLowerCase();
-    document.querySelectorAll("#archiveTable tbody tr").forEach(row => {
-      let text = row.innerText.toLowerCase();
-      row.style.display = text.includes(filter) ? "" : "none";
-    });
-  });
-
-  // --- Keep modal helpers ---
-  window.openModal = function(id) {
-    document.getElementById(id).classList.add("show");
-  };
-  window.closeModal = function(id) {
-    document.getElementById(id).classList.remove("show");
-  };
-});
-     // Dropdown functionality - auto close others & scroll
-const dropdowns = document.querySelectorAll('.dropdown-btn');
-dropdowns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-
-        // close all other dropdowns
-        dropdowns.forEach(otherBtn => {
-            if (otherBtn !== this) {
-                otherBtn.nextElementSibling.classList.remove('show');
-                otherBtn.querySelector('.fa-caret-down').style.transform = 'rotate(0deg)';
-            }
-        });
-
-        // toggle clicked dropdown
-        const container = this.nextElementSibling;
-        container.classList.toggle('show');
-        this.querySelector('.fa-caret-down').style.transform =
-            container.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-
-        // scroll into view if dropdown is opened
-        if(container.classList.contains('show')){
-            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-
-  // --- Modal controls ---
-  function openModal(id) { document.getElementById(id).classList.add("show"); }
-  function closeModal(id) { document.getElementById(id).classList.remove("show"); }
-  window.onclick = function(event) {
-    let addModal = document.getElementById("addModal");
-    let editModal = document.getElementById("editModal");
-    if (event.target === addModal) closeModal("addModal");
-    if (event.target === editModal) closeModal("editModal");
-  };
-
-  // --- Open Add Modal ---
-  window.openAddModal = function() { openModal("addModal"); };
-
-  // --- Live Search ---
-  document.getElementById("searchInput").addEventListener("keyup", function() {
-    let filter = this.value.toLowerCase();
-    document.querySelectorAll("#violationTable tbody tr").forEach(row => {
-      let text = row.innerText.toLowerCase();
-      row.style.display = text.includes(filter) ? "" : "none";
-    });
-  });
-
-  // --- Logout ---
-  window.logout = function() {
-    if (confirm("Are you sure you want to log out?")) {
-      window.location.href = "/adviser/login";
-    }
-  };
-
-  // --- Handle Add (AJAX POST) ---
-  document.getElementById("addViolationForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-
-    fetch(this.action, {
-      method: "POST",
-      headers: { "X-CSRF-TOKEN": csrfToken },
-      body: formData
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          const v = data.violation;
-          let tbody = document.querySelector("#violationTable tbody");
-
-          let newRow = document.createElement("tr");
-          newRow.setAttribute("data-id", v.violation_id);
-          newRow.setAttribute("data-student-id", v.violator_id);
-
-          newRow.innerHTML = `
-            <td>${v.student ? v.student.student_fname + " " + v.student.student_lname : "N/A"}</td>
-            <td>${v.offense ? v.offense.offense_type : "N/A"}</td>
-            <td>${v.violation_incident}</td>
-            <td>${v.violation_date}</td>
-            <td>${v.violation_time}</td>
-            <td>${v.offense ? v.offense.sanction_consequences : "N/A"}</td>
-            <td>
-              <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-              <button class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
-            </td>
-          `;
-          tbody.appendChild(newRow);
-
-          closeModal("addModal");
-          document.getElementById("addViolationForm").reset();
-          alert("Violation added successfully!");
-        }
-      })
-      .catch(err => console.error("Error:", err));
-  });
-
-  // --- Event Delegation for Edit & Delete ---
-  document.querySelector("#violationTable tbody").addEventListener("click", function(e) {
-    const row = e.target.closest("tr");
-    if (!row) return;
-
-    // Handle Edit
-    if (e.target.closest(".btn-edit")) {
-      const id = row.getAttribute("data-id");
-      const studentId = row.getAttribute("data-student-id");
-      const cells = row.querySelectorAll("td");
-
-      document.getElementById("editViolationId").value = id;
-      document.getElementById("editStudent").value = studentId;
-      document.getElementById("editIncident").value = cells[2].innerText;
-      document.getElementById("editDate").value = cells[3].innerText;
-      document.getElementById("editTime").value = cells[4].innerText;
-
-      openModal("editModal");
-    }
-
-    // Handle Delete
-    if (e.target.closest(".btn-delete")) {
-      if (!confirm("Are you sure you want to delete this violation?")) return;
-      const id = row.getAttribute("data-id");
-
-      fetch(`/adviser/violations/${id}`, {
-        method: "DELETE",
-        headers: { "X-CSRF-TOKEN": csrfToken }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          alert("Violation deleted successfully!");
-          row.remove();
-        }
-      })
-      .catch(err => console.error("Error:", err));
-    }
-  });
-
-  // --- Handle Update (AJAX PUT) ---
-  document.getElementById("editViolationForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const id = document.getElementById("editViolationId").value;
-    const formData = new FormData(this);
-
-    fetch(`/adviser/violation/${id}`, {
-      method: "POST",
-      headers: { "X-CSRF-TOKEN": csrfToken, "X-HTTP-Method-Override": "PUT" },
-      body: formData
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          alert("Violation updated successfully!");
-          location.reload();
-        }
-      });
+// ------------------ SIDEBAR DROPDOWN ------------------
+document.querySelectorAll('.dropdown-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+    const dropdown = btn.nextElementSibling;
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
   });
 });
-// --- Select All Checkboxes ---
-document.getElementById("selectAll").addEventListener("change", function () {
-  const checkboxes = document.querySelectorAll(".rowCheckbox");
-  checkboxes.forEach(cb => cb.checked = this.checked);
-});
 
-// --- Keep Select All in sync ---
-document.addEventListener("change", function (e) {
-  if (e.target.classList.contains("rowCheckbox")) {
-    const all = document.querySelectorAll(".rowCheckbox");
-    const checked = document.querySelectorAll(".rowCheckbox:checked");
-    document.getElementById("selectAll").checked = all.length === checked.length;
-  }
-});
+// ------------------ PROFILE DROPDOWN ------------------
+function toggleProfileDropdown() {
+  document.getElementById('profileDropdown').classList.toggle('show');
+}
 
+// ------------------ PRINT TABLE ------------------
+document.getElementById('PrntBtn').addEventListener('click', () => window.print());
+
+// ------------------ SELECT ALL CHECKBOX ------------------
+function updateRowCheckboxes() {
+  const selectAll = document.getElementById('selectAll');
+  const rowCheckboxes = document.querySelectorAll('.rowCheckbox');
+  if (selectAll) selectAll.addEventListener('change', () => rowCheckboxes.forEach(cb => cb.checked = selectAll.checked));
+}
+updateRowCheckboxes();
+
+// ------------------ SHOW INFO MODAL ------------------
+function showViolationInfo(row) {
+  const cells = row.children;
+  document.getElementById('infoModalBody').innerHTML = `
+    <p><strong>ID:</strong> ${cells[1].innerText}</p>
+    <p><strong>Student:</strong> ${cells[2].innerText}</p>
+    <p><strong>Grade:</strong> ${cells[3].innerText}</p>
+    <p><strong>Section:</strong> ${cells[4].innerText}</p>
+    <p><strong>Offense:</strong> ${cells[5].innerText}</p>
+    <p><strong>Category:</strong> ${cells[6].innerText}</p>
+    <p><strong>Points:</strong> ${cells[7].innerText}</p>
+    <p><strong>Sanction:</strong> ${cells[8].innerText}</p>
+    <p><strong>Description:</strong> ${row.dataset.description}</p>
+  `;
+  document.getElementById('infoModal').classList.add('show-modal');
+}
+function closeInfoModal() { document.getElementById('infoModal').classList.remove('show-modal'); }
+
+// ------------------ CREATE MODAL ------------------
+const createBtn = document.getElementById('createBtn');
+const createModal = document.getElementById('createModal');
+const closeCreateBtn = document.getElementById('closeCreateBtn');
+createBtn.addEventListener('click', () => createModal.classList.add('show-modal'));
+closeCreateBtn.addEventListener('click', () => createModal.classList.remove('show-modal'));
+document.getElementById('closeCreate').addEventListener('click', () => createModal.classList.remove('show-modal'));
+
+// ------------------ SUBMIT CREATE FORM ------------------
+const createForm = document.getElementById('createForm');
+let violationId = document.querySelectorAll('#violationTable tbody tr').length + 1;
+createForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(createForm).entries());
+  const row = document.createElement('tr');
+  row.dataset.description = data.description;
+  row.innerHTML = `
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>${violationId}</td><td>${data.studentName}</td><td>${data.grade}</td><td>${data.section}</td>
+    <td>${data.offense}</td><td>${data.category}</td><td>${data.points}</td><td>${data.sanction}</td><td>Active</td>
+  `;
+  row.addEventListener('click', () => showViolationInfo(row));
+  document.querySelector('#violationTable tbody').appendChild(row);
+  violationId++;
+  createForm.reset();
+  createModal.classList.remove('show-modal');
+  updateRowCheckboxes();
+});
 </script>
-
-
 </body>
 </html>
