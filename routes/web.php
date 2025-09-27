@@ -82,7 +82,21 @@ Route::patch('/students/bulk-update-status', [StudentController::class, 'restore
     });
 
 
+    // NEW VIOLATION RECORD CONTROLLER
+    Route::get('/violations/create', [ViolationRecordController::class, 'create'])->name('violations.create');
+Route::post('/violations', [ViolationRecordController::class, 'store'])->name('violations.store');
+
+Route::post('/violations/search-students', [ViolationRecordController::class, 'searchStudents'])->name('violations.search-students');
+Route::post('/violations/search-offenses', [ViolationRecordController::class, 'searchOffenses'])->name('violations.search-offenses');
+
+Route::get('/violations/get-sanction', [ViolationRecordController::class, 'getSanction'])->name('violations.get-sanction');
+
 });
+
+
+
+
+
 
 
 

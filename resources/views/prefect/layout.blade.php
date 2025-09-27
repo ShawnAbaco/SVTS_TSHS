@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/prefect/createViolation.css') }}">
 
 </head>
 <body>
@@ -43,7 +44,7 @@
     </ul>
   </div>
 
-  
+
  <!-- ✅ Main content area (for child pages) -->
   <main class="main-content">
     @yield('content')
