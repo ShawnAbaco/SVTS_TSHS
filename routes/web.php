@@ -91,6 +91,8 @@ Route::post('/violations/search-offenses', [ViolationRecordController::class, 's
 
 Route::get('/violations/get-sanction', [ViolationRecordController::class, 'getSanction'])->name('violations.get-sanction');
 
+
+
 });
 
 
@@ -137,10 +139,27 @@ Route::patch('/students/bulk-update-status', [StudentController::class, 'bulkUpd
         Route::put('/adviser/parents/{id}', [ParentController::class, 'parentUpdate'])->name('parents.update');
         Route::delete('/adviser/parents/{id}', [ParentController::class, 'destroyParent'])->name('parents.destroy');
 
-        // Violation CRUD
-        Route::post('/violations', [ViolationRecordController::class, 'storeViolation'])->name('adviser.storeViolation');
-        Route::put('/violations/{id}', [ViolationRecordController::class, 'updateViolation'])->name('adviser.violations.update');
-        Route::delete('/violations/{id}', [ViolationRecordController::class, 'destroyViolation'])->name('adviser.violations.destroy');
+
+
+
+
+            // NEW VIOLATION RECORD CONTROLLER ADVISER
+    Route::get('/violations/create', [ViolationRecordController::class, 'Acreate'])->name('Aviolations.create');
+Route::post('/violations', [ViolationRecordController::class, 'Astore'])->name('Aviolations.store');
+
+Route::post('/violations/search-students', [ViolationRecordController::class, 'AsearchStudents'])->name('Aviolations.search-students');
+Route::post('/violations/search-offenses', [ViolationRecordController::class, 'AsearchOffenses'])->name('Aviolations.search-offenses');
+
+Route::get('/violations/get-sanction', [ViolationRecordController::class, 'AgetSanction'])->name('Aviolations.get-sanction');
+
+
+
+
+
+        // // Violation CRUD
+        // Route::post('/violations', [ViolationRecordController::class, 'storeViolation'])->name('adviser.storeViolation');
+        // Route::put('/violations/{id}', [ViolationRecordController::class, 'updateViolation'])->name('adviser.violations.update');
+        // Route::delete('/violations/{id}', [ViolationRecordController::class, 'destroyViolation'])->name('adviser.violations.destroy');
 
         // Violation Anecdotal
         Route::get('/violationanecdotal', [AdviserController::class, 'violationanecdotal'])->name('violation.anecdotal');

@@ -15,7 +15,7 @@
  <!-- Sidebar -->
 <div class="sidebar">
   <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>
+  <h2>Adviser</h2>
   <ul>
     <div class="section-title">Main</div>
     <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
@@ -84,7 +84,7 @@
         <input type="text" id="searchInput" placeholder="Search students..." class="form-control">
       </div>
       <div style="display:flex; gap:10px;">
-<a href="{{ route('violations.create') }}" class="btn-create" id="createBtn">
+<a href="{{ route('Aviolations.create') }}" class="btn-create" id="createBtn">
   <i class="fas fa-plus"></i> Add Violation
 </a>
         <button id="archiveBtn" class="btn-warning"><i class="fas fa-archive"></i> Archive</button>

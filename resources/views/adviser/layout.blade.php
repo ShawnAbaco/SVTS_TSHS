@@ -7,7 +7,9 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="{{ asset('css/adviser/dashboard.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/adviser/sidebar.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/prefect/createViolation.css') }}">
+
 </head>
 <body>
 
@@ -53,19 +55,7 @@
   {{-- Main content wrapper --}}
   <main class="main-content">
 
-    {{-- Header / Topbar --}}
-    <div class="main-topbar">
-      <h2 class="dashboard-title">@yield('title', 'Dashboard Overview')</h2>
-      <div class="user-info" onclick="toggleProfileDropdown()">
-        <img id="profileImage" src="https://i.pravatar.cc/70" alt="Profile" />
-        <span>junald gwapo</span>
-        <ul class="profile-dropdown" id="profileDropdown">
-          <li><a href="#">Change Profile</a></li>
-          <li><a href="#">Change Password</a></li>
-          <li><a href="#">Change Email</a></li>
-        </ul>
-      </div>
-    </div>
+
 
     {{-- Page content --}}
     @yield('content')
