@@ -84,7 +84,9 @@
         <input type="text" id="searchInput" placeholder="Search students..." class="form-control">
       </div>
       <div style="display:flex; gap:10px;">
-        <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Add Violation</button>
+<a href="{{ route('violations.create') }}" class="btn-create" id="createBtn">
+  <i class="fas fa-plus"></i> Add Violation
+</a>
         <button id="archiveBtn" class="btn-warning"><i class="fas fa-archive"></i> Archive</button>
         <button id="PrntBtn" class="btn-primary"><i class="fas fa-print"></i> Print</button>
       </div>
@@ -204,33 +206,33 @@ function showViolationInfo(row) {
 function closeInfoModal() { document.getElementById('infoModal').classList.remove('show-modal'); }
 
 // ------------------ CREATE MODAL ------------------
-const createBtn = document.getElementById('createBtn');
-const createModal = document.getElementById('createModal');
-const closeCreateBtn = document.getElementById('closeCreateBtn');
-createBtn.addEventListener('click', () => createModal.classList.add('show-modal'));
-closeCreateBtn.addEventListener('click', () => createModal.classList.remove('show-modal'));
-document.getElementById('closeCreate').addEventListener('click', () => createModal.classList.remove('show-modal'));
+// const createBtn = document.getElementById('createBtn');
+// const createModal = document.getElementById('createModal');
+// const closeCreateBtn = document.getElementById('closeCreateBtn');
+// createBtn.addEventListener('click', () => createModal.classList.add('show-modal'));
+// closeCreateBtn.addEventListener('click', () => createModal.classList.remove('show-modal'));
+// document.getElementById('closeCreate').addEventListener('click', () => createModal.classList.remove('show-modal'));
 
 // ------------------ SUBMIT CREATE FORM ------------------
-const createForm = document.getElementById('createForm');
-let violationId = document.querySelectorAll('#violationTable tbody tr').length + 1;
-createForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(createForm).entries());
-  const row = document.createElement('tr');
-  row.dataset.description = data.description;
-  row.innerHTML = `
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>${violationId}</td><td>${data.studentName}</td><td>${data.grade}</td><td>${data.section}</td>
-    <td>${data.offense}</td><td>${data.category}</td><td>${data.points}</td><td>${data.sanction}</td><td>Active</td>
-  `;
-  row.addEventListener('click', () => showViolationInfo(row));
-  document.querySelector('#violationTable tbody').appendChild(row);
-  violationId++;
-  createForm.reset();
-  createModal.classList.remove('show-modal');
-  updateRowCheckboxes();
-});
+// const createForm = document.getElementById('createForm');
+// let violationId = document.querySelectorAll('#violationTable tbody tr').length + 1;
+// createForm.addEventListener('submit', e => {
+//   e.preventDefault();
+//   const data = Object.fromEntries(new FormData(createForm).entries());
+//   const row = document.createElement('tr');
+//   row.dataset.description = data.description;
+//   row.innerHTML = `
+//     <td><input type="checkbox" class="rowCheckbox"></td>
+//     <td>${violationId}</td><td>${data.studentName}</td><td>${data.grade}</td><td>${data.section}</td>
+//     <td>${data.offense}</td><td>${data.category}</td><td>${data.points}</td><td>${data.sanction}</td><td>Active</td>
+//   `;
+//   row.addEventListener('click', () => showViolationInfo(row));
+//   document.querySelector('#violationTable tbody').appendChild(row);
+//   violationId++;
+//   createForm.reset();
+//   createModal.classList.remove('show-modal');
+//   updateRowCheckboxes();
+// });
 </script>
 </body>
 </html>
