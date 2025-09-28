@@ -1,0 +1,188 @@
+/* ===============================
+   🗃️ ARCHIVE MODAL STYLING
+   =============================== */
+
+/* 🔲 Modal Container */
+.modal {
+  display: none; /* toggle with JS */
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* 📦 Modal Box */
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 🏷️ Header */
+.modal-header {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #003366;
+  background: #f1f5ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 18px;
+  border-bottom: 2px solid #003366;
+}
+
+/* 📄 Body */
+.modal-body {
+  padding: 20px 25px;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+/* 🔍 Search & Bulk Actions */
+.modal-body .action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+/* Checkbox Label */
+.modal-body label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-body input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #007bff;
+}
+
+/* Search Bar */
+.modal-body input[type="search"] {
+  flex: 1 1 220px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.modal-body input[type="search"]:focus {
+  border-color: #003366;
+  box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.1);
+}
+
+/* 📋 Table */
+.modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.modal-body thead {
+  background: #003366;
+  color: #fff;
+}
+
+.modal-body th,
+.modal-body td {
+  padding: 12px;
+  text-align: left;
+}
+
+.modal-body th:first-child,
+.modal-body td:first-child {
+  text-align: center;
+}
+
+.modal-body tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease;
+}
+
+.modal-body tbody tr:hover {
+  background: #f7faff;
+}
+
+/* Scrollable table */
+.modal-body .table-wrapper {
+  overflow-y: auto;
+  max-height: 350px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}
+
+/* ⚠️ Note */
+.modal-note {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+  color: #555;
+}
+
+/* 🧭 Footer Buttons */
+.modal-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding-bottom: 20px;
+}
+
+/* 🎨 Button Styles */
+.modal-footer button {
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease;
+}
+
+.btn-secondary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #005fcc;
+}
+
+.btn-danger {
+  background: #e53935;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c62828;
+}
+
+.btn-close {
+  background: #999;
+  color: white;
+}
+
+.btn-close:hover {
+  background: #777;
+}
+
+/* ✨ Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
