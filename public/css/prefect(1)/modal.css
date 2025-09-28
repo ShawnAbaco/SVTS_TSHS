@@ -223,3 +223,112 @@
     font-size: 1rem;
   }
 }
+/* ==========================
+   Pagination Styles
+========================== */
+/* =========================
+   PAGINATION WRAPPER CENTERED
+========================= */
+.pagination-wrapper {
+  display: flex;
+  flex-direction: column; /* stack summary above buttons */
+  align-items: center;
+  gap: 12px;
+  margin-top: 25px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Summary text */
+.pagination-summary {
+  background-color: #f9f9f9;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+  min-width: 220px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Pagination links container */
+.pagination-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+/* Pagination buttons / links */
+.pagination-links a,
+.pagination-links button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 50px; /* pill-style */
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Hover effect */
+.pagination-links a:hover,
+.pagination-links button:hover {
+  background-color: #4b0000;
+  color: #fff;
+  border-color: #4b0000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Active page */
+.pagination-links .active {
+  background-color: #4b0000;
+  color: #fff;
+  border-color: #4b0000;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+/* Disabled buttons */
+.pagination-links .disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Arrow SVG inside buttons */
+.pagination-links svg {
+  width: 0.8em;
+  height: 0.8em;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .pagination-wrapper {
+    gap: 8px;
+  }
+
+  .pagination-summary {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    min-width: 180px;
+  }
+
+  .pagination-links a,
+  .pagination-links button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}

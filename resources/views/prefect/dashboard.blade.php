@@ -4,6 +4,7 @@
 <div class="main-container">
 
 <style>
+    
 .toolbar {
     display: flex;             /* make it a flex container */
     justify-content: center;   /* horizontal center */
@@ -191,4 +192,20 @@
   window.onclick = (event) => { if(event.target === modal) modal.style.display = "none"; }
 
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebarItems = document.querySelectorAll('.sidebar ul li');
+
+  sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Remove 'active' from all
+      sidebarItems.forEach(i => i.classList.remove('active'));
+
+      // Add 'active' to the clicked item
+      item.classList.add('active');
+    });
+  });
+});
+</script>
+
 @endsection

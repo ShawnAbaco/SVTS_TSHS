@@ -225,7 +225,7 @@
 document.getElementById('searchInput').addEventListener('input', function() {
     const filter = this.value.toLowerCase();
     const tableBody = document.getElementById('tableBody');
-    const rows = tableBody.querySelectorAll('tr');
+    const rows = tableBody.querySelectorAll('tr:not(.no-data-row)'); // Ignore the "No records found" row
 
     let visibleCount = 0;
 
@@ -240,8 +240,8 @@ document.getElementById('searchInput').addEventListener('input', function() {
         }
     });
 
-    // Check if "No records found" row exists
-    let noDataRow = tableBody.querySelector('.no-data-row');
+    // Remove existing "No records found" row
+    const noDataRow = tableBody.querySelector('.no-data-row');
     if(visibleCount === 0) {
         if(!noDataRow) {
             const newRow = document.createElement('tr');
@@ -253,6 +253,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
         if(noDataRow) noDataRow.remove();
     }
 });
+
 
 
 

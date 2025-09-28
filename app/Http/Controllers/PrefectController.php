@@ -52,20 +52,25 @@ class PrefectController extends Controller
 
     public function studentmanagement()
 {
+
+
     // Get students with status active, inactive, or completed, including their adviser
-    $students = Student::with('adviser')
-        ->whereIn('status', ['active' , 'completed'])
-        ->get();
+    // $students = Student::with('adviser')
+    //     ->whereIn('status', ['active' , 'completed'])
+    //     ->get();
 
-    // Get unique sections from advisers
-    $sections = Adviser::select('adviser_section')->distinct()->pluck('adviser_section');
+    // // Get unique sections from advisers
+    // $sections = Adviser::select('adviser_section')->distinct()->pluck('adviser_section');
 
-    // Get archived students (status = 'Cleared') with their adviser
-    $archivedStudents = Student::with('adviser')
-        ->where('status', 'Cleared')
-        ->get();
+    // // Get archived students (status = 'Cleared') with their adviser
+    // $archivedStudents = Student::with('adviser')
+    //     ->where('status', 'Cleared')
+    //     ->get();
 
-    return view('prefect.studentmanagement', compact('students', 'sections', 'archivedStudents'));
+    // return view('prefect.studentmanagement', compact('students', 'sections', 'archivedStudents'));
+    $students = Student::paginate(10); // or use ->get() if no pagination
+return view('prefect.student', compact('students'));
+
 }
 
     public function destroy($studentId)
