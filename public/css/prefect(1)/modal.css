@@ -1,5 +1,6 @@
 /* Hide all modals by default */
 .modal {
+
   display: none; /* hidden until triggered */
   position: fixed;
   top: 0;
@@ -11,6 +12,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
 }
 
 .modal-content {
@@ -21,6 +23,7 @@
   max-width: 600px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   position: relative;
+
 }
 .modal.show {
   display: flex;

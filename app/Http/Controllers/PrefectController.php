@@ -50,28 +50,79 @@ class PrefectController extends Controller
         return view('prefect.dashboard', compact('advisers'));
     }
 
-    public function studentmanagement()
+//     public function studentmanagement()
+// {
+
+
+//     // Get students with status active, inactive, or completed, including their adviser
+//     // $students = Student::with('adviser')
+//     //     ->whereIn('status', ['active' , 'completed'])
+//     //     ->get();
+
+//     // // Get unique sections from advisers
+//     // $sections = Adviser::select('adviser_section')->distinct()->pluck('adviser_section');
+
+//     // // Get archived students (status = 'Cleared') with their adviser
+//     // $archivedStudents = Student::with('adviser')
+//     //     ->where('status', 'Cleared')
+//     //     ->get();
+
+//     // return view('prefect.studentmanagement', compact('students', 'sections', 'archivedStudents'));
+//     $students = Student::paginate(10); // or use ->get() if no pagination
+// return view('prefect.student', compact('students'));
+
+// }
+
+public function studentmanagement()
 {
+    // =========================
+    // Paginated Students
+    // =========================
+    $students = Student::paginate(10);
+        $sections = Adviser::select('adviser_section')->distinct()->pluck('adviser_section');
 
 
-    // Get students with status active, inactive, or completed, including their adviser
-    // $students = Student::with('adviser')
-    //     ->whereIn('status', ['active' , 'completed'])
-    //     ->get();
+    // =========================
+    // Summary Cards Data
+    // =========================
 
-    // // Get unique sections from advisers
-    // $sections = Adviser::select('adviser_section')->distinct()->pluck('adviser_section');
+    // Total students
+    $totalStudents = Student::count();
 
-    // // Get archived students (status = 'Cleared') with their adviser
-    // $archivedStudents = Student::with('adviser')
-    //     ->where('status', 'Cleared')
-    //     ->get();
+    // Active students
+    $activeStudents = Student::where('status', 'active')->count();
 
-    // return view('prefect.studentmanagement', compact('students', 'sections', 'archivedStudents'));
-    $students = Student::paginate(10); // or use ->get() if no pagination
-return view('prefect.student', compact('students'));
+    // Completed students
+    $completedStudents = Student::where('status', 'completed')->count();
 
+    // Gender breakdown
+    $maleStudents = Student::where('student_sex', 'male')->count();
+    $femaleStudents = Student::where('student_sex', 'female')->count();
+    $otherStudents = Student::where('student_sex', 'other')->count();
+
+    // Violations today
+    $violationsToday = ViolationRecord::whereDate('violation_date', now())->count();
+
+    // Pending appointments
+    $pendingAppointments = ViolationAppointment::where('violation_app_status', 'Pending')->count();
+
+    // =========================
+    // Pass data to Blade view
+    // =========================
+    return view('prefect.student', compact(
+        'students',
+        'sections',
+        'totalStudents',
+        'activeStudents',
+        'completedStudents',
+        'maleStudents',
+        'femaleStudents',
+        'otherStudents',
+        'violationsToday',
+        'pendingAppointments'
+    ));
 }
+
 
     public function destroy($studentId)
 {

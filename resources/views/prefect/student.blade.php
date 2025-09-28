@@ -14,21 +14,28 @@
     </div>
   </div>
 
-  <!-- Summary Cards -->
-  <div class="summary">
-    <div class="card">
-      <h2>55</h2>
-      <p>Total Students</p>
-    </div>
-    <div class="card">
-      <h2>12</h2>
-      <p>Violations Today</p>
-    </div>
-    <div class="card">
-      <h2>11</h2>
-      <p>Pending Appointments</p>
-    </div>
+<div class="summary">
+  <div class="card">
+    <h2>{{ $totalStudents }}</h2>
+    <p>Total Students</p>
   </div>
+  <div class="card">
+    <h2>{{ $activeStudents }}</h2>
+    <p>Active Students</p>
+  </div>
+
+  <div class="card">
+    <h2>{{ $maleStudents }}</h2>
+    <p>Male Students</p>
+  </div>
+  <div class="card">
+    <h2>{{ $femaleStudents }}</h2>
+    <p>Female Students</p>
+  </div>
+
+</div>
+
+
 
   <!-- Bulk Action / Select Options -->
  <div class="select-options">
@@ -38,15 +45,20 @@
       <span>Select All</span>
     </label>
 
-    <!-- Dropdown Button -->
-    <div class="dropdown">
-      <button class="btn-info dropdown-btn">⬇️ View Records</button>
-      <div class="dropdown-content">
-        <a href="#" id="violationRecords">Violation Records</a>
-        <a href="#" id="violaitonAppointments">Violation Appointments</a>
-        <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
-      </div>
-    </div>
+<!-- Dropdown Button -->
+<div class="dropdown">
+  <!-- Section Filter Dropdown -->
+<div class="section-filter">
+  <select id="sectionSelect" class="btn-info">
+    <option value="">All Sections</option>
+    @foreach($sections as $section)
+      <option value="{{ $section }}">{{ $section }}</option>
+    @endforeach
+  </select>
+</div>
+
+</div>
+
   </div>
 
 
@@ -158,7 +170,8 @@
               <th>Date</th>
             </tr>
           </thead>
-          <tbody>
+<tbody id="archiveTableBody">
+
             <tr>
               <td><input type="checkbox" class="archivedCheckbox"></td>
               <td>3</td>
@@ -192,8 +205,6 @@
     </div>
   </div>
 </div>
-
-
 
 <script>
 
@@ -402,5 +413,8 @@ document.getElementById('deleteArchiveBtn').addEventListener('click', () => {
 
 
 
+
 </script>
+
+
 @endsection
