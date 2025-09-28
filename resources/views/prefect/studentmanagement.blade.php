@@ -87,9 +87,10 @@
       <!-- Table Header with Controls -->
       <div class="table-header">
         <div class="table-controls">
-          <h3>Student Table</h3>
-        <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
-      </div>
+<h3 style="margin-left: 10px;">Search</h3>
+
+        <input type="text" id="searchInput" placeholder="Search student..." class="form-control">
+        </div>
 
          <div style="display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 0px;margin-top: 0px;">
   <select id="sectionFilter" class="form-select" style="max-width:200px;">

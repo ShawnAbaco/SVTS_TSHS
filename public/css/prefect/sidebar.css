@@ -120,9 +120,10 @@ body {
   z-index: 900;
 }
 .main-header h2 {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: bold;
     color: white;
+
 }
 
 .header-right { display: flex; align-items: center; gap: 15px; position: relative; }
@@ -304,7 +305,10 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
   background: rgba(0,0,0,0.5);
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 20;
+        padding: 20px;
+
+
 }
 .modal.show-modal { display: flex; }
 .modal-content {
@@ -320,12 +324,33 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.modal-header, .modal-footer {
-  display: flex; justify-content: space-between; align-items: center;
+.modal-header {
+
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #003366;
+      text-align: center;
+
+} .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   margin-bottom: 10px;
+
+
+
+      gap: 10px;
+      flex-wrap: wrap;
 }
 .modal-header h5 { font-size: 16px; }
-.modal-body p { margin-bottom: 10px; font-size: 14px; }
+.modal-body p {
+
+    margin-bottom: 20px;
+    font-size: 1rem;
+      line-height: 1.6;
+
+}
 .btn-close, .close-btn {
   background: none;
   border: none;

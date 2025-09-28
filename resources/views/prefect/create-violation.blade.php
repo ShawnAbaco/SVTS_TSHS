@@ -3,39 +3,43 @@
 @section('content')
 <div class="container">
 
-
+    {{-- ✅ Flash Messages --}}
     @if(session('messages'))
-        <div>
+        <div class="alert-messages">
             @foreach(session('messages') as $msg)
-                <div>{!! $msg !!}</div>
+                <div class="alert-item">{!! $msg !!}</div>
             @endforeach
         </div>
     @endif
 
     <div class="main-container">
 
-         <!-- ======= HEADER ======= -->
-  <header class="main-header">
-    <div class="header-left">
-      <h2>Create Violation Records</h2>
-    </div>
-    <div class="header-right">
-      <div class="user-info" onclick="toggleProfileDropdown()">
-        <img src="/images/user.jpg" alt="User">
-        {{-- <span>{{ Auth::user()->name }}</span> --}}
-        <i class="fas fa-caret-down"></i>
-      </div>
-      <div class="profile-dropdown" id="profileDropdown">
-        <a href="{{ route('profile.settings') }}">Profile</a>
-      </div>
-    </div>
-  </header>
+        <!-- ======= HEADER ======= -->
+        <header class="main-header">
+            <div class="header-left">
+                <h2></i> Create Violation Records</h2>
+                {{-- <p class="subtitle">Log multiple student violations quickly and easily.</p> --}}
+            </div>
+            <div class="header-right">
+                <div class="user-info" onclick="toggleProfileDropdown()">
+                    <img src="/images/user.jpg" alt="User">
+                    {{-- <span>{{ Auth::user()->name }}</span> --}}
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="{{ route('profile.settings') }}">Profile</a>
+                </div>
+            </div>
+        </header>
 
-        <div class="form-box">
-            <label>Violator(s) (comma-separated)</label>
+        <!-- ======= FORM BOX ======= -->
+        <div class="form-box shadow-card">
+            <h3 class="section-title"><i class="fas fa-user"></i> Violator Details</h3>
+            <label>Violator(s) <span class="note">(comma-separated)</span></label>
             <input type="text" id="studentsInput" placeholder="e.g. Shawn Abaco, Kent Zyrone" autocomplete="off">
             <div id="studentResults" class="results"></div>
 
+            <h3 class="section-title"><i class="fas fa-info-circle"></i> Violation Information</h3>
             <div class="row-fields">
                 <div class="field">
                     <label>Offense</label>
@@ -43,37 +47,51 @@
                     <input type="hidden" id="offense_id">
                     <div id="offenseResults" class="results"></div>
                 </div>
+
                 <div class="field small">
                     <label>Date</label>
                     <input type="date" id="dateInput">
                 </div>
+
                 <div class="field small">
                     <label>Time</label>
                     <input type="time" id="timeInput">
                 </div>
+
                 <div class="field large">
                     <label>Incident Details</label>
-                    <textarea id="incidentInput" rows="3"></textarea>
+                    <textarea id="incidentInput" rows="3" placeholder="Briefly describe the incident..."></textarea>
                 </div>
             </div>
 
-            <button type="button" class="btn-show-all" id="btnShowAll">Show All</button>
+            <button type="button" class="btn-show-all" id="btnShowAll"><i class="fas fa-eye"></i> Show All</button>
         </div>
     </div>
 
-    <div id="violationsContainer" class="violationsWrapper"></div>
+    <!-- ======= VIOLATION CARDS ======= -->
+    <section class="violations-section">
+        <h3 class="section-title"><i class="fas fa-list"></i> Violations Summary</h3>
+        <div id="violationsContainer" class="violationsWrapper"></div>
+    </section>
 
+    <!-- ======= ACTION BUTTONS ======= -->
     <form id="violationForm" method="POST" action="{{ route('violations.store') }}">
         @csrf
         <div class="buttons-row">
-            <button type="button" class="btn-Add-Violation" id="btnAddViolation">+ Add Violation</button>
-            <button type="submit" class="btn-save">Save All Records</button>
+            <button type="button" class="btn-Add-Violation" id="btnAddViolation">
+                <i class="fas fa-plus-circle"></i> Add Another Violation
+            </button>
+            <button type="submit" class="btn-save">
+                <i class="fas fa-save"></i> Save All Records
+            </button>
         </div>
     </form>
 
-    <hr>
-    <h3>Preview Records</h3>
-    <pre id="output"></pre>
+    <!-- ======= PREVIEW ======= -->
+    <section class="preview-section">
+        <h3><i class="fas fa-search"></i> Preview Records</h3>
+        <pre id="output"></pre>
+    </section>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

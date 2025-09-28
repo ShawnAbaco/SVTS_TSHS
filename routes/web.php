@@ -8,6 +8,7 @@ use App\Http\Controllers\ComplaintAppointmentController;
 use App\Http\Controllers\PrefectController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PrefectReportController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ViolationAnecdotalController;
@@ -91,6 +92,12 @@ Route::post('/violations/search-offenses', [ViolationRecordController::class, 's
 
 Route::get('/violations/get-sanction', [ViolationRecordController::class, 'getSanction'])->name('violations.get-sanction');
 
+// NEW COMPLAINT RECORD CONTROLLER
+Route::get('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');
+Route::post('/complaints/store', [ComplaintController::class, 'store'])->name('complaints.store');
+Route::post('/complaints/search-students', [ComplaintController::class, 'searchStudents'])->name('complaints.search-students');
+Route::post('/complaints/search-types', [ComplaintController::class, 'searchTypes'])->name('complaints.search-types');
+Route::get('/complaints/get-action', [ComplaintController::class, 'getAction'])->name('complaints.get-action');
 
 
 });
