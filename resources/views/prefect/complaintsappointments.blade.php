@@ -1,532 +1,431 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Complaints Appointments</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-<style>
-/* --- Reset --- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
+@extends('prefect.layout')
 
-body {
-  display: flex;
-  background: #f9f9f9;
-  color: #111;
-}
+@section('content')
+<div class="main-container">
 
-/* --- Sidebar --- */
- .sidebar {
-      width: 230px;
-background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
 
-background-repeat: no-repeat;
-background-attachment: fixed;
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-      overflow-y: auto;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar ul li {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-      font-size: 15px;
-      color:rgb(255, 255, 255);
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .sidebar ul li i {
-      margin-right: 12px;
-      color:rgb(255, 255, 255);
-      min-width: 20px;
-      font-size: 16px;
-    }
-
-    .sidebar ul li:hover {
-      background: #2d3f55;
-      transform: translateX(5px);
-      color: #fff;
-    }
-
-    .sidebar ul li:hover i {
-      color: #00e0ff;
-    }
-
-    .sidebar ul li.active {
-      background: #00aaff;
-      color: #fff;
-      border-left: 4px solid #ffffff;
-    }
-
-    .sidebar ul li.active i {
-      color: #fff;
-    }
-
-    .sidebar ul li a {
-      text-decoration: none;
-      color: inherit;
-      flex: 1;
-    }
-
-    .section-title {
-      margin: 20px 10px 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 1px;
-    }
-
-    .dropdown-container {
-      display: none;
-      list-style: none;
-      padding-left: 25px;
-    }
-
-    .dropdown-container li {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      color: #ddd;
-    }
-
-    .dropdown-container li:hover {
-      background: #3a4c66;
-      color: #fff;
-    }
-
-    .dropdown-btn .arrow {
-      margin-left: auto;
-      transition: transform 0.3s;
-    }
-
-    .dropdown-btn.active .arrow {
-      transform: rotate(180deg);
-    }
-
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
-    }
-/* --- Content --- */
-.content { margin-left: 260px; padding: 30px; }
-h1 { text-align: center; margin-bottom: 25px; font-size: 28px; color: #007bff; }
-
-/* Top Controls */
-.top-controls {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-/* Search input */
-.top-controls input {
-  padding: 10px 15px;
-  width: 300px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  height: 40px; 
-}
-
-/* Add / Create Appointment button */
-.top-controls .btn-add {
-  border: none;
-  padding: 10px 16px;
-  font-size: 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg,#007bff,#00aaff);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-  height: 40px;
-}
-.top-controls .btn-add:hover {
-  background: linear-gradient(135deg,#0056b3,#007bbf);
-  transform: translateY(-2px);
-}
-
-/* Archive button */
-.top-controls .btn-archive {
-  border: none;
-  padding: 10px 16px;
-  font-size: 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: orange;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-  height: 40px; 
-}
-.top-controls .btn-archive:hover {
-  background-color: darkorange;
-  transform: translateY(-2px);
-}
-
-/* --- Table --- */
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-  background: #fff;
-  font-size: 16px;
-  table-layout: fixed;
-}
-
-th {
-  background: #000;
-  color: #fff;
-  padding: 16px 14px;
-  text-align: center;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  font-weight: bold;
-  border: none;
-}
-
-td {
-  padding: 14px 12px;
-  border-bottom: 1px solid #e3e3e3;
-  vertical-align: middle;
-  text-align: center;
-  word-wrap: break-word;
-}
-
-td:first-child { text-align: center; }
-td:nth-child(2) { text-align: left; }
-
-tr:nth-child(even) { background: #f5f8ff; }
-
-tr:hover { 
-  background: #d0e7ff; 
-  transform: scale(1.01); 
-  transition: all 0.2s ease-in-out; 
-}
-
-/* --- Status --- */
-.status-pending { color: #e67e22; background: #fff4e5; padding: 6px 12px; border-radius: 14px; font-weight: 600; display: inline-block; }
-.status-confirmed { color: #007bff; background: #e5f0ff; padding: 6px 12px; border-radius: 14px; font-weight: 600; display: inline-block; }
-.status-completed { color: #27ae60; background: #e6f9f0; padding: 6px 12px; border-radius: 14px; font-weight: 600; display: inline-block; }
-
-/* --- Action buttons --- */
-.btn-action {
-  padding: 8px 14px;
-  font-size: 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  color: #fff;
-  margin-right: 6px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-}
-.btn-action i { margin-right: 5px; }
-/* Updated button */
-.btn-update { background-color: orange; }
-.btn-update:hover { background-color: darkorange; transform: translateY(-2px) scale(1.05); }
-
-/* --- Modal --- */
-.modal-overlay {
-  position: fixed; top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.6); display:none; justify-content:center; align-items:center; z-index:1000;
-}
-.modal {
-  background: #fff; padding: 20px; border-radius: 8px; width: 400px; max-width: 90%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-.modal-header { font-size: 18px; margin-bottom: 15px; font-weight: bold; }
-.modal-body label { display: block; margin-top: 10px; font-weight: 600; }
-.modal-body input, .modal-body select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
-.modal-footer { text-align: right; margin-top: 15px; }
-.modal-footer .btn { margin-left: 8px; }
-
-/* --- Responsive --- */
-@media screen and (max-width: 768px){
-  .content { margin-left: 0; padding:15px; }
-  table { font-size:14px; }
-  th, td { padding:10px 8px; }
-  .btn-action { padding:6px 10px; font-size:13px; }
-  .top-controls { flex-direction: column; align-items:flex-start; gap:10px; }
-  .top-controls input { width:100%; }
-}
-
-/* Logo */
-.sidebar img {
-  width: 150px;
-  height: auto;
-  margin: 0 auto 0.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
-</style>
-</head>
-<body>
-
-<!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-        <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>  
-  <ul>
-    <div class="section-title">Main</div>
-    <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-    <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
-    <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
-    <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
-      <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
-      <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
-    </ul>
-    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
-      <li class="active"><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
-      <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
-    </ul>
-    <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-    <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-  </ul>
-</div>
-
-<!-- Main Content -->
-<div class="content">
-  <h1>Complaints Appointments</h1>
-
-  <div class="top-controls">
-    <input type="text" id="searchInput" placeholder="Search Complainant Name..." onkeyup="searchTable()">
-
-    <button class="btn-add" onclick="openAppointmentModal()">
-      <i class="fas fa-plus"></i> Create Appointment
-    </button>
-
-    <button class="btn-archive" onclick="openArchive()">
-      <i class="fas fa-archive"></i> Archive
-    </button>
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <h2>Student Management</h2>
+    <div class="actions">
+<input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
+      <button class="btn-primary" id="createBtn">➕ Add Violation</button>
+      <button class="btn-secondary" id="createAnecBtn">📝 Create Anecdotal</button>
+      <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
+    </div>
   </div>
 
-  <table id="appointmentsTable">
-    <thead>
-      <tr>
-        <th><input type="checkbox" id="selectAll"></th>
-        <th>ID</th>
-        <th>Complaint</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach($appointments as $appointment)
-      <tr>
-        <td><input type="checkbox" class="student-checkbox"></td>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $appointment->complaint->complaints_incident }}</td>
-        <td>{{ $appointment->comp_app_date }}</td>
-        <td>{{ $appointment->comp_app_time }}</td>
-        <td class="{{ strtolower($appointment->comp_app_status) }}">{{ $appointment->comp_app_status }}</td>
-        <td>
-          <button class="btn-action btn-update" onclick="openEditModal({{ $appointment->comp_app_id }}, '{{ $appointment->complaints_id }}', '{{ $appointment->comp_app_date }}', '{{ $appointment->comp_app_time }}', '{{ $appointment->comp_app_status }}')"><i class="fas fa-edit"></i>Update</button>
-        </td>
-      </tr>
-      @endforeach
-    </tbody>
-  </table>
+  <!-- Summary Cards -->
+  <div class="summary">
+    <div class="card">
+      <h2>55</h2>
+      <p>Total Students</p>
+    </div>
+    <div class="card">
+      <h2>12</h2>
+      <p>Violations Today</p>
+    </div>
+    <div class="card">
+      <h2>11</h2>
+      <p>Pending Appointments</p>
+    </div>
+  </div>
+
+  <!-- Bulk Action / Select Options -->
+ <div class="select-options">
+  <div class="left-controls">
+    <label for="selectAll" class="select-label">
+      <input type="checkbox" id="selectAll">
+      <span>Select All</span>
+    </label>
+
+    <!-- Dropdown Button -->
+    <div class="dropdown">
+      <button class="btn-info dropdown-btn">⬇️ View Records</button>
+      <div class="dropdown-content">
+        <a href="#" id="violationRecords">Violation Records</a>
+        <a href="#" id="violaitonAppointments">Violation Appointments</a>
+        <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
+      </div>
+    </div>
+  </div>
+
+
+    <div class="right-controls">
+      <button class="btn-danger" id="moveToTrashBtn">🗑️ Move Selected to Trash</button>
+    </div>
+  </div>
+
+  <!-- Violation Table -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>ID</th>
+          <th>Student Name</th>
+          <th>Offense Type</th>
+          <th>Sanction</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+  <tbody id="tableBody">
+<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
+  <td><input type="checkbox" class="rowCheckbox"></td>
+  <td>1</td>
+  <td>Juan Dela Cruz</td>
+  <td><span title="Tardiness">Tardiness</span></td>
+  <td><span title="Verbal Warning">Verbal Warning</span></td>
+  <td>2025-09-28</td>
+  <td>08:15 AM</td>
+  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+</tr>
+
+  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>2</td>
+    <td>Maria Santos</td>
+    <td>Incomplete Homework</td>
+    <td>Written Warning</td>
+    <td>2025-09-27</td>
+    <td>09:30 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>3</td>
+    <td>Pedro Reyes</td>
+    <td>Uniform Violation</td>
+    <td>Detention</td>
+    <td>2025-09-26</td>
+    <td>07:50 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>4</td>
+    <td>Ana Lopez</td>
+    <td>Disrespect</td>
+    <td>Counseling</td>
+    <td>2025-09-25</td>
+    <td>10:10 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+</tbody>
+
+    </table>
+
+    <!-- Pagination (if needed) -->
+    <div class="pagination">
+      {{-- Implement your pagination links --}}
+      {{-- {{ $violations->links() }} --}}
+    </div>
+  </div>
+
+  <!-- Modals (Details, Anecdotal, Edit, Schedule, Archive) -->
+  {{-- @include('prefect.violations.modals') Create a separate Blade file for modals to keep it clean --}}
+
+
 </div>
 
-<!-- Modals (Create & Edit) -->
-<div id="appointmentModal" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">Create Appointment</div>
-    <form action="{{ route('complaints.appointments.store') }}" method="POST">
-      @csrf
-      <div class="modal-body">
-        <label for="complaint">Complaint</label>
-        <select id="complaint" name="complaints_id" required>
-          <option value="">Select Complaint</option>
-          @foreach($complaints as $complaint)
-            <option value="{{ $complaint->complaints_id }}">{{ $complaint->complaints_incident }}</option>
-          @endforeach
-        </select>
-        <label for="date">Date</label>
-        <input type="date" id="date" name="comp_app_date" required>
-        <label for="time">Time</label>
-        <input type="time" id="time" name="comp_app_time" required>
-        <label for="status">Status</label>
-        <select id="status" name="comp_app_status" required>
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Completed">Completed</option>
-        </select>
+
+<!-- 📝 Details Modal -->
+<div class="modal" id="detailsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      📄 Violation Details
+    </div>
+    <div class="modal-body" id="detailsBody">
+      <!-- Content filled dynamically via JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="setScheduleBtn">📅 Set Schedule</button>
+      <button class="btn-info" id="sendSmsBtn">📩 Send SMS</button>
+      <button class="btn-close">❌ Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 🗃️ Archive Modal -->
+<div class="modal" id="archiveModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      🗃️ Archived Violations
+    </div>
+
+    <div class="modal-body">
+
+      <!-- 🔍 Search & Bulk Actions -->
+      <div class="modal-actions">
+        <label class="select-all-label">
+          <input type="checkbox" id="selectAllArchived" class="select-all-checkbox">
+          <span>Select All</span>
+        </label>
+
+        <div class="search-container">
+          <input type="search" placeholder="🔍 Search archived..." class="search-input">
+        </div>
       </div>
+
+      <!-- 📋 Archive Table -->
+      <div class="archive-table-container">
+        <table class="archive-table">
+          <thead>
+            <tr>
+              <th>✔</th>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Offense</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="archivedCheckbox"></td>
+              <td>3</td>
+              <td>Mark Dela Cruz</td>
+              <td>Tardiness</td>
+              <td>2025-09-22</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="archivedCheckbox"></td>
+              <td>4</td>
+              <td>Anna Reyes</td>
+              <td>Cutting Classes</td>
+              <td>2025-09-23</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ⚠️ Note -->
+      <div class="modal-note">
+        ⚠️ Note: Deleting records will permanently remove them.
+      </div>
+
+      <!-- 🧭 Footer Buttons -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="closeAppointmentModal()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button class="btn-secondary" id="restoreArchivedBtn">🔄 Restore</button>
+        <button class="btn-danger" id="deleteArchivedBtn">🗑️ Delete</button>
+        <button class="btn-close" id="closeArchive">❌ Close</button>
       </div>
-    </form>
+
+    </div>
   </div>
 </div>
 
-<div id="editModal" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">Edit Appointment</div>
-    <form id="editForm" method="POST">
-      @csrf
-      @method('PUT')
-      <div class="modal-body">
-        <label for="editComplaint">Complaint</label>
-        <select id="editComplaint" name="complaints_id" required>
-          <option value="">Select Complaint</option>
-          @foreach($complaints as $complaint)
-            <option value="{{ $complaint->complaints_id }}">{{ $complaint->complaints_incident }}</option>
-          @endforeach
-        </select>
-        <label for="editDate">Date</label>
-        <input type="date" id="editDate" name="comp_app_date" required>
-        <label for="editTime">Time</label>
-        <input type="time" id="editTime" name="comp_app_time" required>
-        <label for="editStatus">Status</label>
-        <select id="editStatus" name="comp_app_status" required>
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Completed">Completed</option>
-        </select>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Update</button>
-      </div>
-    </form>
-  </div>
-</div>
+
 
 <script>
-  // Select All functionality
-const selectAll = document.getElementById('selectAll');
-const checkboxes = document.querySelectorAll('.student-checkbox');
 
-selectAll.addEventListener('change', () => {
-  checkboxes.forEach(cb => cb.checked = selectAll.checked);
-});
+    // Search filter for main violation table
+document.getElementById('searchInput').addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    const tableBody = document.getElementById('tableBody');
+    const rows = tableBody.querySelectorAll('tr');
 
-checkboxes.forEach(cb => {
-  cb.addEventListener('change', () => {
-    if (!cb.checked) selectAll.checked = false;
-    else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) selectAll.checked = true;
-  });
-});
+    let visibleCount = 0;
 
-const dropdowns = document.querySelectorAll('.dropdown-btn');
-dropdowns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const container = btn.nextElementSibling;
-    dropdowns.forEach(otherBtn => {
-      const otherContainer = otherBtn.nextElementSibling;
-      if(otherBtn !== btn){ otherBtn.classList.remove('active'); otherContainer.style.display='none'; }
-    });
-    btn.classList.toggle('active');
-    container.style.display = container.style.display === 'block' ? 'none' : 'block';
-  });
-});
-
-function openAppointmentModal(){ document.getElementById('appointmentModal').style.display='flex'; }
-function closeAppointmentModal(){ document.getElementById('appointmentModal').style.display='none'; }
-function openEditModal(id, complaintId, date, time, status){
-  document.getElementById('editModal').style.display='flex';
-  document.getElementById('editForm').action='/complaints/appointments/'+id;
-  document.getElementById('editComplaint').value=complaintId;
-  document.getElementById('editDate').value=date;
-  document.getElementById('editTime').value=time;
-  document.getElementById('editStatus').value=status;
-}
-function closeEditModal(){ document.getElementById('editModal').style.display='none'; }
-
-function searchTable(){
-  let input=document.getElementById('searchInput').value.toLowerCase();
-  let table=document.getElementById('appointmentsTable');
-  let rows=table.getElementsByTagName('tr');
-  for(let i=1;i<rows.length;i++){
-    let idCell=rows[i].getElementsByTagName('td')[1]; // ID column
-    let complaintCell=rows[i].getElementsByTagName('td')[2]; // Complaint column
-    if(idCell && complaintCell){
-      let idText=idCell.textContent.toLowerCase();
-      let complaintText=complaintCell.textContent.toLowerCase();
-      rows[i].style.display=(idText.includes(input) || complaintText.includes(input)) ? '' : 'none';
-    }
-  }
-}
-
-// Logout
-function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
-    fetch("{{ route('prefect.logout') }}", {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
+    rows.forEach(row => {
+        const studentName = row.cells[2].innerText.toLowerCase(); // Student Name column
+        const studentID = row.cells[1].innerText.toLowerCase();   // ID column
+        if(studentName.includes(filter) || studentID.includes(filter)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
         }
-    })
-    .then(response => {
-        if(response.ok) window.location.href = "{{ route('auth.login') }}";
-        else console.error('Logout failed:', response.statusText);
-    })
-    .catch(error => console.error('Logout failed:', error));
-}
+    });
+
+    // Check if "No records found" row exists
+    let noDataRow = tableBody.querySelector('.no-data-row');
+    if(visibleCount === 0) {
+        if(!noDataRow) {
+            const newRow = document.createElement('tr');
+            newRow.classList.add('no-data-row');
+            newRow.innerHTML = `<td colspan="8" style="text-align:center; padding:15px;">⚠️ No records found</td>`;
+            tableBody.appendChild(newRow);
+        }
+    } else {
+        if(noDataRow) noDataRow.remove();
+    }
+});
+
+
+
+  // Select all checkboxes
+  document.getElementById('selectAll').addEventListener('change', function() {
+    document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = this.checked);
+  });
+
+  // Move to Trash
+  document.getElementById('moveToTrashBtn').addEventListener('click', () => {
+    const selected = [...document.querySelectorAll('.rowCheckbox:checked')];
+    if (selected.length === 0) {
+      alert('Please select at least one record.');
+    } else {
+      alert(selected.length + ' record(s) moved to Trash.');
+      // Add AJAX call here to move to trash in backend
+    }
+  });
+
+  // Row click -> Details Modal
+// Row click -> Details Modal
+document.querySelectorAll('#tableBody tr').forEach(row => {
+  row.addEventListener('click', e => {
+    // Ignore if checkbox or edit button is clicked
+    if(e.target.type === 'checkbox' || e.target.classList.contains('editBtn')) return;
+
+    const data = row.dataset.details.split('|');
+
+    const detailsBody = `
+      <p><strong>Student:</strong> ${data[0]}</p>
+      <p><strong>Offense:</strong> ${data[1]}</p>
+      <p><strong>Sanction:</strong> ${data[2]}</p>
+      <p><strong>Date:</strong> ${data[3]}</p>
+      <p><strong>Time:</strong> ${data[4]}</p>
+    `;
+
+    document.getElementById('detailsBody').innerHTML = detailsBody;
+    document.getElementById('detailsModal').style.display = 'flex';
+    document.getElementById('detailsModal').classList.add('show');
+    btn.closest('.modal').classList.remove('show');
+
+
+  });
+});
+// Close Details Modal
+document.querySelectorAll('#detailsModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
+  });
+});
+
+// Set Schedule Button
+document.getElementById('setScheduleBtn').addEventListener('click', () => {
+  alert('Open schedule setup form or modal here.');
+  // TODO: open your schedule modal or redirect to schedule setup
+});
+
+// Send SMS Button
+document.getElementById('sendSmsBtn').addEventListener('click', () => {
+  alert('Trigger SMS sending here.');
+  // TODO: implement SMS sending via backend
+});
+
+
+  // Close modals
+  document.querySelectorAll('.btn-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modal').style.display = 'none';
+    });
+  });
+
+  // Edit button
+  document.querySelectorAll('.editBtn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const row = btn.closest('tr');
+      const data = row.dataset.details.split('|');
+      document.getElementById('editStudentName').value = data[0];
+      document.getElementById('editOffense').value = data[1];
+      document.getElementById('editSanction').value = data[2];
+      document.getElementById('editDate').value = data[3];
+      document.getElementById('editTime').value = data[4];
+      document.getElementById('editModal').style.display = 'flex';
+    });
+  });
+
+  // Open modals
+  document.getElementById('createAnecBtn').addEventListener('click', () => {
+    document.getElementById('anecModal').style.display = 'flex';
+  });
+  document.getElementById('archiveBtn').addEventListener('click', () => {
+    document.getElementById('archiveModal').style.display = 'flex';
+  });
+
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent row click event
+    const dropdown = btn.parentElement;
+    dropdown.classList.toggle('show');
+  });
+});
+
+// Close dropdown if clicked outside
+window.addEventListener('click', () => {
+  document.querySelectorAll('.dropdown').forEach(dd => dd.classList.remove('show'));
+});
+
+// Open archive modal
+document.getElementById('archiveBtn').addEventListener('click', () => {
+  document.getElementById('archiveModal').style.display = 'flex';
+});
+
+// Close modal
+document.querySelectorAll('#archiveModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
+  });
+});
+
+// Select all checkboxes
+  // Get the select all checkbox and all individual checkboxes
+  const selectAllArchived = document.getElementById('selectAllArchived');
+  const archivedCheckboxes = document.querySelectorAll('.archivedCheckbox');
+
+  // When the select all checkbox changes
+  selectAllArchived.addEventListener('change', () => {
+    const isChecked = selectAllArchived.checked;
+    archivedCheckboxes.forEach(checkbox => {
+      checkbox.checked = isChecked;
+    });
+  });
+
+  // Optional: If any individual checkbox is unchecked, uncheck "Select All"
+  archivedCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      if (!checkbox.checked) {
+        selectAllArchived.checked = false;
+      } else {
+        // If all checkboxes are checked, check the "Select All" box
+        const allChecked = Array.from(archivedCheckboxes).every(cb => cb.checked);
+        selectAllArchived.checked = allChecked;
+      }
+    });
+  });
+
+// Search filter
+document.getElementById('archiveSearch').addEventListener('input', function() {
+  const filter = this.value.toLowerCase();
+  document.querySelectorAll('#archiveTableBody tr').forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(filter) ? '' : 'none';
+  });
+});
+
+// Restore selected
+document.getElementById('restoreArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to restore.');
+  alert(`${selected.length} record(s) restored.`);
+  // TODO: Add AJAX call to restore records
+});
+
+// Delete selected
+document.getElementById('deleteArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to delete.');
+  if(confirm('This will permanently delete the selected record(s). Are you sure?')) {
+    alert(`${selected.length} record(s) deleted permanently.`);
+    // TODO: Add AJAX call to delete records
+  }
+});
+
+
+
 </script>
-</body>
-</html>
+@endsection

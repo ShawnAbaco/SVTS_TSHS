@@ -1,475 +1,431 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Management</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="{{ asset('css/prefect/sidebar.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
-<meta name="csrf-token" content="{{ csrf_token() }}">
-</head>
-<body>
+@extends('prefect.layout')
 
-<!-- Sidebar -->
-  <div class="sidebar">
-    <img src="/images/Logo.png" alt="Logo">
-    <h2>PREFECT</h2>
-    <ul>
-      <div class="section-title">Main</div>
-      <li class="active"><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-      <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
-      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
-      <li class="active"><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-      <li><a href="{{ route('violation.records') }}"><i class="fas fa-book"></i> Violation Record</a></li>
-        <li><a href="{{ route('people.complaints') }}"><i class="fas fa-comments"></i>Complaints</a></li>
-      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-      <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-    </ul>
+@section('content')
+<div class="main-container">
+
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <h2>Student Management</h2>
+    <div class="actions">
+<input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
+      <button class="btn-primary" id="createBtn">➕ Add Violation</button>
+      <button class="btn-secondary" id="createAnecBtn">📝 Create Anecdotal</button>
+      <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
+    </div>
   </div>
 
-<div class="main-content">
-  <!-- ======= HEADER ======= -->
-  <header class="main-header">
-    <div class="header-left">
-      <h2>Student Management</h2>
+  <!-- Summary Cards -->
+  <div class="summary">
+    <div class="card">
+      <h2>55</h2>
+      <p>Total Students</p>
     </div>
-    <div class="header-right">
-      <div class="user-info" onclick="toggleProfileDropdown()">
-        <img src="/images/user.jpg" alt="User">
-        <span>{{ Auth::user()->name }}</span>
-        <i class="fas fa-caret-down"></i>
+    <div class="card">
+      <h2>12</h2>
+      <p>Violations Today</p>
+    </div>
+    <div class="card">
+      <h2>11</h2>
+      <p>Pending Appointments</p>
+    </div>
+  </div>
+
+  <!-- Bulk Action / Select Options -->
+ <div class="select-options">
+  <div class="left-controls">
+    <label for="selectAll" class="select-label">
+      <input type="checkbox" id="selectAll">
+      <span>Select All</span>
+    </label>
+
+    <!-- Dropdown Button -->
+    <div class="dropdown">
+      <button class="btn-info dropdown-btn">⬇️ View Records</button>
+      <div class="dropdown-content">
+        <a href="#" id="violationRecords">Violation Records</a>
+        <a href="#" id="violaitonAppointments">Violation Appointments</a>
+        <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
       </div>
-      <div class="profile-dropdown" id="profileDropdown">
-        <a href="{{ route('profile.settings') }}">Profile</a>
-      </div>
-    </div>
-  </header>
-<!-- Summary Cards -->
-<div class="summary-cards">
-  <div class="summary-card">
-    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
-    <div class="card-content">
-      <h3>Total Students</h3>
-      <p>{{ $advisers->count() }}</p>
     </div>
   </div>
-  <div class="summary-card">
-    <div class="card-icon" style="color:#28a745;"><i class="fas fa-check-circle"></i></div>
-    <div class="card-content">
-      <h3>Active</h3>
-      <p>{{ $advisers->where('status', 'active')->count() }}</p>
+
+
+    <div class="right-controls">
+      <button class="btn-danger" id="moveToTrashBtn">🗑️ Move Selected to Trash</button>
     </div>
   </div>
-  <div class="summary-card">
-    <div class="card-icon" style="color:#ffc107;"><i class="fas fa-archive"></i></div>
-    <div class="card-content">
-      <h3>Cleared / Archived</h3>
-      <p>{{ $advisers->where('status', 'Cleared')->count() }}</p>
-    </div>
-  </div>
-  <div class="summary-card">
-    <div class="card-icon" style="color:#007bff;"><i class="fas fa-layer-group"></i></div>
-    <div class="card-content">
-      <h3>Sections</h3>
-      <p>{{ $advisers->count() }}</p>
-    </div>
-  </div>
-</div>
-  <!-- Table Container -->
+
+  <!-- Violation Table -->
   <div class="table-container">
-    <div class="table-header">
-      <div class="table-controls">
-         <h3>Adviser's Table</h3>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>ID</th>
+          <th>Student Name</th>
+          <th>Offense Type</th>
+          <th>Sanction</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+  <tbody id="tableBody">
+<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
+  <td><input type="checkbox" class="rowCheckbox"></td>
+  <td>1</td>
+  <td>Juan Dela Cruz</td>
+  <td><span title="Tardiness">Tardiness</span></td>
+  <td><span title="Verbal Warning">Verbal Warning</span></td>
+  <td>2025-09-28</td>
+  <td>08:15 AM</td>
+  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+</tr>
 
-        <input type="text" id="searchInput" placeholder="Search parents..." class="form-control">
-      </div>
-      <div style="display: flex; justify-content: flex-end; gap: 10px; margin:12px 0;">
-        <button id="createBtn" class="btn-create"><i class="fas fa-plus"></i> Create</button>
-        <button id="archiveBtn" class="btn btn-warning"><i class="fas fa-archive"></i> Archive</button>
-      </div>
-    </div>
-
-    <!-- Student Table -->
-    <div class="student-table-wrapper">
-      <table id="studentTable" class="fixed-header">
-        <thead>
-          <tr>
-            <th>
-              <input type="checkbox" id="selectAll">
-              <div class="bulk-action-dropdown" style="display:inline-block; position: relative; margin-left:5px;">
-                <button id="bulkActionBtn">&#8942;</button>
-                <div id="bulkActionMenu" style="display:none; position:absolute; top:25px; left:0; background:#fff; border:1px solid #ccc; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10;">
-                  <div class="bulk-action-item" data-action="trash">Trash</div>
-                </div>
-              </div>
-            </th>
-            <th>ID</th>
-            <th>Adviser Name</th>
-            <th>Grade Level</th>
-            <th>Section</th>
-            <th>Status</th>
-            <th>Action</th> <!-- New Action column -->
-          </tr>
-        </thead>
-        <tbody>
-  <tr data-email="juan@example.com" data-address="123 Street" data-contact="09171234567">
+  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
     <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>1001</td>
-    <td>Juan Dela Cruz</td>
-    <td>Grade 7</td>
-    <td>Section A</td>
-    <td>Active</td>
-    <!-- Action column -->
-    <td>
-      <button class="btn-edit" onclick="editStudentRow(this)">
-        <i class="fas fa-edit"></i> Edit
-      </button>
-    </td>
-  </tr>
-  <tr data-email="maria@example.com" data-address="456 Avenue" data-contact="09179876543">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>1002</td>
+    <td>2</td>
     <td>Maria Santos</td>
-    <td>Grade 8</td>
-    <td>Section B</td>
-    <td>Inactive</td>
-    <!-- Action column -->
-    <td>
-      <button class="btn-edit" onclick="editStudentRow(this)">
-        <i class="fas fa-edit"></i> Edit
-      </button>
-    </td>
+    <td>Incomplete Homework</td>
+    <td>Written Warning</td>
+    <td>2025-09-27</td>
+    <td>09:30 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>3</td>
+    <td>Pedro Reyes</td>
+    <td>Uniform Violation</td>
+    <td>Detention</td>
+    <td>2025-09-26</td>
+    <td>07:50 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>4</td>
+    <td>Ana Lopez</td>
+    <td>Disrespect</td>
+    <td>Counseling</td>
+    <td>2025-09-25</td>
+    <td>10:10 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
   </tr>
 </tbody>
 
-      </table>
+    </table>
+
+    <!-- Pagination (if needed) -->
+    <div class="pagination">
+      {{-- Implement your pagination links --}}
+      {{-- {{ $violations->links() }} --}}
+    </div>
+  </div>
+
+  <!-- Modals (Details, Anecdotal, Edit, Schedule, Archive) -->
+  {{-- @include('prefect.violations.modals') Create a separate Blade file for modals to keep it clean --}}
+
+
+</div>
+
+
+<!-- 📝 Details Modal -->
+<div class="modal" id="detailsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      📄 Violation Details
+    </div>
+    <div class="modal-body" id="detailsBody">
+      <!-- Content filled dynamically via JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="setScheduleBtn">📅 Set Schedule</button>
+      <button class="btn-info" id="sendSmsBtn">📩 Send SMS</button>
+      <button class="btn-close">❌ Close</button>
     </div>
   </div>
 </div>
-<!-- Edit Adviser Modal -->
-<div class="modal" id="editModal">
-  <div class="modal-content">
-    <span class="close" id="closeEditModal">&times;</span>
-    <form id="editForm" class="form-grid">
-      <div class="form-column">
-        <div class="form-group"><label>Last Name</label><input type="text" name="lastName" required></div>
-        <div class="form-group"><label>First Name</label><input type="text" name="firstName" required></div>
-        <div class="form-group"><label>Middle Name</label><input type="text" name="middleName"></div>
-        <div class="form-group"><label>Email</label><input type="email" name="email"></div>
-        <div class="form-group"><label>Address</label><input type="text" name="address"></div>
-      </div>
-      <div class="form-column">
-        <div class="form-group"><label>Contact</label><input type="text" name="contact"></div>
-        <div class="form-group"><label>Grade Level</label><select name="gradeLevel" required>
-          <option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
-        </select></div>
-        <div class="form-group"><label>Section</label><input type="text" name="section" required></div>
-        <div class="form-group"><label>Status</label><select name="status">
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-          <option value="Cleared">Cleared</option>
-        </select></div>
-      </div>
-      <div class="form-actions">
-        <button type="button" class="btn-cancel" id="closeEditModalBtn">Cancel</button>
-        <button type="submit" class="btn-create">Save Changes</button>
-      </div>
-    </form>
-  </div>
-</div>
 
-<!-- Modals: Create, Archives, Info (unchanged from your code) -->
-<div class="modal" id="createModal">
-  <div class="modal-content">
-    <span class="close" id="closeCreate">&times;</span>
-    <form id="createForm" class="form-grid">
-      <div class="form-column">
-        <div class="form-group"><label>Last Name</label><input type="text" name="lastName" required></div>
-        <div class="form-group"><label>First Name</label><input type="text" name="firstName" required></div>
-        <div class="form-group"><label>Middle Name</label><input type="text" name="middleName"></div>
-        <div class="form-group"><label>Email</label><input type="email" name="email"></div>
-        <div class="form-group"><label>Address</label><input type="text" name="address"></div>
-        <div class="form-group"><label>Password</label><input type="password" name="password"></div>
-      </div>
-      <div class="form-column">
-        <div class="form-group"><label>Contact</label><input type="text" name="contact"></div>
-        <div class="form-group"><label>Grade Level</label><select name="gradeLevel" required>
-          <option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
-        </select></div>
-        <div class="form-group"><label>Section</label><input type="text" name="section" required></div>
-      </div>
-      <div class="form-actions">
-        <button type="button" class="btn-cancel" id="closeCreate">Cancel</button>
-        <button type="submit" class="btn-create">Save</button>
-      </div>
-    </form>
-  </div>
-</div>
 
-<div class="modal" id="archivesModal">
-  <div class="archive-modal-content">
-    <div class="archive-modal-header">
-      <span>Archived Students</span>
-      <span class="close-btn" id="closeArchivesModal">&times;</span>
+<!-- 🗃️ Archive Modal -->
+<div class="modal" id="archiveModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      🗃️ Archived Violations
     </div>
-    <div class="archive-modal-body">
-      <div class="toolbar-actions">
-        <input id="archiveSearch" type="search" placeholder="Search archived students..." style="flex:1;">
-        <button id="restoreBtn" class="btn-primary"><i class="fas fa-undo"></i> Restore</button>
+
+    <div class="modal-body">
+
+      <!-- 🔍 Search & Bulk Actions -->
+      <div class="modal-actions">
+        <label class="select-all-label">
+          <input type="checkbox" id="selectAllArchived" class="select-all-checkbox">
+          <span>Select All</span>
+        </label>
+
+        <div class="search-container">
+          <input type="search" placeholder="🔍 Search archived..." class="search-input">
+        </div>
       </div>
+
+      <!-- 📋 Archive Table -->
       <div class="archive-table-container">
-        <table id="archiveTable" class="archive-table">
+        <table class="archive-table">
           <thead>
             <tr>
-              <th><input type="checkbox" id="archiveSelectAll"></th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Section</th>
+              <th>✔</th>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Offense</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><input type="checkbox" class="archiveRowCheckbox"></td>
-              <td>Pedro Cruz</td>
-              <td>Archived</td>
-              <td>Section A</td>
+              <td><input type="checkbox" class="archivedCheckbox"></td>
+              <td>3</td>
+              <td>Mark Dela Cruz</td>
+              <td>Tardiness</td>
+              <td>2025-09-22</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="archivedCheckbox"></td>
+              <td>4</td>
+              <td>Anna Reyes</td>
+              <td>Cutting Classes</td>
+              <td>2025-09-23</td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <!-- ⚠️ Note -->
+      <div class="modal-note">
+        ⚠️ Note: Deleting records will permanently remove them.
+      </div>
+
+      <!-- 🧭 Footer Buttons -->
+      <div class="modal-footer">
+        <button class="btn-secondary" id="restoreArchivedBtn">🔄 Restore</button>
+        <button class="btn-danger" id="deleteArchivedBtn">🗑️ Delete</button>
+        <button class="btn-close" id="closeArchive">❌ Close</button>
+      </div>
+
     </div>
   </div>
 </div>
 
-<div class="modal" id="infoModal">
-  <div class="modal-content">
-    <span class="close" id="closeInfoModalBtn">&times;</span>
-    <div id="infoModalBody"></div>
-  </div>
-</div>
 
 
 <script>
-    // SIDEBAR DROPDOWN
-  document.querySelectorAll('.dropdown-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('active');
-      const dropdown = btn.nextElementSibling;
-      dropdown.style.display = dropdown.style.display==='block'?'none':'block';
-    });
-  });
-    
-    
-/* ==================== STUDENT CHECKBOX SELECT ALL ==================== */
-function updateRowCheckboxes() {
-  const selectAll = document.getElementById('selectAll');
-  const rowCheckboxes = document.querySelectorAll('.rowCheckbox');
-  if (selectAll) {
-    selectAll.addEventListener('change', () => {
-      rowCheckboxes.forEach(cb => cb.checked = selectAll.checked);
-    });
-  }
-}
-updateRowCheckboxes();
 
-/* ==================== BULK ACTION MENU ==================== */
-const bulkActionBtn = document.getElementById('bulkActionBtn');
-const bulkActionMenu = document.getElementById('bulkActionMenu');
-if (bulkActionBtn) {
-  bulkActionBtn.addEventListener('click', () => {
-    bulkActionMenu.style.display = bulkActionMenu.style.display === 'block' ? 'none' : 'block';
-  });
-}
-document.addEventListener('click', e => {
-  if (bulkActionBtn && !bulkActionBtn.contains(e.target) && !bulkActionMenu.contains(e.target)) {
-    bulkActionMenu.style.display = 'none';
-  }
-});
+    // Search filter for main violation table
+document.getElementById('searchInput').addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    const tableBody = document.getElementById('tableBody');
+    const rows = tableBody.querySelectorAll('tr');
 
-document.querySelectorAll('.bulk-action-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const selected = document.querySelectorAll('.rowCheckbox:checked');
-    if (!selected.length) { alert("⚠️ Please select at least one student."); return; }
-    if (item.dataset.action === "trash") {
-      if (!confirm("Move selected students to Trash?")) return;
-      alert("✅ Students moved to Trash (demo only)");
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const studentName = row.cells[2].innerText.toLowerCase(); // Student Name column
+        const studentID = row.cells[1].innerText.toLowerCase();   // ID column
+        if(studentName.includes(filter) || studentID.includes(filter)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Check if "No records found" row exists
+    let noDataRow = tableBody.querySelector('.no-data-row');
+    if(visibleCount === 0) {
+        if(!noDataRow) {
+            const newRow = document.createElement('tr');
+            newRow.classList.add('no-data-row');
+            newRow.innerHTML = `<td colspan="8" style="text-align:center; padding:15px;">⚠️ No records found</td>`;
+            tableBody.appendChild(newRow);
+        }
+    } else {
+        if(noDataRow) noDataRow.remove();
     }
-    bulkActionMenu.style.display = 'none';
+});
+
+
+
+  // Select all checkboxes
+  document.getElementById('selectAll').addEventListener('change', function() {
+    document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = this.checked);
+  });
+
+  // Move to Trash
+  document.getElementById('moveToTrashBtn').addEventListener('click', () => {
+    const selected = [...document.querySelectorAll('.rowCheckbox:checked')];
+    if (selected.length === 0) {
+      alert('Please select at least one record.');
+    } else {
+      alert(selected.length + ' record(s) moved to Trash.');
+      // Add AJAX call here to move to trash in backend
+    }
+  });
+
+  // Row click -> Details Modal
+// Row click -> Details Modal
+document.querySelectorAll('#tableBody tr').forEach(row => {
+  row.addEventListener('click', e => {
+    // Ignore if checkbox or edit button is clicked
+    if(e.target.type === 'checkbox' || e.target.classList.contains('editBtn')) return;
+
+    const data = row.dataset.details.split('|');
+
+    const detailsBody = `
+      <p><strong>Student:</strong> ${data[0]}</p>
+      <p><strong>Offense:</strong> ${data[1]}</p>
+      <p><strong>Sanction:</strong> ${data[2]}</p>
+      <p><strong>Date:</strong> ${data[3]}</p>
+      <p><strong>Time:</strong> ${data[4]}</p>
+    `;
+
+    document.getElementById('detailsBody').innerHTML = detailsBody;
+    document.getElementById('detailsModal').style.display = 'flex';
+    document.getElementById('detailsModal').classList.add('show');
+    btn.closest('.modal').classList.remove('show');
+
+
+  });
+});
+// Close Details Modal
+document.querySelectorAll('#detailsModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
   });
 });
 
-/* ==================== SHOW INFO MODAL ==================== */
-const infoModal = document.getElementById('infoModal');
-const infoModalBody = document.getElementById('infoModalBody');
-const closeInfoBtn = document.getElementById('closeInfoModalBtn');
-
-function showFullInfo(row) {
-  const cells = row.children;
-  infoModalBody.innerHTML = `
-    <p><strong>ID:</strong> ${cells[1].innerText}</p>
-    <p><strong>Name:</strong> ${cells[2].innerText}</p>
-    <p><strong>Grade Level:</strong> ${cells[3].innerText}</p>
-    <p><strong>Section:</strong> ${cells[4].innerText}</p>
-    <p><strong>Status:</strong> ${cells[5].innerText}</p>
-    <p><strong>Email:</strong> ${row.dataset.email || 'N/A'}</p>
-    <p><strong>Address:</strong> ${row.dataset.address || 'N/A'}</p>
-    <p><strong>Contact:</strong> <a href="tel:${row.dataset.contact}">${row.dataset.contact || 'N/A'}</a></p>
-  `;
-  infoModal.classList.add('show-modal');
-}
-
-// Close Info Modal button
-closeInfoBtn.addEventListener('click', () => {
-  infoModal.classList.remove('show-modal');
+// Set Schedule Button
+document.getElementById('setScheduleBtn').addEventListener('click', () => {
+  alert('Open schedule setup form or modal here.');
+  // TODO: open your schedule modal or redirect to schedule setup
 });
 
-// Close when clicking outside modal content
-window.addEventListener('click', e => {
-  if(e.target === infoModal) infoModal.classList.remove('show-modal');
+// Send SMS Button
+document.getElementById('sendSmsBtn').addEventListener('click', () => {
+  alert('Trigger SMS sending here.');
+  // TODO: implement SMS sending via backend
 });
 
-/* ==================== SEARCH ==================== */
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-  searchInput.addEventListener('input', e => {
-    const query = e.target.value.toLowerCase();
-    document.querySelectorAll('#studentTable tbody tr').forEach(row => {
-      row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
+
+  // Close modals
+  document.querySelectorAll('.btn-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modal').style.display = 'none';
     });
   });
-}
 
-/* ==================== ARCHIVES MODAL ==================== */
-const archiveBtn = document.getElementById('archiveBtn');
-const archivesModal = document.getElementById('archivesModal');
-const closeArchivesModal = document.getElementById('closeArchivesModal');
-if (archiveBtn) archiveBtn.addEventListener('click', () => archivesModal.classList.add('show-modal'));
-if (closeArchivesModal) closeArchivesModal.addEventListener('click', () => archivesModal.classList.remove('show-modal'));
-window.addEventListener('click', e => { if(e.target===archivesModal) archivesModal.classList.remove('show-modal'); });
-
-/* ==================== ARCHIVE SELECT ALL ==================== */
-const archiveSelectAll = document.getElementById('archiveSelectAll');
-if (archiveSelectAll) {
-  archiveSelectAll.addEventListener('change', e => {
-    document.querySelectorAll('.archiveRowCheckbox').forEach(cb => cb.checked = e.target.checked);
+  // Edit button
+  document.querySelectorAll('.editBtn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const row = btn.closest('tr');
+      const data = row.dataset.details.split('|');
+      document.getElementById('editStudentName').value = data[0];
+      document.getElementById('editOffense').value = data[1];
+      document.getElementById('editSanction').value = data[2];
+      document.getElementById('editDate').value = data[3];
+      document.getElementById('editTime').value = data[4];
+      document.getElementById('editModal').style.display = 'flex';
+    });
   });
-}
 
-/* ==================== RESTORE BUTTON ==================== */
-const restoreBtn = document.getElementById('restoreBtn');
-if (restoreBtn) {
-  restoreBtn.addEventListener('click', () => {
-    const selected = document.querySelectorAll('.archiveRowCheckbox:checked');
-    if (!selected.length) { alert("⚠️ Select at least one student to restore."); return; }
-    alert("✅ Selected students restored (demo only)");
+  // Open modals
+  document.getElementById('createAnecBtn').addEventListener('click', () => {
+    document.getElementById('anecModal').style.display = 'flex';
   });
-}
+  document.getElementById('archiveBtn').addEventListener('click', () => {
+    document.getElementById('archiveModal').style.display = 'flex';
+  });
 
-/* ==================== PROFILE DROPDOWN ==================== */
-function toggleProfileDropdown() {
-  const dropdown = document.getElementById('profileDropdown');
-  dropdown.style.display = dropdown.style.display==='block'?'none':'block';
-}
-document.addEventListener('click', e => {
-  const dropdown = document.getElementById('profileDropdown');
-  const userInfo = document.querySelector('.user-info');
-  if (dropdown && userInfo && !userInfo.contains(e.target)) dropdown.style.display = 'none';
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent row click event
+    const dropdown = btn.parentElement;
+    dropdown.classList.toggle('show');
+  });
 });
 
-/* ==================== LOGOUT ==================== */
-function logout() {
-  if(!confirm("Are you sure you want to logout?")) return;
-  fetch("{{ route('prefect.logout') }}", { method:'POST', headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}'} })
-  .then(() => window.location.href="{{ route('auth.login') }}");
-}
-
-/* ==================== CREATE MODAL ==================== */
-const createBtn = document.getElementById('createBtn');
-const createModal = document.getElementById('createModal');
-const closeCreateBtns = document.querySelectorAll('#closeCreate');
-if(createBtn) createBtn.addEventListener('click', () => createModal.classList.add('show-modal'));
-closeCreateBtns.forEach(btn => btn.addEventListener('click', () => createModal.classList.remove('show-modal')));
-window.addEventListener('click', e => { if(e.target===createModal) createModal.classList.remove('show-modal'); });
-
-/* ==================== CREATE FORM SUBMIT ==================== */
-const createForm = document.getElementById('createForm');
-if(createForm) {
-  let studentId = document.querySelectorAll('#studentTable tbody tr').length + 1;
-  createForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(createForm).entries());
-    const fullName = `${data.firstName} ${data.middleName} ${data.lastName}`.replace("  ", " ");
-    const row = document.createElement("tr");
-    row.dataset.email = data.email;
-    row.dataset.address = data.address;
-    row.dataset.contact = data.contact;
-    row.innerHTML = `
-      <td><input type="checkbox" class="rowCheckbox"></td>
-      <td>${studentId}</td>
-      <td>${fullName}</td>
-      <td>${data.gradeLevel}</td>
-      <td>${data.section}</td>
-      <td>Active</td>
-    `;
-    row.addEventListener('click', () => showFullInfo(row));
-    document.querySelector("#studentTable tbody").appendChild(row);
-    studentId++;
-    createForm.reset();
-    createModal.classList.remove('show-modal');
-    updateRowCheckboxes();
-  });
-}
-// Edit Modal
-const editModal = document.getElementById('editModal');
-const closeEditModal = document.getElementById('closeEditModal');
-const closeEditModalBtn = document.getElementById('closeEditModalBtn');
-const editForm = document.getElementById('editForm');
-let currentEditRow = null;
-
-function editStudentRow(btn) {
-  const row = btn.closest('tr');
-  currentEditRow = row;
-
-  const cells = row.children;
-  const nameParts = cells[2].innerText.split(' ');
-  editForm.elements.firstName.value = nameParts[0] || '';
-  editForm.elements.middleName.value = nameParts.length === 3 ? nameParts[1] : '';
-  editForm.elements.lastName.value = nameParts.length === 3 ? nameParts[2] : nameParts[1] || '';
-  editForm.elements.email.value = row.dataset.email || '';
-  editForm.elements.address.value = row.dataset.address || '';
-  editForm.elements.contact.value = row.dataset.contact || '';
-  editForm.elements.gradeLevel.value = cells[3].innerText;
-  editForm.elements.section.value = cells[4].innerText;
-  editForm.elements.status.value = cells[5].innerText;
-
-  editModal.classList.add('show-modal');
-}
-
-// Close Edit Modal
-closeEditModal.addEventListener('click', () => editModal.classList.remove('show-modal'));
-closeEditModalBtn.addEventListener('click', () => editModal.classList.remove('show-modal'));
-window.addEventListener('click', e => { if(e.target===editModal) editModal.classList.remove('show-modal'); });
-
-// Save Edit
-editForm.addEventListener('submit', e => {
-  e.preventDefault();
-  if(!currentEditRow) return;
-
-  const data = Object.fromEntries(new FormData(editForm).entries());
-  currentEditRow.children[2].innerText = `${data.firstName} ${data.middleName} ${data.lastName}`.replace("  ", " ");
-  currentEditRow.children[3].innerText = data.gradeLevel;
-  currentEditRow.children[4].innerText = data.section;
-  currentEditRow.children[5].innerText = data.status;
-  currentEditRow.dataset.email = data.email;
-  currentEditRow.dataset.address = data.address;
-  currentEditRow.dataset.contact = data.contact;
-
-  editModal.classList.remove('show-modal');
+// Close dropdown if clicked outside
+window.addEventListener('click', () => {
+  document.querySelectorAll('.dropdown').forEach(dd => dd.classList.remove('show'));
 });
+
+// Open archive modal
+document.getElementById('archiveBtn').addEventListener('click', () => {
+  document.getElementById('archiveModal').style.display = 'flex';
+});
+
+// Close modal
+document.querySelectorAll('#archiveModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
+  });
+});
+
+// Select all checkboxes
+  // Get the select all checkbox and all individual checkboxes
+  const selectAllArchived = document.getElementById('selectAllArchived');
+  const archivedCheckboxes = document.querySelectorAll('.archivedCheckbox');
+
+  // When the select all checkbox changes
+  selectAllArchived.addEventListener('change', () => {
+    const isChecked = selectAllArchived.checked;
+    archivedCheckboxes.forEach(checkbox => {
+      checkbox.checked = isChecked;
+    });
+  });
+
+  // Optional: If any individual checkbox is unchecked, uncheck "Select All"
+  archivedCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      if (!checkbox.checked) {
+        selectAllArchived.checked = false;
+      } else {
+        // If all checkboxes are checked, check the "Select All" box
+        const allChecked = Array.from(archivedCheckboxes).every(cb => cb.checked);
+        selectAllArchived.checked = allChecked;
+      }
+    });
+  });
+
+// Search filter
+document.getElementById('archiveSearch').addEventListener('input', function() {
+  const filter = this.value.toLowerCase();
+  document.querySelectorAll('#archiveTableBody tr').forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(filter) ? '' : 'none';
+  });
+});
+
+// Restore selected
+document.getElementById('restoreArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to restore.');
+  alert(`${selected.length} record(s) restored.`);
+  // TODO: Add AJAX call to restore records
+});
+
+// Delete selected
+document.getElementById('deleteArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to delete.');
+  if(confirm('This will permanently delete the selected record(s). Are you sure?')) {
+    alert(`${selected.length} record(s) deleted permanently.`);
+    // TODO: Add AJAX call to delete records
+  }
+});
+
+
 
 </script>
-
-</body>
-</html>
+@endsection

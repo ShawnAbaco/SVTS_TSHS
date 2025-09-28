@@ -1,465 +1,431 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Violation Anecdotal</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-<style>
-/* --- Reset --- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
+@extends('prefect.layout')
 
-body {
-  display: flex;
-  background: #f9f9f9;
-  color: #111;
-}
-
-/* --- Sidebar --- */
- .sidebar {
-      width: 230px;
-background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
-
-background-repeat: no-repeat;
-background-attachment: fixed;
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-      overflow-y: auto;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar ul li {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-      font-size: 15px;
-      color:rgb(255, 255, 255);
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .sidebar ul li i {
-      margin-right: 12px;
-      color:rgb(255, 255, 255);
-      min-width: 20px;
-      font-size: 16px;
-    }
-
-    .sidebar ul li:hover {
-      background: #2d3f55;
-      transform: translateX(5px);
-      color: #fff;
-    }
-
-    .sidebar ul li:hover i {
-      color: #00e0ff;
-    }
-
-    .sidebar ul li.active {
-      background: #00aaff;
-      color: #fff;
-      border-left: 4px solid #ffffff;
-    }
-
-    .sidebar ul li.active i {
-      color: #fff;
-    }
-
-    .sidebar ul li a {
-      text-decoration: none;
-      color: inherit;
-      flex: 1;
-    }
-
-    .section-title {
-      margin: 20px 10px 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 1px;
-    }
-
-    .dropdown-container {
-      display: none;
-      list-style: none;
-      padding-left: 25px;
-    }
-
-    .dropdown-container li {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      color: #ddd;
-    }
-
-    .dropdown-container li:hover {
-      background: #3a4c66;
-      color: #fff;
-    }
-
-    .dropdown-btn .arrow {
-      margin-left: auto;
-      transition: transform 0.3s;
-    }
-
-    .dropdown-btn.active .arrow {
-      transform: rotate(180deg);
-    }
-
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
-    }
-/* --- Main Content --- */
-.main-content {
-  margin-left: 260px;
-  padding: 30px;
-}
-
-h2 { font-size: 26px; margin-bottom: 20px; color: #007bff; }
-
-/* Top controls container */
-.top-controls {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-/* Search input */
-.top-controls input[type="text"] {
-  padding: 10px;
-  width: 300px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  height: 40px;
-  font-size: 14px;
-}
-
-/* Create button */
-.top-controls .create-btn {
-  height: 40px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.top-controls .create-btn:hover {
-  background-color: #0056b3;
-  transform: translateY(-1px) scale(1.02);
-}
-
-/* Archive button */
-.top-controls .archive-btn {
-  height: 40px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  background-color: orange;
-  color: #fff;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.top-controls .archive-btn:hover {
-  background-color: darkorange;
-  transform: translateY(-1px) scale(1.02);
-}
-
-/* --- Table Styling --- */
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
-  background: #ffffff;
-  font-size: 15px;
-}
-
-th {
-  background: #000000; /* plain black */
-  color: #ffffff;      /* white text */
-  padding: 14px 12px;
-  text-align: left;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  border: none;
-}
-
-td {
-  padding: 12px 10px;
-  border-bottom: 1px solid #e3e3e3;
-  vertical-align: middle;
-}
-
-tr:nth-child(even) { background: #f9faff; }
-tr:hover { background: #d0e7ff; transform: scale(1.01); transition: all 0.2s ease-in-out; }
-
-/* Status Labels */
-.status-pending {
-  color:rgb(0, 211, 32);
- 
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.status-resolved {
-  color: #fff;           /* White text */
-  background: #28a745;   /* Green background */
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  text-align: center;
-}
+@section('content')
+<div class="main-container">
 
 
-/* --- Action Buttons --- */
-.btn-action {
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #fff;
-  margin-right: 5px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: all 0.2s ease-in-out;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-action i { margin-right: 4px; }
-
-/* Updated Button */
-.btn-update { 
-  background: orange; 
-}
-.btn-update:hover { 
-  background: darkorange; 
-  transform: translateY(-2px) scale(1.05); 
-}
-
-/* --- Responsive --- */
-@media screen and (max-width: 768px) {
-  .main-content { margin-left: 0; padding: 15px; }
-  th, td { padding: 10px; font-size: 14px; }
-  .top-controls { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .top-controls input { width: 100%; }
-  .btn-action { padding: 6px 10px; font-size: 13px; }
-}
-
-/* Logo */
-.sidebar img {
-  width: 150px;
-  height: auto;
-  margin: 0 auto 0.5rem;
-  display: block;
-  transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
-
-</style>
-</head>
-<body>
-<div class="sidebar">
-        <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>  
-  <ul>
-    <div class="section-title">Main</div>
-
-    <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-    <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
-    <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
-    <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-
-    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
-      <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
-      <li class="active"><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
-    </ul>
-
-    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
-      <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
-      <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
-    </ul>
-
-    <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-    <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-  </ul>
-</div>
-
-<div class="main-content">
-  <h2>Violation Anecdotal Reports</h2>
-  <div class="top-controls">
-    <input type="text" id="searchInput" placeholder="Search student name...">
-    <button class="create-btn" onclick="openCreateForm()">
-        <i class="fas fa-plus"></i> Create Violation Anecdotal
-    </button>
-    <button class="archive-btn" onclick="archiveSelected()">
-        <i class="fas fa-archive"></i> Archive
-    </button>
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <h2>Student Management</h2>
+    <div class="actions">
+<input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
+      <button class="btn-primary" id="createBtn">➕ Add Violation</button>
+      <button class="btn-secondary" id="createAnecBtn">📝 Create Anecdotal</button>
+      <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
+    </div>
   </div>
 
-  <table id="anecTable">
-    <thead>
-      <tr>
-         <th><input type="checkbox" id="selectAll"></th> <!-- Select All -->
-        <th>Student Name</th>
-        <th>Violation</th>
-        <th>Respondent</th>
-        <th>Solution</th>
-        <th>Punishment</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach($violation_anecdotals as $anec)
-      <tr>
-        <td><input type="checkbox" class="student-checkbox"></td>
-        <td>{{ $anec->violation->student->student_fname }} {{ $anec->violation->student->student_lname }}</td>
-        <td>{{ $anec->violation->offense->offense_type }}</td>
-        <td>{{ $anec->violation->student->adviser->adviser_fname ?? 'Prefect' }}</td>
-        <td>{{ $anec->violation_anec_solution }}</td>
-        <td>{{ $anec->violation->offense->sanction_consequences }}</td>
-        <td>{{ $anec->violation_anec_date }}</td>
-        <td>{{ \Carbon\Carbon::parse($anec->violation_anec_time)->format('h:i A') }}</td>
-        <td class="{{ $anec->violation->status == 'Resolved' ? 'status-resolved' : 'status-pending' }}">
-            {{ $anec->violation->status ?? 'Pending' }}
-        </td>
-        <td>
-          <button class="btn-action btn-update"><i class="fas fa-edit"></i>Update</button>
-        </td>
-      </tr>
-      @endforeach
-    </tbody>
-  </table>
+  <!-- Summary Cards -->
+  <div class="summary">
+    <div class="card">
+      <h2>55</h2>
+      <p>Total Students</p>
+    </div>
+    <div class="card">
+      <h2>12</h2>
+      <p>Violations Today</p>
+    </div>
+    <div class="card">
+      <h2>11</h2>
+      <p>Pending Appointments</p>
+    </div>
+  </div>
+
+  <!-- Bulk Action / Select Options -->
+ <div class="select-options">
+  <div class="left-controls">
+    <label for="selectAll" class="select-label">
+      <input type="checkbox" id="selectAll">
+      <span>Select All</span>
+    </label>
+
+    <!-- Dropdown Button -->
+    <div class="dropdown">
+      <button class="btn-info dropdown-btn">⬇️ View Records</button>
+      <div class="dropdown-content">
+        <a href="#" id="violationRecords">Violation Records</a>
+        <a href="#" id="violaitonAppointments">Violation Appointments</a>
+        <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
+      </div>
+    </div>
+  </div>
+
+
+    <div class="right-controls">
+      <button class="btn-danger" id="moveToTrashBtn">🗑️ Move Selected to Trash</button>
+    </div>
+  </div>
+
+  <!-- Violation Table -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>ID</th>
+          <th>Student Name</th>
+          <th>Offense Type</th>
+          <th>Sanction</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+  <tbody id="tableBody">
+<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
+  <td><input type="checkbox" class="rowCheckbox"></td>
+  <td>1</td>
+  <td>Juan Dela Cruz</td>
+  <td><span title="Tardiness">Tardiness</span></td>
+  <td><span title="Verbal Warning">Verbal Warning</span></td>
+  <td>2025-09-28</td>
+  <td>08:15 AM</td>
+  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+</tr>
+
+  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>2</td>
+    <td>Maria Santos</td>
+    <td>Incomplete Homework</td>
+    <td>Written Warning</td>
+    <td>2025-09-27</td>
+    <td>09:30 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>3</td>
+    <td>Pedro Reyes</td>
+    <td>Uniform Violation</td>
+    <td>Detention</td>
+    <td>2025-09-26</td>
+    <td>07:50 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>4</td>
+    <td>Ana Lopez</td>
+    <td>Disrespect</td>
+    <td>Counseling</td>
+    <td>2025-09-25</td>
+    <td>10:10 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+</tbody>
+
+    </table>
+
+    <!-- Pagination (if needed) -->
+    <div class="pagination">
+      {{-- Implement your pagination links --}}
+      {{-- {{ $violations->links() }} --}}
+    </div>
+  </div>
+
+  <!-- Modals (Details, Anecdotal, Edit, Schedule, Archive) -->
+  {{-- @include('prefect.violations.modals') Create a separate Blade file for modals to keep it clean --}}
+
+
 </div>
 
-<script>
-  // Select All functionality
-  const selectAll = document.getElementById('selectAll');
-  const checkboxes = document.querySelectorAll('.student-checkbox');
 
-  selectAll.addEventListener('change', () => {
-    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+<!-- 📝 Details Modal -->
+<div class="modal" id="detailsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      📄 Violation Details
+    </div>
+    <div class="modal-body" id="detailsBody">
+      <!-- Content filled dynamically via JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="setScheduleBtn">📅 Set Schedule</button>
+      <button class="btn-info" id="sendSmsBtn">📩 Send SMS</button>
+      <button class="btn-close">❌ Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 🗃️ Archive Modal -->
+<div class="modal" id="archiveModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      🗃️ Archived Violations
+    </div>
+
+    <div class="modal-body">
+
+      <!-- 🔍 Search & Bulk Actions -->
+      <div class="modal-actions">
+        <label class="select-all-label">
+          <input type="checkbox" id="selectAllArchived" class="select-all-checkbox">
+          <span>Select All</span>
+        </label>
+
+        <div class="search-container">
+          <input type="search" placeholder="🔍 Search archived..." class="search-input">
+        </div>
+      </div>
+
+      <!-- 📋 Archive Table -->
+      <div class="archive-table-container">
+        <table class="archive-table">
+          <thead>
+            <tr>
+              <th>✔</th>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Offense</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="archivedCheckbox"></td>
+              <td>3</td>
+              <td>Mark Dela Cruz</td>
+              <td>Tardiness</td>
+              <td>2025-09-22</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="archivedCheckbox"></td>
+              <td>4</td>
+              <td>Anna Reyes</td>
+              <td>Cutting Classes</td>
+              <td>2025-09-23</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ⚠️ Note -->
+      <div class="modal-note">
+        ⚠️ Note: Deleting records will permanently remove them.
+      </div>
+
+      <!-- 🧭 Footer Buttons -->
+      <div class="modal-footer">
+        <button class="btn-secondary" id="restoreArchivedBtn">🔄 Restore</button>
+        <button class="btn-danger" id="deleteArchivedBtn">🗑️ Delete</button>
+        <button class="btn-close" id="closeArchive">❌ Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+
+    // Search filter for main violation table
+document.getElementById('searchInput').addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    const tableBody = document.getElementById('tableBody');
+    const rows = tableBody.querySelectorAll('tr');
+
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const studentName = row.cells[2].innerText.toLowerCase(); // Student Name column
+        const studentID = row.cells[1].innerText.toLowerCase();   // ID column
+        if(studentName.includes(filter) || studentID.includes(filter)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Check if "No records found" row exists
+    let noDataRow = tableBody.querySelector('.no-data-row');
+    if(visibleCount === 0) {
+        if(!noDataRow) {
+            const newRow = document.createElement('tr');
+            newRow.classList.add('no-data-row');
+            newRow.innerHTML = `<td colspan="8" style="text-align:center; padding:15px;">⚠️ No records found</td>`;
+            tableBody.appendChild(newRow);
+        }
+    } else {
+        if(noDataRow) noDataRow.remove();
+    }
+});
+
+
+
+  // Select all checkboxes
+  document.getElementById('selectAll').addEventListener('change', function() {
+    document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = this.checked);
   });
 
-  checkboxes.forEach(cb => {
-    cb.addEventListener('change', () => {
-      if (!cb.checked) {
-        selectAll.checked = false;
-      } else if (document.querySelectorAll('.student-checkbox:checked').length === checkboxes.length) {
-        selectAll.checked = true;
+  // Move to Trash
+  document.getElementById('moveToTrashBtn').addEventListener('click', () => {
+    const selected = [...document.querySelectorAll('.rowCheckbox:checked')];
+    if (selected.length === 0) {
+      alert('Please select at least one record.');
+    } else {
+      alert(selected.length + ' record(s) moved to Trash.');
+      // Add AJAX call here to move to trash in backend
+    }
+  });
+
+  // Row click -> Details Modal
+// Row click -> Details Modal
+document.querySelectorAll('#tableBody tr').forEach(row => {
+  row.addEventListener('click', e => {
+    // Ignore if checkbox or edit button is clicked
+    if(e.target.type === 'checkbox' || e.target.classList.contains('editBtn')) return;
+
+    const data = row.dataset.details.split('|');
+
+    const detailsBody = `
+      <p><strong>Student:</strong> ${data[0]}</p>
+      <p><strong>Offense:</strong> ${data[1]}</p>
+      <p><strong>Sanction:</strong> ${data[2]}</p>
+      <p><strong>Date:</strong> ${data[3]}</p>
+      <p><strong>Time:</strong> ${data[4]}</p>
+    `;
+
+    document.getElementById('detailsBody').innerHTML = detailsBody;
+    document.getElementById('detailsModal').style.display = 'flex';
+    document.getElementById('detailsModal').classList.add('show');
+    btn.closest('.modal').classList.remove('show');
+
+
+  });
+});
+// Close Details Modal
+document.querySelectorAll('#detailsModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
+  });
+});
+
+// Set Schedule Button
+document.getElementById('setScheduleBtn').addEventListener('click', () => {
+  alert('Open schedule setup form or modal here.');
+  // TODO: open your schedule modal or redirect to schedule setup
+});
+
+// Send SMS Button
+document.getElementById('sendSmsBtn').addEventListener('click', () => {
+  alert('Trigger SMS sending here.');
+  // TODO: implement SMS sending via backend
+});
+
+
+  // Close modals
+  document.querySelectorAll('.btn-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modal').style.display = 'none';
+    });
+  });
+
+  // Edit button
+  document.querySelectorAll('.editBtn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const row = btn.closest('tr');
+      const data = row.dataset.details.split('|');
+      document.getElementById('editStudentName').value = data[0];
+      document.getElementById('editOffense').value = data[1];
+      document.getElementById('editSanction').value = data[2];
+      document.getElementById('editDate').value = data[3];
+      document.getElementById('editTime').value = data[4];
+      document.getElementById('editModal').style.display = 'flex';
+    });
+  });
+
+  // Open modals
+  document.getElementById('createAnecBtn').addEventListener('click', () => {
+    document.getElementById('anecModal').style.display = 'flex';
+  });
+  document.getElementById('archiveBtn').addEventListener('click', () => {
+    document.getElementById('archiveModal').style.display = 'flex';
+  });
+
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent row click event
+    const dropdown = btn.parentElement;
+    dropdown.classList.toggle('show');
+  });
+});
+
+// Close dropdown if clicked outside
+window.addEventListener('click', () => {
+  document.querySelectorAll('.dropdown').forEach(dd => dd.classList.remove('show'));
+});
+
+// Open archive modal
+document.getElementById('archiveBtn').addEventListener('click', () => {
+  document.getElementById('archiveModal').style.display = 'flex';
+});
+
+// Close modal
+document.querySelectorAll('#archiveModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
+  });
+});
+
+// Select all checkboxes
+  // Get the select all checkbox and all individual checkboxes
+  const selectAllArchived = document.getElementById('selectAllArchived');
+  const archivedCheckboxes = document.querySelectorAll('.archivedCheckbox');
+
+  // When the select all checkbox changes
+  selectAllArchived.addEventListener('change', () => {
+    const isChecked = selectAllArchived.checked;
+    archivedCheckboxes.forEach(checkbox => {
+      checkbox.checked = isChecked;
+    });
+  });
+
+  // Optional: If any individual checkbox is unchecked, uncheck "Select All"
+  archivedCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      if (!checkbox.checked) {
+        selectAllArchived.checked = false;
+      } else {
+        // If all checkboxes are checked, check the "Select All" box
+        const allChecked = Array.from(archivedCheckboxes).every(cb => cb.checked);
+        selectAllArchived.checked = allChecked;
       }
     });
   });
 
-  // Dropdown
-  const dropdowns = document.querySelectorAll('.dropdown-btn');
-  dropdowns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling;
-      dropdowns.forEach(otherBtn => {
-        const otherContainer = otherBtn.nextElementSibling;
-        if (otherBtn !== btn) {
-          otherBtn.classList.remove('active');
-          otherContainer.style.display = 'none';
-        }
-      });
-      btn.classList.toggle('active');
-      container.style.display = container.style.display === 'block' ? 'none' : 'block';
-    });
+// Search filter
+document.getElementById('archiveSearch').addEventListener('input', function() {
+  const filter = this.value.toLowerCase();
+  document.querySelectorAll('#archiveTableBody tr').forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(filter) ? '' : 'none';
   });
+});
 
-  // Logout
-  function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
+// Restore selected
+document.getElementById('restoreArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to restore.');
+  alert(`${selected.length} record(s) restored.`);
+  // TODO: Add AJAX call to restore records
+});
 
-    fetch("{{ route('prefect.logout') }}", {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if(response.ok) {
-            window.location.href = "{{ route('auth.login') }}";
-        } else {
-            console.error('Logout failed:', response.statusText);
-        }
-    })
-    .catch(error => console.error('Logout failed:', error));
+// Delete selected
+document.getElementById('deleteArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to delete.');
+  if(confirm('This will permanently delete the selected record(s). Are you sure?')) {
+    alert(`${selected.length} record(s) deleted permanently.`);
+    // TODO: Add AJAX call to delete records
   }
+});
 
-  // Search filter
-  document.getElementById("searchInput").addEventListener("keyup", function() {
-    let filter = this.value.toLowerCase();
-    let rows = document.querySelectorAll("#anecTable tbody tr");
-    rows.forEach(row => {
-      let studentName = row.cells[1].innerText.toLowerCase();
-      row.style.display = studentName.includes(filter) ? "" : "none";
-    });
-  });
 
-  function openCreateForm() {
-    alert("Open Create Violation Anecdotal form/modal here.");
-  }
+
 </script>
-
-</body>
-</html>
+@endsection

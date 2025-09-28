@@ -6,10 +6,8 @@
   <title>Prefect Dashboard</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="{{ asset('css/prefect(1)/sidebar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/prefect/createViolation.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/prefect(1)/toolbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/prefect(1)/sidebar_report.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/prefect(1)/toolbar_report.css') }}">
     <link rel="stylesheet" href="{{ asset('css/prefect(1)/modal.css') }}">
 
 </head>
