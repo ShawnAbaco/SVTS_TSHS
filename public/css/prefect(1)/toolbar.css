@@ -60,7 +60,9 @@
   padding: 0 16px;
 }
 
-.btn-primary { background: #4b0000; color: #fff; }
+.btn-primary {
+        text-decoration: none; /* ensure no underline */
+        background: #4b0000; color: #fff; }
 .btn-primary:hover { background: #2b0000; }
 
 .btn-secondary { background: #555; color: #fff; }

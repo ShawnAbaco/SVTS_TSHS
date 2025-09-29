@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ asset('css/prefect(1)/sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/prefect/cards.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/prefect/createViolation.css') }}">
+     <link rel="stylesheet" href="{{ asset('css/prefect/createViolation.css') }}">
     <link rel="stylesheet" href="{{ asset('css/prefect(1)/toolbar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/prefect(1)/modal.css') }}">
 
@@ -70,7 +70,7 @@
     <div class="header-right">
       <div class="user-info" onclick="toggleProfileDropdown()">
         <img src="/images/user.jpg" alt="User">
-        <span>{{ Auth::user()->name }}</span>
+        {{-- <span>{{ Auth::prefect()->prefect_fname }}</span> --}}
         <i class="fas fa-caret-down"></i>
       </div>
       <div class="profile-dropdown" id="profileDropdown">
