@@ -1,0 +1,341 @@
+/* ===========================
+   🎨 Prefect Dashboard CSS
+   =========================== */
+
+/* ===== Global Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  background: #f5f5f5;
+  color: #222;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===========================
+   SIDEBAR STYLES
+   =========================== */
+.sidebar {
+      overflow-y: auto;    /* Makes content scrollable vertically */
+  width: 230px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+background: linear-gradient(135deg, #001a33, #003366, #1c1c2c);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 15px;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Optional: customize scrollbar (for WebKit browsers) */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #012448;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: #011427;
+}
+
+/* Logo */
+.sidebar img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Title */
+.sidebar h2 {
+      font-size: 1.5rem;
+  color: white;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+    /* ✨ Add a line below */
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 8px;
+  width: 100%;              /* adjust line width */
+  text-align: center;      /* center the text and line */
+}
+
+/* Menu List */
+.sidebar ul {
+  list-style: none;
+  width: 100%;
+}
+
+/* Menu Item */
+.sidebar ul li {
+  width: 100%;
+  margin: 5px 0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+/* Active Item */
+.sidebar ul li.active,
+.sidebar ul li:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+/* ====== Fixed Link Layout ====== */
+.sidebar ul li a {
+      font-size: 1.1rem;
+  padding: 14px 18px;
+  display: flex; /* Align icon + text */
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+
+  gap: 12px;
+  line-height: 1.4;
+  transition: 0.3s ease;
+  font-weight: 700;
+
+
+}
+
+/* Text beside icon wraps properly */
+.sidebar ul li a span {
+  white-space: normal;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* Icons */
+.sidebar ul li i {
+      font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0; /* prevent icon from shrinking */
+}
+
+/* Hover Effects */
+.sidebar ul li a:hover {
+  color: #66ccff; /* Sky blue hover */
+}
+
+/* 🚪 Logout */
+.sidebar ul li:last-child {
+  margin-top: auto;
+  background: rgba(0, 102, 204, 0.2); /* soft blue background */
+  border: 1px solid rgba(0, 102, 204, 0.3); /* light blue border */
+  cursor: pointer;
+  display: flex; /* Align icon + text */
+  justify-content: block;
+  transition: background 0.3s, border 0.3s;
+}
+
+.sidebar ul li:last-child:hover {
+  background: rgba(0, 102, 204, 0.4); /* brighter blue on hover */
+  border: 1px solid rgba(0, 102, 204, 0.6);
+}
+
+/* ===========================
+   MAIN CONTENT
+   =========================== */
+.main-content {
+  margin-left: 230px;
+  width: calc(100% - 230px);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  overflow-y: auto;
+}
+
+/* Scrollbar */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* ===========================
+   HEADER SECTION
+   =========================== */
+/* ===========================
+   HEADER SECTION
+   =========================== */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 230px; /* align beside sidebar */
+  width: calc(100% - 230px); /* fill the rest of the screen */
+  height: 80px; /* fixed height */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #003366;
+  color: #fff;
+  padding: 0 25px; /* removed top/bottom padding to control height */
+  border-bottom: 3px solid #001366;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+
+}
+
+
+/* Header Left */
+.header-left h2 {
+  font-size: 1.3rem !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: white;
+  margin-top: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* ✅ Clean & modern */
+
+}
+
+/* Header Right */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+/* User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.user-info:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* User Image */
+.user-info img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Username */
+.user-info span {
+  font-weight: 500;
+}
+
+/* Dropdown Arrow */
+.user-info i {
+  font-size: 0.9rem;
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 150px;
+  z-index: 200;
+}
+
+.profile-dropdown a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.profile-dropdown a:hover {
+  background: #eee;
+}
+
+/* Toggle Dropdown (JS Controlled) */
+.profile-dropdown.active {
+  display: block;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+  margin-left: 230px;
+  margin-top: 70px; /* equal to header height */
+  width: calc(100% - 230px);
+  height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  overflow-y: auto;
+
+}
+
+
+  .sidebar ul li a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  .sidebar h2,
+  .sidebar img {
+    display: none;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
