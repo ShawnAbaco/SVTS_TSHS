@@ -54,7 +54,12 @@
     <a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a>
   </li>
 
-  <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+<li>
+  <a href="#" onclick="event.preventDefault(); logout();">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </a>
+</li>
+
 </ul>
 
   </div>
@@ -121,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * ------------------------------- */
   window.logout = () => {
     if (!confirm("Are you sure you want to logout?")) return;
-    fetch("{{ route('adviser.logout') }}", {
+    fetch("{{ route('prefect.logout') }}", {
       method: 'POST',
       headers: {
         'X-CSRF-TOKEN': '{{ csrf_token() }}',

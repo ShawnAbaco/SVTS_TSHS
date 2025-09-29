@@ -1,4 +1,4 @@
-@extends('adviser.layout')
+@extends('prefect.layout')
 
 @section('content')
 <div class="main-container">
