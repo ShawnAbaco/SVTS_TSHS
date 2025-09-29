@@ -1,7 +1,7 @@
 @extends('prefect.layout')
 
 @section('content')
-<div class="container">
+<div class="main-container">
 
     {{-- ✅ Flash Messages --}}
     @if(session('messages'))
@@ -12,69 +12,14 @@
         </div>
     @endif
 
-    <div class="main-container">
+  <div class="toolbar">
+    <h2>Create Violation Record</h2>
+    <div class="actions">
+<input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
+      {{-- <button class="btn-primary" id="createBtn">➕ Add Student</button>
+      <button class="btn-info" id="archiveBtn">🗃️ Archive</button> --}}
 
-        <!-- ======= HEADER ======= -->
-        <header class="main-header">
-            <div class="header-left">
-                <h2></i> Create Violation Records</h2>
-                {{-- <p class="subtitle">Log multiple student violations quickly and easily.</p> --}}
-            </div>
-            <div class="header-right">
-                <div class="user-info" onclick="toggleProfileDropdown()">
-                    <img src="/images/user.jpg" alt="User">
-                    {{-- <span>{{ Auth::user()->name }}</span> --}}
-                    <i class="fas fa-caret-down"></i>
-                </div>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="{{ route('profile.settings') }}">Profile</a>
-                </div>
-            </div>
-        </header>
-
-        <!-- ======= FORM BOX ======= -->
-        <div class="form-box shadow-card">
-            <h3 class="section-title"><i class="fas fa-user"></i> Violator Details</h3>
-            <label>Violator(s) <span class="note">(comma-separated)</span></label>
-            <input type="text" id="studentsInput" placeholder="e.g. Shawn Abaco, Kent Zyrone" autocomplete="off">
-            <div id="studentResults" class="results"></div>
-
-            <h3 class="section-title"><i class="fas fa-info-circle"></i> Violation Information</h3>
-            <div class="row-fields">
-                <div class="field">
-                    <label>Offense</label>
-                    <input type="text" id="offenseInput" placeholder="Type offense..." autocomplete="off">
-                    <input type="hidden" id="offense_id">
-                    <div id="offenseResults" class="results"></div>
-                </div>
-
-                <div class="field small">
-                    <label>Date</label>
-                    <input type="date" id="dateInput">
-                </div>
-
-                <div class="field small">
-                    <label>Time</label>
-                    <input type="time" id="timeInput">
-                </div>
-
-                <div class="field large">
-                    <label>Incident Details</label>
-                    <textarea id="incidentInput" rows="3" placeholder="Briefly describe the incident..."></textarea>
-                </div>
-            </div>
-
-            <button type="button" class="btn-show-all" id="btnShowAll"><i class="fas fa-eye"></i> Show All</button>
-        </div>
-    </div>
-
-    <!-- ======= VIOLATION CARDS ======= -->
-    <section class="violations-section">
-        <h3 class="section-title"><i class="fas fa-list"></i> Violations Summary</h3>
-        <div id="violationsContainer" class="violationsWrapper"></div>
-    </section>
-
-    <!-- ======= ACTION BUTTONS ======= -->
+         <!-- ======= ACTION BUTTONS ======= -->
     <form id="violationForm" method="POST" action="{{ route('violations.store') }}">
         @csrf
         <div class="buttons-row">
@@ -86,6 +31,53 @@
             </button>
         </div>
     </form>
+
+    </div>
+  </div>
+
+
+        <!-- ======= FORM BOX ======= -->
+       <div class="form-box shadow-card">
+    <h3 class="section-title"><i class="fas fa-user"></i> Violator Details</h3>
+    <label>Violator(s) <span class="note">(comma-separated)</span></label>
+    <input type="text" id="studentsInput" placeholder="e.g. Shawn Abaco, Kent Zyrone" autocomplete="off">
+    <div id="studentResults" class="results"></div>
+
+    <h3 class="section-title"><i class="fas fa-info-circle"></i> Violation Information</h3>
+    <div class="row-fields">
+        <div class="field">
+            <label>Offense</label>
+            <input type="text" id="offenseInput" placeholder="Type offense..." autocomplete="off">
+            <input type="hidden" id="offense_id">
+            <div id="offenseResults" class="results"></div>
+        </div>
+
+        <div class="field small">
+            <label>Date</label>
+            <input type="date" id="dateInput">
+        </div>
+
+        <div class="field small">
+            <label>Time</label>
+            <input type="time" id="timeInput">
+        </div>
+
+        <div class="field large">
+            <label>Incident Details</label>
+            <textarea id="incidentInput" rows="3" placeholder="Briefly describe the incident..."></textarea>
+        </div>
+    </div>
+
+    <button type="button" class="btn-show-all" id="btnShowAll"><i class="fas fa-eye"></i> Show All</button>
+</div>
+
+    <!-- ======= VIOLATION CARDS ======= -->
+    <section class="violations-section">
+        <h3 class="section-title"><i class="fas fa-list"></i> Violations Summary</h3>
+        <div id="violationsContainer" class="violationsWrapper"></div>
+    </section>
+
+
 
     <!-- ======= PREVIEW ======= -->
     <section class="preview-section">
