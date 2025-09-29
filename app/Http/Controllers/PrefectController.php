@@ -240,12 +240,22 @@ public function parentlists()
         $parent->delete();
         return redirect()->route('parent.index')->with('success', 'Parent deleted successfully.');
     }
+
+
+
+
     public function violationrecords()
     {
         $violations = ViolationRecord::with(['student.parent', 'student.adviser', 'offense'])->get();
 return view('prefect.violationrecords', compact('violations'));
 
     }
+
+
+
+
+
+    
 
 public function violationappointments()
 {
@@ -323,8 +333,11 @@ public function reportgenerate()
     $complaints = Complaints::all(); // For the select dropdown
     return view('prefect.complaintsAppointments', compact('appointments', 'complaints'));
     }
+    
+    
     public function complaintAppointmentStore(Request $request)
 {
+   
     $request->validate([
         'complaints_id' => 'required|exists:tbl_complaints,complaints_id',
         'comp_app_date' => 'required|date',

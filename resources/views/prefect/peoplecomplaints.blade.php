@@ -114,8 +114,7 @@
     <td><button class="btn-primary editBtn">✏️ Edit</button></td>
   </tr>
 </tbody>
-
-    </table>
+</table>
 
     <!-- Pagination (if needed) -->
     <div class="pagination">
@@ -126,6 +125,7 @@
 
   <!-- Modals (Details, Anecdotal, Edit, Schedule, Archive) -->
   {{-- @include('prefect.violations.modals') Create a separate Blade file for modals to keep it clean --}}
+
 
 
 </div>
