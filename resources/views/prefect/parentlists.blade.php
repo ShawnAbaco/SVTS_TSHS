@@ -62,73 +62,54 @@
   <!-- Violation Table -->
   <div class="table-container">
     <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>ID</th>
-          <th>Student Name</th>
-          <th>Offense Type</th>
-          <th>Sanction</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-  <tbody id="tableBody">
-<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
-  <td><input type="checkbox" class="rowCheckbox"></td>
-  <td>1</td>
-  <td>Juan Dela Cruz</td>
-  <td><span title="Tardiness">Tardiness</span></td>
-  <td><span title="Verbal Warning">Verbal Warning</span></td>
-  <td>2025-09-28</td>
-  <td>08:15 AM</td>
-  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-</tr>
-
-  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>2</td>
-    <td>Maria Santos</td>
-    <td>Incomplete Homework</td>
-    <td>Written Warning</td>
-    <td>2025-09-27</td>
-    <td>09:30 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>3</td>
-    <td>Pedro Reyes</td>
-    <td>Uniform Violation</td>
-    <td>Detention</td>
-    <td>2025-09-26</td>
-    <td>07:50 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>4</td>
-    <td>Ana Lopez</td>
-    <td>Disrespect</td>
-    <td>Counseling</td>
-    <td>2025-09-25</td>
-    <td>10:10 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-</tbody>
-
+        <thead>
+            <tr>
+                <th></th>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Sex</th>
+                <th>Birthdate</th>
+                <th>Email</th>
+                <th>Contact Info</th>
+                <th>Relationship</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            @forelse($parents as $parent)
+                <tr data-details="{{ $parent->parent_fname }} {{ $parent->parent_lname }}|{{ $parent->parent_relationship }}|{{ $parent->parent_contactinfo }}">
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>{{ $parent->parent_id }}</td>
+                    <td>{{ $parent->parent_fname }}</td>
+                    <td>{{ $parent->parent_lname }}</td>
+                    <td>{{ ucfirst($parent->parent_sex) }}</td>
+                    <td>{{ $parent->parent_birthdate }}</td>
+                    <td>{{ $parent->parent_email ?? 'N/A' }}</td>
+                    <td>{{ $parent->parent_contactinfo }}</td>
+                    <td>{{ $parent->parent_relationship ?? 'N/A' }}</td>
+                    <td>{{ ucfirst($parent->status) }}</td>
+                    <td>
+                        <button class="btn-primary editBtn">✏️ Edit</button>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="11" style="text-align:center;">No parents found</td>
+                </tr>
+            @endforelse
+        </tbody>
     </table>
 
-    <!-- Pagination (if needed) -->
+    <!-- Pagination -->
     <div class="pagination">
-      {{-- Implement your pagination links --}}
-      {{-- {{ $violations->links() }} --}}
+        {{ $parents->links() }}
     </div>
-  </div>
+</div>
 
-  <!-- Modals (Details, Anecdotal, Edit, Schedule, Archive) -->
-  {{-- @include('prefect.violations.modals') Create a separate Blade file for modals to keep it clean --}}
+<!-- Include modals if needed -->
+{{-- @include('prefect.parents.modals') --}}
 
 
 </div>

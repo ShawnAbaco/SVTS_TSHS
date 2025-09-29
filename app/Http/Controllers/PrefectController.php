@@ -180,11 +180,34 @@ public function complaintDestroy($id)
 }
 
 
-   public function parentlists()
+
+
+
+
+// DIRIIIIIIIIIIIIII
+
+
+
+
+
+
+public function parentlists()
 {
-    $parents = ParentModel::with(['students.adviser'])->get();
+    $parents = ParentModel::paginate(10); // ✅ Use paginate for links()
     return view('prefect.parentlists', compact("parents"));
 }
+
+
+
+
+
+//////////////////////////////////////////////////
+
+
+
+
+
+
 
 
         public function parentCreate()
@@ -278,11 +301,19 @@ public function reportgenerate()
     {
         return view('prefect.reportgenerate');
     }
+
+
+// adviserrrrr
+
    public function usermanagement()
 {
     $advisers = Adviser::all(); // Fetch all advisers
     return view('prefect.usermanagement', compact('advisers'));
 }
+
+
+///////////////////
+
 
 
     public function complaintsappointments()
