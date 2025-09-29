@@ -62,6 +62,10 @@ Route::prefix('prefect')->group(function () {
         Route::get('/reportgenerate', [PrefectController::class, 'reportgenerate'])->name('report.generate');
         Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData'])->name('prefect.reports.data');;
 
+
+        Route::get('/create/parent', [ParentController::class, 'createParent'])->name('create.parent');
+
+
         // Parents CRUD
         Route::get('/parents/create', [PrefectController::class, 'parentCreate'])->name('parent.create');
         Route::post('/parents', [PrefectController::class, 'parentStore'])->name('parent.store');

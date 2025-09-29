@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 class ParentController extends Controller
 {
+
+public function createParent(Request $request){
+
+    return view('prefect.create-parent');
+
+}
+
+
   public function parentStore(Request $request)
 {
     $request->validate([

@@ -9,7 +9,11 @@
     <h2>Parent Management</h2>
     <div class="actions">
 <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
-      <button class="btn-primary" id="createBtn">➕ Add Parent</button>
+      {{-- <button class="btn-primary" id="createBtn">➕ Add Parent</button> --}}
+ <a href="{{ route('create.parent') }}" class="btn-primary" id="createBtn">
+    <i class="fas fa-plus"></i> Add Parent
+</a>
+
       <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
     </div>
   </div>
