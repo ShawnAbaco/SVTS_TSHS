@@ -15,6 +15,7 @@ use App\Models\ViolationAppointment;
 use App\Models\ViolationAnecdotal;
 use App\Models\ComplaintsAppointment;
 use App\Models\ComplaintsAnecdotal;
+use Illuminate\Support\Facades\DB;
 
 
 use App\Models\Complaints;
@@ -328,11 +329,24 @@ public function complaintAppointmentDestroy($id)
 
         return view('prefect.complaintsanecdotals', compact('complaint_anecdotals'));
     }
-     public function offensesandsanctions()
-    {
-    $offenses = OffensesWithSanction::orderBy('offense_sanc_id', 'ASC')->get();
+public function offensesandsanctions()
+{
+    // Get all offenses grouped by offense_type, offense_description, ordered by offense_sanc_id
+    $offenses = DB::table('tbl_offenses_with_sanction')
+        ->select(
+            'offense_type',
+            'offense_description',
+            DB::raw('GROUP_CONCAT(sanction_consequences SEPARATOR ", ") as sanctions'),
+            DB::raw('MIN(offense_sanc_id) as min_id') // Use the smallest ID for sorting
+        )
+        ->groupBy('offense_type', 'offense_description')
+        ->orderBy('min_id', 'ASC') // Sort by the earliest offense_sanc_id
+        ->get();
+
     return view('prefect.offensesandsanctions', compact('offenses'));
-    }
+}
+
+
 
     public function createAdviser(Request $request)
     {
