@@ -6,7 +6,7 @@
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <h2>Complaint Management</h2>
+    <h2>Violation Management</h2>
     <div class="actions">
 <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
       <button class="btn-primary" id="createBtn">➕ Add Violation</button>
