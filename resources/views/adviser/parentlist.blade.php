@@ -1,5 +1,6 @@
 @extends('adviser.layout')
 
+<<<<<<< HEAD
 @section('content')
 <div class="main-container">
 
@@ -12,6 +13,31 @@
       <button class="btn-primary" id="createBtn">➕ Add Violation</button>
       <button class="btn-secondary" id="createAnecBtn">📝 Create Anecdotal</button>
       <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
+=======
+</head>
+<body>
+  <!-- Sidebar -->
+<div class="sidebar">
+  <img src="/images/Logo.png" alt="Logo">
+  <h2>ADVISER</h2>
+  <ul>
+    <div class="section-title">Main</div>
+    <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+    <li><a href="{{ route('student.list') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
+    <li class="active"><a href="{{ route('parent.list') }}"><i class="fas fa-users"></i> Parent List</a></li>
+    <li><a href="{{ route('violation.record') }}"><i class="fas fa-book"></i>Violation Record</a></li>
+    <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i>Complaints</a></li>
+    <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+    <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+  </ul>
+</div>
+   <!-- Main Content -->
+<div class="main-content">
+  <header class="main-header">
+    <div class="header-left">
+      <h2>Parent List</h2>
+>>>>>>> cd1851499bad138b4fef1c14876b8cb2562a174f
     </div>
   </div>
 

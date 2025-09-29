@@ -6,7 +6,7 @@
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <h2>Student Management</h2>
+    <h2>Adviser Management</h2>
     <div class="actions">
 <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
       <button class="btn-primary" id="createBtn">➕ Add Violation</button>
@@ -55,66 +55,37 @@
     </div>
   </div>
 
-  <!-- Violation Table -->
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>ID</th>
-          <th>Student Name</th>
-          <th>Offense Type</th>
-          <th>Sanction</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-  <tbody id="tableBody">
-<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
-  <td><input type="checkbox" class="rowCheckbox"></td>
-  <td>1</td>
-  <td>Juan Dela Cruz</td>
-  <td><span title="Tardiness">Tardiness</span></td>
-  <td><span title="Verbal Warning">Verbal Warning</span></td>
-  <td>2025-09-28</td>
-  <td>08:15 AM</td>
-  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-</tr>
-
-  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>2</td>
-    <td>Maria Santos</td>
-    <td>Incomplete Homework</td>
-    <td>Written Warning</td>
-    <td>2025-09-27</td>
-    <td>09:30 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>3</td>
-    <td>Pedro Reyes</td>
-    <td>Uniform Violation</td>
-    <td>Detention</td>
-    <td>2025-09-26</td>
-    <td>07:50 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>4</td>
-    <td>Ana Lopez</td>
-    <td>Disrespect</td>
-    <td>Counseling</td>
-    <td>2025-09-25</td>
-    <td>10:10 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-</tbody>
-
-    </table>
+ <!-- Violation Table -->
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Adviser Name</th>
+        <th>Section</th>
+        <th>Grade Level</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      @foreach($advisers as $adviser)
+      <tr data-details="{{ $adviser->adviser_fname }} {{ $adviser->adviser_lname }}|{{ $adviser->adviser_section }}|{{ $adviser->adviser_gradelevel }}|{{ $adviser->adviser_email }}|{{ $adviser->adviser_contactinfo }}">
+        <td><input type="checkbox" class="rowCheckbox"></td>
+        <td>{{ $adviser->adviser_id }}</td>
+        <td>{{ $adviser->adviser_fname }} {{ $adviser->adviser_lname }}</td>
+        <td>{{ $adviser->adviser_section }}</td>
+        <td>{{ $adviser->adviser_gradelevel }}</td>
+        <td>{{ $adviser->adviser_email }}</td>
+        <td>{{ $adviser->adviser_contactinfo }}</td>
+        <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
 
     <!-- Pagination (if needed) -->
     <div class="pagination">

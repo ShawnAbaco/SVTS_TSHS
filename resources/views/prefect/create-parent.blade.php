@@ -2,117 +2,61 @@
 
 @section('content')
 <div class="main-container">
+    <style>
 
-    {{-- ✅ Flash Messages --}}
-    @if(session('messages'))
+        
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Flash Messages -->
         <div class="alert-messages">
-            @foreach(session('messages') as $msg)
-                <div class="alert-item">{!! $msg !!}</div>
-            @endforeach
+            <!-- Flash messages would appear here -->
         </div>
-    @endif
 
-  <div class="toolbar">
-    <h2>Create Parents</h2>
-    <div class="actions">
-<input type="search" placeholder="🔍 Search parent..." id="searchInput">
-      {{-- <button class="btn-primary" id="createBtn">➕ Add Student</button>
-      <button class="btn-info" id="archiveBtn">🗃️ Archive</button> --}}
-
-         <!-- ======= ACTION BUTTONS ======= -->
-    <form id="violationForm" method="POST" action="{{ route('parent.store') }}">
-        @csrf
-        <div class="buttons-row">
-            <button type="button" class="btn-Add-Violation" id="btnAddViolation">
-                <i class="fas fa-plus-circle"></i> Add Another Parent
-            </button>
-            <button type="submit" class="btn-save">
-                <i class="fas fa-save"></i> Save All
-            </button>
-        </div>
-    </form>
-
-    </div>
-  </div>
-
-
-            <!-- Parent Container -->
-            <div class="parent-container" id="parentContainer">
-                <div class="parent-header">
-                    <span class="parent-title">Parent #1</span>
-                    <button type="button" class="remove-parent" onclick="removeParent(this)">
-                        <i class="fas fa-times"></i> Remove
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <h2>Create Parents</h2>
+            <div class="actions">
+                <input type="search" placeholder="🔍 Search parent..." id="searchInput">
+                
+                <div class="buttons-row">
+                    <button type="button" class="btn-Add-Violation" id="btnAddViolation">
+                        <i class="fas fa-plus-circle"></i> Add Another Parent
+                    </button>
+                    <button type="submit" class="btn-save" form="violationForm">
+                        <i class="fas fa-save"></i> Save All
                     </button>
                 </div>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="parent_fname">First Name *</label>
-                        <input type="text" id="parent_fname" name="parents[0][parent_fname]" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="parent_lname">Last Name *</label>
-                        <input type="text" id="parent_lname" name="parents[0][parent_lname]" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="parent_sex">Sex</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="parent_sex_male" name="parents[0][parent_sex]" value="male">
-                                <label for="parent_sex_male">Male</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="parent_sex_female" name="parents[0][parent_sex]" value="female">
-                                <label for="parent_sex_female">Female</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="parent_sex_other" name="parents[0][parent_sex]" value="other">
-                                <label for="parent_sex_other">Other</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="parent_birthdate">Birthdate *</label>
-                        <input type="date" id="parent_birthdate" name="parents[0][parent_birthdate]" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="parent_email">Email</label>
-                        <input type="email" id="parent_email" name="parents[0][parent_email]" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="parent_contactinfo">Contact Information *</label>
-                        <input type="text" id="parent_contactinfo" name="parents[0][parent_contactinfo]" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="parent_relationship">Relationship</label>
-                        <select id="parent_relationship" name="parents[0][parent_relationship]" class="form-control">
-                            <option value="">Select Relationship</option>
-                            <option value="father">Father</option>
-                            <option value="mother">Mother</option>
-                            <option value="guardian">Guardian</option>
-                            <option value="grandparent">Grandparent</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                </div>
+            </div>
+        </div>
+
+        <!-- Parent Container -->
+        <form id="violationForm" method="POST">
+            <div class="parents-wrapper" id="parentsWrapper">
+                <!-- Parent forms will be dynamically added here -->
             </div>
         </form>
     </div>
-</div>
+
     <script>
-        let parentCount = 1;
+        let parentCount = 0;
+
+        // Initialize with one parent form
+        document.addEventListener('DOMContentLoaded', function() {
+            addParentForm();
+        });
 
         // Add new parent form
         document.getElementById('btnAddViolation').addEventListener('click', function() {
+            addParentForm();
+            updateLayout();
+        });
+
+        function addParentForm() {
             parentCount++;
             
-            const parentContainer = document.getElementById('parentContainer');
+            const parentsWrapper = document.getElementById('parentsWrapper');
             const newParent = document.createElement('div');
             newParent.className = 'parent-container';
             newParent.innerHTML = `
@@ -181,16 +125,17 @@
                 </div>
             `;
             
-            parentContainer.parentNode.insertBefore(newParent, parentContainer.nextSibling);
-        });
+            parentsWrapper.appendChild(newParent);
+        }
 
         // Remove parent form
         function removeParent(button) {
             const parentContainers = document.querySelectorAll('.parent-container');
             if (parentContainers.length > 1) {
                 button.closest('.parent-container').remove();
-                // Update parent numbers
+                // Update parent numbers and layout
                 updateParentNumbers();
+                updateLayout();
             } else {
                 alert('You need at least one parent form.');
             }
@@ -202,8 +147,61 @@
             parentContainers.forEach((container, index) => {
                 const title = container.querySelector('.parent-title');
                 title.textContent = `Parent #${index + 1}`;
+                
+                // Update all input names and IDs
+                const inputs = container.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        input.setAttribute('name', name.replace(/\[\d+\]/, `[${index}]`));
+                    }
+                    
+                    const id = input.getAttribute('id');
+                    if (id) {
+                        input.setAttribute('id', id.replace(/\d+$/, index + 1));
+                    }
+                });
+                
+                // Update radio button IDs and labels
+                const radios = container.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => {
+                    const id = radio.getAttribute('id');
+                    if (id) {
+                        radio.setAttribute('id', id.replace(/\d+$/, index + 1));
+                    }
+                });
+                
+                const labels = container.querySelectorAll('label');
+                labels.forEach(label => {
+                    const forAttr = label.getAttribute('for');
+                    if (forAttr) {
+                        label.setAttribute('for', forAttr.replace(/\d+$/, index + 1));
+                    }
+                });
             });
             parentCount = parentContainers.length;
+        }
+
+        // Update layout based on number of parent forms
+        function updateLayout() {
+            const parentContainers = document.querySelectorAll('.parent-container');
+            const parentsWrapper = document.getElementById('parentsWrapper');
+            
+            // Reset all containers to default flex behavior
+            parentContainers.forEach(container => {
+                container.style.flex = '1 1 400px';
+                container.style.maxWidth = '600px';
+            });
+            
+            // Special layout for single parent
+            if (parentContainers.length === 1) {
+                parentContainers[0].style.maxWidth = '800px';
+                parentsWrapper.style.justifyContent = 'center';
+            }
+            // For multiple parents, let flexbox handle the layout naturally
+            else {
+                parentsWrapper.style.justifyContent = 'flex-start';
+            }
         }
 
         // Form validation
