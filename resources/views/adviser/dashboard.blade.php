@@ -1,52 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Adviser Dashboard</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="{{ asset('css/adviser/sidebar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/adviser/cards.css') }}">
+@extends('adviser.layout')
 
-</head>
-<body>
+@section('content')
+<div class="main-container">
 
-    <!-- Sidebar -->
-<div class="sidebar">
-  <img src="/images/Logo.png" alt="Logo">
-  <h2>Adviser</h2>
-  <ul>
-    <div class="section-title">Main</div>
-    <li class="active"><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-    <li><a href="{{ route('student.list') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
-    <li ><a href="{{ route('parent.list') }}"><i class="fas fa-users"></i> Parent List</a></li>
-    <li><a href="{{ route('violation.record') }}"><i class="fas fa-book"></i>Violation Record</a></li>
-    <li><a href="{{ route('complaints.all') }}"><i class="fas fa-comments"></i>Complaints</a></li>
-    <li><a href="{{ route('offense.sanction') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-    <li><a href="{{ route('adviser.reports') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-  </ul>
-</div>
+<style>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- ======= HEADER ======= -->
-  <header class="main-header">
-    <div class="header-left">
-      <h2>Dashoard Overview</h2>
-    </div>
-    <div class="header-right">
-      <div class="user-info" onclick="toggleProfileDropdown()">
-        <img src="/images/user.jpg" alt="User">
-        <span>{{ Auth::user()->name }}</span>
-        <i class="fas fa-caret-down"></i>
-      </div>
-      <div class="profile-dropdown" id="profileDropdown">
-        <a href="{{ route('profile.settings') }}">Profile</a>
-      </div>
-    </div>
-  </header>
+.toolbar {
+    display: flex;             /* make it a flex container */
+    justify-content: center;   /* horizontal center */
+    align-items: center;       /* vertical center */
+    height: 80px;              /* adjust as needed */
+}
+
+.toolbar h3 {
+    font-size: 2rem;
+    color: #4b0000;
+    font-weight: 600;
+    text-align: center;        /* centers text inside h3 if needed */
+}
+</style>
+
+    </style>
+  <!-- Toolbar -->
+  <div class="toolbar">
+        <h3>Dashboard Overview</h3>
+  </div>
 
 <br>
     <!-- Stats Cards -->
@@ -215,5 +193,5 @@
   window.onclick = (event) => { if(event.target === modal) modal.style.display = "none"; }
 
 </script>
-</body>
-</html>
+
+@endsection
