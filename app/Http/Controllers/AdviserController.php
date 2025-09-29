@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
+use App\Models\Adviser;
+
 use App\Models\ParentModel;
 use App\Models\ViolationRecord;
 use App\Models\ViolationAppointment;
@@ -38,47 +40,101 @@ class AdviserController extends Controller
     }
 public function studentlist()
 {
-    $adviserId = Auth::guard('adviser')->id();
+    // $adviserId = Auth::guard('adviser')->id();
 
-    // Active and Cleared students
-    $activeStudents = Student::where('adviser_id', $adviserId)
-        ->whereIn('status', ['active', 'cleared'])
-        ->with('parent')
-        ->get();
+    // // Active and Cleared students
+    // $activeStudents = Student::where('adviser_id', $adviserId)
+    //     ->whereIn('status', ['active', 'cleared'])
+    //     ->with('parent')
+    //     ->get();
 
-    // Archived students (inactive or completed)
-    $archivedStudents = Student::where('adviser_id', $adviserId)
-        ->whereIn('status', ['inactive', 'completed'])
-        ->with('parent')
-        ->get();
+    // // Archived students (inactive or completed)
+    // $archivedStudents = Student::where('adviser_id', $adviserId)
+    //     ->whereIn('status', ['inactive', 'completed'])
+    //     ->with('parent')
+    //     ->get();
 
-    return view('adviser.studentlist', compact('activeStudents', 'archivedStudents'));
+    // return view('adviser.studentlist', compact('activeStudents', 'archivedStudents'));
+
+    $students = Student::paginate(10);
+        $sections = Adviser::select('adviser_section')->distinct()->pluck('adviser_section');
+
+
+    // =========================
+    // Summary Cards Data
+    // =========================
+
+    // Total students
+    $totalStudents = Student::count();
+
+    // Active students
+    $activeStudents = Student::where('status', 'active')->count();
+
+    // Completed students
+    $completedStudents = Student::where('status', 'completed')->count();
+
+    // Gender breakdown
+    $maleStudents = Student::where('student_sex', 'male')->count();
+    $femaleStudents = Student::where('student_sex', 'female')->count();
+    $otherStudents = Student::where('student_sex', 'other')->count();
+
+    // Violations today
+    $violationsToday = ViolationRecord::whereDate('violation_date', now())->count();
+
+    // Pending appointments
+    $pendingAppointments = ViolationAppointment::where('violation_app_status', 'Pending')->count();
+
+    // =========================
+    // Pass data to Blade view
+    // =========================
+    return view('adviser.studentlist', compact(
+        'students',
+        'sections',
+        'totalStudents',
+         'activeStudents',
+       'completedStudents',
+        'maleStudents',
+       'femaleStudents',
+        'otherStudents',
+        'violationsToday',
+        'pendingAppointments'
+    ));
 }
 
 
 
     public function parentlist()
 {
-    // Get all parents with their students
-    $parents = \App\Models\ParentModel::with('students')->get();
+    // // Get all parents with their students
+    // $parents = \App\Models\ParentModel::with('students')->get();
 
-    return view('adviser.parentlist', compact('parents'));
+    // return view('adviser.parentlist', compact('parents'));
+
+
+    $parents = ParentModel::paginate(10); // ✅ Use paginate for links()
+    return view('adviser.parentlist', compact("parents"));
+
+
 }
 
 
 // Display violation records
     public function violationrecord()
     {
-        $adviserId = Auth::guard('adviser')->id();
+        // $adviserId = Auth::guard('adviser')->id();
 
-        $violations = ViolationRecord::with(['student', 'offense'])
-            ->whereHas('student', fn($q) => $q->where('adviser_id', $adviserId))
-            ->get();
+        // $violations = ViolationRecord::with(['student', 'offense'])
+        //     ->whereHas('student', fn($q) => $q->where('adviser_id', $adviserId))
+        //     ->get();
 
-        $students = Student::where('adviser_id', $adviserId)->get();
-        $offenses = OffensesWithSanction::all();
+        // $students = Student::where('adviser_id', $adviserId)->get();
+        // $offenses = OffensesWithSanction::all();
 
-        return view('adviser.violationrecord', compact('violations', 'students', 'offenses'));
+        // return view('adviser.violationrecord', compact('violations', 'students', 'offenses'));
+
+        $violations = ViolationRecord::with(['student.parent', 'student.adviser', 'offense'])->get();
+return view('adviser.violationrecord', compact('violations'));
+
     }
 
    public function violationappointment()
@@ -111,17 +167,25 @@ public function studentlist()
 
 public function complaintsall()
 {
-    $adviserId = Auth::guard('adviser')->id();
+    // $adviserId = Auth::guard('adviser')->id();
 
-    $complaints = Complaints::with(['complainant','respondent','offense'])
-        ->whereHas('complainant', fn($q) => $q->where('adviser_id', $adviserId))
-        ->orWhereHas('respondent', fn($q) => $q->where('adviser_id', $adviserId))
-        ->get();
+    // $complaints = Complaints::with(['complainant','respondent','offense'])
+    //     ->whereHas('complainant', fn($q) => $q->where('adviser_id', $adviserId))
+    //     ->orWhereHas('respondent', fn($q) => $q->where('adviser_id', $adviserId))
+    //     ->get();
 
-    // Add these lines:
-    $offenses = OffensesWithSanction::all();
+    // // Add these lines:
+    // $offenses = OffensesWithSanction::all();
 
-    return view('adviser.complaintsall', compact('complaints', 'offenses'));
+    // return view('adviser.complaintsall', compact('complaints', 'offenses'));
+     $complaints = Complaints::with([
+        'complainant',
+        'respondent',
+        'offense'
+    ])->get();
+
+    return view('adviser.complaintsall', compact('complaints'));
+
 }
 
 

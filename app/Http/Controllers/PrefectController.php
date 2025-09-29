@@ -114,10 +114,10 @@ public function studentmanagement()
         'students',
         'sections',
         'totalStudents',
-        'activeStudents',
-        'completedStudents',
+         'activeStudents',
+       'completedStudents',
         'maleStudents',
-        'femaleStudents',
+       'femaleStudents',
         'otherStudents',
         'violationsToday',
         'pendingAppointments'
