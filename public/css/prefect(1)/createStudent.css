@@ -1,12 +1,62 @@
-/* Parent Container Styles */
-        .parents-wrapper {
+
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        #searchInput {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 250px;
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-Add-Student, .btn-save {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-Add-Student {
+            background: #4b0000;
+            color: white;
+        }
+
+        .btn-Add-Student:hover {
+            background: #3a0000;
+        }
+
+        .btn-save {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #1b5e20;
+        }
+
+        /* Student Container Styles */
+        .students-wrapper {
             display: flex;
             flex-wrap: wrap;
             gap: 25px;
             justify-content: center;
         }
 
-        .parent-container {
+        .student-container {
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -17,12 +67,12 @@
             border: 1px solid #eaeaea;
         }
 
-        .parent-container:hover {
+        .student-container:hover {
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
             transform: translateY(-2px);
         }
 
-        .parent-header {
+        .student-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -31,13 +81,13 @@
             border-bottom: 1px solid #eee;
         }
 
-        .parent-header .parent-title {
+        .student-header .student-title {
             font-size: 1.3rem;
             font-weight: 600;
             color: #4b0000;
         }
 
-        .remove-parent {
+        .remove-student {
             background: #e53935;
             color: #fff;
             border: none;
@@ -50,7 +100,7 @@
             gap: 5px;
         }
         
-        .remove-parent:hover { 
+        .remove-student:hover { 
             background: #b71c1c; 
         }
 
@@ -118,13 +168,13 @@
             margin-bottom: 10px;
         }
 
-        /* Animation for new parent forms */
+        /* Animation for new student forms */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .parent-container {
+        .student-container {
             animation: fadeIn 0.4s ease-out;
         }
 
@@ -151,7 +201,8 @@
                 justify-content: space-between;
             }
             
-            .parent-container {
+            .student-container {
                 flex: 1 1 100%;
             }
         }
+  

@@ -64,6 +64,14 @@ Route::prefix('prefect')->group(function () {
 
 
         Route::get('/create/parent', [ParentController::class, 'createParent'])->name('create.parent');
+        Route::get('/create/student', [StudentController::class, 'createStudent'])->name('create.student');
+
+
+        Route::post('/students/bulk-delete', [StudentController::class, 'bulkDestroy'])
+     ->name('students.bulk-destroy');
+
+Route::get('/students/by-parent/{parentId}', [StudentController::class, 'getByParent'])
+     ->name('students.by-parent');
 
 
         // Parents CRUD
