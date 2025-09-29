@@ -14,7 +14,7 @@
   <!-- Sidebar -->
 <div class="sidebar">
   <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>
+  <h2>ADVISER</h2>
   <ul>
     <div class="section-title">Main</div>
     <li><a href="{{ route('adviser.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
