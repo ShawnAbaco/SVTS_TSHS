@@ -57,78 +57,55 @@
   </div>
 
   <!-- Violation Table -->
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>ID</th>
-          <th>Student Name</th>
-          <th>Offense Type</th>
-          <th>Sanction</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-  <tbody id="tableBody">
-<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
-  <td><input type="checkbox" class="rowCheckbox"></td>
-  <td>1</td>
-  <td>Juan Dela Cruz</td>
-  <td><span title="Tardiness">Tardiness</span></td>
-  <td><span title="Verbal Warning">Verbal Warning</span></td>
-  <td>2025-09-28</td>
-  <td>08:15 AM</td>
-  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-</tr>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Student Name</th>
+        <th>Sex</th>
+        <th>Birthdate</th>
+        <th>Address</th>
+        <th>Contact Info</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      @forelse($students as $student)
+      <tr data-details="{{ $student->student_fname }} {{ $student->student_lname }}|{{ $student->student_sex }}|{{ $student->student_birthdate }}|{{ $student->student_address }}|{{ $student->student_contactinfo }}|{{ $student->status }}">
+        <td><input type="checkbox" class="rowCheckbox"></td>
+        <td>{{ $student->student_id }}</td>
+        <td>{{ $student->student_fname }} {{ $student->student_lname }}</td>
+        <td>{{ ucfirst($student->student_sex) }}</td>
+        <td>{{ \Carbon\Carbon::parse($student->student_birthdate)->format('Y-m-d') }}</td>
+        <td>{{ $student->student_address }}</td>
+        <td>{{ $student->student_contactinfo }}</td>
+        <td>{{ ucfirst($student->status) }}</td>
+        <td>
+          <button class="btn-primary editBtn" data-id="{{ $student->student_id }}">✏️ Edit</button>
+        </td>
+      </tr>
+      @empty
+      <tr class="no-data-row">
+        <td colspan="9" style="text-align:center; padding:15px;">⚠️ No students found</td>
+      </tr>
+      @endforelse
+    </tbody>
+  </table>
 
-  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>2</td>
-    <td>Maria Santos</td>
-    <td>Incomplete Homework</td>
-    <td>Written Warning</td>
-    <td>2025-09-27</td>
-    <td>09:30 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>3</td>
-    <td>Pedro Reyes</td>
-    <td>Uniform Violation</td>
-    <td>Detention</td>
-    <td>2025-09-26</td>
-    <td>07:50 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>4</td>
-    <td>Ana Lopez</td>
-    <td>Disrespect</td>
-    <td>Counseling</td>
-    <td>2025-09-25</td>
-    <td>10:10 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-</tbody>
-
-    </table>
-
-    <!-- Pagination (if needed) -->
-    <div class="pagination">
-      {{-- Implement your pagination links --}}
-      {{-- {{ $violations->links() }} --}}
-    </div>
+<!-- Pagination -->
+<div class="pagination-wrapper">
+  <div class="pagination-summary">
+    Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} results
   </div>
 
-  <!-- Modals (Details, Anecdotal, Edit, Schedule, Archive) -->
-  {{-- @include('prefect.violations.modals') Create a separate Blade file for modals to keep it clean --}}
-
-
+  <div class="pagination-links">
+    {{ $students->links() }}
+  </div>
 </div>
+
 
 
 <!-- 📝 Details Modal -->

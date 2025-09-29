@@ -56,7 +56,7 @@
     </div>
   </div>
 
-  <!-- Violation Table -->
+ <!-- Violation Table -->
   <div class="table-container">
     <table>
       <thead>
@@ -129,7 +129,6 @@
 
 
 </div>
-
 
 <!-- 📝 Details Modal -->
 <div class="modal" id="detailsModal">
