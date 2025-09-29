@@ -20,7 +20,7 @@ class Authenticate extends Middleware
                 return route('prefect.login');
             }
 
-            return route('adviser.login'); // fallback
+            return route('auth.login'); // fallback
         }
 
         return null;

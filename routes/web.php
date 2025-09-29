@@ -21,6 +21,7 @@ Route::get('/', function () {
 });
     Route::get('/adviser/login', [AdviserController::class, 'showLoginForm'])->name('adviser.login');
     Route::post('/adviser/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::get('/login', [AdviserController::class, 'showLoginForm'])->name('login');
 
 
 // ===================== Prefect Routes =====================
