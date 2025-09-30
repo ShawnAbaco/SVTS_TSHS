@@ -8,6 +8,108 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/adviser/login.css') }}">
+    
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+        
+        .modal h2 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 15px 0;
+        }
+        
+        .attempts-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .modal-actions {
+            margin-top: 20px;
+        }
+        
+        .ok-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .ok-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Success Modal Styles */
+        .success-modal .modal-content h2 {
+            color: #27ae60;
+        }
+        
+        .success-modal .modal-content p {
+            color: #2c3e50;
+        }
+        
+        .success-modal .ok-btn {
+            background-color: #27ae60;
+        }
+        
+        .success-modal .ok-btn:hover {
+            background-color: #219955;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .redirect-message {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+    </style>
+</head>
 <body style="background: url('http://127.0.0.1:8000/images/tshs.jpg') no-repeat center center fixed; background-size: cover;">
 
 <header class="top-bar">
@@ -43,6 +145,8 @@
 
     <!-- Login Card shifted slightly right -->
     <div class="login-card">
+        <div class="attempts-counter" id="attemptsCounter">Attempts: 0/3</div>
+        
         <div class="login-header">
             <img src="{{ asset('images/logo.png') }}" alt="Logo">
             <h2> Login</h2>
@@ -100,21 +204,150 @@
     </div>
 </div>
 
+<!-- Modal for too many attempts -->
+<div id="attemptsModal" class="modal">
+    <div class="modal-content">
+        <h2>Too Many Attempts</h2>
+        <p>You have exceeded the maximum number of login attempts. Please wait before trying again.</p>
+        <div class="countdown" id="countdown">10</div>
+        <p>seconds remaining</p>
+        <div class="modal-actions">
+            <button class="ok-btn" id="okBtn">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal success-modal">
+    <div class="modal-content">
+        <div class="success-icon">✅</div>
+        <h2>Login Successful!</h2>
+        <p>You are being redirected to your dashboard.</p>
+        <div class="redirect-message" id="redirectMessage">Redirecting in 3 seconds...</div>
+        <div class="modal-actions">
+            <button class="ok-btn" id="successOkBtn">Continue</button>
+        </div>
+    </div>
+</div>
 
 <footer>
     &copy; {{ date('Y') }} Tagoloan Senior High School • Student Violation Tracking System
 </footer>
 
 <script>
+// Track login attempts
+let loginAttempts = 0;
+const maxAttempts = 3;
+const lockoutTime = 10; // 10 seconds
+let countdownInterval;
+let redirectInterval;
+
 const loginForm = document.getElementById('loginForm');
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const emailError = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
+const loginBtn = document.getElementById('loginBtn');
+const attemptsCounter = document.getElementById('attemptsCounter');
+const attemptsModal = document.getElementById('attemptsModal');
+const successModal = document.getElementById('successModal');
+const countdownDisplay = document.getElementById('countdown');
+const redirectMessage = document.getElementById('redirectMessage');
+const okBtn = document.getElementById('okBtn');
+const successOkBtn = document.getElementById('successOkBtn');
+
+// Load attempts from localStorage if available
+if (localStorage.getItem('loginAttempts')) {
+    loginAttempts = parseInt(localStorage.getItem('loginAttempts'));
+    updateAttemptsCounter();
+}
+
+// Check if user is still in lockout period
+const lockoutEnd = localStorage.getItem('lockoutEnd');
+if (lockoutEnd && new Date().getTime() < parseInt(lockoutEnd)) {
+    const remainingTime = Math.ceil((parseInt(lockoutEnd) - new Date().getTime()) / 1000);
+    startLockout(remainingTime);
+}
+
+function updateAttemptsCounter() {
+    attemptsCounter.textContent = `Attempts: ${loginAttempts}/${maxAttempts}`;
+    localStorage.setItem('loginAttempts', loginAttempts);
+}
+
+function startLockout(seconds) {
+    // Disable form
+    loginBtn.disabled = true;
+    
+    let timeLeft = seconds;
+    updateLoginButtonText(timeLeft);
+    
+    // Show modal
+    attemptsModal.style.display = 'flex';
+    
+    countdownInterval = setInterval(() => {
+        timeLeft--;
+        countdownDisplay.textContent = timeLeft;
+        updateLoginButtonText(timeLeft);
+        
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            attemptsModal.style.display = 'none';
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Log In';
+            loginAttempts = 0;
+            updateAttemptsCounter();
+            localStorage.removeItem('lockoutEnd');
+        }
+    }, 1000);
+}
+
+function updateLoginButtonText(timeLeft) {
+    loginBtn.textContent = `Try Again in ${timeLeft}s`;
+}
+
+function showSuccessMessage(redirectUrl) {
+    // Show success modal
+    successModal.style.display = 'flex';
+    
+    let countdown = 3;
+    redirectMessage.textContent = `Redirecting in ${countdown} seconds...`;
+    
+    // Start countdown for automatic redirect
+    redirectInterval = setInterval(() => {
+        countdown--;
+        redirectMessage.textContent = `Redirecting in ${countdown} seconds...`;
+        
+        if (countdown <= 0) {
+            clearInterval(redirectInterval);
+            window.location.href = redirectUrl;
+        }
+    }, 1000);
+}
+
+// Modal button event handlers
+okBtn.addEventListener('click', function() {
+    // Only hide the modal, don't clear the lockout
+    attemptsModal.style.display = 'none';
+});
+
+successOkBtn.addEventListener('click', function() {
+    // Clear the redirect interval and redirect immediately
+    clearInterval(redirectInterval);
+    const redirectUrl = successModal.getAttribute('data-redirect');
+    if (redirectUrl) {
+        window.location.href = redirectUrl;
+    }
+});
 
 loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
-
+    
+    // If user is in lockout period, prevent form submission
+    const lockoutEnd = localStorage.getItem('lockoutEnd');
+    if (lockoutEnd && new Date().getTime() < parseInt(lockoutEnd)) {
+        return;
+    }
+    
     let valid = true;
     emailError.classList.remove('visible');
     passwordError.classList.remove('visible');
@@ -141,17 +374,53 @@ loginForm.addEventListener('submit', function(e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            window.location.href = data.redirect;
+            // Reset attempts on successful login
+            loginAttempts = 0;
+            updateAttemptsCounter();
+            localStorage.removeItem('lockoutEnd');
+            
+            // Show success message before redirecting
+            showSuccessMessage(data.redirect);
+            
+            // Store redirect URL in modal for manual redirect
+            successModal.setAttribute('data-redirect', data.redirect);
         } else {
+            loginAttempts++;
+            updateAttemptsCounter();
+            
             passwordError.textContent = data.message;
             passwordError.classList.add('visible');
+            
+            // Check if we've reached the maximum attempts
+            if (loginAttempts >= maxAttempts) {
+                // Set lockout end time
+                const lockoutEndTime = new Date().getTime() + (lockoutTime * 1000);
+                localStorage.setItem('lockoutEnd', lockoutEndTime);
+                
+                // Start lockout
+                startLockout(lockoutTime);
+            }
         }
     })
     .catch(() => {
+        loginAttempts++;
+        updateAttemptsCounter();
+        
         passwordError.textContent = "Something went wrong. Please try again.";
         passwordError.classList.add('visible');
+        
+        // Check if we've reached the maximum attempts
+        if (loginAttempts >= maxAttempts) {
+            // Set lockout end time
+            const lockoutEndTime = new Date().getTime() + (lockoutTime * 1000);
+            localStorage.setItem('lockoutEnd', lockoutEndTime);
+            
+            // Start lockout
+            startLockout(lockoutTime);
+        }
     });
 });
+
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('password');
 

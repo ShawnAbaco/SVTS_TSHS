@@ -4,7 +4,6 @@
 <div class="main-container">
 
 <style>
-    
 .toolbar {
     display: flex;             /* make it a flex container */
     justify-content: center;   /* horizontal center */
@@ -20,7 +19,6 @@
 }
 </style>
 
-    </style>
   <!-- Toolbar -->
   <div class="toolbar">
         <h3>Dashboard Overview</h3>
@@ -100,6 +98,28 @@
     </div>
   </div>
 
+  <!-- 🔔 Notification Modal -->
+  <div class="modal" id="notificationModal">
+    <div class="modal-content notification-modal-content">
+      <div class="modal-header notification-modal-header">
+        <div class="notification-header-content">
+          <span id="notificationIcon">🔔</span>
+          <span id="notificationTitle">Notification</span>
+        </div>
+      </div>
+      <div class="modal-body notification-modal-body" id="notificationBody">
+        <!-- Content filled dynamically via JS -->
+      </div>
+      <div class="modal-footer notification-modal-footer">
+        <div class="notification-buttons-container">
+          <button class="btn-primary" id="notificationYesBtn">Yes</button>
+          <button class="btn-secondary" id="notificationNoBtn">No</button>
+          <button class="btn-close" id="notificationCloseBtn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   // Chart.js Doughnut
   const ctx = document.getElementById('violationChart').getContext('2d');
@@ -156,31 +176,90 @@
     });
   });
 
-  // Profile image & name
-  function changeProfileImage() { document.getElementById('imageInput').click(); }
+  // Profile image & name - Now using modal notifications
+  function changeProfileImage() { 
+    document.getElementById('imageInput').click(); 
+  }
+  
   document.getElementById('imageInput').addEventListener('change', function(e){
     const file = e.target.files[0];
     if(file){
       const reader = new FileReader();
-      reader.onload = function(ev){ document.getElementById('profileImage').src = ev.target.result; }
+      reader.onload = function(ev){ 
+        document.getElementById('profileImage').src = ev.target.result;
+        showNotification('✅ Profile Updated', 'Profile image changed successfully!', 'success', {
+          yesText: 'OK',
+          noText: null,
+          onYes: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+          }
+        });
+      }
       reader.readAsDataURL(file);
     }
   });
+  
   function changeProfileName() {
-    const newName = prompt("Enter new name:");
-    if(newName) document.querySelector('.user-info span').innerText = newName;
+    showNotification('✏️ Change Profile Name', 'Enter your new name:', 'info', {
+      yesText: 'Change Name',
+      noText: 'Cancel',
+      onYes: () => {
+        // Simulate name change
+        setTimeout(() => {
+          showNotification('✅ Profile Updated', 'Profile name changed successfully!', 'success', {
+            yesText: 'OK',
+            noText: null,
+            onYes: () => {
+              document.getElementById('notificationModal').style.display = 'none';
+            }
+          });
+        }, 500);
+      },
+      onNo: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+      }
+    });
   }
 
-  // Logout
+  // Logout - Now using modal notification
   function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-    fetch("{{ route('adviser.logout') }}", {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
-    })
-    .then(response => { if(response.ok){ window.location.href = "{{ route('auth.login') }}"; } })
-    .catch(error => console.error('Logout failed:', error));
+    showNotification('🚪 Logout', 'Are you sure you want to logout?', 'confirm', {
+      yesText: 'Yes, Logout',
+      noText: 'Cancel',
+      onYes: () => {
+        fetch("{{ route('adviser.logout') }}", {
+          method: 'POST',
+          headers: { 
+            'X-CSRF-TOKEN': '{{ csrf_token() }}', 
+            'Accept': 'application/json' 
+          }
+        })
+        .then(response => { 
+          if(response.ok){ 
+            showNotification('👋 Goodbye', 'Logging out...', 'success', {
+              yesText: 'OK',
+              noText: null,
+              onYes: () => {
+                window.location.href = "{{ route('auth.login') }}";
+              }
+            });
+          } 
+        })
+        .catch(error => {
+          console.error('Logout failed:', error);
+          showNotification('❌ Error', 'Logout failed. Please try again.', 'danger', {
+            yesText: 'OK',
+            noText: null,
+            onYes: () => {
+              document.getElementById('notificationModal').style.display = 'none';
+            }
+          });
+        });
+      },
+      onNo: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+      }
+    });
   }
 
   // Info modal logic
@@ -191,21 +270,142 @@
   closeBtn.onclick = () => modal.style.display = "none";
   window.onclick = (event) => { if(event.target === modal) modal.style.display = "none"; }
 
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const sidebarItems = document.querySelectorAll('.sidebar ul li');
+  // Sidebar active state
+  document.addEventListener("DOMContentLoaded", () => {
+    const sidebarItems = document.querySelectorAll('.sidebar ul li');
 
-  sidebarItems.forEach(item => {
-    item.addEventListener('click', () => {
-      // Remove 'active' from all
-      sidebarItems.forEach(i => i.classList.remove('active'));
+    sidebarItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Remove 'active' from all
+        sidebarItems.forEach(i => i.classList.remove('active'));
 
-      // Add 'active' to the clicked item
-      item.classList.add('active');
+        // Add 'active' to the clicked item
+        item.classList.add('active');
+        
+        // Show notification for navigation
+        const pageName = item.textContent.trim();
+        showNotification('📄 Navigation', `Navigating to ${pageName}`, 'info', {
+          yesText: 'OK',
+          noText: null,
+          onYes: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+          }
+        });
+      });
     });
   });
-});
+
+  // ================= NOTIFICATION MODAL FUNCTIONALITY =================
+
+  // Notification modal function
+  function showNotification(title, message, type = 'info', options = {}) {
+    const modal = document.getElementById('notificationModal');
+    const notificationTitle = document.getElementById('notificationTitle');
+    const notificationBody = document.getElementById('notificationBody');
+    const notificationIcon = document.getElementById('notificationIcon');
+    const yesBtn = document.getElementById('notificationYesBtn');
+    const noBtn = document.getElementById('notificationNoBtn');
+    const closeBtn = document.getElementById('notificationCloseBtn');
+    
+    // Set title and message
+    notificationTitle.textContent = title;
+    notificationBody.textContent = message;
+    
+    // Set icon based on type
+    let icon = '🔔';
+    if (type === 'success') icon = '✅';
+    else if (type === 'warning') icon = '⚠️';
+    else if (type === 'danger') icon = '❌';
+    else if (type === 'confirm') icon = '❓';
+    notificationIcon.textContent = icon;
+    
+    // Configure buttons
+    yesBtn.textContent = options.yesText || 'Yes';
+    yesBtn.onclick = options.onYes || (() => modal.style.display = 'none');
+    
+    if (options.noText) {
+      noBtn.textContent = options.noText;
+      noBtn.style.display = 'inline-block';
+      noBtn.onclick = options.onNo || (() => modal.style.display = 'none');
+    } else {
+      noBtn.style.display = 'none';
+    }
+    
+    closeBtn.onclick = () => modal.style.display = 'none';
+    
+    // Show the modal
+    modal.style.display = 'flex';
+  }
+
+  // Close notification modal with close button
+  document.getElementById('notificationCloseBtn').addEventListener('click', () => {
+    document.getElementById('notificationModal').style.display = 'none';
+  });
+
+  // Close modals when clicking outside
+  window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+      e.target.style.display = 'none';
+    }
+  });
+
+  // Demo notifications for dashboard interactions
+  document.addEventListener('DOMContentLoaded', function() {
+    // Show welcome notification
+    setTimeout(() => {
+      showNotification('👋 Welcome Back', 'Welcome to your Dashboard Overview!', 'info', {
+        yesText: 'Get Started',
+        noText: null,
+        onYes: () => {
+          document.getElementById('notificationModal').style.display = 'none';
+        }
+      });
+    }, 1000);
+
+    // Add click events to dashboard cards for demo
+    const dashboardCards = document.querySelectorAll('.cards .card');
+    dashboardCards.forEach(card => {
+      card.addEventListener('click', function() {
+        const cardTitle = this.querySelector('h3').textContent;
+        const cardValue = this.querySelector('p').textContent;
+        
+        showNotification('📊 Dashboard Info', `${cardTitle}: ${cardValue}`, 'info', {
+          yesText: 'OK',
+          noText: null,
+          onYes: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Appointment card interactions
+    const appointmentCards = document.querySelectorAll('.upcoming .card');
+    appointmentCards.forEach(card => {
+      card.addEventListener('click', function() {
+        const studentName = this.querySelector('h3').textContent;
+        const appointmentTime = this.querySelector('p').textContent;
+        
+        showNotification('📅 Appointment Details', `Student: ${studentName}\nTime: ${appointmentTime}`, 'info', {
+          yesText: 'View Details',
+          noText: 'Close',
+          onYes: () => {
+            showNotification('📅 Appointment', `Opening details for ${studentName}...`, 'success', {
+              yesText: 'OK',
+              noText: null,
+              onYes: () => {
+                document.getElementById('notificationModal').style.display = 'none';
+              }
+            });
+          },
+          onNo: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+
 </script>
 
 @endsection

@@ -158,8 +158,8 @@
         <div class="modal-note">⚠️ Note: Deleting records will permanently remove them.</div>
 
         <div class="modal-footer">
-          <button class="btn-secondary" id="restoreArchiveBtn">🔄 Restore</button>
-          <button class="btn-danger" id="deleteArchiveBtn">🗑️ Delete</button>
+          <button class="btn-secondary" id="restoreArchivedBtn">🔄 Restore</button>
+          <button class="btn-danger" id="deleteArchivedBtn">🗑️ Delete</button>
           <button class="btn-close" id="closeArchive">❌ Close</button>
         </div>
       </div>
@@ -176,6 +176,28 @@
       <div class="modal-footer">
         <button class="btn-primary">Save</button>
         <button class="btn-close">❌ Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔔 Notification Modal -->
+  <div class="modal" id="notificationModal">
+    <div class="modal-content notification-modal-content">
+      <div class="modal-header notification-modal-header">
+        <div class="notification-header-content">
+          <span id="notificationIcon">🔔</span>
+          <span id="notificationTitle">Notification</span>
+        </div>
+      </div>
+      <div class="modal-body notification-modal-body" id="notificationBody">
+        <!-- Content filled dynamically via JS -->
+      </div>
+      <div class="modal-footer notification-modal-footer">
+        <div class="notification-buttons-container">
+          <button class="btn-primary" id="notificationYesBtn">Yes</button>
+          <button class="btn-secondary" id="notificationNoBtn">No</button>
+          <button class="btn-close" id="notificationCloseBtn">Close</button>
+        </div>
       </div>
     </div>
   </div>
@@ -197,12 +219,40 @@ document.getElementById('selectAll')?.addEventListener('change', function() {
   document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = this.checked);
 });
 
-// ✅ Move to Trash
+// ✅ Move to Trash - Now shows confirmation modal
 document.getElementById('moveToTrashBtn')?.addEventListener('click', () => {
   const selected = [...document.querySelectorAll('.rowCheckbox:checked')];
-  if(!selected.length) return alert('Please select at least one record.');
-  alert(`${selected.length} record(s) moved to Trash.`);
-  // TODO: AJAX call to backend
+  if(!selected.length) {
+    showNotification('⚠️ No Selection', 'Please select at least one offense record to move to trash.', 'warning', {
+      yesText: 'OK',
+      noText: null,
+      onYes: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+      }
+    });
+    return;
+  }
+  
+  showNotification('🗑️ Move to Trash', `Are you sure you want to move ${selected.length} offense record(s) to trash?`, 'confirm', {
+    yesText: 'Yes, Move',
+    noText: 'Cancel',
+    onYes: () => {
+      // AJAX call to move to trash
+      setTimeout(() => {
+        showNotification('✅ Success', `${selected.length} offense record(s) moved to trash successfully.`, 'success', {
+          yesText: 'OK',
+          noText: null,
+          onYes: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+            // Optionally refresh the page or update the table
+          }
+        });
+      }, 500);
+    },
+    onNo: () => {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+  });
 });
 
 // 🔹 Row click for Details Modal
@@ -235,12 +285,36 @@ document.querySelectorAll('.btn-close').forEach(btn => {
 
 // 🔹 Set Schedule Button
 document.getElementById('setScheduleBtn')?.addEventListener('click', () => {
-  alert('Schedule setup would open here...');
+  showNotification('📅 Set Schedule', 'Open schedule setup form or modal here.', 'info', {
+    yesText: 'OK',
+    noText: null,
+    onYes: () => {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+  });
 });
 
 // 🔹 Send SMS Button
 document.getElementById('sendSmsBtn')?.addEventListener('click', () => {
-  alert('SMS sending would trigger here...');
+  showNotification('📩 Send SMS', 'Are you sure you want to send an SMS about this offense?', 'confirm', {
+    yesText: 'Send SMS',
+    noText: 'Cancel',
+    onYes: () => {
+      // AJAX call to send SMS
+      setTimeout(() => {
+        showNotification('✅ Success', 'SMS sent successfully!', 'success', {
+          yesText: 'OK',
+          noText: null,
+          onYes: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+          }
+        });
+      }, 500);
+    },
+    onNo: () => {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+  });
 });
 
 // 🔹 Edit Button
@@ -248,8 +322,25 @@ document.querySelectorAll('.editBtn').forEach(btn => {
   btn.addEventListener('click', e => {
     e.stopPropagation();
     const [offenseType, offenseDescription, sanctions] = btn.closest('tr').dataset.details.split('|');
-    alert(`Edit offense: ${offenseType}\nDescription: ${offenseDescription}\nSanctions: ${sanctions}`);
-    // TODO: Implement actual edit modal functionality
+    showNotification('✏️ Edit Offense', `Edit offense: ${offenseType}\nDescription: ${offenseDescription}\nSanctions: ${sanctions}`, 'info', {
+      yesText: 'OK',
+      noText: null,
+      onYes: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+        // TODO: Implement actual edit modal functionality
+      }
+    });
+  });
+});
+
+// 🔹 Add Violation Button
+document.getElementById('createBtn')?.addEventListener('click', () => {
+  showNotification('➕ Add Violation', 'Open violation creation form.', 'info', {
+    yesText: 'OK',
+    noText: null,
+    onYes: () => {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
   });
 });
 
@@ -299,20 +390,76 @@ document.getElementById('archiveSearch')?.addEventListener('input', function() {
   });
 });
 
-// 🔹 Restore Archived
-document.getElementById('restoreArchiveBtn')?.addEventListener('click', () => {
+// 🔹 Restore Archived - Now shows confirmation modal
+document.getElementById('restoreArchivedBtn')?.addEventListener('click', () => {
   const selected = [...document.querySelectorAll('.archivedCheckbox:checked')];
-  if(!selected.length) return alert('Please select at least one record to restore.');
-  alert(`${selected.length} record(s) restored.`);
+  if(!selected.length) {
+    showNotification('⚠️ No Selection', 'Please select at least one record to restore.', 'warning', {
+      yesText: 'OK',
+      noText: null,
+      onYes: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+      }
+    });
+    return;
+  }
+  
+  showNotification('🔄 Restore Records', `Are you sure you want to restore ${selected.length} offense record(s)?`, 'confirm', {
+    yesText: 'Yes, Restore',
+    noText: 'Cancel',
+    onYes: () => {
+      // AJAX call to restore records
+      setTimeout(() => {
+        showNotification('✅ Success', `${selected.length} offense record(s) restored successfully.`, 'success', {
+          yesText: 'OK',
+          noText: null,
+          onYes: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+            // Optionally refresh the page or update the table
+          }
+        });
+      }, 500);
+    },
+    onNo: () => {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+  });
 });
 
-// 🔹 Delete Archived
-document.getElementById('deleteArchiveBtn')?.addEventListener('click', () => {
+// 🔹 Delete Archived - Now shows confirmation modal
+document.getElementById('deleteArchivedBtn')?.addEventListener('click', () => {
   const selected = [...document.querySelectorAll('.archivedCheckbox:checked')];
-  if(!selected.length) return alert('Please select at least one record to delete.');
-  if(confirm('This will permanently delete the selected record(s). Are you sure?')) {
-    alert(`${selected.length} record(s) deleted permanently.`);
+  if(!selected.length) {
+    showNotification('⚠️ No Selection', 'Please select at least one record to delete.', 'warning', {
+      yesText: 'OK',
+      noText: null,
+      onYes: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+      }
+    });
+    return;
   }
+  
+  showNotification('🗑️ Delete Records', `This will permanently delete ${selected.length} offense record(s). This action cannot be undone. Are you sure?`, 'danger', {
+    yesText: 'Yes, Delete',
+    noText: 'Cancel',
+    onYes: () => {
+      // AJAX call to delete records
+      setTimeout(() => {
+        showNotification('✅ Success', `${selected.length} offense record(s) deleted permanently.`, 'success', {
+          yesText: 'OK',
+          noText: null,
+          onYes: () => {
+            document.getElementById('notificationModal').style.display = 'none';
+            // Optionally refresh the page or update the table
+          }
+        });
+      }, 500);
+    },
+    onNo: () => {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+  });
 });
 
 // 🔹 Close modals when clicking outside
@@ -320,6 +467,53 @@ window.addEventListener('click', (e) => {
   if (e.target.classList.contains('modal')) {
     e.target.style.display = 'none';
   }
+});
+
+// ================= NOTIFICATION MODAL FUNCTIONALITY =================
+
+// Notification modal function
+function showNotification(title, message, type = 'info', options = {}) {
+  const modal = document.getElementById('notificationModal');
+  const notificationTitle = document.getElementById('notificationTitle');
+  const notificationBody = document.getElementById('notificationBody');
+  const notificationIcon = document.getElementById('notificationIcon');
+  const yesBtn = document.getElementById('notificationYesBtn');
+  const noBtn = document.getElementById('notificationNoBtn');
+  const closeBtn = document.getElementById('notificationCloseBtn');
+  
+  // Set title and message
+  notificationTitle.textContent = title;
+  notificationBody.textContent = message;
+  
+  // Set icon based on type
+  let icon = '🔔';
+  if (type === 'success') icon = '✅';
+  else if (type === 'warning') icon = '⚠️';
+  else if (type === 'danger') icon = '❌';
+  else if (type === 'confirm') icon = '❓';
+  notificationIcon.textContent = icon;
+  
+  // Configure buttons
+  yesBtn.textContent = options.yesText || 'Yes';
+  yesBtn.onclick = options.onYes || (() => modal.style.display = 'none');
+  
+  if (options.noText) {
+    noBtn.textContent = options.noText;
+    noBtn.style.display = 'inline-block';
+    noBtn.onclick = options.onNo || (() => modal.style.display = 'none');
+  } else {
+    noBtn.style.display = 'none';
+  }
+  
+  closeBtn.onclick = () => modal.style.display = 'none';
+  
+  // Show the modal
+  modal.style.display = 'flex';
+}
+
+// Close notification modal with close button
+document.getElementById('notificationCloseBtn').addEventListener('click', () => {
+  document.getElementById('notificationModal').style.display = 'none';
 });
 </script>
 
