@@ -29,4 +29,24 @@ public function store(Request $request)
         return redirect()->route('parent.lists')->with('success', 'Parents saved successfully!');
     }
 
+public function update(Request $request)
+{
+    $parent = ParentModel::findOrFail($request->parent_id);
+
+    $parent->update([
+        'parent_fname' => $request->parent_fname,
+        'parent_lname' => $request->parent_lname,
+        'parent_sex' => $request->parent_sex,
+        'parent_birthdate' => $request->parent_birthdate,
+        'parent_email' => $request->parent_email,
+        'parent_contactinfo' => $request->parent_contactinfo,
+        'parent_relationship' => $request->parent_relationship,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->back()->with('success', 'Parent updated successfully!');
+}
+
+
+
 }
