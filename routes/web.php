@@ -117,8 +117,13 @@ Route::get('/students/by-parent/{parentId}', [StudentController::class, 'getByPa
         Route::get('/parents/create', [PrefectController::class, 'parentCreate'])->name('parent.create');
         Route::post('/parents', [PrefectController::class, 'parentStore'])->name('parent.store');
         Route::get('/parents/{parent}/edit', [PrefectController::class, 'parentEdit'])->name('parent.edit');
-        Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
+        // Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
         Route::delete('/parents/{parent}', [PrefectController::class, 'parentDestroy'])->name('parent.destroy');
+
+// new parent crud
+Route::put('/parents/update/{id}', [PParentController::class, 'update'])->name('parents.update');
+
+
 
         // Students
         Route::delete('/students/{student}', [PrefectController::class, 'destroy'])->name('student.delete');
@@ -194,7 +199,7 @@ Route::patch('/students/bulk-update-status', [StudentController::class, 'bulkUpd
 
         // CRUD parent
         // Route::post('/adviser/parents', [ParentController::class, 'parentStore'])->name('parents.store');
-        Route::put('/adviser/parents/{id}', [ParentController::class, 'parentUpdate'])->name('parents.update');
+        // Route::put('/adviser/parents/{id}', [ParentController::class, 'parentUpdate'])->name('parents.update');
         Route::delete('/adviser/parents/{id}', [ParentController::class, 'destroyParent'])->name('parents.destroy');
 
 
