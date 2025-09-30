@@ -26,7 +26,7 @@ body {
   padding-bottom: 8px;
   letter-spacing: 1px;
 }
-.sidebar {
+    .sidebar {
   width: 230px;
 background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  background-repeat: no-repeat;
   background-attachment: fixed;

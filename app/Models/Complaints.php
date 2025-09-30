@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class Complaints extends Model
 {
@@ -20,9 +19,6 @@ class Complaints extends Model
         'complaints_time',
         'status',
     ];
-
-
-
 
     public function complainant()
     {
@@ -53,7 +49,8 @@ class Complaints extends Model
     {
         return $this->hasOne(ComplaintsAnecdotal::class, 'complaints_id');
     }
-     /** 🔎 Local Scopes for Status Filtering */
+
+    /** 🔎 Local Scopes for Status Filtering */
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

@@ -158,8 +158,6 @@ Route::get('/complaints/get-action', [ComplaintController::class, 'getAction'])-
 
 
 
-
-
 // ===================== Adviser Routes =====================
 Route::prefix('adviser')->group(function () {
     // Login / Logout

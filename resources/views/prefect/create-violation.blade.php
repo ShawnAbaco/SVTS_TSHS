@@ -233,8 +233,20 @@ studentInput.addEventListener("keyup", function() {
             <p><b>Student:</b> ${name}<input type="hidden" name="student_id[]" value="${id}"></p>
             <p style="color: orange;"><b>Offense:</b> ${offense}<input type="hidden" name="offense[]" value="${offenseVal}" ></p>
             <p style="color: red;"><b>Sanction:</b> <input type="text" name="sanction[]" class="sanction" readonly></p>
-            <p><b>Date:</b> ${date}<input type="hidden" name="date[]" value="${date}"></p>
-            <p><b>Time:</b> ${time}<input type="hidden" name="time[]" value="${time}"></p>
+            <p><b>Date:</b> ${new Date(date).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            })}
+            <input type="hidden" name="date[${groupId}]" value="${date}">
+          </p>
+          <p><b>Time:</b> ${new Date("1970-01-01T" + time).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hour12: true 
+            })}
+            <input type="hidden" name="time[${groupId}]" value="${time}">
+          </p>
             <p><b>Incident:</b> ${incident}<input type="hidden" name="incident[]" value="${incident}"></p>
         `;
         groupContainer.appendChild(card);
