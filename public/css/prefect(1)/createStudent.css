@@ -57,6 +57,8 @@
         }
 
         .student-container {
+                        margin-bottom: 20px;
+
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -99,9 +101,9 @@
             align-items: center;
             gap: 5px;
         }
-        
-        .remove-student:hover { 
-            background: #b71c1c; 
+
+        .remove-student:hover {
+            background: #b71c1c;
         }
 
         /* Form Grid Styles */
@@ -185,24 +187,23 @@
                 gap: 15px;
                 align-items: flex-start;
             }
-            
+
             .actions {
                 width: 100%;
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             #searchInput {
                 width: 100%;
             }
-            
+
             .buttons-row {
                 width: 100%;
                 justify-content: space-between;
             }
-            
+
             .student-container {
                 flex: 1 1 100%;
             }
         }
-  

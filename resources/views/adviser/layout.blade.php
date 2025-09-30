@@ -53,10 +53,14 @@
   </li>
 
 <li>
-  <a href="#" onclick="event.preventDefault(); logout();">
+  <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
     <i class="fas fa-sign-out-alt"></i> Logout
   </a>
 </li>
+
+<form id="logout-form" action="{{ route('adviser.logout') }}" method="POST" style="display: none;">
+  @csrf
+</form>
 
 
 </ul>

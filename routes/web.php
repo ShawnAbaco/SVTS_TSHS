@@ -15,6 +15,8 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ViolationAnecdotalController;
 use App\Http\Controllers\ViolationRecordController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Prefect\PAdviserController;
+use App\Http\Controllers\Prefect\PComplaintController;
 use App\Http\Controllers\Prefect\PParentController;
 
 Route::get('/', function () {
@@ -33,7 +35,9 @@ Route::prefix('prefect')->group(function () {
     // Protected routes
     Route::middleware('auth:prefect')->group(function () {
         Route::get('/dashboard', [PrefectController::class, 'dashboard'])->name('prefect.dashboard');
-        Route::post('/advisers', [PrefectController::class, 'createAdviser'])->name('prefect.create.adviser');
+        // Route::post('/advisers', [PrefectController::class, 'createAdviser'])->name('prefect.create.adviser');
+        Route::post('/adviser/store', [PAdviserController::class, 'store'])->name('adviser.store');
+
 
 
 
@@ -42,7 +46,23 @@ Route::post('/students/store', [PStudentController::class, 'store'])->name('stud
 
 
 
+    // Create Complaint Form
+    Route::get('/complaints/create', [PComplaintController::class, 'create'])->name('complaints.create');
 
+    // Store Complaints
+Route::post('/complaints/store', [PComplaintController::class, 'store'])->name('complaints.store');
+
+    // AJAX: Search students for complainant/respondent
+    Route::post('/complaints/search-students', [PComplaintController::class, 'searchStudents'])
+        ->name('complaints.search-students');
+
+    // AJAX: Search offenses
+    Route::post('/complaints/search-offenses', [PComplaintController::class, 'searchOffenses'])
+        ->name('complaints.search-offenses');
+
+    // AJAX: Get sanction for offense (optional)
+    Route::get('/complaints/get-sanction', [PComplaintController::class, 'getSanction'])
+        ->name('complaints.get-sanction');
 
 
 
@@ -82,7 +102,7 @@ Route::post('/students/store', [PStudentController::class, 'store'])->name('stud
         Route::post('/parents/store', [PParentController::class, 'store'])->name('parents.store');
 
         Route::get('/create/student', [StudentController::class, 'createStudent'])->name('create.student');
-        Route::get('/create/adviser', [PrefectController::class, 'createAdviser'])->name('create.adviser');
+        Route::get(uri: '/create/adviser', action: [PrefectController::class, 'createAdviser'])->name('create.adviser');
 
 
 

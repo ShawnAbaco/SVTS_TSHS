@@ -192,6 +192,47 @@
   closeBtn.onclick = () => modal.style.display = "none";
   window.onclick = (event) => { if(event.target === modal) modal.style.display = "none"; }
 
+
+// Logout - Now using modal notification
+  function logout() {
+    showNotification('🚪 Logout', 'Are you sure you want to logout?', 'confirm', {
+      yesText: 'Yes, Logout',
+      noText: 'Cancel',
+      onYes: () => {
+        fetch("{{ route('adviser.logout') }}", {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => {
+          if(response.ok){
+            showNotification('👋 Goodbye', 'Logging out...', 'success', {
+              yesText: 'OK',
+              noText: null,
+              onYes: () => {
+                window.location.href = "{{ route('auth.login') }}";
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Logout failed:', error);
+          showNotification('❌ Error', 'Logout failed. Please try again.', 'danger', {
+            yesText: 'OK',
+            noText: null,
+            onYes: () => {
+              document.getElementById('notificationModal').style.display = 'none';
+            }
+          });
+        });
+      },
+      onNo: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+      }
+    });
+  }
 </script>
 
 @endsection

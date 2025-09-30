@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prefect Dashboard</title>
+  <title>Prefect</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ asset('css/prefect(1)/sidebar.css') }}">
@@ -12,7 +12,9 @@
     <link rel="stylesheet" href="{{ asset('css/prefect(1)/toolbar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/prefect(1)/modal.css') }}">
      <link rel="stylesheet" href="{{ asset('css/prefect(1)/createParent.css') }}">
-          <link rel="stylesheet" href="{{ asset('css/prefect(1)/createStudent.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/prefect(1)/createStudent.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/prefect(1)/createComplaint.css') }}">
+
            {{-- <link rel="stylesheet" href="{{ asset('css/prefect(1)/notificationsmodal.css') }}"> --}}
 
 </head>

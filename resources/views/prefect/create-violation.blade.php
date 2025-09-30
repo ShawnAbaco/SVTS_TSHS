@@ -80,18 +80,20 @@
             <h3 class="section-title"><i class="fas fa-list"></i> Violations Summary</h3>
             <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
         </div>
-        <div id="violationsContainer" class="violationsWrapper">
-            {{-- Cards will be added here --}}
-        </div>
+<div id="violationsContainer-1" class="violationsWrapper">
+
+    <!-- Violation cards go here -->
+</div>
+
     </section>
 </div>
 
 
-    <!-- ======= Preview (Bottom) ======= -->
+    {{-- <!-- ======= Preview (Bottom) ======= -->
     <section class="preview-section">
         <h3><i class="fas fa-search"></i> Preview Records</h3>
         <pre id="output"></pre>
-    </section>
+    </section> --}}
 </div>
 
 
@@ -103,37 +105,76 @@ const studentSearchUrl = "{{ route('violations.search-students') }}";
 const offenseSearchUrl = "{{ route('violations.search-offenses') }}";
 const getSanctionUrl   = "{{ route('violations.get-sanction') }}";
 
-function attachListeners(box) {
+let violationCount = 1;
+
+// Keep track of all students already in summary
+let addedStudentIds = new Set();
+
+function attachListeners(box, id) {
     const studentInput  = box.querySelector(".student-input");
     const studentResults = box.querySelectorAll(".results")[0];
     const offenseInput  = box.querySelector(".offense-input");
     const offenseId     = box.querySelector(".offense-id");
     const offenseResults= box.querySelectorAll(".results")[1];
+    const showAllBtn    = box.querySelector(".btn-show-all");
 
-    // 🔍 Student Search
-    studentInput.addEventListener("keyup", function() {
-        let fullInput = this.value;
-        let parts = fullInput.split(",");
-        let query = parts[parts.length - 1].trim();
-        if (query.length < 2) { studentResults.innerHTML = ""; return; }
+    box.dataset.groupId = id;
 
-        $.post(studentSearchUrl, { query, _token: "{{ csrf_token() }}" }, function(data){
-            studentResults.innerHTML = data;
-            studentResults.querySelectorAll(".student-item").forEach(item => {
-                item.onclick = () => {
-                    parts[parts.length-1] = " " + item.textContent;
+    function allFieldsFilled() {
+        return studentInput.value.trim() && offenseInput.value.trim() && box.querySelector(".date-input").value && box.querySelector(".time-input").value && box.querySelector(".incident-input").value.trim();
+    }
+
+    // Enable/disable "Add Another Violation" button
+    function toggleAddViolationButton() {
+        const btnAdd = document.getElementById("btnAddViolation");
+        btnAdd.disabled = !allFieldsFilled();
+    }
+
+    // Attach input events to check if all fields filled
+    box.querySelectorAll("input, textarea").forEach(input => {
+        input.addEventListener("input", toggleAddViolationButton);
+    });
+
+    // Student search
+studentInput.addEventListener("keyup", function() {
+    let fullInput = this.value;
+    let parts = fullInput.split(",");
+    let query = parts[parts.length - 1].trim();
+    if (query.length < 2) { studentResults.innerHTML = ""; return; }
+
+    $.post(studentSearchUrl, { query, _token: "{{ csrf_token() }}" }, function(data){
+        // Create a temporary container to parse returned HTML
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = data;
+
+        // Get the list of already selected student IDs for this form
+        const selectedIds = (studentInput.dataset.ids || "").split(",").filter(id => id.trim() !== "");
+
+        // Filter out already selected students
+        const filteredItems = Array.from(tempDiv.querySelectorAll(".student-item")).filter(item => !selectedIds.includes(item.dataset.id));
+
+        // Clear and append filtered results
+        studentResults.innerHTML = "";
+        filteredItems.forEach(item => {
+            studentResults.appendChild(item);
+
+            // Attach click event
+            item.addEventListener("click", () => {
+                const currentIds = (studentInput.dataset.ids || "").split(",").filter(id => id.trim() !== "");
+                if (!currentIds.includes(item.dataset.id)) {
+                    parts[parts.length - 1] = " " + item.textContent;
                     studentInput.value = parts.join(",").replace(/^,/, "");
-                    let ids = studentInput.dataset.ids || "";
-                    if(ids) ids += ",";
-                    ids += item.dataset.id;
-                    studentInput.dataset.ids = ids;
-                    studentResults.innerHTML = "";
-                };
+                    currentIds.push(item.dataset.id);
+                    studentInput.dataset.ids = currentIds.join(",");
+                }
+                studentResults.innerHTML = "";
+                toggleAddViolationButton();
             });
         });
     });
+});
 
-    // 🔍 Offense Search
+    // Offense search
     offenseInput.addEventListener("keyup", function() {
         let query = this.value;
         if(query.length < 2){ offenseResults.innerHTML = ""; return; }
@@ -145,111 +186,161 @@ function attachListeners(box) {
                     offenseInput.value = item.textContent;
                     offenseId.value = item.dataset.id;
                     offenseResults.innerHTML = "";
+                    toggleAddViolationButton();
                 };
             });
         });
     });
 
-    // 👁️ Show All Button
-    const showAllBtn = box.querySelector(".btn-show-all");
-    showAllBtn.onclick = () => {
-        const students = studentInput.value.split(",");
-        const offense  = offenseInput.value.trim();
-        const offenseVal = offenseId.value;
-        const date = box.querySelector(".date-input").value;
-        const time = box.querySelector(".time-input").value;
-        const incident = box.querySelector(".incident-input").value.trim();
+    // Show All Button
+   showAllBtn.onclick = () => {
+    if(!allFieldsFilled()) { alert("Please complete all fields"); return; }
 
-        if(!students || !offense || !date || !time || !incident){
-            alert("Please complete all fields");
-            return;
-        }
+    const students = studentInput.value.split(",");
+    const studentIds = (studentInput.dataset.ids || "").split(",");
+    const offense  = offenseInput.value.trim();
+    const offenseVal = offenseId.value;
+    const date = box.querySelector(".date-input").value;
+    const time = box.querySelector(".time-input").value;
+    const incident = box.querySelector(".incident-input").value.trim();
+    const groupId = box.dataset.groupId;
 
-        const studentIds = (studentInput.dataset.ids || "").split(",");
-        students.forEach((name, index) => {
-            name = name.trim();
-            const id = studentIds[index]?.trim();
-            if(!name || !id) return;
+    let container = document.querySelector(".violationsWrapper");
+    let groupContainer = document.querySelector(`#group-${groupId}`);
+    if(!groupContainer){
+        groupContainer = document.createElement("div");
+        groupContainer.classList.add("violation-group");
+        groupContainer.id = `group-${groupId}`;
+        groupContainer.innerHTML = `<div class="violation-group-title">Violation Group #${groupId}</div>`;
+        container.appendChild(groupContainer);
+    }
 
-            const card = document.createElement("div");
-            card.classList.add("violation-card");
-            card.innerHTML = `
-                <div class="btn-remove">&times;</div>
-                <p><b>Student:</b> ${name}<input type="hidden" name="student_id[]" value="${id}"></p>
-                <p style="color: orange;"><b>Offense:</b> ${offense}<input type="hidden" name="offense[]" value="${offenseVal}" ></p>
-                <p style="color: red;"><b>Sanction:</b> <input type="text" name="sanction[]" class="sanction" readonly></p>
-                <p><b>Date:</b> ${date}<input type="hidden" name="date[]" value="${date}"></p>
-                <p><b>Time:</b> ${time}<input type="hidden" name="time[]" value="${time}"></p>
-                <p><b>Incident:</b> ${incident}<input type="hidden" name="incident[]" value="${incident}"></p>
-            `;
-            document.getElementById("violationsContainer").appendChild(card);
+    // Keep track of student IDs **only for this group**
+    let groupStudentIds = new Set();
 
-            // ❌ Remove card
-            card.querySelector(".btn-remove").onclick = () => card.remove();
+    students.forEach((name, index) => {
+        name = name.trim();
+        const id = studentIds[index]?.trim();
+        if(!name || !id || groupStudentIds.has(id)) return;  // check only within this group
 
-            // ⚖️ Fetch sanction
-            $.get(getSanctionUrl, { student_id: id, offense_id: offenseVal }, function(data){
-                card.querySelector(".sanction").value = data;
-            });
+        groupStudentIds.add(id);
+
+        const card = document.createElement("div");
+        card.classList.add("violation-card");
+        card.dataset.groupId = groupId;
+        card.innerHTML = `
+            <div class="btn-remove">&times;</div>
+            <p><b>Student:</b> ${name}<input type="hidden" name="student_id[]" value="${id}"></p>
+            <p style="color: orange;"><b>Offense:</b> ${offense}<input type="hidden" name="offense[]" value="${offenseVal}" ></p>
+            <p style="color: red;"><b>Sanction:</b> <input type="text" name="sanction[]" class="sanction" readonly></p>
+            <p><b>Date:</b> ${date}<input type="hidden" name="date[]" value="${date}"></p>
+            <p><b>Time:</b> ${time}<input type="hidden" name="time[]" value="${time}"></p>
+            <p><b>Incident:</b> ${incident}<input type="hidden" name="incident[]" value="${incident}"></p>
+        `;
+        groupContainer.appendChild(card);
+
+        card.querySelector(".btn-remove").onclick = () => {
+            groupStudentIds.delete(id);
+            card.remove();
+        };
+
+        $.get(getSanctionUrl, { student_id: id, offense_id: offenseVal }, function(data){
+            card.querySelector(".sanction").value = data;
         });
+    });
 
-        updatePreview();
-    };
+    toggleAddViolationButton();
+    updatePreview();
+};
 
-    // ❌ Remove Form
+    // Remove Form
     box.querySelector(".btn-remove-form").addEventListener("click", () => {
         if(document.querySelectorAll(".violation-form").length > 1){
+            const group = document.querySelector(`#group-${id}`);
+            if(group) {
+                // Remove all students in this group from addedStudentIds
+                group.querySelectorAll("input[name='student_id[]']").forEach(input => addedStudentIds.delete(input.value));
+                group.remove();
+            }
             box.remove();
-        } else {
-            alert("At least one violation form is required.");
-        }
+            toggleAddViolationButton();
+        } else alert("At least one violation form is required.");
     });
 }
 
-// ➕ Add another violation form
+// Add another violation form
 document.getElementById("btnAddViolation").onclick = () => {
+    if(document.querySelectorAll(".violation-form").length > 0){
+        const lastForm = document.querySelector(".violation-form:last-child");
+        if([...lastForm.querySelectorAll("input, textarea")].some(input => !input.value.trim())) {
+            alert("Please fill all fields in the current form first.");
+            return;
+        }
+    }
+
+    violationCount++;
     const originalBox = document.querySelector(".violation-form");
     const clone = originalBox.cloneNode(true);
-
-    // Clear inputs
     clone.querySelectorAll("input, textarea").forEach(input => input.value="");
     clone.querySelector(".student-input").dataset.ids = "";
     clone.querySelectorAll(".results").forEach(div=>div.innerHTML="");
-
-    document.querySelector(".content-wrapper").prepend(clone);
-    attachListeners(clone);
+    clone.querySelector(".section-title").innerHTML = `<i class="fas fa-user"></i> Violator Details (Form #${violationCount})`;
+    document.querySelector(".forms-container").appendChild(clone);
+    attachListeners(clone, violationCount);
 };
 
-// 📝 Update Preview JSON
+// Preview
 function updatePreview(){
     const data = $("#violationForm").serializeArray();
     $("#output").text(JSON.stringify(data, null, 2));
 }
 
-// Initial attach
-attachListeners(document.querySelector(".violation-form"));
+attachListeners(document.querySelector(".violation-form"), violationCount);
+$("#violationForm").on("submit", function(){ updatePreview(); });
 
-// Form submit preview
-$("#violationForm").on("submit", function(e){
-    updatePreview();
+
+
+
+
+// ======= Violations Summary Search =======
+const summarySearchInput = document.getElementById("searchInput");
+const violationsWrapper = document.querySelector(".violationsWrapper");
+
+summarySearchInput.addEventListener("input", function() {
+    const query = this.value.trim().toLowerCase();
+    let anyVisible = false;
+
+    // Check each violation card
+    document.querySelectorAll(".violationsWrapper .violation-card").forEach(card => {
+        const studentName = card.querySelector("p b")?.parentElement?.textContent.replace("Student:", "").trim().toLowerCase() || "";
+        const offense = card.querySelector("p[style*='orange']")?.textContent.replace("Offense:", "").trim().toLowerCase() || "";
+        const sanction = card.querySelector("p[style*='red']")?.textContent.replace("Sanction:", "").trim().toLowerCase() || "";
+
+        if(studentName.includes(query) || offense.includes(query) || sanction.includes(query)) {
+            card.style.display = "";
+            anyVisible = true;
+        } else {
+            card.style.display = "none";
+        }
+    });
+
+    // Remove any existing "No records found" div
+    const existing = violationsWrapper.querySelector(".no-records");
+    if(existing) existing.remove();
+
+    // If nothing is visible, append "No records found" at the end
+    if(!anyVisible) {
+        const noRecordsDiv = document.createElement("div");
+        noRecordsDiv.classList.add("no-records");
+        noRecordsDiv.textContent = "No records found.";
+        noRecordsDiv.style.textAlign = "center";
+        noRecordsDiv.style.color = "gray";
+        noRecordsDiv.style.marginTop = "1rem";
+        violationsWrapper.appendChild(noRecordsDiv); // append at the end
+    }
 });
 
-// ➕ Add another violation form
-document.getElementById("btnAddViolation").onclick = () => {
-    const originalBox = document.querySelector(".violation-form");
-    const clone = originalBox.cloneNode(true);
-
-    // Clear inputs
-    clone.querySelectorAll("input, textarea").forEach(input => input.value="");
-    clone.querySelector(".student-input").dataset.ids = "";
-    clone.querySelectorAll(".results").forEach(div=>div.innerHTML="");
-
-    // 👉 Append at bottom instead of prepend
-    document.querySelector(".forms-container").appendChild(clone);
-    attachListeners(clone);
-};
 
 </script>
-
 
 @endsection
