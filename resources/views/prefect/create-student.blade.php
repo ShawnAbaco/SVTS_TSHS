@@ -4,14 +4,14 @@
     <div class="main-container">
 
     </head>
-    $
+
 
             <!-- Toolbar -->
             <div class="toolbar">
                 <h2>Create Student</h2>
                 <div class="actions">
                     <input type="search" placeholder="🔍 Search student..." id="searchInput">
-                    
+
                     <div class="buttons-row">
                         <button type="button" class="btn-Add-Student" id="btnAddStudent">
                             <i class="fas fa-plus-circle"></i> Add Another Student
@@ -48,7 +48,7 @@
 
             function addStudentForm() {
                 studentCount++;
-                
+
                 const studentsWrapper = document.getElementById('studentsWrapper');
                 const newStudent = document.createElement('div');
                 newStudent.className = 'student-container';
@@ -59,18 +59,18 @@
                             <i class="fas fa-times"></i> Remove
                         </button>
                     </div>
-                    
+
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="student_fname_${studentCount}">First Name *</label>
                             <input type="text" id="student_fname_${studentCount}" name="students[${studentCount-1}][student_fname]" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="student_lname_${studentCount}">Last Name *</label>
                             <input type="text" id="student_lname_${studentCount}" name="students[${studentCount-1}][student_lname]" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="student_sex_${studentCount}">Sex</label>
                             <div class="radio-group">
@@ -88,22 +88,22 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="student_birthdate_${studentCount}">Birthdate *</label>
                             <input type="date" id="student_birthdate_${studentCount}" name="students[${studentCount-1}][student_birthdate]" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="student_address_${studentCount}">Address *</label>
                             <input type="text" id="student_address_${studentCount}" name="students[${studentCount-1}][student_address]" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="student_contactinfo_${studentCount}">Contact Information *</label>
                             <input type="text" id="student_contactinfo_${studentCount}" name="students[${studentCount-1}][student_contactinfo]" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="parent_id_${studentCount}">Parent *</label>
                             <select id="parent_id_${studentCount}" name="students[${studentCount-1}][parent_id]" class="form-control" required>
@@ -113,7 +113,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="adviser_id_${studentCount}">Adviser *</label>
                             <select id="adviser_id_${studentCount}" name="students[${studentCount-1}][adviser_id]" class="form-control" required>
@@ -123,7 +123,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="status_${studentCount}">Status</label>
                             <select id="status_${studentCount}" name="students[${studentCount-1}][status]" class="form-control">
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                 `;
-                
+
                 studentsWrapper.appendChild(newStudent);
             }
 
@@ -158,7 +158,7 @@
                 studentContainers.forEach((container, index) => {
                     const title = container.querySelector('.student-title');
                     title.textContent = `Student #${index + 1}`;
-                    
+
                     // Update all input names and IDs
                     const inputs = container.querySelectorAll('input, select');
                     inputs.forEach(input => {
@@ -166,13 +166,13 @@
                         if (name) {
                             input.setAttribute('name', name.replace(/\[\d+\]/, `[${index}]`));
                         }
-                        
+
                         const id = input.getAttribute('id');
                         if (id) {
                             input.setAttribute('id', id.replace(/\d+$/, index + 1));
                         }
                     });
-                    
+
                     // Update radio button IDs and labels
                     const radios = container.querySelectorAll('input[type="radio"]');
                     radios.forEach(radio => {
@@ -181,7 +181,7 @@
                             radio.setAttribute('id', id.replace(/\d+$/, index + 1));
                         }
                     });
-                    
+
                     const labels = container.querySelectorAll('label');
                     labels.forEach(label => {
                         const forAttr = label.getAttribute('for');
@@ -197,13 +197,13 @@
             function updateLayout() {
                 const studentContainers = document.querySelectorAll('.student-container');
                 const studentsWrapper = document.getElementById('studentsWrapper');
-                
+
                 // Reset all containers to default flex behavior
                 studentContainers.forEach(container => {
                     container.style.flex = '1 1 400px';
                     container.style.maxWidth = '600px';
                 });
-                
+
                 // Special layout for single student
                 if (studentContainers.length === 1) {
                     studentContainers[0].style.maxWidth = '800px';
@@ -219,7 +219,7 @@
             document.getElementById('studentForm').addEventListener('submit', function(e) {
                 const studentContainers = document.querySelectorAll('.student-container');
                 let isValid = true;
-                
+
                 studentContainers.forEach((container, index) => {
                     const firstName = container.querySelector(`input[name="students[${index}][student_fname]"]`);
                     const lastName = container.querySelector(`input[name="students[${index}][student_lname]"]`);
@@ -228,7 +228,7 @@
                     const contactInfo = container.querySelector(`input[name="students[${index}][student_contactinfo]"]`);
                     const parentId = container.querySelector(`select[name="students[${index}][parent_id]"]`);
                     const adviserId = container.querySelector(`select[name="students[${index}][adviser_id]"]`);
-                    
+
                     if (!firstName.value || !lastName.value || !birthdate.value || !address.value || !contactInfo.value || !parentId.value || !adviserId.value) {
                         isValid = false;
                         // Highlight empty required fields
@@ -241,7 +241,7 @@
                         if (!adviserId.value) adviserId.style.borderColor = '#e74c3c';
                     }
                 });
-                
+
                 if (!isValid) {
                     e.preventDefault();
                     alert('Please fill in all required fields (marked with *) before submitting.');
@@ -259,11 +259,11 @@
             document.getElementById('searchInput').addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
                 const studentContainers = document.querySelectorAll('.student-container');
-                
+
                 studentContainers.forEach(container => {
                     const firstName = container.querySelector('input[name*="[student_fname]"]').value.toLowerCase();
                     const lastName = container.querySelector('input[name*="[student_lname]"]').value.toLowerCase();
-                    
+
                     if (firstName.includes(searchTerm) || lastName.includes(searchTerm)) {
                         container.style.display = 'block';
                     } else {

@@ -377,21 +377,26 @@ public function offensesandsanctions()
     return view('prefect.offensesandsanctions', compact('offenses'));
 }
 
-
-
-    public function createAdviser(Request $request)
+ public function createAdviser()
     {
-        $request->validate([
-            'email' => 'required|email|unique:advisers',
-            'password' => 'required|min:6',
-        ]);
-
-        Adviser::create([
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return back()->with('success', 'Adviser created successfully.');
+        return view('prefect.create-adviser'); // Blade file
     }
+
+
+
+    // public function createAdviser(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email|unique:advisers',
+    //         'password' => 'required|min:6',
+    //     ]);
+
+    //     Adviser::create([
+    //         'email' => $request->email,
+    //         'password' => Hash::make($request->password),
+    //     ]);
+
+    //     return back()->with('success', 'Adviser created successfully.');
+    // }
 
 }
