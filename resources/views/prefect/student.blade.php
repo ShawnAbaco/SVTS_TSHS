@@ -9,8 +9,9 @@
     <h2>Student Management</h2>
     <div class="actions">
 <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
-      <button class="btn-primary" id="createBtn">➕ Add Violation</button>
-      <button class="btn-secondary" id="createAnecBtn">📝 Create Anecdotal</button>
+ <a href="{{ route('create.student') }}" class="btn-primary" id="createBtn">
+    <i class="fas fa-plus"></i> Add Student
+</a>
       <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
     </div>
   </div>
