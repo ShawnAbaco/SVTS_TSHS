@@ -99,10 +99,15 @@
         </tbody>
     </table>
 
-    <!-- Pagination -->
-    <div class="pagination">
-        {{ $parents->links() }}
-    </div>
+<!-- Pagination -->
+<div class="pagination-wrapper">
+  <div class="pagination-summary">
+    Showing {{ $parents->firstItem() }} to {{ $parents->lastItem() }} of {{ $parents->total() }} results
+  </div>
+
+  <div class="pagination-links">
+    {{ $parents->links() }}
+  </div>
 </div>
 
 <!-- Include modals if needed -->

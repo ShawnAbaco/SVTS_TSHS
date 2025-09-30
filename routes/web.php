@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ViolationAppointmentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Prefect\PStudentController;
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\AdviserCRUDController;
 use App\Http\Controllers\ComplaintAppointmentController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ViolationAnecdotalController;
 use App\Http\Controllers\ViolationRecordController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\Prefect\PParentController;
 
 Route::get('/', function () {
     return view('adviser.login');
@@ -27,13 +28,26 @@ Route::get('/', function () {
 // ===================== Prefect Routes =====================
 Route::prefix('prefect')->group(function () {
     // Login / Logout
-
     Route::post('/logout', [PrefectController::class, 'logout'])->name('prefect.logout');
 
     // Protected routes
     Route::middleware('auth:prefect')->group(function () {
         Route::get('/dashboard', [PrefectController::class, 'dashboard'])->name('prefect.dashboard');
         Route::post('/advisers', [PrefectController::class, 'createAdviser'])->name('prefect.create.adviser');
+
+
+
+// new student store
+Route::post('/students/store', [PStudentController::class, 'store'])->name('students.store');
+
+
+
+
+
+
+
+
+
 
         // Management
         Route::get('/studentmanagement', [PrefectController::class, 'studentmanagement'])->name('student.management');
@@ -63,8 +77,10 @@ Route::prefix('prefect')->group(function () {
         Route::get('/reportgenerate', [PrefectController::class, 'reportgenerate'])->name('report.generate');
         Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData'])->name('prefect.reports.data');;
 
-
+// diri ang bag o
         Route::get('/create/parent', [ParentController::class, 'createParent'])->name('create.parent');
+        Route::post('/parents/store', [PParentController::class, 'store'])->name('parents.store');
+
         Route::get('/create/student', [StudentController::class, 'createStudent'])->name('create.student');
         Route::get('/create/adviser', [PrefectController::class, 'createAdviser'])->name('create.adviser');
 
@@ -148,7 +164,7 @@ Route::prefix('adviser')->group(function () {
         Route::get('/offense/search', [AdviserController::class, 'offenseSearch']);
 
         // CRUD student
-        Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+        // Route::post('/students', [StudentController::class, 'store'])->name('students.store');
         Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('/students/{id}/trash', [StudentController::class, 'trash'])->name('students.trash');
 Route::patch('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
@@ -157,7 +173,7 @@ Route::patch('/students/bulk-update-status', [StudentController::class, 'bulkUpd
 
 
         // CRUD parent
-        Route::post('/adviser/parents', [ParentController::class, 'parentStore'])->name('parents.store');
+        // Route::post('/adviser/parents', [ParentController::class, 'parentStore'])->name('parents.store');
         Route::put('/adviser/parents/{id}', [ParentController::class, 'parentUpdate'])->name('parents.update');
         Route::delete('/adviser/parents/{id}', [ParentController::class, 'destroyParent'])->name('parents.destroy');
 

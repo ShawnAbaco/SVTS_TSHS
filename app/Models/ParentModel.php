@@ -15,6 +15,7 @@ class ParentModel extends Model
         'parent_lname',
         'parent_sex',
         'parent_birthdate',
+        'parent_email',
         'parent_contactinfo',
         'parent_relationship',
         'status',
