@@ -14,10 +14,11 @@ class ComplaintController extends Controller
         return view('prefect.create-complaints');
     }
 
-    // Store multiple complaints - UPDATED FOR ONE-TO-MANY
+    // Store multiple complaints - ENHANCED DEBUGGING
     public function store(Request $request)
     {
-        \Log::info('Complaint Form Data Received:', $request->all());
+        \Log::info('=== COMPLAINT STORE METHOD STARTED ===');
+        \Log::info('Full Request Data:', $request->all());
         
         try {
             DB::beginTransaction();
@@ -30,15 +31,19 @@ class ComplaintController extends Controller
             $complaintsData = $request->input('complaints', []);
             
             \Log::info('Complaints Data Structure:', $complaintsData);
+            \Log::info('Number of complaints to process:', ['count' => count($complaintsData)]);
 
             // Check if we have any data
             if (empty($complaintsData)) {
+                \Log::warning('No complaints data found in request');
                 DB::rollBack();
                 return back()->with('error', 'No complaint data found. Please make sure you added complaints to the summary.');
             }
 
             // Loop through each complaint
             foreach ($complaintsData as $complaintIndex => $complaint) {
+                \Log::info("Processing complaint index: {$complaintIndex}", $complaint);
+                
                 $complainant_id = $complaint['complainant_id'] ?? null;
                 $respondent_id = $complaint['respondent_id'] ?? null;
                 $offense_sanc_id = $complaint['offense_sanc_id'] ?? null;
@@ -46,15 +51,16 @@ class ComplaintController extends Controller
                 $time = $complaint['time'] ?? null;
                 $incident = $complaint['incident'] ?? null;
 
-                \Log::info("Processing complaint {$complaintIndex}:", [
-                    'complainant_id' => $complainant_id,
-                    'respondent_id' => $respondent_id,
-                    'offense_sanc_id' => $offense_sanc_id
-                ]);
-
                 // Validate required fields
                 if (!$complainant_id || !$respondent_id || !$offense_sanc_id || !$date || !$time || !$incident) {
-                    \Log::warning("Skipping complaint {$complaintIndex} - missing required fields");
+                    \Log::warning("Skipping complaint {$complaintIndex} - missing required fields", [
+                        'complainant_id' => $complainant_id,
+                        'respondent_id' => $respondent_id,
+                        'offense_sanc_id' => $offense_sanc_id,
+                        'date' => $date,
+                        'time' => $time,
+                        'incident' => $incident
+                    ]);
                     continue;
                 }
 
@@ -63,8 +69,18 @@ class ComplaintController extends Controller
                 $respondentExists = DB::table('tbl_student')->where('student_id', $respondent_id)->exists();
                 $offenseExists = DB::table('tbl_offenses_with_sanction')->where('offense_sanc_id', $offense_sanc_id)->exists();
 
-                if (!$complainantExists || !$respondentExists || !$offenseExists) {
-                    \Log::warning("Invalid IDs in complaint {$complaintIndex} - complainant: $complainantExists, respondent: $respondentExists, offense: $offenseExists");
+                if (!$complainantExists) {
+                    \Log::warning("Complainant does not exist: {$complainant_id}");
+                    continue;
+                }
+                
+                if (!$respondentExists) {
+                    \Log::warning("Respondent does not exist: {$respondent_id}");
+                    continue;
+                }
+                
+                if (!$offenseExists) {
+                    \Log::warning("Offense does not exist: {$offense_sanc_id}");
                     continue;
                 }
 
@@ -75,32 +91,42 @@ class ComplaintController extends Controller
                 $complainantName = $complainant ? $complainant->student_fname . ' ' . $complainant->student_lname : 'Unknown';
                 $respondentName = $respondent ? $respondent->student_fname . ' ' . $respondent->student_lname : 'Unknown';
 
-                \Log::info("Creating complaint record:", [
-                    'complainant' => $complainantName,
-                    'respondent' => $respondentName,
-                    'offense_id' => $offense_sanc_id
-                ]);
+                \Log::info("Creating complaint record: {$complainantName} vs {$respondentName}");
 
                 // Create the complaint record
-                Complaints::create([
-                    'complainant_id' => $complainant_id,
-                    'respondent_id' => $respondent_id,
-                    'prefect_id' => $prefect_id,
-                    'offense_sanc_id' => $offense_sanc_id,
-                    'complaints_incident' => $incident,
-                    'complaints_date' => $date,
-                    'complaints_time' => $time,
-                    'status' => 'active'
-                ]);
+                try {
+                    $newComplaint = Complaints::create([
+                        'complainant_id' => $complainant_id,
+                        'respondent_id' => $respondent_id,
+                        'prefect_id' => $prefect_id,
+                        'offense_sanc_id' => $offense_sanc_id,
+                        'complaints_incident' => $incident,
+                        'complaints_date' => $date,
+                        'complaints_time' => $time,
+                        'status' => 'active'
+                    ]);
 
-                $savedCount++;
-                $messages[] = "✅ {$complainantName} vs {$respondentName}";
+                    \Log::info("Complaint created successfully with ID: {$newComplaint->id}");
+                    $savedCount++;
+                    $messages[] = "✅ {$complainantName} vs {$respondentName}";
+                    
+                } catch (\Exception $e) {
+                    \Log::error("Failed to create complaint record: " . $e->getMessage());
+                    continue;
+                }
             }
 
             DB::commit();
 
+            \Log::info("Complaint storage completed. Saved: {$savedCount}, Attempted: " . count($complaintsData));
+
             if ($savedCount === 0) {
-                return back()->with('error', 'No complaints were saved. Please check that all fields are filled correctly and students/offenses exist.');
+                return back()->with('error', 
+                    'No complaints were saved. Please check that:<br>'
+                    . '1. All students exist in the database<br>'
+                    . '2. The offense exists in the database<br>'
+                    . '3. All fields are properly filled'
+                );
             }
 
             $successMessage = "Successfully saved $savedCount complaint record(s)!<br><br>" . implode('<br>', array_slice($messages, 0, 10));
@@ -118,7 +144,7 @@ class ComplaintController extends Controller
         }
     }
 
-    // AJAX search for students - FIXED SYNTAX ERROR
+    // AJAX search for students
     public function searchStudents(Request $request)
     {
         $query = $request->input('query', '');
