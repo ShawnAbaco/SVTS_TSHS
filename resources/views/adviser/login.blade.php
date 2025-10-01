@@ -7,10 +7,272 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/adviser/login.css') }}">
     
     <style>
-        /* Modal Styles */
+        /* Reset & Box Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Full height body & html */
+        html, body {
+            height: 100%;
+            font-family: "Inter", sans-serif;
+            overflow: hidden; /* prevent scrolling */
+        }
+
+        /* Body background with overlay */
+        body {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: url('http://127.0.0.1:8000/images/tshs.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(0,0,0,0.65), rgba(0,0,0,0.45));
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease-in-out infinite;
+            backdrop-filter: blur(8px);
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .top-bar img { width: 55px; }
+        .top-bar h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main-container {
+            flex: 1 0 auto; /* fill remaining space */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+            max-height: calc(100vh - 120px); /* 120px for top bar + footer */
+            overflow: hidden;
+        }
+
+        /* Left Welcome Section */
+        .welcome-text {
+            margin-left: 80px;
+            color: white;
+            max-width: 500px;
+            animation: slideInLeft 0.8s ease-out;
+        }
+        .welcome-text h2 {
+            font-size: 46px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+        .welcome-text p {
+            font-size: 18px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: rgba(99,95,95,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            max-width: 420px;
+            width: 100%;
+            padding: 40px 35px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-left: 80px;
+        }
+        .login-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Login Header */
+        .login-header img { width: 70px; margin-bottom: 12px; }
+        .login-header h2 {
+            font-size: 30px;
+            font-weight: 700;
+            color: white;
+        }
+        .login-header p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 20px;
+        }
+
+        /* Input Fields */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .form-group label {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 18px;
+            transition: 0.3s ease;
+        }
+        .form-group input:focus {
+            border-color: #4facfe;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            box-shadow: 0 0 12px rgba(79,172,254,0.5);
+        }
+        input::placeholder {
+            color: rgba(255,255,255,0.85);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            font-size: 18px;
+        }
+        input:focus::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Password Toggle */
+        .password-wrapper { position: relative; }
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            width: 22px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.2s ease;
+        }
+        .toggle-password:hover { opacity: 1; }
+
+        /* Button */
+        .login-card button {
+            width: 100%;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .login-card button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 18px rgba(79,172,254,0.4);
+        }
+
+        /* Login Footer Links */
+        .login-footer a {
+            font-size: 13px;
+            color: #00f2fe;
+            text-decoration: none;
+        }
+        .login-footer a:hover { text-decoration: underline; }
+
+        /* Footer fixed at bottom */
+        footer {
+            flex-shrink: 0; /* stays at bottom */
+            background: rgba(0,0,0,0.7);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* School Highlights */
+        .school-highlights {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .school-highlights .highlight {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(255,255,255,0.1);
+            padding: 12px 16px;
+            border-radius: 14px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.2s ease;
+        }
+        .school-highlights .highlight:hover { transform: translateX(6px); }
+        .school-highlights .highlight span { font-size: 24px; flex-shrink: 0; }
+        .school-highlights .highlight p { color: white; font-size: 18px; line-height: 1.4; }
+
+        /* Error Text */
+        .error-text {
+            display: block;
+            color: #ff6b6b;
+            font-size: 17px;
+            margin-top: 4px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(-3px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .error-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== UPDATED MODAL STYLES ===== */
         .modal {
             display: none;
             position: fixed;
@@ -18,49 +280,66 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
         
         .modal-content {
-            background-color: white;
+            background: rgba(99,95,95,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             padding: 30px;
-            border-radius: 10px;
             max-width: 400px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             position: relative;
+            color: white;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
         .modal h2 {
-            color: #e74c3c;
+            color: #ff6b6b;
             margin-bottom: 15px;
+            font-size: 28px;
+            font-weight: 700;
         }
         
         .modal p {
             margin-bottom: 20px;
-            color: #555;
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            line-height: 1.5;
         }
         
         .countdown {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
-            color: #e74c3c;
+            color: #4facfe;
             margin: 15px 0;
+            text-shadow: 0 0 10px rgba(79,172,254,0.5);
         }
         
         .attempts-counter {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #f8f9fa;
+            background: rgba(255,255,255,0.1);
             padding: 5px 10px;
             border-radius: 15px;
             font-size: 14px;
-            color: #6c757d;
+            color: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
         .modal-actions {
@@ -68,39 +347,44 @@
         }
         
         .ok-btn {
-            background-color: #3498db;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
             color: white;
             border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
+            padding: 10px 24px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 16px;
+            transition: 0.3s ease;
         }
         
         .ok-btn:hover {
-            background-color: #2980b9;
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(79,172,254,0.4);
         }
         
         /* Success Modal Styles */
         .success-modal .modal-content h2 {
-            color: #27ae60;
+            color: #2ecc71;
         }
         
         .success-modal .modal-content p {
-            color: #2c3e50;
+            color: rgba(255,255,255,0.9);
         }
         
         .success-modal .ok-btn {
-            background-color: #27ae60;
+            background: linear-gradient(135deg, #2ecc71, #1abc9c);
         }
         
         .success-modal .ok-btn:hover {
-            background-color: #219955;
+            box-shadow: 0 8px 18px rgba(46,204,113,0.4);
         }
         
         .success-icon {
             font-size: 48px;
             margin-bottom: 15px;
+            color: #2ecc71;
+            text-shadow: 0 0 15px rgba(46,204,113,0.5);
         }
         
         /* Contact Information Styles */
@@ -109,20 +393,32 @@
         }
         
         .contact-link {
-            color: #3498db;
+            color: #4facfe;
             text-decoration: none;
-            border-bottom: 1px solid #3498db;
+            border-bottom: 1px solid #4facfe;
             transition: all 0.2s ease;
             cursor: pointer;
         }
         
         .contact-link:hover {
-            color: #2980b9;
-            border-bottom: 1px solid #2980b9;
+            color: #00f2fe;
+            border-bottom: 1px solid #00f2fe;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 30px;
+                max-height: calc(100vh - 120px);
+            }
+            .welcome-text h2 { font-size: 34px; }
+            .login-card { margin-left: 0; }
         }
     </style>
 </head>
-<body style="background: url('http://127.0.0.1:8000/images/tshs.jpg') no-repeat center center fixed; background-size: cover;">
+<body>
 
 <header class="top-bar">
     <img src="{{ asset('images/logo.png') }}" alt="System Logo">
@@ -133,8 +429,8 @@
     <!-- Left Section with More Details -->
     <div class="welcome-text">
         <h2>Welcome Back!</h2>
-<p>Track and manage student behavior effectively with the Student Violation Tracking System.<br>
-   Access violation records, parent notifications, and reports easily.</p>
+        <p>Track and manage student behavior effectively with the Student Violation Tracking System.<br>
+           Access violation records, parent notifications, and reports easily.</p>
 
         <!-- School Highlights -->
         <div class="school-highlights">
@@ -172,54 +468,52 @@
             <p>Sign in to access your dashboard</p>
         </div>
 
-<form id="loginForm" action="{{ route('auth.login') }}" method="POST" novalidate>
-    @csrf
-    <div class="form-group">
-    <label for="email">Email Address</label>
-    <input
-        type="email"
-        id="email"
-        name="email"
-        placeholder="e.g. adviser@gmail.com"
-        required
-        autocomplete="username"
-        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        title="Invalid email format. Example: adviser@gmail.com"
-    >
-    <small class="error-text" id="emailError">
-        @error('email')
-            {{ $message }}
-        @enderror
-    </small>
-</div>
+        <form id="loginForm" action="{{ route('auth.login') }}" method="POST" novalidate>
+            @csrf
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="e.g. adviser@gmail.com"
+                    required
+                    autocomplete="username"
+                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                    title="Invalid email format. Example: adviser@gmail.com"
+                >
+                <small class="error-text" id="emailError">
+                    @error('email')
+                        {{ $message }}
+                    @enderror
+                </small>
+            </div>
 
+            <div class="form-group password-wrapper">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                    minlength="6"
+                    maxlength="50"
+                >
+                <small class="error-text" id="passwordError">
+                    @error('password')
+                        {{ $message }}
+                    @enderror
+                </small>
+                <img src="{{ asset('images/hide.png') }}" id="togglePassword" class="toggle-password" alt="Toggle Password">
+            </div>
 
-<div class="form-group password-wrapper">
-    <label for="password">Password</label>
-    <input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Enter your password"
-        required
-        autocomplete="current-password"
-        minlength="6"
-        maxlength="50"
-    >
-    <small class="error-text" id="passwordError">
-        @error('password')
-            {{ $message }}
-        @enderror
-    </small>
-    <img src="{{ asset('images/hide.png') }}" id="togglePassword" class="toggle-password" alt="Toggle Password">
-</div>
-
-<button type="submit" id="loginBtn">Log In</button>
-<div class="login-footer" style="margin-top: 12px;">
-    <a href="#">Forgot Password?</a>
-</div>
-
-</form>
+            <button type="submit" id="loginBtn">Log In</button>
+            <div class="login-footer" style="margin-top: 12px;">
+                <a href="#">Forgot Password?</a>
+            </div>
+        </form>
     </div>
 </div>
 
