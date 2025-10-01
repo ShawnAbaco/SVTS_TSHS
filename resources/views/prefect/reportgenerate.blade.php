@@ -346,26 +346,20 @@ body {
 }
 
 /* ===========================
-   REPORTS TITLE - UPDATED WITH TOOLBAR STYLE
+   REPORTS TITLE - REMOVED CONTAINER AND LINE
    =========================== */
-.reports-title-container {
-    display: flex;             /* make it a flex container */
-    justify-content: center;   /* horizontal center */
-    align-items: center;       /* vertical center */
-    height: 80px;              /* adjust as needed */
-    width: 100%;
-    margin: 0 0 30px 0;
-    padding: 0 20px;
-}
-
-.reports-title-container h3 {
+/* ===========================
+   REPORTS TITLE - WITH BROWN LINE
+   =========================== */
+.reports-title {
     font-size: 2rem;
     color: #4b0000;
     font-weight: 600;
-    text-align: center;        /* centers text inside h3 if needed */
+    text-align: center;
+    margin: 20px 0 30px 0;
+    padding: 0 20px 15px 20px; /* Added bottom padding */
+    border-bottom: 3px solid #8B4513; /* Brown line */
 }
-<<<<<<< HEAD
-
 /* ===========================
    REPORT BOXES GRID
    =========================== */
@@ -413,14 +407,6 @@ body {
    =========================== */
 .modal {
   display: none;
-=======
-    .sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
->>>>>>> c5b27ed762f3863e0cc6390cdd5a433cde886514
   position: fixed;
   z-index: 100;
   left: 0;
@@ -596,10 +582,8 @@ tr:nth-child(even) {
 
     @yield('content')
     
-    <!-- Small Centered Reports Title -->
-    <div class="reports-title-container">
-      <h3>REPORTS</h3>
-    </div>
+    <!-- Simple Reports Title (no container, no line) -->
+    <h3 class="reports-title">REPORTS</h3>
     
     <!-- Report Boxes Grid (EXACTLY AS BEFORE) -->
     <div class="reports-grid">
@@ -1196,7 +1180,7 @@ function printModal(modalId){
   const clone = m.cloneNode(true);
   clone.querySelectorAll('input,button,.close').forEach(e=>e.remove());
   const w = window.open('','','width=900,height=700');
-  w.document.write('<html><head><title>Print</title></head><body>');
+  w.document.write('<html><head><title>Print</title></html>');
   w.document.write(clone.innerHTML);
   w.document.write('</body></html>');
   w.document.close(); w.focus(); w.print(); w.close();
