@@ -4,7 +4,7 @@
 <div class="main-container">
     <style>
 
-        
+
     </style>
 </head>
 <body>
@@ -19,7 +19,7 @@
             <h2>Create Parents</h2>
             <div class="actions">
                 <input type="search" placeholder="🔍 Search parent..." id="searchInput">
-                
+
                 <div class="buttons-row">
                     <button type="button" class="btn-Add-Violation" id="btnAddViolation">
                         <i class="fas fa-plus-circle"></i> Add Another Parent
@@ -32,7 +32,8 @@
         </div>
 
         <!-- Parent Container -->
-        <form id="violationForm" method="POST">
+        <form id="violationForm" method="POST"action="{{ route('parents.store') }}">
+                @csrf
             <div class="parents-wrapper" id="parentsWrapper">
                 <!-- Parent forms will be dynamically added here -->
             </div>
@@ -55,7 +56,7 @@
 
         function addParentForm() {
             parentCount++;
-            
+
             const parentsWrapper = document.getElementById('parentsWrapper');
             const newParent = document.createElement('div');
             newParent.className = 'parent-container';
@@ -66,18 +67,18 @@
                         <i class="fas fa-times"></i> Remove
                     </button>
                 </div>
-                
+
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="parent_fname_${parentCount}">First Name *</label>
                         <input type="text" id="parent_fname_${parentCount}" name="parents[${parentCount-1}][parent_fname]" class="form-control" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="parent_lname_${parentCount}">Last Name *</label>
                         <input type="text" id="parent_lname_${parentCount}" name="parents[${parentCount-1}][parent_lname]" class="form-control" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="parent_sex_${parentCount}">Sex</label>
                         <div class="radio-group">
@@ -95,22 +96,22 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="parent_birthdate_${parentCount}">Birthdate *</label>
                         <input type="date" id="parent_birthdate_${parentCount}" name="parents[${parentCount-1}][parent_birthdate]" class="form-control" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="parent_email_${parentCount}">Email</label>
                         <input type="email" id="parent_email_${parentCount}" name="parents[${parentCount-1}][parent_email]" class="form-control">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="parent_contactinfo_${parentCount}">Contact Information *</label>
                         <input type="text" id="parent_contactinfo_${parentCount}" name="parents[${parentCount-1}][parent_contactinfo]" class="form-control" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="parent_relationship_${parentCount}">Relationship</label>
                         <select id="parent_relationship_${parentCount}" name="parents[${parentCount-1}][parent_relationship]" class="form-control">
@@ -124,7 +125,7 @@
                     </div>
                 </div>
             `;
-            
+
             parentsWrapper.appendChild(newParent);
         }
 
@@ -147,7 +148,7 @@
             parentContainers.forEach((container, index) => {
                 const title = container.querySelector('.parent-title');
                 title.textContent = `Parent #${index + 1}`;
-                
+
                 // Update all input names and IDs
                 const inputs = container.querySelectorAll('input, select');
                 inputs.forEach(input => {
@@ -155,13 +156,13 @@
                     if (name) {
                         input.setAttribute('name', name.replace(/\[\d+\]/, `[${index}]`));
                     }
-                    
+
                     const id = input.getAttribute('id');
                     if (id) {
                         input.setAttribute('id', id.replace(/\d+$/, index + 1));
                     }
                 });
-                
+
                 // Update radio button IDs and labels
                 const radios = container.querySelectorAll('input[type="radio"]');
                 radios.forEach(radio => {
@@ -170,7 +171,7 @@
                         radio.setAttribute('id', id.replace(/\d+$/, index + 1));
                     }
                 });
-                
+
                 const labels = container.querySelectorAll('label');
                 labels.forEach(label => {
                     const forAttr = label.getAttribute('for');
@@ -186,13 +187,13 @@
         function updateLayout() {
             const parentContainers = document.querySelectorAll('.parent-container');
             const parentsWrapper = document.getElementById('parentsWrapper');
-            
+
             // Reset all containers to default flex behavior
             parentContainers.forEach(container => {
                 container.style.flex = '1 1 400px';
                 container.style.maxWidth = '600px';
             });
-            
+
             // Special layout for single parent
             if (parentContainers.length === 1) {
                 parentContainers[0].style.maxWidth = '800px';
@@ -204,32 +205,41 @@
             }
         }
 
-        // Form validation
-        document.getElementById('violationForm').addEventListener('submit', function(e) {
-            const parentContainers = document.querySelectorAll('.parent-container');
-            let isValid = true;
-            
-            parentContainers.forEach((container, index) => {
-                const firstName = container.querySelector(`input[name="parents[${index}][parent_fname]"]`);
-                const lastName = container.querySelector(`input[name="parents[${index}][parent_lname]"]`);
-                const birthdate = container.querySelector(`input[name="parents[${index}][parent_birthdate]"]`);
-                const contactInfo = container.querySelector(`input[name="parents[${index}][parent_contactinfo]"]`);
-                
-                if (!firstName.value || !lastName.value || !birthdate.value || !contactInfo.value) {
-                    isValid = false;
-                    // Highlight empty required fields
-                    if (!firstName.value) firstName.style.borderColor = '#e74c3c';
-                    if (!lastName.value) lastName.style.borderColor = '#e74c3c';
-                    if (!birthdate.value) birthdate.style.borderColor = '#e74c3c';
-                    if (!contactInfo.value) contactInfo.style.borderColor = '#e74c3c';
-                }
-            });
-            
-            if (!isValid) {
-                e.preventDefault();
-                alert('Please fill in all required fields (marked with *) before submitting.');
+    document.getElementById('violationForm').addEventListener('submit', function(e) {
+    const parentContainers = document.querySelectorAll('.parent-container');
+    let isValid = true;
+
+    parentContainers.forEach((container, index) => {
+        const firstName = container.querySelector(`input[name="parents[${index}][parent_fname]"]`);
+        const lastName = container.querySelector(`input[name="parents[${index}][parent_lname]"]`);
+        const birthdate = container.querySelector(`input[name="parents[${index}][parent_birthdate]"]`);
+        const contactInfo = container.querySelector(`input[name="parents[${index}][parent_contactinfo]"]`);
+        const email = container.querySelector(`input[name="parents[${index}][parent_email]"]`);
+
+        if (!firstName.value || !lastName.value || !birthdate.value || !contactInfo.value) {
+            isValid = false;
+            if (!firstName.value) firstName.style.borderColor = '#e74c3c';
+            if (!lastName.value) lastName.style.borderColor = '#e74c3c';
+            if (!birthdate.value) birthdate.style.borderColor = '#e74c3c';
+            if (!contactInfo.value) contactInfo.style.borderColor = '#e74c3c';
+        }
+
+        // Validate email only if not empty
+        if (email.value) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email.value)) {
+                isValid = false;
+                email.style.borderColor = '#e74c3c';
+                alert(`Please enter a valid email address for Parent #${index + 1}.`);
             }
-        });
+        }
+    });
+
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields (marked with *) before submitting.');
+    }
+});
 
         // Clear error styling on input
         document.addEventListener('input', function(e) {

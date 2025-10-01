@@ -16,58 +16,58 @@ class ViolationRecordController extends Controller
     }
 
 
-    public function store(Request $request)
-    {
-        $student_ids = $request->input('student_id', []);
-        $offense_ids = $request->input('offense', []);
-        $dates       = $request->input('date', []);
-        $times       = $request->input('time', []);
-        $incidents   = $request->input('incident', []);
+    // public function store(Request $request)
+    // {
+    //     $student_ids = $request->input('student_id', []);
+    //     $offense_ids = $request->input('offense', []);
+    //     $dates       = $request->input('date', []);
+    //     $times       = $request->input('time', []);
+    //     $incidents   = $request->input('incident', []);
 
-        $messages = [];
+    //     $messages = [];
 
-        foreach ($offense_ids as $i => $offense_id) {
-            $student_id = $student_ids[$i] ?? null;
-            $date       = $dates[$i] ?? null;
-            $time       = $times[$i] ?? null;
-            $incident   = $incidents[$i] ?? null;
+    //     foreach ($offense_ids as $i => $offense_id) {
+    //         $student_id = $student_ids[$i] ?? null;
+    //         $date       = $dates[$i] ?? null;
+    //         $time       = $times[$i] ?? null;
+    //         $incident   = $incidents[$i] ?? null;
 
-            if (!$student_id || !$offense_id) continue;
+    //         if (!$student_id || !$offense_id) continue;
 
-            $previous_count = DB::table('tbl_violation_record')
-                ->where('student_id', $student_id)
-                ->where('offense_id', $offense_id)
-                ->count();
+    //         $previous_count = DB::table('tbl_violation_record')
+    //             ->where('student_id', $student_id)
+    //             ->where('offense_id', $offense_id)
+    //             ->count();
 
-            $stage_number = $previous_count + 1;
+    //         $stage_number = $previous_count + 1;
 
-            $sanction_row = DB::table('tbl_offenses_with_sanction')
-                ->where('offense_sanc_id', $offense_id)
-                ->where('stage_number', $stage_number)
-                ->first();
+    //         $sanction_row = DB::table('tbl_offenses_with_sanction')
+    //             ->where('offense_sanc_id', $offense_id)
+    //             ->where('stage_number', $stage_number)
+    //             ->first();
 
-            if (!$sanction_row) {
-                $sanction_row = DB::table('tbl_offenses_with_sanction')
-                    ->where('offense_sanc_id', $offense_id)
-                    ->orderByDesc('stage_number')
-                    ->first();
-            }
+    //         if (!$sanction_row) {
+    //             $sanction_row = DB::table('tbl_offenses_with_sanction')
+    //                 ->where('offense_sanc_id', $offense_id)
+    //                 ->orderByDesc('stage_number')
+    //                 ->first();
+    //         }
 
-            $sanction = $sanction_row->sanction_consequences ?? 'No sanction found';
+    //         $sanction = $sanction_row->sanction_consequences ?? 'No sanction found';
 
-            DB::table('tbl_violation_record')->insert([
-                'student_id' => $student_id,
-                'offense_id' => $offense_id,
-                'violation_date' => $date,
-                'violation_time' => $time,
-                'violation_details' => $incident
-            ]);
+    //         DB::table('tbl_violation_record')->insert([
+    //             'student_id' => $student_id,
+    //             'offense_id' => $offense_id,
+    //             'violation_date' => $date,
+    //             'violation_time' => $time,
+    //             'violation_details' => $incident
+    //         ]);
 
-            $messages[] = "✅ Violation recorded. Sanction: $sanction";
-        }
+    //         $messages[] = "✅ Violation recorded. Sanction: $sanction";
+    //     }
 
-        return back()->with('messages', $messages);
-    }
+    //     return back()->with('messages', $messages);
+    // }
 
     public function searchStudents(Request $request)
     {

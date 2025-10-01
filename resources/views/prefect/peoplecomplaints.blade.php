@@ -3,13 +3,15 @@
 @section('content')
 <div class="main-container">
 
+
   <!-- Toolbar -->
   <div class="toolbar">
     <h2>Complaint Management</h2>
     <div class="actions">
-      <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
-      <button class="btn-primary" id="createBtn">➕ Add Violation</button>
-      <button class="btn-secondary" id="createAnecBtn">📝 Create Anecdotal</button>
+<input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
+ <a href="{{ route('complaints.create') }}" class="btn-primary" id="createBtn">
+    <i class="fas fa-plus"></i> Add Complaint
+</a>      <button class="btn-secondary" id="createAnecBtn">📝 Create Anecdotal</button>
       <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
     </div>
   </div>
@@ -31,23 +33,24 @@
   </div>
 
   <!-- Bulk Action / Select Options -->
-  <div class="select-options">
-    <div class="left-controls">
-      <label for="selectAll" class="select-label">
-        <input type="checkbox" id="selectAll">
-        <span>Select All</span>
-      </label>
+ <div class="select-options">
+  <div class="left-controls">
+    <label for="selectAll" class="select-label">
+      <input type="checkbox" id="selectAll">
+      <span>Select All</span>
+    </label>
 
-      <!-- Dropdown Button -->
-      <div class="dropdown">
-        <button class="btn-info dropdown-btn">⬇️ View Records</button>
-        <div class="dropdown-content">
-          <a href="#" id="violationRecords">Violation Records</a>
-          <a href="#" id="violaitonAppointments">Violation Appointments</a>
-          <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
-        </div>
+    <!-- Dropdown Button -->
+    <div class="dropdown">
+      <button class="btn-info dropdown-btn">⬇️ View Records</button>
+      <div class="dropdown-content">
+        <a href="#" id="violationRecords">Violation Records</a>
+        <a href="#" id="violaitonAppointments">Violation Appointments</a>
+        <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
       </div>
     </div>
+  </div>
+
 
     <div class="right-controls">
       <button class="btn-danger" id="moveToTrashBtn">🗑️ Move Selected to Trash</button>
@@ -69,49 +72,50 @@
           <th>Action</th>
         </tr>
       </thead>
-      <tbody id="tableBody">
-        <tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
-          <td><input type="checkbox" class="rowCheckbox"></td>
-          <td>1</td>
-          <td>Juan Dela Cruz</td>
-          <td><span title="Tardiness">Tardiness</span></td>
-          <td><span title="Verbal Warning">Verbal Warning</span></td>
-          <td>2025-09-28</td>
-          <td>08:15 AM</td>
-          <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-        </tr>
+  <tbody id="tableBody">
+<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
+  <td><input type="checkbox" class="rowCheckbox"></td>
+  <td>1</td>
+  <td>Juan Dela Cruz</td>
+  <td><span title="Tardiness">Tardiness</span></td>
+  <td><span title="Verbal Warning">Verbal Warning</span></td>
+  <td>2025-09-28</td>
+  <td>08:15 AM</td>
+  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+</tr>
 
-        <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
-          <td><input type="checkbox" class="rowCheckbox"></td>
-          <td>2</td>
-          <td>Maria Santos</td>
-          <td>Incomplete Homework</td>
-          <td>Written Warning</td>
-          <td>2025-09-27</td>
-          <td>09:30 AM</td>
-          <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-        </tr>
-        <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
-          <td><input type="checkbox" class="rowCheckbox"></td>
-          <td>3</td>
-          <td>Pedro Reyes</td>
-          <td>Uniform Violation</td>
-          <td>Detention</td>
-          <td>2025-09-26</td>
-          <td>07:50 AM</td>
-          <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-        </tr>
-        <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
-          <td><input type="checkbox" class="rowCheckbox"></td>
-          <td>4</td>
-          <td>Ana Lopez</td>
-          <td>Disrespect</td>
-          <td>Counseling</td>
-          <td>2025-09-25</td>
-          <td>10:10 AM</td>
-          <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-        </tr>
-      </tbody>
+  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>2</td>
+    <td>Maria Santos</td>
+    <td>Incomplete Homework</td>
+    <td>Written Warning</td>
+    <td>2025-09-27</td>
+    <td>09:30 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>3</td>
+    <td>Pedro Reyes</td>
+    <td>Uniform Violation</td>
+    <td>Detention</td>
+    <td>2025-09-26</td>
+    <td>07:50 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
+    <td><input type="checkbox" class="rowCheckbox"></td>
+    <td>4</td>
+    <td>Ana Lopez</td>
+    <td>Disrespect</td>
+    <td>Counseling</td>
+    <td>2025-09-25</td>
+    <td>10:10 AM</td>
+    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
+  </tr>
+</tbody>
+
     </table>
 
     <!-- Pagination (if needed) -->
@@ -121,7 +125,12 @@
     </div>
   </div>
 
+  <!-- Modals (Details, Anecdotal, Edit, Schedule, Archive) -->
+  {{-- @include('prefect.violations.modals') Create a separate Blade file for modals to keep it clean --}}
+
+
 </div>
+
 
 <!-- 📝 Details Modal -->
 <div class="modal" id="detailsModal">
@@ -140,6 +149,7 @@
   </div>
 </div>
 
+
 <!-- 🗃️ Archive Modal -->
 <div class="modal" id="archiveModal">
   <div class="modal-content">
@@ -148,6 +158,7 @@
     </div>
 
     <div class="modal-body">
+
       <!-- 🔍 Search & Bulk Actions -->
       <div class="modal-actions">
         <label class="select-all-label">
@@ -156,7 +167,7 @@
         </label>
 
         <div class="search-container">
-          <input type="search" id="archiveSearch" placeholder="🔍 Search archived..." class="search-input">
+          <input type="search" placeholder="🔍 Search archived..." class="search-input">
         </div>
       </div>
 
@@ -172,7 +183,7 @@
               <th>Date</th>
             </tr>
           </thead>
-          <tbody id="archiveTableBody">
+          <tbody>
             <tr>
               <td><input type="checkbox" class="archivedCheckbox"></td>
               <td>3</td>
@@ -202,106 +213,67 @@
         <button class="btn-danger" id="deleteArchivedBtn">🗑️ Delete</button>
         <button class="btn-close" id="closeArchive">❌ Close</button>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- 🔔 Notification Modal -->
-<div class="modal" id="notificationModal">
-  <div class="modal-content notification-modal-content">
-    <div class="modal-header notification-modal-header">
-      <div class="notification-header-content">
-        <span id="notificationIcon">🔔</span>
-        <span id="notificationTitle">Notification</span>
-      </div>
-    </div>
-    <div class="modal-body notification-modal-body" id="notificationBody">
-      <!-- Content filled dynamically via JS -->
-    </div>
-    <div class="modal-footer notification-modal-footer">
-      <div class="notification-buttons-container">
-        <button class="btn-primary" id="notificationYesBtn">Yes</button>
-        <button class="btn-secondary" id="notificationNoBtn">No</button>
-        <button class="btn-close" id="notificationCloseBtn">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <script>
-// Search filter for main violation table
+
+    // Search filter for main violation table
 document.getElementById('searchInput').addEventListener('input', function() {
-  const filter = this.value.toLowerCase();
-  const tableBody = document.getElementById('tableBody');
-  const rows = tableBody.querySelectorAll('tr:not(.no-data-row)'); // Ignore the "No records found" row
+    const filter = this.value.toLowerCase();
+    const tableBody = document.getElementById('tableBody');
+    const rows = tableBody.querySelectorAll('tr:not(.no-data-row)'); // Ignore the "No records found" row
 
-  let visibleCount = 0;
+    let visibleCount = 0;
 
-  rows.forEach(row => {
-    const studentName = row.cells[2].innerText.toLowerCase(); // Student Name column
-    const studentID = row.cells[1].innerText.toLowerCase();   // ID column
-    if(studentName.includes(filter) || studentID.includes(filter)) {
-      row.style.display = '';
-      visibleCount++;
+    rows.forEach(row => {
+        const studentName = row.cells[2].innerText.toLowerCase(); // Student Name column
+        const studentID = row.cells[1].innerText.toLowerCase();   // ID column
+        if(studentName.includes(filter) || studentID.includes(filter)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Remove existing "No records found" row
+    const noDataRow = tableBody.querySelector('.no-data-row');
+    if(visibleCount === 0) {
+        if(!noDataRow) {
+            const newRow = document.createElement('tr');
+            newRow.classList.add('no-data-row');
+            newRow.innerHTML = `<td colspan="8" style="text-align:center; padding:15px;">⚠️ No records found</td>`;
+            tableBody.appendChild(newRow);
+        }
     } else {
-      row.style.display = 'none';
+        if(noDataRow) noDataRow.remove();
+    }
+});
+
+
+
+  // Select all checkboxes
+  document.getElementById('selectAll').addEventListener('change', function() {
+    document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = this.checked);
+  });
+
+  // Move to Trash
+  document.getElementById('moveToTrashBtn').addEventListener('click', () => {
+    const selected = [...document.querySelectorAll('.rowCheckbox:checked')];
+    if (selected.length === 0) {
+      alert('Please select at least one record.');
+    } else {
+      alert(selected.length + ' record(s) moved to Trash.');
+      // Add AJAX call here to move to trash in backend
     }
   });
 
-  // Remove existing "No records found" row
-  const noDataRow = tableBody.querySelector('.no-data-row');
-  if(visibleCount === 0) {
-    if(!noDataRow) {
-      const newRow = document.createElement('tr');
-      newRow.classList.add('no-data-row');
-      newRow.innerHTML = `<td colspan="8" style="text-align:center; padding:15px;">⚠️ No records found</td>`;
-      tableBody.appendChild(newRow);
-    }
-  } else {
-    if(noDataRow) noDataRow.remove();
-  }
-});
-
-// Select all checkboxes
-document.getElementById('selectAll').addEventListener('change', function() {
-  document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = this.checked);
-});
-
-// Move to Trash - Now shows confirmation modal
-document.getElementById('moveToTrashBtn').addEventListener('click', () => {
-  const selected = [...document.querySelectorAll('.rowCheckbox:checked')];
-  if (selected.length === 0) {
-    showNotification('⚠️ No Selection', 'Please select at least one complaint record to move to trash.', 'warning', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
-  } else {
-    showNotification('🗑️ Move to Trash', `Are you sure you want to move ${selected.length} complaint record(s) to trash?`, 'confirm', {
-      yesText: 'Yes, Move',
-      noText: 'Cancel',
-      onYes: () => {
-        // AJAX call to move to trash
-        setTimeout(() => {
-          showNotification('✅ Success', `${selected.length} complaint record(s) moved to trash successfully.`, 'success', {
-            yesText: 'OK',
-            noText: null,
-            onYes: () => {
-              document.getElementById('notificationModal').style.display = 'none';
-              // Optionally refresh the page or update the table
-            }
-          });
-        }, 500);
-      },
-      onNo: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
-  }
-});
-
+  // Row click -> Details Modal
 // Row click -> Details Modal
 document.querySelectorAll('#tableBody tr').forEach(row => {
   row.addEventListener('click', e => {
@@ -320,9 +292,12 @@ document.querySelectorAll('#tableBody tr').forEach(row => {
 
     document.getElementById('detailsBody').innerHTML = detailsBody;
     document.getElementById('detailsModal').style.display = 'flex';
+    document.getElementById('detailsModal').classList.add('show');
+    btn.closest('.modal').classList.remove('show');
+
+
   });
 });
-
 // Close Details Modal
 document.querySelectorAll('#detailsModal .btn-close').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -332,79 +307,48 @@ document.querySelectorAll('#detailsModal .btn-close').forEach(btn => {
 
 // Set Schedule Button
 document.getElementById('setScheduleBtn').addEventListener('click', () => {
-  showNotification('📅 Set Schedule', 'Open schedule setup form or modal here.', 'info', {
-    yesText: 'OK',
-    noText: null,
-    onYes: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
-  });
+  alert('Open schedule setup form or modal here.');
+  // TODO: open your schedule modal or redirect to schedule setup
 });
 
 // Send SMS Button
 document.getElementById('sendSmsBtn').addEventListener('click', () => {
-  showNotification('📩 Send SMS', 'Are you sure you want to send an SMS about this complaint?', 'confirm', {
-    yesText: 'Send SMS',
-    noText: 'Cancel',
-    onYes: () => {
-      // AJAX call to send SMS
-      setTimeout(() => {
-        showNotification('✅ Success', 'SMS sent successfully!', 'success', {
-          yesText: 'OK',
-          noText: null,
-          onYes: () => {
-            document.getElementById('notificationModal').style.display = 'none';
-          }
-        });
-      }, 500);
-    },
-    onNo: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
-  });
+  alert('Trigger SMS sending here.');
+  // TODO: implement SMS sending via backend
 });
 
-// Edit button
-document.querySelectorAll('.editBtn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    const row = btn.closest('tr');
-    const data = row.dataset.details.split('|');
-    showNotification('✏️ Edit Complaint', `Edit complaint for student: ${data[0]}`, 'info', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-        // TODO: Implement actual edit functionality
-      }
+
+  // Close modals
+  document.querySelectorAll('.btn-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modal').style.display = 'none';
     });
   });
-});
 
-// Create Anecdotal Button
-document.getElementById('createAnecBtn').addEventListener('click', () => {
-  showNotification('📝 Create Anecdotal', 'Open anecdotal record creation form.', 'info', {
-    yesText: 'OK',
-    noText: null,
-    onYes: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
+  // Edit button
+  document.querySelectorAll('.editBtn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const row = btn.closest('tr');
+      const data = row.dataset.details.split('|');
+      document.getElementById('editStudentName').value = data[0];
+      document.getElementById('editOffense').value = data[1];
+      document.getElementById('editSanction').value = data[2];
+      document.getElementById('editDate').value = data[3];
+      document.getElementById('editTime').value = data[4];
+      document.getElementById('editModal').style.display = 'flex';
+    });
   });
-});
 
-// Add Violation Button
-document.getElementById('createBtn').addEventListener('click', () => {
-  showNotification('➕ Add Violation', 'Open violation creation form.', 'info', {
-    yesText: 'OK',
-    noText: null,
-    onYes: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
+  // Open modals
+  document.getElementById('createAnecBtn').addEventListener('click', () => {
+    document.getElementById('anecModal').style.display = 'flex';
   });
-});
+  document.getElementById('archiveBtn').addEventListener('click', () => {
+    document.getElementById('archiveModal').style.display = 'flex';
+  });
 
-// Dropdown functionality
-document.querySelectorAll('.dropdown-btn').forEach(btn => {
+  document.querySelectorAll('.dropdown-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.stopPropagation(); // prevent row click event
     const dropdown = btn.parentElement;
@@ -422,171 +366,67 @@ document.getElementById('archiveBtn').addEventListener('click', () => {
   document.getElementById('archiveModal').style.display = 'flex';
 });
 
-// Close archive modal
-document.getElementById('closeArchive').addEventListener('click', () => {
-  document.getElementById('archiveModal').style.display = 'none';
+// Close modal
+document.querySelectorAll('#archiveModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
+  });
 });
 
-// ================= ARCHIVE MODAL FUNCTIONALITY =================
+// Select all checkboxes
+  // Get the select all checkbox and all individual checkboxes
+  const selectAllArchived = document.getElementById('selectAllArchived');
+  const archivedCheckboxes = document.querySelectorAll('.archivedCheckbox');
 
-// Select all checkboxes in archive modal
-const selectAllArchived = document.getElementById('selectAllArchived');
-const archivedCheckboxes = document.querySelectorAll('.archivedCheckbox');
+  // When the select all checkbox changes
+  selectAllArchived.addEventListener('change', () => {
+    const isChecked = selectAllArchived.checked;
+    archivedCheckboxes.forEach(checkbox => {
+      checkbox.checked = isChecked;
+    });
+  });
 
-selectAllArchived.addEventListener('change', () => {
-  const isChecked = selectAllArchived.checked;
+  // Optional: If any individual checkbox is unchecked, uncheck "Select All"
   archivedCheckboxes.forEach(checkbox => {
-    checkbox.checked = isChecked;
+    checkbox.addEventListener('change', () => {
+      if (!checkbox.checked) {
+        selectAllArchived.checked = false;
+      } else {
+        // If all checkboxes are checked, check the "Select All" box
+        const allChecked = Array.from(archivedCheckboxes).every(cb => cb.checked);
+        selectAllArchived.checked = allChecked;
+      }
+    });
   });
-});
 
-// Individual checkbox change handler
-archivedCheckboxes.forEach(checkbox => {
-  checkbox.addEventListener('change', () => {
-    if (!checkbox.checked) {
-      selectAllArchived.checked = false;
-    } else {
-      const allChecked = Array.from(archivedCheckboxes).every(cb => cb.checked);
-      selectAllArchived.checked = allChecked;
-    }
-  });
-});
-
-// Search filter for archive table
+// Search filter
 document.getElementById('archiveSearch').addEventListener('input', function() {
   const filter = this.value.toLowerCase();
-  const archiveRows = document.querySelectorAll('#archiveTableBody tr');
-  
-  archiveRows.forEach(row => {
+  document.querySelectorAll('#archiveTableBody tr').forEach(row => {
     const text = row.innerText.toLowerCase();
     row.style.display = text.includes(filter) ? '' : 'none';
   });
 });
 
-// Restore selected archived records
-document.getElementById('restoreArchivedBtn').addEventListener('click', () => {
-  const selected = [...document.querySelectorAll('.archivedCheckbox:checked')];
-  if(selected.length === 0) {
-    showNotification('⚠️ No Selection', 'Please select at least one record to restore.', 'warning', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
-    return;
-  }
-  
-  showNotification('🔄 Restore Records', `Are you sure you want to restore ${selected.length} record(s)?`, 'confirm', {
-    yesText: 'Yes, Restore',
-    noText: 'Cancel',
-    onYes: () => {
-      // AJAX call to restore records
-      setTimeout(() => {
-        showNotification('✅ Success', `${selected.length} record(s) restored successfully.`, 'success', {
-          yesText: 'OK',
-          noText: null,
-          onYes: () => {
-            document.getElementById('notificationModal').style.display = 'none';
-            // Optionally refresh the page or update the table
-          }
-        });
-      }, 500);
-    },
-    onNo: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
-  });
+// Restore selected
+document.getElementById('restoreArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to restore.');
+  alert(`${selected.length} record(s) restored.`);
+  // TODO: Add AJAX call to restore records
 });
 
-// Delete selected archived records
-document.getElementById('deleteArchivedBtn').addEventListener('click', () => {
-  const selected = [...document.querySelectorAll('.archivedCheckbox:checked')];
-  if(selected.length === 0) {
-    showNotification('⚠️ No Selection', 'Please select at least one record to delete.', 'warning', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
-    return;
-  }
-  
-  showNotification('🗑️ Delete Records', `This will permanently delete ${selected.length} record(s). This action cannot be undone. Are you sure?`, 'danger', {
-    yesText: 'Yes, Delete',
-    noText: 'Cancel',
-    onYes: () => {
-      // AJAX call to delete records
-      setTimeout(() => {
-        showNotification('✅ Success', `${selected.length} record(s) deleted permanently.`, 'success', {
-          yesText: 'OK',
-          noText: null,
-          onYes: () => {
-            document.getElementById('notificationModal').style.display = 'none';
-            // Optionally refresh the page or update the table
-          }
-        });
-      }, 500);
-    },
-    onNo: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
-  });
-});
-
-// Close modals when clicking outside
-window.addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal')) {
-    e.target.style.display = 'none';
+// Delete selected
+document.getElementById('deleteArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to delete.');
+  if(confirm('This will permanently delete the selected record(s). Are you sure?')) {
+    alert(`${selected.length} record(s) deleted permanently.`);
+    // TODO: Add AJAX call to delete records
   }
 });
 
-// ================= NOTIFICATION MODAL FUNCTIONALITY =================
 
-// Notification modal function
-function showNotification(title, message, type = 'info', options = {}) {
-  const modal = document.getElementById('notificationModal');
-  const notificationTitle = document.getElementById('notificationTitle');
-  const notificationBody = document.getElementById('notificationBody');
-  const notificationIcon = document.getElementById('notificationIcon');
-  const yesBtn = document.getElementById('notificationYesBtn');
-  const noBtn = document.getElementById('notificationNoBtn');
-  const closeBtn = document.getElementById('notificationCloseBtn');
-  
-  // Set title and message
-  notificationTitle.textContent = title;
-  notificationBody.textContent = message;
-  
-  // Set icon based on type
-  let icon = '🔔';
-  if (type === 'success') icon = '✅';
-  else if (type === 'warning') icon = '⚠️';
-  else if (type === 'danger') icon = '❌';
-  else if (type === 'confirm') icon = '❓';
-  notificationIcon.textContent = icon;
-  
-  // Configure buttons
-  yesBtn.textContent = options.yesText || 'Yes';
-  yesBtn.onclick = options.onYes || (() => modal.style.display = 'none');
-  
-  if (options.noText) {
-    noBtn.textContent = options.noText;
-    noBtn.style.display = 'inline-block';
-    noBtn.onclick = options.onNo || (() => modal.style.display = 'none');
-  } else {
-    noBtn.style.display = 'none';
-  }
-  
-  closeBtn.onclick = () => modal.style.display = 'none';
-  
-  // Show the modal
-  modal.style.display = 'flex';
-}
 
-// Close notification modal with close button
-document.getElementById('notificationCloseBtn').addEventListener('click', () => {
-  document.getElementById('notificationModal').style.display = 'none';
-});
 </script>
 @endsection

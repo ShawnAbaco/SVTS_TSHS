@@ -8,7 +8,9 @@
     <h2>Adviser Management</h2>
     <div class="actions">
       <input type="search" placeholder="🔍 Search by adviser name or ID..." id="searchInput">
-      <button class="btn-primary" id="createBtn">➕ Add Adviser</button>
+ <a href="{{ route('create.adviser') }}" class="btn-primary" id="createBtn">
+    <i class="fas fa-plus"></i> Add Adviser
+</a>
       <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
     </div>
   </div>
@@ -406,7 +408,7 @@ archivedCheckboxes.forEach(checkbox => {
 document.getElementById('archiveSearch').addEventListener('input', function() {
     const filter = this.value.toLowerCase();
     const archiveRows = document.querySelectorAll('#archiveTableBody tr');
-    
+
     archiveRows.forEach(row => {
         const text = row.innerText.toLowerCase();
         row.style.display = text.includes(filter) ? '' : 'none';
@@ -426,7 +428,7 @@ document.getElementById('restoreArchivedBtn').addEventListener('click', () => {
         });
         return;
     }
-    
+
     showNotification('🔄 Restore Records', `Are you sure you want to restore ${selected.length} record(s)?`, 'confirm', {
         yesText: 'Yes, Restore',
         noText: 'Cancel',
@@ -462,7 +464,7 @@ document.getElementById('deleteArchivedBtn').addEventListener('click', () => {
         });
         return;
     }
-    
+
     showNotification('🗑️ Delete Records', `This will permanently delete ${selected.length} record(s). This action cannot be undone. Are you sure?`, 'danger', {
         yesText: 'Yes, Delete',
         noText: 'Cancel',
@@ -503,11 +505,11 @@ function showNotification(title, message, type = 'info', options = {}) {
     const yesBtn = document.getElementById('notificationYesBtn');
     const noBtn = document.getElementById('notificationNoBtn');
     const closeBtn = document.getElementById('notificationCloseBtn');
-    
+
     // Set title and message
     notificationTitle.textContent = title;
     notificationBody.textContent = message;
-    
+
     // Set icon based on type
     let icon = '🔔';
     if (type === 'success') icon = '✅';
@@ -515,11 +517,11 @@ function showNotification(title, message, type = 'info', options = {}) {
     else if (type === 'danger') icon = '❌';
     else if (type === 'confirm') icon = '❓';
     notificationIcon.textContent = icon;
-    
+
     // Configure buttons
     yesBtn.textContent = options.yesText || 'Yes';
     yesBtn.onclick = options.onYes || (() => modal.style.display = 'none');
-    
+
     if (options.noText) {
         noBtn.textContent = options.noText;
         noBtn.style.display = 'inline-block';
@@ -527,9 +529,9 @@ function showNotification(title, message, type = 'info', options = {}) {
     } else {
         noBtn.style.display = 'none';
     }
-    
+
     closeBtn.onclick = () => modal.style.display = 'none';
-    
+
     // Show the modal
     modal.style.display = 'flex';
 }

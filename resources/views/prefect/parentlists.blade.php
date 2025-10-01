@@ -1,5 +1,4 @@
 @extends('prefect.layout')
-
 @section('content')
 <div class="main-container">
 
@@ -7,7 +6,7 @@
   <div class="toolbar">
     <h2>Parent Management</h2>
     <div class="actions">
-      <input type="search" placeholder="🔍 Search by parent name or ID..." id="searchInput">
+      <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
       <a href="{{ route('create.parent') }}" class="btn-primary" id="createBtn">
         <i class="fas fa-plus"></i> Add Parent
       </a>
@@ -44,7 +43,7 @@
         <button class="btn-info dropdown-btn">⬇️ View Records</button>
         <div class="dropdown-content">
           <a href="#" id="violationRecords">Violation Records</a>
-          <a href="#" id="violationAppointments">Violation Appointments</a>
+          <a href="#" id="violaitonAppointments">Violation Appointments</a>
           <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
         </div>
       </div>
@@ -55,7 +54,7 @@
     </div>
   </div>
 
-  <!-- Parent Table -->
+  <!-- Table -->
   <div class="table-container">
     <table>
       <thead>
@@ -75,162 +74,208 @@
       </thead>
       <tbody id="tableBody">
         @forelse($parents as $parent)
-          <tr data-details="{{ $parent->parent_fname }} {{ $parent->parent_lname }}|{{ $parent->parent_sex }}|{{ $parent->parent_birthdate }}|{{ $parent->parent_email }}|{{ $parent->parent_contactinfo }}|{{ $parent->parent_relationship }}|{{ $parent->status }}">
-            <td><input type="checkbox" class="rowCheckbox"></td>
-            <td>{{ $parent->parent_id }}</td>
-            <td>{{ $parent->parent_fname }}</td>
-            <td>{{ $parent->parent_lname }}</td>
-            <td>{{ ucfirst($parent->parent_sex) }}</td>
-            <td>{{ $parent->parent_birthdate }}</td>
-            <td>{{ $parent->parent_email ?? 'N/A' }}</td>
-            <td>{{ $parent->parent_contactinfo }}</td>
-            <td>{{ $parent->parent_relationship ?? 'N/A' }}</td>
-            <td>{{ ucfirst($parent->status) }}</td>
-            <td>
-              <button class="btn-primary editBtn">✏️ Edit</button>
-            </td>
-          </tr>
+        <tr data-details="{{ $parent->parent_fname }} {{ $parent->parent_lname }}|{{ $parent->parent_relationship ?? 'N/A' }}|{{ $parent->parent_contactinfo ?? 'N/A' }}|{{ $parent->parent_birthdate ?? 'N/A' }}|{{ $parent->parent_email ?? 'N/A' }}">
+          <td><input type="checkbox" class="rowCheckbox"></td>
+          <td>{{ $parent->parent_id }}</td>
+          <td>{{ $parent->parent_fname }}</td>
+          <td>{{ $parent->parent_lname }}</td>
+          <td>{{ ucfirst($parent->parent_sex) }}</td>
+          <td>{{ $parent->parent_birthdate }}</td>
+          <td>{{ $parent->parent_email ?? 'N/A' }}</td>
+          <td>{{ $parent->parent_contactinfo }}</td>
+          <td>{{ $parent->parent_relationship ?? 'N/A' }}</td>
+          <td>{{ ucfirst($parent->status) }}</td>
+          <td>
+            <button class="btn-primary">✏️ Edit</button>
+          </td>
+        </tr>
         @empty
-          <tr>
-            <td colspan="11" style="text-align:center;">No parents found</td>
-          </tr>
+        <tr>
+          <td colspan="11" style="text-align:center;">No parents found</td>
+        </tr>
         @endforelse
       </tbody>
     </table>
 
     <!-- Pagination -->
-    <div class="pagination">
-      {{ $parents->links() }}
+    <div class="pagination-wrapper">
+      <div class="pagination-summary">
+        Showing {{ $parents->firstItem() }} to {{ $parents->lastItem() }} of {{ $parents->total() }} results
+      </div>
+      <div class="pagination-links">
+        {{ $parents->links() }}
+      </div>
     </div>
   </div>
 
-</div>
 
-<!-- 📝 Parent Details Modal -->
-<div class="modal" id="detailsModal">
+  <!-- ✏️ Edit Parent Modal -->
+<div class="modal" id="editModal">
   <div class="modal-content">
-    <div class="modal-header">
-      📄 Parent Details
+    <button class="close-btn" id="closeEditModal">✖</button>
+    <h2>Edit Parent</h2>
+ <form id="editParentForm" method="POST" action="{{ route('parents.update', ['id' => '__id__']) }}">
+  @csrf
+  @method('PUT')
+  <input type="hidden" name="parent_id" id="edit_parent_id">
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label>First Name</label>
+      <input type="text" name="parent_fname" id="edit_parent_fname" required>
     </div>
-    <div class="modal-body" id="detailsBody">
-      <!-- Content filled dynamically via JS -->
+
+    <div class="form-group">
+      <label>Last Name</label>
+      <input type="text" name="parent_lname" id="edit_parent_lname" required>
     </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" id="setScheduleBtn">📅 Set Schedule</button>
-      <button class="btn-info" id="sendSmsBtn">📩 Send SMS</button>
-      <button class="btn-close">❌ Close</button>
+
+    <div class="form-group">
+      <label>Sex</label>
+      <select name="parent_sex" id="edit_parent_sex" required>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
     </div>
+
+    <div class="form-group">
+      <label>Birthdate</label>
+      <input type="date" name="parent_birthdate" id="edit_parent_birthdate" required>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="parent_email" id="edit_parent_email">
+    </div>
+
+    <div class="form-group">
+      <label>Contact Info</label>
+      <input type="text" name="parent_contactinfo" id="edit_parent_contactinfo">
+    </div>
+
+    <div class="form-group">
+      <label>Relationship</label>
+      <input type="text" name="parent_relationship" id="edit_parent_relationship">
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+      <select name="status" id="edit_parent_status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="btn-primary">💾 Save Changes</button>
+    <button type="button" class="btn-secondary" id="cancelEditBtn">❌ Cancel</button>
+  </div>
+</form>
+
   </div>
 </div>
 
-<!-- 🗃️ Archive Modal -->
-<div class="modal" id="archiveModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      🗃️ Archived Parents
-    </div>
 
-    <div class="modal-body">
-      <!-- 🔍 Search & Bulk Actions -->
-      <div class="modal-actions">
-        <label class="select-all-label">
-          <input type="checkbox" id="selectAllArchived" class="select-all-checkbox">
-          <span>Select All</span>
-        </label>
 
-        <div class="search-container">
-          <input type="search" id="archiveSearch" placeholder="🔍 Search archived..." class="search-input">
-        </div>
+  <!-- 📝 Details Modal -->
+  <div class="modal" id="detailsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        📄 Violation Details
       </div>
-
-      <!-- 📋 Archive Table -->
-      <div class="archive-table-container">
-        <table class="archive-table">
-          <thead>
-            <tr>
-              <th>✔</th>
-              <th>ID</th>
-              <th>Parent Name</th>
-              <th>Relationship</th>
-              <th>Contact Info</th>
-              <th>Date Archived</th>
-            </tr>
-          </thead>
-          <tbody id="archiveTableBody">
-            <tr>
-              <td><input type="checkbox" class="archivedCheckbox"></td>
-              <td>P003</td>
-              <td>Juan Dela Cruz</td>
-              <td>Father</td>
-              <td>09123456789</td>
-              <td>2025-09-22</td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="archivedCheckbox"></td>
-              <td>P004</td>
-              <td>Maria Reyes</td>
-              <td>Mother</td>
-              <td>09198765432</td>
-              <td>2025-09-23</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="modal-body" id="detailsBody">
+        <!-- Filled via JS -->
       </div>
-
-      <!-- ⚠️ Note -->
-      <div class="modal-note">
-        ⚠️ Note: Deleting records will permanently remove them.
-      </div>
-
-      <!-- 🧭 Footer Buttons -->
       <div class="modal-footer">
-        <button class="btn-secondary" id="restoreArchivedBtn">🔄 Restore</button>
-        <button class="btn-danger" id="deleteArchivedBtn">🗑️ Delete</button>
-        <button class="btn-close" id="closeArchive">❌ Close</button>
+        <button class="btn-secondary" id="setScheduleBtn">📅 Set Schedule</button>
+        <button class="btn-info" id="sendSmsBtn">📩 Send SMS</button>
+        <button class="btn-close">❌ Close</button>
       </div>
     </div>
   </div>
-</div>
 
-<!-- 🔔 Notification Modal -->
-<div class="modal" id="notificationModal">
-  <div class="modal-content notification-modal-content">
-    <div class="modal-header notification-modal-header">
-      <div class="notification-header-content">
-        <span id="notificationIcon">🔔</span>
-        <span id="notificationTitle">Notification</span>
+  <!-- 🗃️ Archive Modal -->
+  <div class="modal" id="archiveModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        🗃️ Archived Violations
       </div>
-    </div>
-    <div class="modal-body notification-modal-body" id="notificationBody">
-      <!-- Content filled dynamically via JS -->
-    </div>
-    <div class="modal-footer notification-modal-footer">
-      <div class="notification-buttons-container">
-        <button class="btn-primary" id="notificationYesBtn">Yes</button>
-        <button class="btn-secondary" id="notificationNoBtn">No</button>
-        <button class="btn-close" id="notificationCloseBtn">Close</button>
+      <div class="modal-body">
+
+        <div class="modal-actions">
+          <label class="select-all-label">
+            <input type="checkbox" id="selectAllArchived" class="select-all-checkbox">
+            <span>Select All</span>
+          </label>
+
+          <div class="search-container">
+            <input type="search" placeholder="🔍 Search archived..." id="archiveSearch" class="search-input">
+          </div>
+        </div>
+
+        <div class="archive-table-container">
+          <table class="archive-table">
+            <thead>
+              <tr>
+                <th>✔</th>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Offense</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="archiveTableBody">
+              <tr>
+                <td><input type="checkbox" class="archiveCheckbox"></td>
+                <td>3</td>
+                <td>Mark Dela Cruz</td>
+                <td>Tardiness</td>
+                <td>2025-09-22</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="archiveCheckbox"></td>
+                <td>4</td>
+                <td>Anna Reyes</td>
+                <td>Cutting Classes</td>
+                <td>2025-09-23</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-note">
+          ⚠️ Note: Deleting records will permanently remove them.
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" id="restoreArchiveBtn">🔄 Restore</button>
+          <button class="btn-danger" id="deleteArchiveBtn">🗑️ Delete</button>
+          <button class="btn-close" id="closeArchive">❌ Close</button>
+        </div>
+
       </div>
     </div>
   </div>
-</div>
 
+</div>
 
 
 <script>
-// Search filter for main parent table
+// ==========================
+// Search filter for main table
+// ==========================
 document.getElementById('searchInput').addEventListener('input', function() {
   const filter = this.value.toLowerCase();
   const tableBody = document.getElementById('tableBody');
-  const rows = tableBody.querySelectorAll('tr');
+  const rows = tableBody.querySelectorAll('tr:not(.no-data-row)');
 
   let visibleCount = 0;
 
   rows.forEach(row => {
-    const firstName = row.cells[2].innerText.toLowerCase();
-    const lastName = row.cells[3].innerText.toLowerCase();
-    const parentID = row.cells[1].innerText.toLowerCase();
-    
-    if(firstName.includes(filter) || lastName.includes(filter) || parentID.includes(filter)) {
+    const studentName = row.cells[2].innerText.toLowerCase();
+    const studentID = row.cells[1].innerText.toLowerCase();
+    if(studentName.includes(filter) || studentID.includes(filter)) {
       row.style.display = '';
       visibleCount++;
     } else {
@@ -238,13 +283,12 @@ document.getElementById('searchInput').addEventListener('input', function() {
     }
   });
 
-  // Remove existing "No records found" row
   const noDataRow = tableBody.querySelector('.no-data-row');
   if(visibleCount === 0) {
     if(!noDataRow) {
       const newRow = document.createElement('tr');
       newRow.classList.add('no-data-row');
-      newRow.innerHTML = `<td colspan="11" style="text-align:center; padding:15px;">⚠️ No parents found</td>`;
+      newRow.innerHTML = `<td colspan="8" style="text-align:center; padding:15px;">⚠️ No records found</td>`;
       tableBody.appendChild(newRow);
     }
   } else {
@@ -252,68 +296,44 @@ document.getElementById('searchInput').addEventListener('input', function() {
   }
 });
 
+// ==========================
 // Select all checkboxes
+// ==========================
 document.getElementById('selectAll').addEventListener('change', function() {
   document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = this.checked);
 });
 
-// Move to Trash - Now shows confirmation modal
+// Move to Trash
 document.getElementById('moveToTrashBtn').addEventListener('click', () => {
   const selected = [...document.querySelectorAll('.rowCheckbox:checked')];
   if (selected.length === 0) {
-    showNotification('⚠️ No Selection', 'Please select at least one record to move to trash.', 'warning', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        // Just close the modal
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
+    alert('Please select at least one record.');
   } else {
-    showNotification('🗑️ Move to Trash', `Are you sure you want to move ${selected.length} record(s) to trash?`, 'confirm', {
-      yesText: 'Yes, Move',
-      noText: 'Cancel',
-      onYes: () => {
-        // AJAX call to move to trash
-        // Simulate API call
-        setTimeout(() => {
-          showNotification('✅ Success', `${selected.length} record(s) moved to trash successfully.`, 'success', {
-            yesText: 'OK',
-            noText: null,
-            onYes: () => {
-              document.getElementById('notificationModal').style.display = 'none';
-              // Optionally refresh the page or update the table
-            }
-          });
-        }, 500);
-      },
-      onNo: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
+    alert(selected.length + ' record(s) moved to Trash.');
   }
 });
 
-// Row click -> Parent Details Modal
+// ==========================
+// Row click -> Details Modal
+// ==========================
 document.querySelectorAll('#tableBody tr').forEach(row => {
   row.addEventListener('click', e => {
-    // Ignore if checkbox or edit button is clicked
-    if(e.target.type === 'checkbox' || e.target.classList.contains('editBtn')) return;
+    if(e.target.type === 'checkbox') return;
 
     const data = row.dataset.details.split('|');
 
     const detailsBody = `
-      <p><strong>Parent Name:</strong> ${data[0]}</p>
-      <p><strong>Sex:</strong> ${data[1]}</p>
-      <p><strong>Birthdate:</strong> ${data[2]}</p>
-      <p><strong>Email:</strong> ${data[3]}</p>
-      <p><strong>Contact Info:</strong> ${data[4]}</p>
-      <p><strong>Relationship:</strong> ${data[5]}</p>
-      <p><strong>Status:</strong> ${data[6]}</p>
+      <p><strong>Student:</strong> ${data[0]}</p>
+      <p><strong>Offense:</strong> ${data[1]}</p>
+      <p><strong>Sanction:</strong> ${data[2]}</p>
+      <p><strong>Date:</strong> ${data[3]}</p>
+      <p><strong>Time:</strong> ${data[4]}</p>
     `;
 
     document.getElementById('detailsBody').innerHTML = detailsBody;
-    document.getElementById('detailsModal').style.display = 'flex';
+    const detailsModal = document.getElementById('detailsModal');
+    detailsModal.style.display = 'flex';
+    detailsModal.classList.add('show');
   });
 });
 
@@ -321,67 +341,39 @@ document.querySelectorAll('#tableBody tr').forEach(row => {
 document.querySelectorAll('#detailsModal .btn-close').forEach(btn => {
   btn.addEventListener('click', () => {
     btn.closest('.modal').style.display = 'none';
+    btn.closest('.modal').classList.remove('show');
   });
 });
 
-// Set Schedule Button
+// ==========================
+// Toolbar buttons
+// ==========================
 document.getElementById('setScheduleBtn').addEventListener('click', () => {
-  showNotification('📅 Set Schedule', 'Open schedule setup form or modal here.', 'info', {
-    yesText: 'OK',
-    noText: null,
-    onYes: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
-  });
+  alert('Open schedule setup form or modal here.');
 });
 
-// Send SMS Button
 document.getElementById('sendSmsBtn').addEventListener('click', () => {
-  showNotification('📩 Send SMS', 'Are you sure you want to send an SMS to this parent?', 'confirm', {
-    yesText: 'Send SMS',
-    noText: 'Cancel',
-    onYes: () => {
-      // AJAX call to send SMS
-      setTimeout(() => {
-        showNotification('✅ Success', 'SMS sent successfully!', 'success', {
-          yesText: 'OK',
-          noText: null,
-          onYes: () => {
-            document.getElementById('notificationModal').style.display = 'none';
-          }
-        });
-      }, 500);
-    },
-    onNo: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
+  alert('Trigger SMS sending here.');
+});
+
+// Close modals (generic)
+document.querySelectorAll('.btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
+    btn.closest('.modal').classList.remove('show');
   });
 });
 
-// Edit button
-document.querySelectorAll('.editBtn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    const row = btn.closest('tr');
-    const data = row.dataset.details.split('|');
-    
-    showNotification('✏️ Edit Parent', `Edit parent: ${data[0]}`, 'info', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-        // TODO: Implement actual edit functionality
-      }
-    });
-  });
-});
-
-// Open archive modal
+// ==========================
+// Open modals
+// ==========================
 document.getElementById('archiveBtn').addEventListener('click', () => {
   document.getElementById('archiveModal').style.display = 'flex';
 });
 
-// Dropdown functionality
+// ==========================
+// Dropdown
+// ==========================
 document.querySelectorAll('.dropdown-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -390,30 +382,28 @@ document.querySelectorAll('.dropdown-btn').forEach(btn => {
   });
 });
 
-// Close dropdown if clicked outside
 window.addEventListener('click', () => {
   document.querySelectorAll('.dropdown').forEach(dd => dd.classList.remove('show'));
 });
 
-// Close archive modal
-document.getElementById('closeArchive').addEventListener('click', () => {
-  document.getElementById('archiveModal').style.display = 'none';
-});
-
-// ================= ARCHIVE MODAL FUNCTIONALITY =================
-
-// Select all checkboxes in archive modal
-const selectAllArchived = document.getElementById('selectAllArchived');
-const archivedCheckboxes = document.querySelectorAll('.archivedCheckbox');
-
-selectAllArchived.addEventListener('change', () => {
-  const isChecked = selectAllArchived.checked;
-  archivedCheckboxes.forEach(checkbox => {
-    checkbox.checked = isChecked;
+// ==========================
+// Archive modal
+// ==========================
+document.querySelectorAll('#archiveModal .btn-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.modal').style.display = 'none';
   });
 });
 
-// Individual checkbox change handler
+// Select all archived checkboxes
+const selectAllArchived = document.getElementById('selectAllArchived');
+const archivedCheckboxes = document.querySelectorAll('.archiveCheckbox');
+
+selectAllArchived.addEventListener('change', () => {
+  const isChecked = selectAllArchived.checked;
+  archivedCheckboxes.forEach(checkbox => checkbox.checked = isChecked);
+});
+
 archivedCheckboxes.forEach(checkbox => {
   checkbox.addEventListener('change', () => {
     if (!checkbox.checked) {
@@ -425,141 +415,83 @@ archivedCheckboxes.forEach(checkbox => {
   });
 });
 
-// Search filter for archive table
+// Archive search
 document.getElementById('archiveSearch').addEventListener('input', function() {
   const filter = this.value.toLowerCase();
-  const archiveRows = document.querySelectorAll('#archiveTableBody tr');
-  
-  archiveRows.forEach(row => {
+  document.querySelectorAll('#archiveTableBody tr').forEach(row => {
     const text = row.innerText.toLowerCase();
     row.style.display = text.includes(filter) ? '' : 'none';
   });
 });
 
-// Restore selected archived records
-document.getElementById('restoreArchivedBtn').addEventListener('click', () => {
-  const selected = [...document.querySelectorAll('.archivedCheckbox:checked')];
-  if(selected.length === 0) {
-    showNotification('⚠️ No Selection', 'Please select at least one record to restore.', 'warning', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
-    return;
+// Restore archive
+document.getElementById('restoreArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to restore.');
+  alert(`${selected.length} record(s) restored.`);
+});
+
+// Delete archive
+document.getElementById('deleteArchiveBtn').addEventListener('click', () => {
+  const selected = [...document.querySelectorAll('.archiveCheckbox:checked')];
+  if(selected.length === 0) return alert('Please select at least one record to delete.');
+  if(confirm('This will permanently delete the selected record(s). Are you sure?')) {
+    alert(`${selected.length} record(s) deleted permanently.`);
   }
-  
-  showNotification('🔄 Restore Records', `Are you sure you want to restore ${selected.length} record(s)?`, 'confirm', {
-    yesText: 'Yes, Restore',
-    noText: 'Cancel',
-    onYes: () => {
-      // AJAX call to restore records
-      setTimeout(() => {
-        showNotification('✅ Success', `${selected.length} record(s) restored successfully.`, 'success', {
-          yesText: 'OK',
-          noText: null,
-          onYes: () => {
-            document.getElementById('notificationModal').style.display = 'none';
-            // Optionally refresh the page or update the table
-          }
-        });
-      }, 500);
-    },
-    onNo: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
+});
+
+
+// ==========================
+// ✏️ Edit Modal Logic (Fixed)
+// ==========================
+document.querySelectorAll('#tableBody .btn-primary').forEach(editBtn => {
+  editBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent row click opening details modal
+    const row = e.target.closest('tr');
+    const cells = row.querySelectorAll('td');
+
+    // Get Parent ID (assuming column 1 = ID)
+    const id = cells[1].innerText.trim();
+
+    // ✅ Update form action dynamically
+    const form = document.getElementById('editParentForm');
+    form.action = "{{ route('parents.update', ['id' => '__id__']) }}".replace('__id__', id);
+
+    // ✅ Fill form fields from row
+    document.getElementById('edit_parent_id').value = id;
+    document.getElementById('edit_parent_fname').value = cells[2].innerText.trim();
+    document.getElementById('edit_parent_lname').value = cells[3].innerText.trim();
+    document.getElementById('edit_parent_sex').value = cells[4].innerText.toLowerCase();
+    document.getElementById('edit_parent_birthdate').value = cells[5].innerText.trim();
+
+    const email = cells[6].innerText.trim();
+    document.getElementById('edit_parent_email').value = (email === 'N/A' ? '' : email);
+
+    document.getElementById('edit_parent_contactinfo').value = cells[7].innerText.trim();
+
+    const relationship = cells[8].innerText.trim();
+    document.getElementById('edit_parent_relationship').value = (relationship === 'N/A' ? '' : relationship);
+
+    document.getElementById('edit_parent_status').value = cells[9].innerText.toLowerCase();
+
+    // ✅ Show modal
+    const editModal = document.getElementById('editModal');
+    editModal.style.display = 'flex';
+    editModal.classList.add('show');
   });
 });
 
-// Delete selected archived records
-document.getElementById('deleteArchivedBtn').addEventListener('click', () => {
-  const selected = [...document.querySelectorAll('.archivedCheckbox:checked')];
-  if(selected.length === 0) {
-    showNotification('⚠️ No Selection', 'Please select at least one record to delete.', 'warning', {
-      yesText: 'OK',
-      noText: null,
-      onYes: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
-    return;
-  }
-  
-  showNotification('🗑️ Delete Records', `This will permanently delete ${selected.length} record(s). This action cannot be undone. Are you sure?`, 'danger', {
-    yesText: 'Yes, Delete',
-    noText: 'Cancel',
-    onYes: () => {
-      // AJAX call to delete records
-      setTimeout(() => {
-        showNotification('✅ Success', `${selected.length} record(s) deleted permanently.`, 'success', {
-          yesText: 'OK',
-          noText: null,
-          onYes: () => {
-            document.getElementById('notificationModal').style.display = 'none';
-            // Optionally refresh the page or update the table
-          }
-        });
-      }, 500);
-    },
-    onNo: () => {
-      document.getElementById('notificationModal').style.display = 'none';
-    }
-  });
-});
+// ✅ Close / Cancel Edit Modal
+document.getElementById('closeEditModal').addEventListener('click', closeEditModal);
+document.getElementById('cancelEditBtn').addEventListener('click', closeEditModal);
 
-// Close modals when clicking outside
-window.addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal')) {
-    e.target.style.display = 'none';
-  }
-});
-
-// ================= NOTIFICATION MODAL FUNCTIONALITY =================
-
-// Notification modal function
-function showNotification(title, message, type = 'info', options = {}) {
-  const modal = document.getElementById('notificationModal');
-  const notificationTitle = document.getElementById('notificationTitle');
-  const notificationBody = document.getElementById('notificationBody');
-  const notificationIcon = document.getElementById('notificationIcon');
-  const yesBtn = document.getElementById('notificationYesBtn');
-  const noBtn = document.getElementById('notificationNoBtn');
-  const closeBtn = document.getElementById('notificationCloseBtn');
-  
-  // Set title and message
-  notificationTitle.textContent = title;
-  notificationBody.textContent = message;
-  
-  // Set icon based on type
-  let icon = '🔔';
-  if (type === 'success') icon = '✅';
-  else if (type === 'warning') icon = '⚠️';
-  else if (type === 'danger') icon = '❌';
-  else if (type === 'confirm') icon = '❓';
-  notificationIcon.textContent = icon;
-  
-  // Configure buttons
-  yesBtn.textContent = options.yesText || 'Yes';
-  yesBtn.onclick = options.onYes || (() => modal.style.display = 'none');
-  
-  if (options.noText) {
-    noBtn.textContent = options.noText;
-    noBtn.style.display = 'inline-block';
-    noBtn.onclick = options.onNo || (() => modal.style.display = 'none');
-  } else {
-    noBtn.style.display = 'none';
-  }
-  
-  closeBtn.onclick = () => modal.style.display = 'none';
-  
-  // Show the modal
-  modal.style.display = 'flex';
+function closeEditModal() {
+  const modal = document.getElementById('editModal');
+  modal.style.display = 'none';
+  modal.classList.remove('show');
 }
 
-// Close notification modal with close button
-document.getElementById('notificationCloseBtn').addEventListener('click', () => {
-  document.getElementById('notificationModal').style.display = 'none';
-});
+
 </script>
+
 @endsection

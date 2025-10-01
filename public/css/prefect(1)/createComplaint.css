@@ -12,11 +12,11 @@ button:hover {
 }
 
 /* Button Variants */
-.btn-Add-Violation {
+.btn-Add-Complaint {
     background-color: #ffc107;
     color: #000;
 }
-.btn-Add-Violation:hover {
+.btn-Add-Complaint:hover {
     background-color: #e0a800;
 }
 
@@ -130,8 +130,8 @@ textarea {
     flex: 1 0 100%;
 }
 
-/* === Violations Summary (Right Column) === */
-.violations-section {
+/* === Complaints Summary (Right Column) === */
+.complaints-section {
     position: sticky;
     top: 20px;
     background: #fff;
@@ -154,7 +154,7 @@ textarea {
     font-size: 0.9rem;
     width: 180px;
 }
-.violationsWrapper {
+.complaintsWrapper {
     display: grid;
     gap: 1rem;
     max-height: 400px;
@@ -166,8 +166,8 @@ textarea {
     border: 1px solid #ccc;
 }
 
-/* Individual Violation Card */
-.violation-card {
+/* Individual Complaint Card */
+.complaint-card {
     background: #fff;
     border: 1px solid #ddd;
     padding: 8px 12px;
@@ -175,10 +175,10 @@ textarea {
     border-radius: 4px;
     position: relative;
 }
-.violation-card p {
+.complaint-card p {
     margin: 0.3rem 0;
 }
-.violation-card .btn-remove {
+.complaint-card .btn-remove {
     position: absolute;
     right: 8px;
     top: 8px;
@@ -186,7 +186,7 @@ textarea {
     font-weight: bold;
     cursor: pointer;
 }
-.violation-card .btn-remove:hover {
+.complaint-card .btn-remove:hover {
     color: #e74c3c;
 }
 
@@ -206,15 +206,15 @@ textarea {
     font-size: 0.9rem;
     overflow-x: auto;
 }
-/* Violation Group Header inside Summary */
-.violation-group-title {
+/* Complaint Group Header inside Summary */
+.complaint-group-title {
     font-size: 1rem;
     font-weight: 700;
-    color: #007bff; /* Blue color for emphasis */
-    background: #e9f2ff; /* Light blue background */
+    color: #007bff;
+    background: #e9f2ff;
     padding: 6px 10px;
     border-radius: 6px;
     margin-bottom: 8px;
-    border: 1px solid #b3d1ff; /* subtle border for separation */
+    border: 1px solid #b3d1ff;
     text-align: center;
 }

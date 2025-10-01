@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ViolationAppointmentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Prefect\PStudentController;
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\AdviserCRUDController;
 use App\Http\Controllers\ComplaintAppointmentController;
@@ -14,7 +15,9 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ViolationAnecdotalController;
 use App\Http\Controllers\ViolationRecordController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\Prefect\PAdviserController;
+use App\Http\Controllers\Prefect\PComplaintController;
+use App\Http\Controllers\Prefect\PParentController;
 
 Route::get('/', function () {
     return view('adviser.login');
@@ -27,13 +30,44 @@ Route::get('/', function () {
 // ===================== Prefect Routes =====================
 Route::prefix('prefect')->group(function () {
     // Login / Logout
-
     Route::post('/logout', [PrefectController::class, 'logout'])->name('prefect.logout');
 
     // Protected routes
     Route::middleware('auth:prefect')->group(function () {
         Route::get('/dashboard', [PrefectController::class, 'dashboard'])->name('prefect.dashboard');
-        Route::post('/advisers', [PrefectController::class, 'createAdviser'])->name('prefect.create.adviser');
+        // Route::post('/advisers', [PrefectController::class, 'createAdviser'])->name('prefect.create.adviser');
+        Route::post('/adviser/store', [PAdviserController::class, 'store'])->name('adviser.store');
+
+
+
+
+// new student store
+Route::post('/students/store', [PStudentController::class, 'store'])->name('students.store');
+
+
+
+    // Create Complaint Form
+    Route::get('/complaints/create', [PComplaintController::class, 'create'])->name('complaints.create');
+
+    // Store Complaints
+Route::post('/complaints/store', [PComplaintController::class, 'store'])->name('complaints.store');
+
+    // AJAX: Search students for complainant/respondent
+    Route::post('/complaints/search-students', [PComplaintController::class, 'searchStudents'])
+        ->name('complaints.search-students');
+
+    // AJAX: Search offenses
+    Route::post('/complaints/search-offenses', [PComplaintController::class, 'searchOffenses'])
+        ->name('complaints.search-offenses');
+
+    // AJAX: Get sanction for offense (optional)
+    Route::get('/complaints/get-sanction', [PComplaintController::class, 'getSanction'])
+        ->name('complaints.get-sanction');
+
+
+
+
+
 
         // Management
         Route::get('/studentmanagement', [PrefectController::class, 'studentmanagement'])->name('student.management');
@@ -63,9 +97,13 @@ Route::prefix('prefect')->group(function () {
         Route::get('/reportgenerate', [PrefectController::class, 'reportgenerate'])->name('report.generate');
         Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData'])->name('prefect.reports.data');;
 
-
+// diri ang bag o
         Route::get('/create/parent', [ParentController::class, 'createParent'])->name('create.parent');
+        Route::post('/parents/store', [PParentController::class, 'store'])->name('parents.store');
+
         Route::get('/create/student', [StudentController::class, 'createStudent'])->name('create.student');
+        Route::get(uri: '/create/adviser', action: [PrefectController::class, 'createAdviser'])->name('create.adviser');
+
 
 
         Route::post('/students/bulk-delete', [StudentController::class, 'bulkDestroy'])
@@ -79,8 +117,13 @@ Route::get('/students/by-parent/{parentId}', [StudentController::class, 'getByPa
         Route::get('/parents/create', [PrefectController::class, 'parentCreate'])->name('parent.create');
         Route::post('/parents', [PrefectController::class, 'parentStore'])->name('parent.store');
         Route::get('/parents/{parent}/edit', [PrefectController::class, 'parentEdit'])->name('parent.edit');
-        Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
+        // Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
         Route::delete('/parents/{parent}', [PrefectController::class, 'parentDestroy'])->name('parent.destroy');
+
+// new parent crud
+Route::put('/parents/update/{id}', [PParentController::class, 'update'])->name('parents.update');
+
+
 
         // Students
         Route::delete('/students/{student}', [PrefectController::class, 'destroy'])->name('student.delete');
@@ -120,8 +163,6 @@ Route::get('/complaints/get-action', [ComplaintController::class, 'getAction'])-
 
 
 
-
-
 // ===================== Adviser Routes =====================
 Route::prefix('adviser')->group(function () {
     // Login / Logout
@@ -146,7 +187,7 @@ Route::prefix('adviser')->group(function () {
         Route::get('/offense/search', [AdviserController::class, 'offenseSearch']);
 
         // CRUD student
-        Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+        // Route::post('/students', [StudentController::class, 'store'])->name('students.store');
         Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('/students/{id}/trash', [StudentController::class, 'trash'])->name('students.trash');
 Route::patch('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
@@ -155,8 +196,8 @@ Route::patch('/students/bulk-update-status', [StudentController::class, 'bulkUpd
 
 
         // CRUD parent
-        Route::post('/adviser/parents', [ParentController::class, 'parentStore'])->name('parents.store');
-        Route::put('/adviser/parents/{id}', [ParentController::class, 'parentUpdate'])->name('parents.update');
+        // Route::post('/adviser/parents', [ParentController::class, 'parentStore'])->name('parents.store');
+        // Route::put('/adviser/parents/{id}', [ParentController::class, 'parentUpdate'])->name('parents.update');
         Route::delete('/adviser/parents/{id}', [ParentController::class, 'destroyParent'])->name('parents.destroy');
 
 

@@ -177,15 +177,15 @@
   });
 
   // Profile image & name - Now using modal notifications
-  function changeProfileImage() { 
-    document.getElementById('imageInput').click(); 
+  function changeProfileImage() {
+    document.getElementById('imageInput').click();
   }
-  
+
   document.getElementById('imageInput').addEventListener('change', function(e){
     const file = e.target.files[0];
     if(file){
       const reader = new FileReader();
-      reader.onload = function(ev){ 
+      reader.onload = function(ev){
         document.getElementById('profileImage').src = ev.target.result;
         showNotification('✅ Profile Updated', 'Profile image changed successfully!', 'success', {
           yesText: 'OK',
@@ -198,7 +198,7 @@
       reader.readAsDataURL(file);
     }
   });
-  
+
   function changeProfileName() {
     showNotification('✏️ Change Profile Name', 'Enter your new name:', 'info', {
       yesText: 'Change Name',
@@ -221,46 +221,6 @@
     });
   }
 
-  // Logout - Now using modal notification
-  function logout() {
-    showNotification('🚪 Logout', 'Are you sure you want to logout?', 'confirm', {
-      yesText: 'Yes, Logout',
-      noText: 'Cancel',
-      onYes: () => {
-        fetch("{{ route('adviser.logout') }}", {
-          method: 'POST',
-          headers: { 
-            'X-CSRF-TOKEN': '{{ csrf_token() }}', 
-            'Accept': 'application/json' 
-          }
-        })
-        .then(response => { 
-          if(response.ok){ 
-            showNotification('👋 Goodbye', 'Logging out...', 'success', {
-              yesText: 'OK',
-              noText: null,
-              onYes: () => {
-                window.location.href = "{{ route('auth.login') }}";
-              }
-            });
-          } 
-        })
-        .catch(error => {
-          console.error('Logout failed:', error);
-          showNotification('❌ Error', 'Logout failed. Please try again.', 'danger', {
-            yesText: 'OK',
-            noText: null,
-            onYes: () => {
-              document.getElementById('notificationModal').style.display = 'none';
-            }
-          });
-        });
-      },
-      onNo: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
-    });
-  }
 
   // Info modal logic
   const modal = document.getElementById("infoModal");
@@ -281,7 +241,7 @@
 
         // Add 'active' to the clicked item
         item.classList.add('active');
-        
+
         // Show notification for navigation
         const pageName = item.textContent.trim();
         showNotification('📄 Navigation', `Navigating to ${pageName}`, 'info', {
@@ -306,11 +266,11 @@
     const yesBtn = document.getElementById('notificationYesBtn');
     const noBtn = document.getElementById('notificationNoBtn');
     const closeBtn = document.getElementById('notificationCloseBtn');
-    
+
     // Set title and message
     notificationTitle.textContent = title;
     notificationBody.textContent = message;
-    
+
     // Set icon based on type
     let icon = '🔔';
     if (type === 'success') icon = '✅';
@@ -318,11 +278,11 @@
     else if (type === 'danger') icon = '❌';
     else if (type === 'confirm') icon = '❓';
     notificationIcon.textContent = icon;
-    
+
     // Configure buttons
     yesBtn.textContent = options.yesText || 'Yes';
     yesBtn.onclick = options.onYes || (() => modal.style.display = 'none');
-    
+
     if (options.noText) {
       noBtn.textContent = options.noText;
       noBtn.style.display = 'inline-block';
@@ -330,9 +290,9 @@
     } else {
       noBtn.style.display = 'none';
     }
-    
+
     closeBtn.onclick = () => modal.style.display = 'none';
-    
+
     // Show the modal
     modal.style.display = 'flex';
   }
@@ -368,7 +328,7 @@
       card.addEventListener('click', function() {
         const cardTitle = this.querySelector('h3').textContent;
         const cardValue = this.querySelector('p').textContent;
-        
+
         showNotification('📊 Dashboard Info', `${cardTitle}: ${cardValue}`, 'info', {
           yesText: 'OK',
           noText: null,
@@ -385,7 +345,7 @@
       card.addEventListener('click', function() {
         const studentName = this.querySelector('h3').textContent;
         const appointmentTime = this.querySelector('p').textContent;
-        
+
         showNotification('📅 Appointment Details', `Student: ${studentName}\nTime: ${appointmentTime}`, 'info', {
           yesText: 'View Details',
           noText: 'Close',
@@ -405,6 +365,47 @@
       });
     });
   });
+
+  // Logout - Now using modal notification
+  function logout() {
+    showNotification('🚪 Logout', 'Are you sure you want to logout?', 'confirm', {
+      yesText: 'Yes, Logout',
+      noText: 'Cancel',
+      onYes: () => {
+        fetch("{{ route('prefect.logout') }}", {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => {
+          if(response.ok){
+            showNotification('👋 Goodbye', 'Logging out...', 'success', {
+              yesText: 'OK',
+              noText: null,
+              onYes: () => {
+                window.location.href = "{{ route('auth.login') }}";
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Logout failed:', error);
+          showNotification('❌ Error', 'Logout failed. Please try again.', 'danger', {
+            yesText: 'OK',
+            noText: null,
+            onYes: () => {
+              document.getElementById('notificationModal').style.display = 'none';
+            }
+          });
+        });
+      },
+      onNo: () => {
+        document.getElementById('notificationModal').style.display = 'none';
+      }
+    });
+  }
 
 </script>
 

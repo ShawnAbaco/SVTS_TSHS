@@ -1,259 +1,536 @@
 @extends('prefect.layout')
 
 @section('content')
-<div class="container">
+<div class="main-container">
 
-    {{-- ✅ Flash Messages --}}
-    @if(session('messages'))
-        <div class="alert-messages">
-            @foreach(session('messages') as $msg)
-                <div class="alert-item">{!! $msg !!}</div>
-            @endforeach
-        </div>
-    @endif
+  {{-- ✅ Flash Messages --}}
+  @if(session('success'))
+      <div class="alert alert-success">
+          {!! session('success') !!}
+      </div>
+  @endif
 
-    <div class="main-container">
+  @if(session('error'))
+      <div class="alert alert-danger">
+          {!! session('error') !!}
+      </div>
+  @endif
 
-        <!-- ======= HEADER ======= -->
-        <header class="main-header">
-            <div class="header-left">
-                <h2>Create Complaint Records</h2>
-                {{-- <p class="subtitle">Log multiple complaints quickly and efficiently.</p> --}}
-            </div>
-            <div class="header-right">
-                <div class="user-info" onclick="toggleProfileDropdown()">
-                    <img src="/images/user.jpg" alt="User">
-                    <i class="fas fa-caret-down"></i>
-                </div>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="{{ route('profile.settings') }}">Profile</a>
-                </div>
-            </div>
-        </header>
-
-        <!-- ======= FORM BOX ======= -->
-        <div class="form-box shadow-card">
-            <h3 class="section-title"><i class="fas fa-user"></i> Complainant Details</h3>
-            <label>Complainant(s) <span class="note">(comma-separated)</span></label>
-            <input type="text" id="studentsInput" placeholder="e.g. Shawn Abaco, Kent Zyrone" autocomplete="off">
-            <div id="studentResults" class="results"></div>
-
-            <h3 class="section-title"><i class="fas fa-info-circle"></i> Complaint Information</h3>
-            <div class="row-fields">
-                <div class="field">
-                    <label>Complaint Type</label>
-                    <input type="text" id="complaintInput" placeholder="Type complaint..." autocomplete="off">
-                    <input type="hidden" id="complaint_id">
-                    <div id="complaintResults" class="results"></div>
-                </div>
-
-                <div class="field small">
-                    <label>Date</label>
-                    <input type="date" id="dateInput">
-                </div>
-
-                <div class="field small">
-                    <label>Time</label>
-                    <input type="time" id="timeInput">
-                </div>
-
-                <div class="field large">
-                    <label>Incident Details</label>
-                    <textarea id="incidentInput" rows="3" placeholder="Briefly describe the incident..."></textarea>
-                </div>
-            </div>
-
-            <button type="button" class="btn-show-all" id="btnShowAll"><i class="fas fa-eye"></i> Show All</button>
-        </div>
-    </div>
-
-    <!-- ======= COMPLAINT CARDS ======= -->
-    <section class="violations-section">
-        <h3 class="section-title"><i class="fas fa-list"></i> Complaints Summary</h3>
-        <div id="complaintsContainer" class="violationsWrapper"></div>
-    </section>
-
-    <!-- ======= ACTION BUTTONS ======= -->
-    <form id="complaintForm" method="POST" action="{{ route('complaints.store') }}">
+  <div class="toolbar">
+    <h2>Create Complaint Record</h2>
+    <div class="actions">
+      <form id="complaintForm" method="POST" action="{{ route('complaints.store') }}">
         @csrf
         <div class="buttons-row">
-            <button type="button" class="btn-Add-Violation" id="btnAddComplaint">
-                <i class="fas fa-plus-circle"></i> Add Another Complaint
-            </button>
-            <button type="submit" class="btn-save">
-                <i class="fas fa-save"></i> Save All Complaints
-            </button>
+          <button type="button" class="btn-Add-Complaint" id="btnAddComplaint" disabled>
+            <i class="fas fa-plus-circle"></i> Add Another Complaint
+          </button>
+          <button type="submit" class="btn-save">
+            <i class="fas fa-save"></i> Save All Records
+          </button>
         </div>
-    </form>
+        
+        <!-- ✅ Hidden fields container for form submission -->
+        <div id="hiddenFieldsContainer"></div>
+      </form>
+    </div>
+  </div>
 
-    <!-- ======= PREVIEW ======= -->
-    <section class="preview-section">
-        <h3><i class="fas fa-search"></i> Preview Records</h3>
-        <pre id="output"></pre>
-    </section>
+  <!-- ======= CONTENT WRAPPER (FORM + SUMMARY) ======= -->
+  <div class="content-wrapper">
+      <!-- Left: Multiple Forms -->
+      <div class="forms-container">
+          <div class="form-box shadow-card complaint-form">
+              <div class="form-header">
+                  <h3 class="section-title"><i class="fas fa-user"></i> Complaint Details</h3>
+                  <button type="button" class="btn-remove-form">&times;</button>
+              </div>
+
+              <label>Complainant(s) <span class="note">(single or comma-separated)</span></label>
+              <input type="text" class="complainant-input" placeholder="e.g. Kent Zyrone, Shawn Laurence" data-ids="">
+              <div class="results complainant-results"></div>
+
+              <label>Respondent(s) <span class="note">(comma-separated for multiple)</span></label>
+              <input type="text" class="respondent-input" placeholder="e.g. Jonathan, Junald, Jayvee Charles" data-ids="">
+              <div class="results respondent-results"></div>
+
+              <h3 class="section-title"><i class="fas fa-info-circle"></i> Complaint Information</h3>
+              <div class="row-fields">
+                  <div class="field">
+                      <label>Offense</label>
+                      <input type="text" class="offense-input" placeholder="Type offense (e.g., Tardiness, Bullying, Cheating)...">
+                      <input type="hidden" class="offense-id">
+                      <div class="results offense-results"></div>
+                  </div>
+
+                  <div class="field small">
+                      <label>Date</label>
+                      <input type="date" class="date-input" value="{{ date('Y-m-d') }}">
+                  </div>
+
+                  <div class="field small">
+                      <label>Time</label>
+                      <input type="time" class="time-input" value="{{ date('H:i') }}">
+                  </div>
+
+                  <div class="field large">
+                      <label>Incident Details</label>
+                      <textarea rows="3" class="incident-input" placeholder="Briefly describe the incident..."></textarea>
+                  </div>
+              </div>
+
+              <button type="button" class="btn-show-all">
+                  <i class="fas fa-eye"></i> Show All
+              </button>
+          </div>
+      </div>
+
+      <!-- Right: Complaints Summary -->
+      <section class="complaints-section">
+          <div class="summary-header">
+              <h3 class="section-title"><i class="fas fa-list"></i> Complaints Summary</h3>
+              <input type="search" placeholder="🔍 Search by student name or ID..." id="searchInput">
+          </div>
+
+          <!-- Summary container (all groups appended here) -->
+          <div id="allComplaintGroups" class="complaintsWrapper"></div>
+      </section>
+  </div>
+
 </div>
 
+{{-- ✅ JS --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    const studentSearchUrl = "{{ route('complaints.search-students') }}";
-    const complaintSearchUrl = "{{ route('complaints.search-types') }}";
+const studentSearchUrl = "{{ route('complaints.search-students') }}";
+const offenseSearchUrl = "{{ route('complaints.search-offenses') }}";
 
-    function attachListeners(box) {
-        const studentInput = box.querySelector("input[placeholder^='e.g.']");
-        const studentResults = box.querySelector(".results");
+let complaintCount = 1;
+let allComplaintsData = {}; // Store all complaint data
+let complaintCounter = 1; // Global counter for unique complaint IDs
 
-        studentInput.addEventListener("keyup", function() {
-            let fullInput = this.value;
-            let parts = fullInput.split(",");
-            let query = parts[parts.length - 1].trim();
-            if (query.length < 2) { studentResults.innerHTML = ""; return; }
-            $.post(studentSearchUrl, { query, _token: "{{ csrf_token() }}" }, function(data){
-                studentResults.innerHTML = data;
-                studentResults.querySelectorAll(".student-item").forEach(item => {
-                    item.onclick = () => {
-                        parts[parts.length-1] = " " + item.textContent;
-                        studentInput.value = parts.join(",").replace(/^,/, "");
-                        let ids = studentInput.dataset.ids || "";
-                        if(ids) ids += ",";
-                        ids += item.dataset.id;
-                        studentInput.dataset.ids = ids;
-                        studentResults.innerHTML = "";
-                    };
-                });
+function attachListeners(box, id) {
+  const complainantInput = box.querySelector(".complainant-input");
+  const respondentInput  = box.querySelector(".respondent-input");
+  const offenseInput     = box.querySelector(".offense-input");
+  const offenseId        = box.querySelector(".offense-id");
+  const dateInput        = box.querySelector(".date-input");
+  const timeInput        = box.querySelector(".time-input");
+  const incidentInput    = box.querySelector(".incident-input");
+  const complainantResults = box.querySelector(".complainant-results");
+  const respondentResults  = box.querySelector(".respondent-results");
+  const offenseResults     = box.querySelector(".offense-results");
+  const showAllBtn       = box.querySelector(".btn-show-all");
+
+  box.dataset.groupId = id;
+
+  function allFieldsFilled() {
+    return complainantInput.value.trim() &&
+           respondentInput.value.trim() &&
+           offenseInput.value.trim() &&
+           offenseId.value.trim() &&
+           dateInput.value &&
+           timeInput.value &&
+           incidentInput.value.trim();
+  }
+
+  function toggleAddComplaintButton() {
+    const addBtn = document.getElementById("btnAddComplaint");
+    addBtn.disabled = !allFieldsFilled();
+  }
+
+  box.querySelectorAll("input, textarea").forEach(input => input.addEventListener("input", toggleAddComplaintButton));
+
+  // Student search for complainant - FIXED: Replace input with full name
+  complainantInput.addEventListener("keyup", function() {
+    let parts = this.value.split(",");
+    let query = parts[parts.length - 1].trim();
+    
+    if (query.length < 2) { 
+        complainantResults.innerHTML = ""; 
+        return; 
+    }
+    
+    $.post(studentSearchUrl, { query, _token: "{{ csrf_token() }}" }, function(data) {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = data;
+        const selectedIds = (complainantInput.dataset.ids || "").split(",").filter(id => id.trim() !== "");
+        complainantResults.innerHTML = "";
+        
+        Array.from(tempDiv.querySelectorAll(".student-item"))
+          .filter(item => !selectedIds.includes(item.dataset.id))
+          .forEach(item => {
+            const clonedItem = item.cloneNode(true);
+            complainantResults.appendChild(clonedItem);
+            clonedItem.addEventListener("click", () => {
+              // FIXED: Replace the input value with the full selected name
+              const fullName = clonedItem.textContent.trim();
+              complainantInput.value = fullName; // This replaces "sa" with "Samantha"
+              complainantInput.dataset.ids = clonedItem.dataset.id;
+              complainantResults.innerHTML = "";
+              toggleAddComplaintButton();
             });
+          });
+    }).fail(function(xhr, status, error) {
+        console.error('Student search failed:', error);
+        complainantResults.innerHTML = '<div class="no-results">Search failed</div>';
+    });
+  });
+
+  // Student search for respondent - FIXED: Replace partial text with full name
+  respondentInput.addEventListener("keyup", function() {
+    let parts = this.value.split(",");
+    let query = parts[parts.length - 1].trim();
+    
+    if (query.length < 2) { 
+        respondentResults.innerHTML = ""; 
+        return; 
+    }
+    
+    $.post(studentSearchUrl, { query, _token: "{{ csrf_token() }}" }, function(data) {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = data;
+        const selectedIds = (respondentInput.dataset.ids || "").split(",").filter(id => id.trim() !== "");
+        respondentResults.innerHTML = "";
+        
+        Array.from(tempDiv.querySelectorAll(".student-item"))
+          .filter(item => !selectedIds.includes(item.dataset.id))
+          .forEach(item => {
+            const clonedItem = item.cloneNode(true);
+            respondentResults.appendChild(clonedItem);
+            clonedItem.addEventListener("click", () => {
+              const currentIds = (respondentInput.dataset.ids || "").split(",").filter(id => id.trim() !== "");
+              if (!currentIds.includes(clonedItem.dataset.id)) {
+                // FIXED: Replace the last partial text with the full selected name
+                const fullName = clonedItem.textContent.trim();
+                const currentNames = respondentInput.value.split(",").map(n => n.trim()).filter(n => n !== "");
+                
+                // Replace the last incomplete name with the full selected name
+                if (currentNames.length > 0 && query.length > 0) {
+                  // Check if last name contains the query (partial match)
+                  const lastIndex = currentNames.length - 1;
+                  if (currentNames[lastIndex].toLowerCase().includes(query.toLowerCase())) {
+                    currentNames[lastIndex] = fullName;
+                  } else {
+                    currentNames.push(fullName);
+                  }
+                } else {
+                  currentNames.push(fullName);
+                }
+                
+                respondentInput.value = currentNames.join(", ");
+                currentIds.push(clonedItem.dataset.id);
+                respondentInput.dataset.ids = currentIds.join(",");
+              }
+              respondentResults.innerHTML = "";
+              toggleAddComplaintButton();
+            });
+          });
+    }).fail(function(xhr, status, error) {
+        console.error('Respondent search failed:', error);
+        respondentResults.innerHTML = '<div class="no-results">Search failed</div>';
+    });
+  });
+
+  // Offense search - FIXED: Replace input with full offense name
+  offenseInput.addEventListener("keyup", function() {
+    let query = this.value;
+    
+    if (query.length < 2){ 
+        offenseResults.innerHTML = ""; 
+        return; 
+    }
+    
+    $.post(offenseSearchUrl, { query, _token: "{{ csrf_token() }}" }, function(data){
+        offenseResults.innerHTML = data;
+        
+        offenseResults.querySelectorAll(".offense-item").forEach(item => {
+            item.onclick = () => {
+                // FIXED: Replace the input value with the full selected offense
+                offenseInput.value = item.textContent;
+                offenseId.value = item.dataset.id;
+                offenseResults.innerHTML = "";
+                toggleAddComplaintButton();
+            };
         });
+    }).fail(function(xhr, status, error) {
+        console.error('Offense search failed:', error);
+        offenseResults.innerHTML = '<div class="no-results">Search failed</div>';
+    });
+  });
 
-        const complaintInput = box.querySelector("input[placeholder='Type complaint...']");
-        const complaintId = box.querySelector("input[type='hidden']");
-        const complaintResults = box.querySelectorAll(".results")[1];
-
-        complaintInput.addEventListener("keyup", function() {
-            let query = this.value;
-            if(query.length < 2){ complaintResults.innerHTML = ""; return; }
-            $.post(complaintSearchUrl, { query, _token: "{{ csrf_token() }}" }, function(data){
-                complaintResults.innerHTML = data;
-                complaintResults.querySelectorAll(".complaint-item").forEach(item=>{
-                    item.onclick = () => {
-                        complaintInput.value = item.textContent;
-                        complaintId.value = item.dataset.id;
-                        complaintResults.innerHTML = "";
-                    };
-                });
-            });
-        });
-
-        const showAllBtn = box.querySelector(".btn-show-all");
-        showAllBtn.onclick = () => {
-            const students = studentInput.value.split(",");
-            const complaint = complaintInput.value.trim();
-            const complaintVal = complaintId.value;
-            const date = box.querySelector("input[type='date']").value;
-            const time = box.querySelector("input[type='time']").value;
-            const incident = box.querySelector("textarea").value.trim();
-
-            if(!students || !complaint || !date || !time || !incident){
-                alert("Please complete all fields");
-                return;
-            }
-
-            const studentIds = (studentInput.dataset.ids || "").split(",");
-            students.forEach((name, index) => {
-                name = name.trim();
-                const id = studentIds[index]?.trim();
-                if(!name || !id) return;
-
-                const card = document.createElement("div");
-                card.classList.add("violation-card");
-                card.innerHTML = `
-                    <div class="btn-remove">&times;</div>
-                    <p><b>Complainant:</b> ${name}<input type="hidden" name="student_id[]" value="${id}"></p>
-                    <p><b>Complaint Type:</b> ${complaint}<input type="hidden" name="complaint[]" value="${complaintVal}"></p>
-                    <p><b>Date:</b> ${date}<input type="hidden" name="date[]" value="${date}"></p>
-                    <p><b>Time:</b> ${time}<input type="hidden" name="time[]" value="${time}"></p>
-                    <p><b>Incident:</b> ${incident}<input type="hidden" name="incident[]" value="${incident}"></p>
-                `;
-                document.getElementById("complaintsContainer").appendChild(card);
-                card.querySelector(".btn-remove").onclick = () => card.remove();
-            });
-        };
+  // Show all button
+  showAllBtn.onclick = () => {
+    if (!allFieldsFilled()) {
+      Swal.fire("Incomplete!", "Please fill all fields before showing summary.", "warning");
+      return;
     }
 
-    attachListeners(document.querySelector(".form-box"));
+    const complainantName = complainantInput.value.trim();
+    const complainantId = complainantInput.dataset.ids || "";
+    const respondentNames = respondentInput.value.split(",").map(r => r.trim()).filter(r => r !== "");
+    const respondentIds = (respondentInput.dataset.ids || "").split(",").map(i => i.trim()).filter(i => i !== "");
+    const offense = offenseInput.value.trim();
+    const offenseVal = offenseId.value;
+    const date = dateInput.value;
+    const time = timeInput.value;
+    const incident = incidentInput.value.trim();
+    const groupId = box.dataset.groupId;
 
-    document.getElementById("btnAddComplaint").onclick = () => {
-        const originalBox = document.querySelector(".form-box");
-        const clone = originalBox.cloneNode(true);
-        clone.querySelectorAll("input, textarea").forEach(input=>input.value="");
-        clone.querySelectorAll(".results").forEach(div=>div.innerHTML="");
-        document.querySelector(".main-container").appendChild(clone);
-        attachListeners(clone);
+    // Validate that we have matching counts for respondents
+    if (respondentNames.length !== respondentIds.length) {
+        Swal.fire("Error!", "Some respondent selections are invalid. Please reselect respondents.", "error");
+        return;
+    }
+
+    if (!complainantId) {
+        Swal.fire("Error!", "Please select a valid complainant.", "error");
+        return;
+    }
+
+    // ✅ Store complaint data - ONE complainant with MULTIPLE respondents
+    allComplaintsData[groupId] = {
+        complainantName: complainantName,
+        complainantId: complainantId,
+        respondentNames: respondentNames,
+        respondentIds: respondentIds,
+        offense: offense,
+        offenseVal: offenseVal,
+        date: date,
+        time: time,
+        incident: incident
     };
 
-    $("#complaintForm").on("submit", function(e){
-        $("#output").text(JSON.stringify($(this).serializeArray(), null, 2));
+    // ✅ Update hidden fields for form submission
+    updateHiddenFields();
+
+    // ✅ Create group container
+    let groupContainer = document.querySelector(`#group-${groupId}`);
+    if (!groupContainer) {
+      groupContainer = document.createElement("div");
+      groupContainer.classList.add("complaint-group");
+      groupContainer.id = `group-${groupId}`;
+      groupContainer.innerHTML = `<div class="complaint-group-title">Complaint Group #${groupId}</div>`;
+      document.getElementById("allComplaintGroups").appendChild(groupContainer);
+    }
+
+    // ✅ Clear existing cards before regenerating
+    groupContainer.querySelectorAll(".complaint-card").forEach(card => card.remove());
+
+    // ✅ Generate cards - ONE card per respondent
+    respondentNames.forEach((respName, index) => {
+      const respId = respondentIds[index];
+      if (!respId) return;
+
+      const uniqueComplaintId = complaintCounter++;
+      
+      const card = document.createElement("div");
+      card.classList.add("complaint-card");
+      card.dataset.complaintId = uniqueComplaintId;
+      card.dataset.groupId = groupId;
+      card.dataset.respondentId = respId;
+      card.innerHTML = `
+        <div class="btn-remove">&times;</div>
+        <p><b>Complaint ID:</b> #${uniqueComplaintId}</p>
+        <p><b>Complainant:</b> ${complainantName} (ID: ${complainantId})</p>
+        <p><b>Respondent:</b> ${respName} (ID: ${respId})</p>
+        <p style="color: orange;"><b>Offense:</b> ${offense} (ID: ${offenseVal})</p>
+        <p><b>Date:</b> ${new Date(date).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+          })}</p>
+        <p><b>Time:</b> ${new Date("1970-01-01T" + time).toLocaleTimeString([], { 
+              hour: '2-digit', 
+              minute: '2-digit', 
+              hour12: true 
+          })}</p>
+        <p><b>Incident:</b> ${incident}</p>
+      `;
+      groupContainer.appendChild(card);
+      
+      // Remove card functionality
+      card.querySelector(".btn-remove").onclick = () => {
+        const respondentIdToRemove = card.dataset.respondentId;
+        card.remove();
+        // Remove the specific respondent from our data
+        removeRespondentFromGroup(groupId, respondentIdToRemove);
+      };
     });
 
-    function toggleProfileDropdown() {
-        const dropdown = document.getElementById("profileDropdown");
-        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    toggleAddComplaintButton();
+    Swal.fire("Success!", `Added ${respondentNames.length} complaint(s) to summary.`, "success");
+  };
+
+  // Remove form
+  box.querySelector(".btn-remove-form").addEventListener("click", () => {
+    if (document.querySelectorAll(".complaint-form").length > 1) {
+      const groupId = box.dataset.groupId;
+      // Remove from data
+      delete allComplaintsData[groupId];
+      updateHiddenFields();
+      
+      const group = document.querySelector(`#group-${groupId}`);
+      if (group) group.remove();
+      box.remove();
+      toggleAddComplaintButton();
+    } else {
+      Swal.fire("Warning", "At least one complaint form is required.", "warning");
     }
+  });
+}
+
+// Update hidden fields for form submission
+function updateHiddenFields() {
+    const container = document.getElementById('hiddenFieldsContainer');
+    container.innerHTML = ''; // Clear existing
+    
+    Object.keys(allComplaintsData).forEach(groupId => {
+        const group = allComplaintsData[groupId];
+        
+        if (!group.complainantId || !group.respondentIds.length) return;
+        
+        // For EACH respondent, create a separate complaint entry
+        group.respondentIds.forEach((respondentId, index) => {
+            const complaintIndex = `${groupId}_${index}`;
+            
+            // Add complainant ID (same for all in this group)
+            const compInput = document.createElement('input');
+            compInput.type = 'hidden';
+            compInput.name = `complaints[${complaintIndex}][complainant_id]`;
+            compInput.value = group.complainantId;
+            container.appendChild(compInput);
+            
+            // Add respondent ID (different for each)
+            const respInput = document.createElement('input');
+            respInput.type = 'hidden';
+            respInput.name = `complaints[${complaintIndex}][respondent_id]`;
+            respInput.value = respondentId;
+            container.appendChild(respInput);
+            
+            // Add offense, date, time, incident (same for all in this group)
+            const offenseInput = document.createElement('input');
+            offenseInput.type = 'hidden';
+            offenseInput.name = `complaints[${complaintIndex}][offense_sanc_id]`;
+            offenseInput.value = group.offenseVal;
+            container.appendChild(offenseInput);
+            
+            const dateInput = document.createElement('input');
+            dateInput.type = 'hidden';
+            dateInput.name = `complaints[${complaintIndex}][date]`;
+            dateInput.value = group.date;
+            container.appendChild(dateInput);
+            
+            const timeInput = document.createElement('input');
+            timeInput.type = 'hidden';
+            timeInput.name = `complaints[${complaintIndex}][time]`;
+            timeInput.value = group.time;
+            container.appendChild(timeInput);
+            
+            const incidentInput = document.createElement('input');
+            incidentInput.type = 'hidden';
+            incidentInput.name = `complaints[${complaintIndex}][incident]`;
+            incidentInput.value = group.incident;
+            container.appendChild(incidentInput);
+        });
+    });
+}
+
+// Remove specific respondent from group
+function removeRespondentFromGroup(groupId, respondentId) {
+    const group = allComplaintsData[groupId];
+    if (!group) return;
+    
+    // Find the index of the respondent to remove
+    const index = group.respondentIds.indexOf(respondentId);
+    if (index > -1) {
+        group.respondentNames.splice(index, 1);
+        group.respondentIds.splice(index, 1);
+    }
+    
+    // If no respondents left, remove the entire group
+    if (group.respondentIds.length === 0) {
+        delete allComplaintsData[groupId];
+    }
+    
+    updateHiddenFields();
+}
+
+// Add another complaint form
+document.getElementById("btnAddComplaint").onclick = () => {
+  const lastForm = document.querySelector(".complaint-form:last-child");
+  const allFilled = [...lastForm.querySelectorAll("input, textarea")].every(input => input.value.trim());
+  
+  if (!allFilled) {
+    Swal.fire("Incomplete!", "Please fill all fields in the current form first.", "warning");
+    return;
+  }
+
+  complaintCount++;
+  const originalBox = document.querySelector(".complaint-form");
+  const clone = originalBox.cloneNode(true);
+  
+  // Clear all inputs
+  clone.querySelectorAll("input, textarea").forEach(input => input.value = "");
+  clone.querySelectorAll(".complainant-input, .respondent-input").forEach(input => input.dataset.ids = "");
+  clone.querySelectorAll(".results").forEach(div => div.innerHTML = "");
+  
+  // Set current date and time for new form
+  clone.querySelector(".date-input").value = "{{ date('Y-m-d') }}";
+  clone.querySelector(".time-input").value = "{{ date('H:i') }}";
+  
+  clone.querySelector(".section-title").innerHTML = `<i class="fas fa-user"></i> Complaint Details (Form #${complaintCount})`;
+  document.querySelector(".forms-container").appendChild(clone);
+  attachListeners(clone, complaintCount);
+  
+  // Disable add button for new form until filled
+  document.getElementById("btnAddComplaint").disabled = true;
+};
+
+// Form submission handler - ADDED SUCCESS NOTIFICATION
+document.getElementById('complaintForm').addEventListener('submit', function(e) {
+  const hasComplaintData = Object.keys(allComplaintsData).length > 0;
+  
+  if (!hasComplaintData) {
+    e.preventDefault();
+    Swal.fire("No Complaints!", "Please add at least one complaint to the summary before saving.", "warning");
+    return;
+  }
+  
+  // Count total complaints to be saved
+  let totalComplaints = 0;
+  Object.keys(allComplaintsData).forEach(groupId => {
+    const group = allComplaintsData[groupId];
+    totalComplaints += group.respondentIds.length;
+  });
+  
+  if (totalComplaints === 0) {
+    e.preventDefault();
+    Swal.fire("No Complaints!", "Please add at least one complaint to the summary before saving.", "warning");
+    return;
+  }
+  
+  // Show loading state
+  const submitBtn = this.querySelector('button[type="submit"]');
+  submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Saving ${totalComplaints} Complaint(s)...`;
+  submitBtn.disabled = true;
+  
+  // Show success notification after form submission
+  this.addEventListener('ajax:success', function(event) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: `${totalComplaints} complaint(s) have been successfully saved to the database.`,
+      confirmButtonText: 'OK'
+    });
+  });
+});
+
+// Initialize first form
+document.addEventListener('DOMContentLoaded', function() {
+  attachListeners(document.querySelector(".complaint-form"), complaintCount);
+});
 </script>
 
-<style>
-/* ===== General ===== */
-.container { width:100%; max-width:100%; margin:0; padding:25px 40px; box-sizing:border-box; }
-.main-container { width:100%; }
-.form-box, .violations-section, .preview-section { width:100%; }
-
-/* ===== Typography ===== */
-h2, h3 { margin-bottom:10px; color:#222; }
-.subtitle { font-size:14px; color:#666; margin-top:-5px; }
-
-/* ===== Header ===== */
-.main-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; width:100%; }
-.header-left h2 { font-size:1.6rem; }
-.user-info { display:flex; align-items:center; gap:8px; cursor:pointer; }
-.user-info img { width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #ddd; }
-
-/* ===== Form Box ===== */
-.shadow-card { width:100%; box-shadow:0 4px 12px rgba(0,0,0,0.05); background:#fff; border-radius:8px; padding:20px 25px; box-sizing:border-box; }
-.section-title { margin:15px 0 10px; font-size:1.1rem; color:#0056b3; display:flex; align-items:center; gap:6px; }
-
-/* ===== Fields ===== */
-label { font-weight:bold; display:block; margin-bottom:5px; }
-input, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; margin-bottom:14px; font-size:14px; }
-input:focus, textarea:focus { outline:none; border-color:#007bff; box-shadow:0 0 0 2px rgba(0,123,255,0.1); }
-textarea { resize:vertical; }
-
-/* ===== Row Fields ===== */
-.row-fields { display:flex; flex-wrap:wrap; gap:15px; width:100%; }
-.field { flex:1; min-width:180px; }
-.field.small { max-width:200px; }
-.field.large { flex:2; }
-
-/* ===== Buttons ===== */
-button { padding:10px 18px; border:none; border-radius:6px; cursor:pointer; font-weight:600; transition: background 0.2s ease; }
-.buttons-row { display:flex; justify-content:center; flex-wrap:wrap; gap:15px; margin:30px 0; }
-.btn-show-all { background-color:#28a745; color:#fff; display:block; margin:20px auto 0; }
-.btn-show-all:hover { background-color:#218838; }
-.btn-Add-Violation { background-color:#ffc107; color:#000; }
-.btn-Add-Violation:hover { background-color:#e0a800; }
-.btn-save { background-color:#007bff; color:#fff; }
-.btn-save:hover { background-color:#0069d9; }
-
-/* ===== Complaints Section ===== */
-.violations-section { margin-top:40px; width:100%; }
-.violationsWrapper { display:flex; flex-wrap:wrap; gap:20px; margin-top:10px; }
-.violation-card { border:1px solid #ccc; border-radius:8px; padding:15px; background:#fafafa; flex:1 1 320px; position:relative; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
-.violation-card p { margin-bottom:8px; font-size:14px; }
-.violation-card .btn-remove { background-color:#dc3545; color:white; border-radius:50%; width:24px; height:24px; line-height:22px; text-align:center; font-weight:bold; position:absolute; top:6px; right:6px; cursor:pointer; }
-
-/* ===== Results Dropdown ===== */
-.results div { padding:6px 10px; cursor:pointer; }
-.results div:hover { background:#f0f0f0; }
-
-/* ===== Alerts ===== */
-.alert-messages { margin-bottom:20px; }
-.alert-item { background-color:#d4edda; color:#155724; padding:10px 15px; border-radius:6px; margin-bottom:8px; border:1px solid #c3e6cb; }
-</style>
 @endsection

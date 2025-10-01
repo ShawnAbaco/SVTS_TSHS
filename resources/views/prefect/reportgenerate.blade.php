@@ -364,6 +364,7 @@ body {
     font-weight: 600;
     text-align: center;        /* centers text inside h3 if needed */
 }
+<<<<<<< HEAD
 
 /* ===========================
    REPORT BOXES GRID
@@ -412,6 +413,14 @@ body {
    =========================== */
 .modal {
   display: none;
+=======
+    .sidebar {
+  width: 230px;
+background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #fff;
+  height: 100vh;
+>>>>>>> c5b27ed762f3863e0cc6390cdd5a433cde886514
   position: fixed;
   z-index: 100;
   left: 0;
