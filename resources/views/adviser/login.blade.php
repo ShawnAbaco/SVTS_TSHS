@@ -242,9 +242,7 @@
         <div class="success-icon">✅</div>
         <h2>Login Successful!</h2>
         <p>You are being redirected to your dashboard.</p>
-        <div class="modal-actions">
-            <button class="ok-btn" id="successOkBtn">Continue</button>
-        </div>
+        <!-- Removed the Continue button as requested -->
     </div>
 </div>
 
@@ -271,7 +269,6 @@ const attemptsModal = document.getElementById('attemptsModal');
 const successModal = document.getElementById('successModal');
 const countdownDisplay = document.getElementById('countdown');
 const okBtn = document.getElementById('okBtn');
-const successOkBtn = document.getElementById('successOkBtn');
 
 // Load attempts from localStorage if available
 if (localStorage.getItem('loginAttempts')) {
@@ -326,8 +323,8 @@ function showSuccessMessage(redirectUrl) {
     // Show success modal
     successModal.style.display = 'flex';
     
-    // Start countdown for automatic redirect (3 seconds)
-    let countdown = 3;
+    // Start countdown for automatic redirect (1 second instead of 3)
+    let countdown = 1;
     
     redirectInterval = setInterval(() => {
         countdown--;
@@ -343,15 +340,6 @@ function showSuccessMessage(redirectUrl) {
 okBtn.addEventListener('click', function() {
     // Only hide the modal, don't clear the lockout
     attemptsModal.style.display = 'none';
-});
-
-successOkBtn.addEventListener('click', function() {
-    // Clear the redirect interval and redirect immediately
-    clearInterval(redirectInterval);
-    const redirectUrl = successModal.getAttribute('data-redirect');
-    if (redirectUrl) {
-        window.location.href = redirectUrl;
-    }
 });
 
 loginForm.addEventListener('submit', function(e) {
@@ -396,9 +384,6 @@ loginForm.addEventListener('submit', function(e) {
             
             // Show success message before redirecting
             showSuccessMessage(data.redirect);
-            
-            // Store redirect URL in modal for manual redirect
-            successModal.setAttribute('data-redirect', data.redirect);
         } else {
             loginAttempts++;
             updateAttemptsCounter();
