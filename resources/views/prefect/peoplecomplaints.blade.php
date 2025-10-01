@@ -56,67 +56,45 @@
       <button class="btn-danger" id="moveToTrashBtn">🗑️ Move Selected to Trash</button>
     </div>
   </div>
+<!-- Complaint Table -->
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Complainant</th>
+        <th>Respondent</th>
+        <th>Offense Type</th>
+        <th>Sanction</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
 
-  <!-- Violation Table -->
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>ID</th>
-          <th>Student Name</th>
-          <th>Offense Type</th>
-          <th>Sanction</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Action</th>
+    <tbody id="tableBody">
+      @forelse($complaints as $complaint)
+        <tr data-details="{{ $complaint->complainant->student_fname }} {{ $complaint->complainant->student_lname }}|{{ $complaint->respondent->student_fname }} {{ $complaint->respondent->student_lname }}|{{ $complaint->offense->offense_type }}|{{ $complaint->offense->sanction_consequences }}|{{ $complaint->complaints_date }}|{{ \Carbon\Carbon::parse($complaint->complaints_time)->format('h:i A') }}">
+          <td><input type="checkbox" class="rowCheckbox"></td>
+          <td>{{ $complaint->complaints_id }}</td>
+          <td>{{ $complaint->complainant->student_fname }} {{ $complaint->complainant->student_lname }}</td>
+          <td>{{ $complaint->respondent->student_fname }} {{ $complaint->respondent->student_lname }}</td>
+          <td><span title="{{ $complaint->offense->offense_type }}">{{ $complaint->offense->offense_type }}</span></td>
+          <td><span title="{{ $complaint->offense->sanction_consequences }}">{{ $complaint->offense->sanction_consequences }}</span></td>
+          <td>{{ $complaint->complaints_date }}</td>
+          <td>{{ \Carbon\Carbon::parse($complaint->complaints_time)->format('h:i A') }}</td>
+          <td>
+            <button class="btn-primary editBtn" data-id="{{ $complaint->complaints_id }}">✏️ Edit</button>
+          </td>
         </tr>
-      </thead>
-  <tbody id="tableBody">
-<tr data-details="Juan Dela Cruz|Tardiness|Verbal Warning|2025-09-28|08:15 AM">
-  <td><input type="checkbox" class="rowCheckbox"></td>
-  <td>1</td>
-  <td>Juan Dela Cruz</td>
-  <td><span title="Tardiness">Tardiness</span></td>
-  <td><span title="Verbal Warning">Verbal Warning</span></td>
-  <td>2025-09-28</td>
-  <td>08:15 AM</td>
-  <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-</tr>
-
-  <tr data-details="Maria Santos|Incomplete Homework|Written Warning|2025-09-27|09:30 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>2</td>
-    <td>Maria Santos</td>
-    <td>Incomplete Homework</td>
-    <td>Written Warning</td>
-    <td>2025-09-27</td>
-    <td>09:30 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Pedro Reyes|Uniform Violation|Detention|2025-09-26|07:50 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>3</td>
-    <td>Pedro Reyes</td>
-    <td>Uniform Violation</td>
-    <td>Detention</td>
-    <td>2025-09-26</td>
-    <td>07:50 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-  <tr data-details="Ana Lopez|Disrespect|Counseling|2025-09-25|10:10 AM">
-    <td><input type="checkbox" class="rowCheckbox"></td>
-    <td>4</td>
-    <td>Ana Lopez</td>
-    <td>Disrespect</td>
-    <td>Counseling</td>
-    <td>2025-09-25</td>
-    <td>10:10 AM</td>
-    <td><button class="btn-primary editBtn">✏️ Edit</button></td>
-  </tr>
-</tbody>
-
-    </table>
+      @empty
+        <tr>
+          <td colspan="9" style="text-align:center;">No complaints found</td>
+        </tr>
+      @endforelse
+    </tbody>
+  </table>
 
     <!-- Pagination (if needed) -->
     <div class="pagination">

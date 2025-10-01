@@ -240,12 +240,15 @@ public function parentlists()
         $parent->delete();
         return redirect()->route('parent.index')->with('success', 'Parent deleted successfully.');
     }
-    public function violationrecords()
-    {
-        $violations = ViolationRecord::with(['student.parent', 'student.adviser', 'offense'])->get();
-return view('prefect.violationrecords', compact('violations'));
+ public function violationrecords()
+{
+    $violations = ViolationRecord::with(['student.parent', 'student.adviser', 'offense'])
+        ->where('status', 'active')
+        ->paginate(10); // show 10 records per page
 
-    }
+    return view('prefect.violationrecords', compact('violations'));
+}
+
 
 public function violationappointments()
 {
