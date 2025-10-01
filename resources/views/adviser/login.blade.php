@@ -103,10 +103,22 @@
             margin-bottom: 15px;
         }
         
-        .redirect-message {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin-top: 10px;
+        /* Contact Information Styles */
+        .contact-info {
+            margin-top: 5px;
+        }
+        
+        .contact-link {
+            color: #3498db;
+            text-decoration: none;
+            border-bottom: 1px solid #3498db;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .contact-link:hover {
+            color: #2980b9;
+            border-bottom: 1px solid #2980b9;
         }
     </style>
 </head>
@@ -130,16 +142,23 @@
                 <span>🏫</span>
                 <p><strong>Tagoloan Senior High School</strong><br>Committed to excellence in education.</p>
             </div>
-                        <div class="highlight">
+            <div class="highlight">
                 <span>🎓</span>
                 <p><strong>Student Support</strong><br>Helping students grow with proper guidance.</p>
             </div>
-    <div class="highlight">
-        <span>📞</span>
-        <p><strong>Contact:</strong> 0913-123-4567<br>
-           <strong>Email:</strong> tshs@gmail.com</p>
-    </div>
-
+            <div class="highlight">
+                <span>📞</span>
+                <p>
+                    <strong>Contact:</strong> 
+                    <span class="contact-info">
+                        <a href="tel:09131234567" class="contact-link">0913-123-4567</a>
+                    </span><br>
+                    <strong>Email:</strong> 
+                    <span class="contact-info">
+                        <a href="mailto:tshs@gmail.com" class="contact-link">tshs@gmail.com</a>
+                    </span>
+                </p>
+            </div>
         </div>
     </div>
 
@@ -223,7 +242,6 @@
         <div class="success-icon">✅</div>
         <h2>Login Successful!</h2>
         <p>You are being redirected to your dashboard.</p>
-        <div class="redirect-message" id="redirectMessage">Redirecting in 3 seconds...</div>
         <div class="modal-actions">
             <button class="ok-btn" id="successOkBtn">Continue</button>
         </div>
@@ -252,7 +270,6 @@ const attemptsCounter = document.getElementById('attemptsCounter');
 const attemptsModal = document.getElementById('attemptsModal');
 const successModal = document.getElementById('successModal');
 const countdownDisplay = document.getElementById('countdown');
-const redirectMessage = document.getElementById('redirectMessage');
 const okBtn = document.getElementById('okBtn');
 const successOkBtn = document.getElementById('successOkBtn');
 
@@ -309,13 +326,11 @@ function showSuccessMessage(redirectUrl) {
     // Show success modal
     successModal.style.display = 'flex';
     
+    // Start countdown for automatic redirect (3 seconds)
     let countdown = 3;
-    redirectMessage.textContent = `Redirecting in ${countdown} seconds...`;
     
-    // Start countdown for automatic redirect
     redirectInterval = setInterval(() => {
         countdown--;
-        redirectMessage.textContent = `Redirecting in ${countdown} seconds...`;
         
         if (countdown <= 0) {
             clearInterval(redirectInterval);
