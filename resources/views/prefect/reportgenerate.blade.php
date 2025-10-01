@@ -6,6 +6,337 @@
 <title>Violation Reports</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
+    /* ===========================
+   🎨 Prefect Dashboard CSS
+   =========================== */
+
+/* ===== Global Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  background: #f5f5f5;
+  color: #222;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===========================
+   SIDEBAR STYLES
+   =========================== */
+.sidebar {
+      overflow-y: auto;    /* Makes content scrollable vertically */
+  width: 230px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, #2b0000, #4b0000, #2c2c2c);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 15px;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Optional: customize scrollbar (for WebKit browsers) */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #550000;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: #2b0000;
+}
+
+/* Logo */
+.sidebar img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Title */
+.sidebar h2 {
+      font-size: 1.5rem;
+  color: white;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+    /* ✨ Add a line below */
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 8px;
+  width: 100%;              /* adjust line width */
+  text-align: center;      /* center the text and line */
+}
+
+/* Menu List */
+.sidebar ul {
+  list-style: none;
+  width: 100%;
+}
+
+/* Menu Item */
+.sidebar ul li {
+  width: 100%;
+  margin: 5px 0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+/* Active Item */
+.sidebar ul li.active,
+.sidebar ul li:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+/* ====== Fixed Link Layout ====== */
+.sidebar ul li a {
+      font-size: 1.1rem;
+  padding: 14px 18px;
+  display: flex; /* Align icon + text */
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+
+  gap: 12px;
+  line-height: 1.4;
+  transition: 0.3s ease;
+  font-weight: 700;
+
+
+}
+
+/* Text beside icon wraps properly */
+.sidebar ul li a span {
+  white-space: normal;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* Icons */
+.sidebar ul li i {
+      font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0; /* prevent icon from shrinking */
+}
+
+/* Hover Effects */
+.sidebar ul li a:hover {
+  color: #ffb3b3;
+}
+
+/* Logout */
+.sidebar ul li:last-child {
+  margin-top: auto;
+  background: rgba(255, 0, 0, 0.2);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  cursor: pointer;
+  justify-content: block;
+    display: flex; /* Align icon + text */
+
+}
+
+.sidebar ul li:last-child:hover {
+  background: rgba(255, 0, 0, 0.4);
+}
+
+/* ===========================
+   MAIN CONTENT
+   =========================== */
+.main-content {
+  margin-left: 230px;
+  margin-top: 80px; /* equal to header height */
+  width: calc(100% - 230px);
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Scrollbar */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* ===========================
+   HEADER SECTION
+   =========================== */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 230px; /* align beside sidebar */
+  width: calc(100% - 230px); /* fill the rest of the screen */
+  height: 80px; /* fixed height */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #4b0000;
+  color: #fff;
+  padding: 0 25px; /* removed top/bottom padding to control height */
+  border-bottom: 3px solid #2b0000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+/* Header Left */
+.header-left h2 {
+  font-size: 1.3rem !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: white;
+  margin-top: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* ✅ Clean & modern */
+}
+
+/* Header Right */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+/* User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.user-info:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* User Image */
+.user-info img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Username */
+.user-info span {
+  font-weight: 500;
+}
+
+/* Dropdown Arrow */
+.user-info i {
+  font-size: 0.9rem;
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 150px;
+  z-index: 200;
+}
+
+.profile-dropdown a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.profile-dropdown a:hover {
+  background: #eee;
+}
+
+/* Toggle Dropdown (JS Controlled) */
+.profile-dropdown.active {
+  display: block;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    margin-left: 200px;
+    margin-top: 70px; /* equal to header height */
+    width: calc(100% - 200px);
+    height: calc(100vh - 70px);
+  }
+
+  .sidebar ul li a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  .sidebar h2,
+  .sidebar img {
+    display: none;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
 /* (styles unchanged from your working version) */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;font-weight:bold;transition:all .2s ease-in-out;}
 body {
@@ -13,193 +344,195 @@ body {
   background: #f9f9f9;
   color: #111;
 }
- .page-header {
-  grid-column: 1 / -1; /* make it span full width above grid */
-  margin-bottom: 20px;
+
+/* ===========================
+   REPORTS TITLE - UPDATED WITH TOOLBAR STYLE
+   =========================== */
+.reports-title-container {
+    display: flex;             /* make it a flex container */
+    justify-content: center;   /* horizontal center */
+    align-items: center;       /* vertical center */
+    height: 80px;              /* adjust as needed */
+    width: 100%;
+    margin: 0 0 30px 0;
+    padding: 0 20px;
 }
 
-.page-header h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #111;
-  border-bottom: 3px solid var(--sidebar-border-color);
-  padding-bottom: 8px;
-  letter-spacing: 1px;
+.reports-title-container h3 {
+    font-size: 2rem;
+    color: #4b0000;
+    font-weight: 600;
+    text-align: center;        /* centers text inside h3 if needed */
 }
-.sidebar {
-  width: 230px;
-background: linear-gradient(135deg, #001818, #002222, #002f3f, #00394d);  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
+
+/* ===========================
+   REPORT BOXES GRID
+   =========================== */
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.report-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.report-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,.2);
+}
+
+.report-box i {
+  font-size: 28px;
+  margin-bottom: 12px;
+  color: inherit;
+}
+
+.report-box h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* ===========================
+   MODAL STYLES
+   =========================== */
+.modal {
+  display: none;
   position: fixed;
-  padding: 25px 15px;
-  border-radius: 0 15px 15px 0;
-  box-shadow: 2px 0 15px rgba(0,0,0,.5);
-  overflow-y: auto;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: rgba(0,0,0,.5);
 }
 
- .sidebar {
-      width: 230px;
-background: linear-gradient(135deg, #002200, #004400, #006600, #008800);
+.modal-content {
+  background: #fff;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
 
-background-repeat: no-repeat;
-background-attachment: fixed;
-      color: #fff;
-      height: 100vh;
-      position: fixed;
-      padding: 25px 15px;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-      overflow-y: auto;
-    }
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
-    }
+.close:hover {
+  color: black;
+}
 
-    .sidebar ul {
-      list-style: none;
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
 
-    .sidebar ul li {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-      font-size: 15px;
-      color:rgb(255, 255, 255);
-      transition: background 0.3s, transform 0.2s;
-    }
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
 
-    .sidebar ul li i {
-      margin-right: 12px;
-      color:rgb(255, 255, 255);
-      min-width: 20px;
-      font-size: 16px;
-    }
+th {
+  background: #2980b9;
+  color: #fff;
+  position: sticky;
+  top: 0;
+}
 
-    .sidebar ul li:hover {
-      background: #2d3f55;
-      transform: translateX(5px);
-      color: #fff;
-    }
+tr:nth-child(even) {
+  background: #f2f2f2;
+}
 
-    .sidebar ul li:hover i {
-      color: #00e0ff;
-    }
+.toolbar input {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 5px;
+}
 
-    .sidebar ul li.active {
-      background: #00aaff;
-      color: #fff;
-      border-left: 4px solid #ffffff;
-    }
+.toolbar button {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
 
-    .sidebar ul li.active i {
-      color: #fff;
-    }
+.toolbar button.btn-warning {
+  background: #f39c12;
+  color: #fff;
+}
 
-    .sidebar ul li a {
-      text-decoration: none;
-      color: inherit;
-      flex: 1;
-    }
+.toolbar button.btn-warning:hover {
+  background: #d68910;
+}
 
-    .section-title {
-      margin: 20px 10px 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 1px;
-    }
+.toolbar button.btn-danger {
+  background: #c0392b;
+  color: #fff;
+}
 
-    .dropdown-container {
-      display: none;
-      list-style: none;
-      padding-left: 25px;
-    }
+.toolbar button.btn-danger:hover {
+  background: #962d22;
+}
 
-    .dropdown-container li {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      color: #ddd;
-    }
+@media screen and (max-width:768px) {
+  .reports-grid {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+  
+  .toolbar input {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
 
-    .dropdown-container li:hover {
-      background: #3a4c66;
-      color: #fff;
-    }
-
-    .dropdown-btn .arrow {
-      margin-left: auto;
-      transition: transform 0.3s;
-    }
-
-    .dropdown-btn.active .arrow {
-      transform: rotate(180deg);
-    }
-
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
-    }
-.main-content{margin-left:220px;padding:20px;width:calc(100% - 220px);display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-.report-box{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 6px rgba(0,0,0,.1);transition:transform .2s,box-shadow .2s;cursor:pointer;}
-.report-box:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,.2);}
-.report-box i{font-size:24px;margin-bottom:10px;color:#2980b9;}
-.report-box h3{margin:0;font-size:18px;}
-.modal{display:none;position:fixed;z-index:100;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,.5);}
-.modal-content{background:#fff;margin:50px auto;padding:20px;border-radius:10px;width:90%;max-height:80vh;overflow-y:auto;position:relative;}
-.close{color:#aaa;float:right;font-size:28px;font-weight:bold;cursor:pointer;}
-.close:hover{color:black;}
-table{width:100%;border-collapse:collapse;margin-top:15px;}
-th,td{border:1px solid #ccc;padding:8px;text-align:left;}
-th{background:#2980b9;color:#fff;position:sticky;top:0;}
-tr:nth-child(even){background:#f2f2f2;}
-.toolbar input{padding:6px 10px;border-radius:5px;border:1px solid #ccc;margin-right:5px;}
-.toolbar button{padding:6px 10px;border-radius:5px;border:none;cursor:pointer;margin-right:5px;}
-.toolbar button.btn-warning{background:#f39c12;color:#fff;}
-.toolbar button.btn-warning:hover{background:#d68910;}
-.toolbar button.btn-danger{background:#c0392b;color:#fff;}
-.toolbar button.btn-danger:hover{background:#962d22;}
-@media screen and (max-width:768px){.main-content{margin-left:0;width:100%;grid-template-columns:1fr;padding:15px;}.toolbar input{width:100%;margin-bottom:5px;}}
 /* Colored report boxes */
-.report-box:nth-child(2) { background: #ff6b6b; color: #fff; }   /* red */
-.report-box:nth-child(3) { background: #4ecdc4; color: #fff; }   /* teal */
-.report-box:nth-child(4) { background: #45b7d1; color: #fff; }   /* blue */
-.report-box:nth-child(5) { background: #feca57; color: #111; }   /* yellow */
-.report-box:nth-child(6) { background: #5f27cd; color: #fff; }   /* purple */
-.report-box:nth-child(7) { background: #10ac84; color: #fff; }   /* green */
-.report-box:nth-child(8) { background: #ff9f43; color: #111; }   /* orange */
-.report-box:nth-child(9) { background: #1dd1a1; color: #fff; }   /* mint */
-.report-box:nth-child(10){ background: #576574; color: #fff; }   /* gray */
-.report-box:nth-child(11){ background: #341f97; color: #fff; }   /* dark purple */
-.report-box:nth-child(12){ background: #54a0ff; color: #fff; }   /* sky blue */
-.report-box:nth-child(13){ background: #00d2d3; color: #fff; }   /* aqua */
-.report-box:nth-child(14){ background: #ee5253; color: #fff; }   /* coral red */
-.report-box:nth-child(15){ background: #2e86de; color: #fff; }   /* cobalt */
-.report-box:nth-child(16){ background: #222f3e; color: #fff; }   /* dark */
-.report-box:nth-child(17){ background: #ffb142; color: #111; }   /* amber */
-.report-box:nth-child(18){ background: #009432; color: #fff; }   /* emerald */
-.report-box:nth-child(19){ background: #e58e26; color: #111; }   /* golden */
-.report-box:nth-child(20){ background: #c8d6e5; color: #111; }   /* light gray */
-
-/* make icons adapt to white/black */
-.report-box i { color: inherit; }
+.report-box:nth-child(1) { background: #ff6b6b; color: #fff; }   /* red */
+.report-box:nth-child(2) { background: #4ecdc4; color: #fff; }   /* teal */
+.report-box:nth-child(3) { background: #45b7d1; color: #fff; }   /* blue */
+.report-box:nth-child(4) { background: #feca57; color: #111; }   /* yellow */
+.report-box:nth-child(5) { background: #5f27cd; color: #fff; }   /* purple */
+.report-box:nth-child(6) { background: #10ac84; color: #fff; }   /* green */
+.report-box:nth-child(7) { background: #ff9f43; color: #111; }   /* orange */
+.report-box:nth-child(8) { background: #1dd1a1; color: #fff; }   /* mint */
+.report-box:nth-child(9) { background: #576574; color: #fff; }   /* gray */
+.report-box:nth-child(10){ background: #341f97; color: #fff; }   /* dark purple */
+.report-box:nth-child(11){ background: #54a0ff; color: #fff; }   /* sky blue */
+.report-box:nth-child(12){ background: #00d2d3; color: #fff; }   /* aqua */
+.report-box:nth-child(13){ background: #ee5253; color: #fff; }   /* coral red */
+.report-box:nth-child(14){ background: #2e86de; color: #fff; }   /* cobalt */
+.report-box:nth-child(15){ background: #222f3e; color: #fff; }   /* dark */
+.report-box:nth-child(16){ background: #ffb142; color: #111; }   /* amber */
+.report-box:nth-child(17){ background: #009432; color: #fff; }   /* emerald */
+.report-box:nth-child(18){ background: #e58e26; color: #111; }   /* golden */
+.report-box:nth-child(19){ background: #c8d6e5; color: #111; }   /* light gray */
 
 /* Logo */
 .sidebar img {
@@ -215,62 +548,72 @@ tr:nth-child(even){background:#f2f2f2;}
 </head>
 <body>
 
-<!-- Sidebar (unchanged) -->
-<div class="sidebar">
-        <img src="/images/Logo.png" alt="Logo">
-  <h2>PREFECT</h2>  <ul>
-    <div class="section-title">Main</div>
-    <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-    <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Student List</a></li>
-    <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parent List</a></li>
-    <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Adviser</a></li>
-
-    <li class="dropdown-btn"><i class="fas fa-book"></i> Violations <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('violation.records') }}">Violation Record</a></li>
-      <li><a href="{{ route('violation.appointments') }}">Violation Appointments</a></li>
-      <li><a href="{{ route('violation.anecdotals') }}">Violation Anecdotal</a></li>
+<!-- Sidebar -->
+  <div class="sidebar">
+    <img src="/images/Logo.png" alt="Logo">
+    <h2>Prefect</h2>
+    <ul>
+      <li><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+      <li><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Students</a></li>
+      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parents</a></li>
+      <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Advisers</a></li>
+      <li><a href="{{ route('violation.records') }}"><i class="fas fa-book"></i> Violations</a></li>
+      <li><a href="{{ route('people.complaints') }}"><i class="fas fa-comments"></i>Complaints</a></li>
+      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
+      <li class="active"><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
     </ul>
-
-    <li class="dropdown-btn"><i class="fas fa-comments"></i> Complaints <i class="fas fa-caret-down arrow"></i></li>
-    <ul class="dropdown-container">
-      <li><a href="{{ route('people.complaints') }}">Complaints</a></li>
-      <li><a href="{{ route('complaints.appointments') }}">Complaints Appointments</a></li>
-      <li><a href="{{ route('complaints.anecdotals') }}">Complaints Anecdotal</a></li>
-    </ul>
-
-    <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-    <li class="active"><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-    <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-  </ul>
-</div>
-
- <div class="main-content">
-  <!-- Page Header -->
-  <div class="page-header">
-    <h1>REPORTS</h1>
   </div>
-  <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
-  <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
-  <div class="report-box" data-modal="modal3"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
-  <div class="report-box" data-modal="modal4"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
-  <div class="report-box" data-modal="modal5"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div>
-  <div class="report-box" data-modal="modal6"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
-  <div class="report-box" data-modal="modal7"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
-  <div class="report-box" data-modal="modal8"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
-  <div class="report-box" data-modal="modal9"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
-  <div class="report-box" data-modal="modal10"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
-  <div class="report-box" data-modal="modal11"><i class="fas fa-phone-alt"></i><h3>Parent Contact Information for Students with Active Violations</h3></div>
-  <div class="report-box" data-modal="modal12"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
-  <div class="report-box" data-modal="modal13"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div>
-  <div class="report-box" data-modal="modal14"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
-  <div class="report-box" data-modal="modal15"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
-  <div class="report-box" data-modal="modal16"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
-  <div class="report-box" data-modal="modal17"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div>
-  <div class="report-box" data-modal="modal18"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
-  <div class="report-box" data-modal="modal19"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
-</div>
 
+ <!-- ✅ Main content area (for child pages) -->
+  <main class="main-content">
+     <!-- ======= HEADER ======= -->
+  <header class="main-header">
+    <div class="header-left">
+      <h2>Student Violation Tracking System</h2>
+    </div>
+    
+    <div class="header-right">
+      <div class="user-info" onclick="toggleProfileDropdown()">
+        <img src="/images/user.jpg" alt="User">
+        <span>{{ Auth::user()->name }}</span>
+        <i class="fas fa-caret-down"></i>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <a href="{{ route('profile.settings') }}">Profile</a>
+      </div>
+    </div>
+  </header>
+
+    @yield('content')
+    
+    <!-- Small Centered Reports Title -->
+    <div class="reports-title-container">
+      <h3>REPORTS</h3>
+    </div>
+    
+    <!-- Report Boxes Grid (EXACTLY AS BEFORE) -->
+    <div class="reports-grid">
+      <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
+      <div class="report-box" data-modal="modal2"><i class="fas fa-book"></i><h3>Anecdotal Records per Violation Case</h3></div>
+      <div class="report-box" data-modal="modal3"><i class="fas fa-calendar-check"></i><h3>Appointments Scheduled for Complaints</h3></div>
+      <div class="report-box" data-modal="modal4"><i class="fas fa-calendar-alt"></i><h3>Appointments Scheduled for Violation Cases</h3></div>
+      <div class="report-box" data-modal="modal5"><i class="fas fa-user-tie"></i><h3>Complaint Records by Adviser</h3></div>
+      <div class="report-box" data-modal="modal6"><i class="fas fa-file-alt"></i><h3>Complaint Records with Complainant and Respondent</h3></div>
+      <div class="report-box" data-modal="modal7"><i class="fas fa-clock"></i><h3>Complaints Filed within the Last 30 Days</h3></div>
+      <div class="report-box" data-modal="modal8"><i class="fas fa-chart-bar"></i><h3>Common Offenses by Frequency</h3></div>
+      <div class="report-box" data-modal="modal9"><i class="fas fa-exclamation-triangle"></i><h3>List of Violators with Repeat Offenses</h3></div>
+      <div class="report-box" data-modal="modal10"><i class="fas fa-gavel"></i><h3>Offenses and Their Sanction Consequences</h3></div>
+      <div class="report-box" data-modal="modal11"><i class="fas fa-phone-alt"></i><h3>Parent Contact Information for Students with Active Violations</h3></div>
+      <div class="report-box" data-modal="modal12"><i class="fas fa-chart-line"></i><h3>Sanction Trends Across Time Periods</h3></div>
+      <div class="report-box" data-modal="modal13"><i class="fas fa-chalkboard-teacher"></i><h3>Students and Their Class Advisers</h3></div>
+      <div class="report-box" data-modal="modal14"><i class="fas fa-user-graduate"></i><h3>Students and Their Parents</h3></div>
+      <div class="report-box" data-modal="modal15"><i class="fas fa-user-shield"></i><h3>Students with Both Violation and Complaint Records</h3></div>
+      <div class="report-box" data-modal="modal16"><i class="fas fa-user-friends"></i><h3>Students with the Most Violation Records</h3></div>
+      <div class="report-box" data-modal="modal17"><i class="fas fa-layer-group"></i><h3>Summary of Violations per Grade Level</h3></div>
+      <div class="report-box" data-modal="modal18"><i class="fas fa-users"></i><h3>Violation Records and Assigned Adviser</h3></div>
+      <div class="report-box" data-modal="modal19"><i class="fas fa-exclamation-circle"></i><h3>Violation Records with Violator Information</h3></div>
+    </div>
 
 <!-- Modals -->
 @for($i=1; $i<=20; $i++)
@@ -284,7 +627,6 @@ tr:nth-child(even){background:#f2f2f2;}
       <button class="btn btn-warning" onclick="printModal('modal{{ $i }}')"><i class="fa fa-print"></i> Print</button>
       <button class="btn btn-danger" onclick="exportCSV('modal{{ $i }}')"><i class="fa fa-file-export"></i> Export CSV</button>
     </div>
-
 
 <!-- NOTE: table id is table-{{ $i }} -->
 <h2 class="text-xl font-semibold mb-3 text-center">
@@ -340,7 +682,6 @@ tr:nth-child(even){background:#f2f2f2;}
         @case(17)
             Summary of Violations per Grade Level
             @break
-
         @case(18)
             Violation Records and Assigned Adviser
             @break
@@ -355,7 +696,6 @@ tr:nth-child(even){background:#f2f2f2;}
     @switch($i)
         @case(1)
         <tr>
-
             <th>Complainant Name</th>
             <th>Respondent Name</th>
             <th>Solution</th>
@@ -416,7 +756,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(7)
         <tr>
-
             <th>Complainant Name</th>
             <th>Respondent Name</th>
             <th>Offense Type</th>
@@ -427,7 +766,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(8)
         <tr>
-
             <th>Offense Type</th>
             <th>Description</th>
             <th>Total Occurrences</th>
@@ -466,7 +804,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(12)
         <tr>
-
             <th>Offense Type</th>
             <th>Sanction Consequences</th>
             <th>Month and Year</th>
@@ -519,7 +856,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(18)
         <tr>
-
             <th>Student Name</th>
             <th>Adviser Name</th>
             <th>Type of Offense</th>
@@ -531,7 +867,6 @@ tr:nth-child(even){background:#f2f2f2;}
 
         @case(19)
         <tr>
-
             <th>Student Name</th>
             <th>Offense Type</th>
             <th>Sanction</th>
@@ -540,7 +875,6 @@ tr:nth-child(even){background:#f2f2f2;}
             <th>Violation Time</th>
         </tr>
         @break
-
     @endswitch
   </thead>
   <tbody></tbody>
@@ -549,9 +883,7 @@ tr:nth-child(even){background:#f2f2f2;}
 </div>
 @endfor
 
-
 <script>
-
 /* dropdown */
 document.querySelectorAll('.dropdown-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -579,7 +911,6 @@ async function openReportModal(reportId) {
             data.forEach(row => {
                 tbody.innerHTML += `
                     <tr>
-
                         <td>${row.student_name}</td>
                         <td>${row.offense_type}</td>
                         <td>${row.sanction}</td>
@@ -590,56 +921,55 @@ async function openReportModal(reportId) {
                 `;
             });
         }
-            else if (reportId === 2) {
-    data.forEach(row => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${row.student_name}</td>
-                <td>${row.parent_name}</td>
-                <td>${row.parent_contact_info}</td>
-            </tr>
-        `;
-    });
-}
-else if (reportId === 3) {
-    data.forEach(row => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${row.complainant_name}</td>
-                <td>${row.respondent_name}</td>
-                <td>${row.incident_description}</td>
-                <td>${row.complaint_date}</td>
-                <td>${row.complaint_time}</td>
-            </tr>
-        `;
-    });
-}
-else if (reportId === 4) {
-    data.forEach(row => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${row.offense_type}</td>
-                <td>${row.offense_description}</td>
-                <td>${row.sanction_consequences}</td>
-            </tr>
-        `;
-    });
-}
-else if (reportId === 5) {
-    data.forEach(row => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${row.student_name}</td>
-                <td>${row.adviser_name}</td>
-                <td>${row.type_of_offense}</td>
-                <td>${row.violation_date}</td>
-                <td>${row.violation_time}</td>
-                <td>${row.incident_description}</td>
-            </tr>
-        `;
-    });
-}
-
+        else if (reportId === 2) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.parent_name}</td>
+                        <td>${row.parent_contact_info}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 3) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.complainant_name}</td>
+                        <td>${row.respondent_name}</td>
+                        <td>${row.incident_description}</td>
+                        <td>${row.complaint_date}</td>
+                        <td>${row.complaint_time}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 4) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.offense_type}</td>
+                        <td>${row.offense_description}</td>
+                        <td>${row.sanction_consequences}</td>
+                    </tr>
+                `;
+            });
+        }
+        else if (reportId === 5) {
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.adviser_name}</td>
+                        <td>${row.type_of_offense}</td>
+                        <td>${row.violation_date}</td>
+                        <td>${row.violation_time}</td>
+                        <td>${row.incident_description}</td>
+                    </tr>
+                `;
+            });
+        }
         else if (reportId === 6) {
             data.forEach(row => {
                 tbody.innerHTML += `
@@ -829,8 +1159,6 @@ else if (reportId === 5) {
     }
 }
 
-
-
 /* attach event to boxes (report tiles) */
 document.querySelectorAll('.report-box').forEach(box=>{
   box.addEventListener('click', ()=> openReportModal(box.dataset.modal.replace('modal','')));
@@ -902,6 +1230,21 @@ function logout() {
     })
     .catch(error => console.error('Logout failed:', error));
 }
+
+function toggleProfileDropdown() {
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.classList.toggle('active');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('profileDropdown');
+  const userInfo = document.querySelector('.user-info');
+  
+  if (!userInfo.contains(event.target) && !dropdown.contains(event.target)) {
+    dropdown.classList.remove('active');
+  }
+});
 </script>
 </body>
 </html>
