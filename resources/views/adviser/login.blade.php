@@ -116,6 +116,7 @@
             animation: fadeIn 0.8s ease-out;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-left: 80px;
+            position: relative;
         }
         .login-card:hover {
             transform: translateY(-4px);
@@ -329,18 +330,7 @@
             text-shadow: 0 0 10px rgba(79,172,254,0.5);
         }
         
-        .attempts-counter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 14px;
-            color: rgba(255,255,255,0.8);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
+        /* Hidden attempts counter - removed from modal */
         
         .modal-actions {
             margin-top: 20px;
@@ -460,7 +450,7 @@
 
     <!-- Login Card shifted slightly right -->
     <div class="login-card">
-        <div class="attempts-counter" id="attemptsCounter">Attempts: 0/3</div>
+        <!-- Removed the attempts counter from the login form -->
         
         <div class="login-header">
             <img src="{{ asset('images/logo.png') }}" alt="Logo">
@@ -558,7 +548,6 @@ const password = document.getElementById('password');
 const emailError = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
 const loginBtn = document.getElementById('loginBtn');
-const attemptsCounter = document.getElementById('attemptsCounter');
 const attemptsModal = document.getElementById('attemptsModal');
 const successModal = document.getElementById('successModal');
 const countdownDisplay = document.getElementById('countdown');
@@ -567,7 +556,6 @@ const okBtn = document.getElementById('okBtn');
 // Load attempts from localStorage if available
 if (localStorage.getItem('loginAttempts')) {
     loginAttempts = parseInt(localStorage.getItem('loginAttempts'));
-    updateAttemptsCounter();
 }
 
 // Check if user is still in lockout period
@@ -575,11 +563,6 @@ const lockoutEnd = localStorage.getItem('lockoutEnd');
 if (lockoutEnd && new Date().getTime() < parseInt(lockoutEnd)) {
     const remainingTime = Math.ceil((parseInt(lockoutEnd) - new Date().getTime()) / 1000);
     startLockout(remainingTime);
-}
-
-function updateAttemptsCounter() {
-    attemptsCounter.textContent = `Attempts: ${loginAttempts}/${maxAttempts}`;
-    localStorage.setItem('loginAttempts', loginAttempts);
 }
 
 function startLockout(seconds) {
@@ -603,7 +586,6 @@ function startLockout(seconds) {
             loginBtn.disabled = false;
             loginBtn.textContent = 'Log In';
             loginAttempts = 0;
-            updateAttemptsCounter();
             localStorage.removeItem('lockoutEnd');
         }
     }, 1000);
@@ -673,14 +655,13 @@ loginForm.addEventListener('submit', function(e) {
         if (data.success) {
             // Reset attempts on successful login
             loginAttempts = 0;
-            updateAttemptsCounter();
             localStorage.removeItem('lockoutEnd');
             
             // Show success message before redirecting
             showSuccessMessage(data.redirect);
         } else {
             loginAttempts++;
-            updateAttemptsCounter();
+            localStorage.setItem('loginAttempts', loginAttempts);
             
             passwordError.textContent = data.message;
             passwordError.classList.add('visible');
@@ -698,7 +679,7 @@ loginForm.addEventListener('submit', function(e) {
     })
     .catch(() => {
         loginAttempts++;
-        updateAttemptsCounter();
+        localStorage.setItem('loginAttempts', loginAttempts);
         
         passwordError.textContent = "Something went wrong. Please try again.";
         passwordError.classList.add('visible');
