@@ -180,7 +180,7 @@
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
     })
-    .then(response => { if(response.ok){ window.location.href = "{{ route('auth.login') }}"; } })
+    .then(response => { if(response.ok){ window.location.href = "{{ route('login') }}"; } })
     .catch(error => console.error('Logout failed:', error));
   }
 
@@ -212,7 +212,7 @@
               yesText: 'OK',
               noText: null,
               onYes: () => {
-                window.location.href = "{{ route('auth.login') }}";
+                window.location.href = "{{ route('login') }}";
               }
             });
           }

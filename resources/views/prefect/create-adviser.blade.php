@@ -54,7 +54,7 @@
     </div>
 
     <!-- Adviser Form -->
-    <form id="violationForm" method="POST" action="{{ route('adviser.store') }}">
+    <form id="violationForm" method="POST" action="{{ route('advisers.store') }}">
         @csrf
         <div class="parents-wrapper" id="parentsWrapper">
             <!-- Adviser forms will be dynamically added here -->

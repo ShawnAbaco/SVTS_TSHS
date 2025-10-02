@@ -22,6 +22,10 @@ public function index(Request $request)
 
     return view('prefect.adviser', compact('advisers'));
 }
+ public function createAdviser()
+    {
+        return view('prefect.create-adviser'); // Blade file
+    }
 
  public function store(Request $request)
     {

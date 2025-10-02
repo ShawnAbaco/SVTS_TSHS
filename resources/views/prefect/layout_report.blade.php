@@ -13,22 +13,52 @@
 </head>
 <body>
 
+
 <!-- Sidebar -->
   <div class="sidebar">
     <img src="/images/Logo.png" alt="Logo">
     <h2>Prefect</h2>
-    <ul>
+ <ul>
+  <li class="{{ request()->routeIs('prefect.dashboard') ? 'active' : '' }}">
+    <a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a>
+  </li>
 
-      <li ><a href="{{ route('prefect.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
-      <li class="active"><a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Students</a></li>
-      <li><a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parents</a></li>
-      <li><a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Advisers</a></li>
-      <li><a href="{{ route('violation.records') }}"><i class="fas fa-book"></i> Violations</a></li>
-        <li><a href="{{ route('people.complaints') }}"><i class="fas fa-comments"></i>Complaints</a></li>
-      <li><a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a></li>
-      <li><a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a></li>
-      <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
-    </ul>
+  <li class="{{ request()->routeIs('parent.lists') ? 'active' : '' }}">
+    <a href="{{ route('parent.lists') }}"><i class="fas fa-users"></i> Parents</a>
+  </li>
+
+  <li class="{{ request()->routeIs('student.management') ? 'active' : '' }}">
+    <a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Students</a>
+  </li>
+
+  <li class="{{ request()->routeIs('prefect.adviser') ? 'active' : '' }}">
+    <a href="{{ route('prefect.adviser') }}"><i class="fas fa-users"></i> Advisers</a>
+  </li>
+
+  <li class="{{ request()->routeIs('prefect.violation') ? 'active' : '' }}">
+    <a href="{{ route('prefect.violation') }}"><i class="fas fa-book"></i> Violations</a>
+  </li>
+
+  <li class="{{ request()->routeIs('prefect.complaints') ? 'active' : '' }}">
+    <a href="{{ route('prefect.complaints') }}"><i class="fas fa-comments"></i> Complaints</a>
+  </li>
+
+  <li class="{{ request()->routeIs('offenses.sanctions') ? 'active' : '' }}">
+    <a href="{{ route('offenses.sanctions') }}"><i class="fas fa-exclamation-triangle"></i> Offense & Sanctions</a>
+  </li>
+
+  <li class="{{ request()->routeIs('report.generate') ? 'active' : '' }}">
+    <a href="{{ route('report.generate') }}"><i class="fas fa-chart-line"></i> Reports</a>
+  </li>
+
+<li>
+  <a href="#" onclick="event.preventDefault(); logout();">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </a>
+</li>
+
+</ul>
+
   </div>
 
 
@@ -48,7 +78,7 @@
         <i class="fas fa-caret-down"></i>
       </div>
       <div class="profile-dropdown" id="profileDropdown">
-        <a href="{{ route('profile.settings') }}">Profile</a>
+        {{-- <a href="{{ route('profile.settings') }}">Profile</a> --}}
       </div>
     </div>
   </header>
@@ -101,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
     .then(response => {
-      if (response.ok) window.location.href = "{{ route('auth.login') }}";
+      if (response.ok) window.location.href = "{{ route('login') }}";
     })
     .catch(err => console.error('Logout failed:', err));
   };

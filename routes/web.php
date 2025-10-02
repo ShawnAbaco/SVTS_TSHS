@@ -1,208 +1,107 @@
 <?php
 
-use App\Http\Controllers\ViolationAppointmentController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Prefect\PStudentController;
-use App\Http\Controllers\AdviserController;
-use App\Http\Controllers\AdviserCRUDController;
-use App\Http\Controllers\ComplaintAppointmentController;
-use App\Http\Controllers\PrefectController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\PrefectReportController;
-use App\Http\Controllers\ComplaintController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\ParentController;
-use App\Http\Controllers\ViolationAnecdotalController;
-use App\Http\Controllers\ViolationRecordController;
 use App\Http\Controllers\AuthController;
+
+// Prefect Controllers
+use App\Http\Controllers\Prefect\PDashboardController;
+use App\Http\Controllers\Prefect\PLogoutController;
+use App\Http\Controllers\Prefect\PStudentController;
 use App\Http\Controllers\Prefect\PAdviserController;
-use App\Http\Controllers\Prefect\PComplaintController;
-use App\Http\Controllers\Prefect\POffenseSanctionController;
 use App\Http\Controllers\Prefect\PParentController;
 use App\Http\Controllers\Prefect\PViolationController;
+use App\Http\Controllers\Prefect\PComplaintController;
+use App\Http\Controllers\Prefect\POffenseSanctionController;
+use App\Http\Controllers\Prefect\PReportController;
+
+// Adviser Controllers
+use App\Http\Controllers\Adviser\ADashboardController;
+use App\Http\Controllers\Adviser\ALogoutController;
+use App\Http\Controllers\Adviser\AStudentController;
+use App\Http\Controllers\Adviser\AParentController;
+use App\Http\Controllers\Adviser\AViolationController;
+use App\Http\Controllers\Adviser\AComplaintController;
+use App\Http\Controllers\Adviser\AOffenseSanctionController;
+use App\Http\Controllers\Adviser\AReportController;
+
 
 Route::get('/', function () {
     return view('adviser.login');
 });
-    Route::get('/adviser/login', [AdviserController::class, 'showLoginForm'])->name('adviser.login');
-    Route::post('/adviser/login', [AuthController::class, 'login'])->name('auth.login');
-    Route::get('/login', [AdviserController::class, 'showLoginForm'])->name('login');
 
+
+// ===================== Authentication Routes =====================
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/', [AuthController::class, 'login'])->name('login');
 
 // ===================== Prefect Routes =====================
 Route::prefix('prefect')->group(function () {
-    // Login / Logout
-    Route::post('/logout', [PrefectController::class, 'logout'])->name('prefect.logout');
+    // Logout
+    Route::post('/logout', [PLogoutController::class, 'logout'])->name('prefect.logout');
 
     // Protected routes
     Route::middleware('auth:prefect')->group(function () {
-        Route::get('/dashboard', [PrefectController::class, 'dashboard'])->name('prefect.dashboard');
-        // Route::post('/advisers', [PrefectController::class, 'createAdviser'])->name('prefect.create.adviser');
+        // Dashboard
+        Route::get('/dashboard', [PDashboardController::class, 'dashboard'])->name('prefect.dashboard');
+
+        // Management Routes
+        Route::get('/studentmanagement', [PStudentController::class, 'studentmanagement'])->name('student.management');
+        Route::get('/violation', [PViolationController::class, 'index'])->name('prefect.violation');
+        Route::get('/parentlists', [PParentController::class, 'parentlists'])->name('parent.lists');
+        Route::get('/adviser', [PAdviserController::class, 'index'])->name('prefect.adviser');
+        Route::get('/offensesandsanctions', [POffenseSanctionController::class, 'index'])->name('offenses.sanctions');
+
+        // Student Routes
+        Route::get('/create/student', [PStudentController::class, 'createStudent'])->name('create.student');
+        Route::post('/students/store', [PStudentController::class, 'store'])->name('students.store');
+        Route::put('/students/update/{id}', [PStudentController::class, 'update'])->name('students.update');
+        Route::get('/students/search', [PStudentController::class, 'search'])->name('students.search');
+
+        // Adviser Routes
+        Route::get('/create/adviser', [PAdviserController::class, 'createAdviser'])->name('create.adviser');
         Route::post('/advisers/store', [PAdviserController::class, 'store'])->name('advisers.store');
         Route::put('/advisers/update', [PAdviserController::class, 'update'])->name('advisers.update');
-Route::get('/students/search', [PStudentController::class, 'search'])->name('students.search');
 
-// Route::put('/violations/update/{id}', [PViolationController::class, 'update'])->name('violations.update');
-// Violation Records
-    Route::get('violations', [PViolationController::class, 'index'])->name('violations.index');
-
-    // Show create form
-    Route::get('violations/create', [PViolationController::class, 'create'])->name('violations.create');
-
-    // Store violations
-    Route::post('violations/store', [PViolationController::class, 'store'])->name('violations.store');
-
-    // AJAX: search students
-    Route::post('violations/search-students', [PViolationController::class, 'searchStudents'])->name('violations.search-students');
-
-    // AJAX: search offenses
-    Route::post('violations/search-offenses', [PViolationController::class, 'searchOffenses'])->name('violations.search-offenses');
-        // update violation
-   // Update single violation
-    Route::put('/violations/update/{violationId}', [PViolationController::class, 'update'])
-        ->name('violations.update');
-
-// complaint index
-    Route::get('/complaints', [PComplaintController::class, 'index'])->name('prefect.complaints');
-
-
-// Update complaint (needs {id})
-Route::put('complaints/{id}', [PComplaintController::class, 'update'])->name('complaints.update');
-
-    Route::delete('complaints/{id}', [PComplaintController::class, 'destroy'])->name('complaints.destroy');
-
-
-
-
-
-// new student store
-Route::post('/students/store', [PStudentController::class, 'store'])->name('students.store');
-
-
-
-    // Create Complaint Form
-    Route::get('/complaints/create', [PComplaintController::class, 'create'])->name('complaints.create');
-
-    // Store Complaints
-Route::post('/complaints/store', [PComplaintController::class, 'store'])->name('complaints.store');
-
-
-    Route::get('/complaints/search-students1', [PComplaintController::class, 'searchStudents'])->name('prefect.students.search');
-
-    // AJAX: Search students for complainant/respondent
-    Route::post('/complaints/search-students', [PComplaintController::class, 'searchStudents'])
-        ->name('complaints.search-students');
-
-    Route::get('/complaints/search-offenses1', [PComplaintController::class, 'searchOffenses'])->name('prefect.offenses.search');
-
-    // AJAX: Search offenses
-    Route::post('/complaints/search-offenses', [PComplaintController::class, 'searchOffenses'])
-        ->name('complaints.search-offenses');
-
-    // AJAX: Get sanction for offense (optional)
-    Route::get('/complaints/get-sanction', [PComplaintController::class, 'getSanction'])
-        ->name('complaints.get-sanction');
-
-
-
-
-
-
-        // Management
-        Route::get('/studentmanagement', [PrefectController::class, 'studentmanagement'])->name('student.management');
-        Route::get('/violation', [PViolationController::class, 'index'])->name('prefect.violation'); // new routes
-        Route::get('/parentlists', [PrefectController::class, 'parentlists'])->name('parent.lists');
-        Route::get('/adviser', [PAdviserController::class, 'index'])->name('prefect.adviser'); // NEW ROUTE
-
-
-        // Appointments
-        Route::get('/violationappointments', [PrefectController::class, 'violationappointments'])->name('violation.appointments');
-        Route::post('violation-appointments/store', [PrefectController::class, 'storeViolationAppointment'])->name('violation.appointments.store');
-
-        Route::get('/complaintsappointments', [PrefectController::class, 'complaintsappointments'])->name('complaints.appointments');
-        Route::post('/complaints-appointments', [PrefectController::class, 'complaintAppointmentStore'])->name('complaints.appointments.store');
-        Route::delete('/complaints-appointments/{id}', [PrefectController::class, 'complaintAppointmentDestroy'])->name('complaints.appointments.destroy');
-
-        // Complaints
-        // Route::get('/complaints/{id}/edit', [PrefectController::class, 'complaintEdit'])->name('complaints.edit');
-        // Route::put('/complaints/{id}', [PrefectController::class, 'complaintUpdate'])->name('complaints.update');
-        // Route::delete('/complaints/{id}', [PrefectController::class, 'complaintDestroy'])->name('complaints.destroy');
-
-        // Anecdotals
-        Route::get('/violationanecdotals', [PrefectController::class, 'violationanecdotals'])->name('violation.anecdotals');
-        Route::get('/complaintsanecdotals', [PrefectController::class, 'complaintsanecdotals'])->name('complaints.anecdotals');
-
-        // Reports
-        Route::get('/reportgenerate', [PrefectController::class, 'reportgenerate'])->name('report.generate');
-        Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData'])->name('prefect.reports.data');;
-
-        // diri ang bag o
-        Route::get('/create/parent', [ParentController::class, 'createParent'])->name('create.parent');
+        // Parent Routes
+        Route::get('/create/parent', [PParentController::class, 'createParent'])->name('create.parent');
         Route::post('/parents/store', [PParentController::class, 'store'])->name('parents.store');
-
-        Route::get('/create/student', [StudentController::class, 'createStudent'])->name('create.student');
-        Route::get(uri: '/create/adviser', action: [PrefectController::class, 'createAdviser'])->name('create.adviser');
-
-
-
-        Route::post('/students/bulk-delete', [StudentController::class, 'bulkDestroy'])
-     ->name('students.bulk-destroy');
-
-Route::get('/students/by-parent/{parentId}', [StudentController::class, 'getByParent'])
-     ->name('students.by-parent');
-
-
-        // Parents CRUD
-        Route::get('/parents/create', [PrefectController::class, 'parentCreate'])->name('parent.create');
-        Route::post('/parents', [PrefectController::class, 'parentStore'])->name('parent.store');
-        Route::get('/parents/{parent}/edit', [PrefectController::class, 'parentEdit'])->name('parent.edit');
-        // Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
-        Route::delete('/parents/{parent}', [PrefectController::class, 'parentDestroy'])->name('parent.destroy');
-
-        // new parent crud
         Route::put('/parents/update/{id}', [PParentController::class, 'update'])->name('parents.update');
+        
         // Parent Archive Routes
-        Route::post('/parents/archive', [ParentController::class, 'archive'])->name('parents.archive');
-        Route::get('/parents/archived', [ParentController::class, 'archived'])->name('parents.archived');
-        Route::post('/parents/restore', [ParentController::class, 'restore'])->name('parents.restore');
-        Route::post('/parents/destroy-permanent', [ParentController::class, 'destroyPermanent'])->name('parents.destroy.permanent');
-        Route::get('/parents', [ParentController::class, 'parentList'])->name('parents.list');
-        Route::get('/parents/counts', [ParentController::class, 'archivedCount'])->name('parents.counts');
+        Route::post('/parents/archive', [PParentController::class, 'archive'])->name('parents.archive');
+        Route::get('/parents/archived', [PParentController::class, 'archived'])->name('parents.archived');
+        Route::post('/parents/restore', [PParentController::class, 'restore'])->name('parents.restore');
+        Route::post('/parents/destroy-permanent', [PParentController::class, 'destroyPermanent'])->name('parents.destroy.permanent');
+        Route::get('/parents/counts', [PParentController::class, 'archivedCount'])->name('parents.counts');
 
-        // Students
-        Route::delete('/students/{student}', [PrefectController::class, 'destroy'])->name('student.delete');
-        Route::patch('/students/bulk-clear-status', [StudentController::class, 'bulkClearStatus'])
-    ->name('prefect.students.bulkClearStatus');
-    Route::patch('/students/bulk-update-status', [StudentController::class, 'restoreStudents'])
-    ->name('prefect.students.bulkRestoreStatus');
-    Route::put('/students/update/{id}', [PStudentController::class, 'update'])->name('students.update'); //NEW ROUTES
+        // Violation Routes
+        Route::get('/violations', [PViolationController::class, 'index'])->name('violations.index');
+        Route::get('/violations/create', [PViolationController::class, 'create'])->name('violations.create');
+        Route::post('/violations/store', [PViolationController::class, 'store'])->name('violations.store');
+        Route::put('/violations/update/{violationId}', [PViolationController::class, 'update'])->name('violations.update');
+        
+        // Violation AJAX Routes
+        Route::post('/violations/search-students', [PViolationController::class, 'searchStudents'])->name('violations.search-students');
+        Route::post('/violations/search-offenses', [PViolationController::class, 'searchOffenses'])->name('violations.search-offenses');
 
+        // Complaint Routes
+        Route::get('/complaints', [PComplaintController::class, 'index'])->name('prefect.complaints');
+        Route::get('/complaints/create', [PComplaintController::class, 'create'])->name('complaints.create');
+        Route::post('/complaints/store', [PComplaintController::class, 'store'])->name('complaints.store');
+        Route::put('/complaints/{id}', [PComplaintController::class, 'update'])->name('complaints.update');
+        
+        // Complaint AJAX Routes
+        Route::post('/complaints/search-students', [PComplaintController::class, 'searchStudents'])->name('complaints.search-students');
+        Route::get('/complaints/search-students1', [PComplaintController::class, 'searchStudents'])->name('prefect.students.search');
+        Route::post('/complaints/search-offenses', [PComplaintController::class, 'searchOffenses'])->name('complaints.search-offenses');
+        Route::get('/complaints/search-offenses1', [PComplaintController::class, 'searchOffenses'])->name('prefect.offenses.search');
+        Route::get('/complaints/get-sanction', [PComplaintController::class, 'getSanction'])->name('complaints.get-sanction');
 
-
-        // Offenses & Sanctions
-        Route::get('/offensesandsanctions', [POffenseSanctionController::class, 'index'])->name('offenses.sanctions');
+        // Report Routes
+        Route::get('/reportgenerate', [PReportController::class, 'reportgenerate'])->name('report.generate');
+        Route::get('/reports/data/{reportId}', [PReportController::class, 'generateReportData'])->name('prefect.reports.data');
     });
-
-
-    // NEW VIOLATION RECORD CONTROLLER
-    Route::get('/violations/create', [ViolationRecordController::class, 'create'])->name('violations.create');
-// Route::post('/violations', [ViolationRecordController::class, 'store'])->name('violations.store');
-
-Route::post('/violations/search-students', [ViolationRecordController::class, 'searchStudents'])->name('violations.search-students');
-Route::post('/violations/search-offenses', [ViolationRecordController::class, 'searchOffenses'])->name('violations.search-offenses');
-
-Route::get('/violations/get-sanction', [ViolationRecordController::class, 'getSanction'])->name('violations.get-sanction');
-
-// NEW COMPLAINT RECORD CONTROLLER
-Route::get('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');
-Route::post('/complaints/store', [ComplaintController::class, 'store'])->name('complaints.store');
-Route::post('/complaints/search-students', [ComplaintController::class, 'searchStudents'])->name('complaints.search-students');
-Route::post('/complaints/search-types', [ComplaintController::class, 'searchTypes'])->name('complaints.search-types');
-Route::get('/complaints/get-action', [ComplaintController::class, 'getAction'])->name('complaints.get-action');
-
-
 });
-
 
 
 
@@ -210,95 +109,35 @@ Route::get('/complaints/get-action', [ComplaintController::class, 'getAction'])-
 
 // ===================== Adviser Routes =====================
 Route::prefix('adviser')->group(function () {
-    // Login / Logout
-    Route::get('/login', [AdviserController::class, 'showLoginForm'])->name('adviser.login');
-    Route::post('/logout', [AdviserController::class, 'logout'])->name('adviser.logout');
+    // Logout
+    Route::post('/logout', [ALogoutController::class, 'logout'])->name('adviser.logout');
 
     // Protected routes
     Route::middleware('auth:adviser')->group(function () {
-        Route::get('/dashboard', [AdviserController::class, 'dashboard'])->name('adviser.dashboard');
-        Route::get('/violationrecord', [AdviserController::class, 'violationrecord'])->name('violation.record');
-        Route::get('/studentlist', [AdviserController::class, 'studentlist'])->name('student.list');
-        Route::get('/parentlist', [AdviserController::class, 'parentlist'])->name('parent.list');
-        Route::get('/profilesettings', [AdviserController::class, 'profilesettings'])->name('profile.settings');
+        // Dashboard
+        Route::get('/dashboard', [ADashboardController::class, 'dashboard'])->name('adviser.dashboard');
 
-        // Reports
-        Route::get('/adviserreports', [AdviserController::class, 'reports'])->name('adviser.reports');
-        Route::get('/reports/data/{reportId}', [ReportController::class, 'getReportData'])->name('adviser.reports.data');
+        // Management Routes
+        Route::get('/violationrecord', [AViolationController::class, 'violationrecord'])->name('violation.record');
+        Route::get('/studentlist', [AStudentController::class, 'studentlist'])->name('student.list');
+        Route::get('/parentlist', [AParentController::class, 'parentlist'])->name('parent.list');
+        Route::get('/offensesanction', [AOffenseSanctionController::class, 'offensesanction'])->name('offense.sanction');
+        Route::get('/complaintsall', [AComplaintController::class, 'complaintsall'])->name('complaints.all');
 
-        // Live search
-        Route::get('/adviser/parentsearch', [StudentController::class, 'parentsearch'])->name('adviser.parentsearch');
-        Route::get('/student/search', [AdviserController::class, 'studentSearch']);
-        Route::get('/offense/search', [AdviserController::class, 'offenseSearch']);
+        // Student Routes
+        Route::put('/students/update/{id}', [PStudentController::class, 'update'])->name('students.update');
 
-        // CRUD student
-        // Route::post('/students', [StudentController::class, 'store'])->name('students.store');
-        Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
-        Route::delete('/students/{id}/trash', [StudentController::class, 'trash'])->name('students.trash');
-Route::patch('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
-Route::delete('/students/{id}/delete', [StudentController::class, 'forceDelete'])->name('students.forceDelete');
-Route::patch('/students/bulk-update-status', [StudentController::class, 'bulkUpdateStatus'])->name('students.bulkUpdateStatus');
-    Route::put('/students/update/{id}', [PStudentController::class, 'update'])->name('students.update'); // NEW ROUTES
+        // Violation Routes
+        Route::get('/violations/create', [AViolationController::class, 'Acreate'])->name('Aviolations.create');
+        Route::post('/violations', [AViolationController::class, 'Astore'])->name('Aviolations.store');
+        
+        // Violation AJAX Routes
+        Route::post('/violations/search-students', [AViolationController::class, 'AsearchStudents'])->name('Aviolations.search-students');
+        Route::post('/violations/search-offenses', [AViolationController::class, 'AsearchOffenses'])->name('Aviolations.search-offenses');
+        Route::get('/violations/get-sanction', [AViolationController::class, 'AgetSanction'])->name('Aviolations.get-sanction');
 
-
-        // CRUD parent
-        // Route::post('/adviser/parents', [ParentController::class, 'parentStore'])->name('parents.store');
-        // Route::put('/adviser/parents/{id}', [ParentController::class, 'parentUpdate'])->name('parents.update');
-        Route::delete('/adviser/parents/{id}', [ParentController::class, 'destroyParent'])->name('parents.destroy');
-
-
-
-
-
-            // NEW VIOLATION RECORD CONTROLLER ADVISER
-    Route::get('/violations/create', [ViolationRecordController::class, 'Acreate'])->name('Aviolations.create');
-Route::post('/violations', [ViolationRecordController::class, 'Astore'])->name('Aviolations.store');
-
-Route::post('/violations/search-students', [ViolationRecordController::class, 'AsearchStudents'])->name('Aviolations.search-students');
-Route::post('/violations/search-offenses', [ViolationRecordController::class, 'AsearchOffenses'])->name('Aviolations.search-offenses');
-
-Route::get('/violations/get-sanction', [ViolationRecordController::class, 'AgetSanction'])->name('Aviolations.get-sanction');
-
-        // Route::put('/violations/update', [PViolationController::class, 'update'])->name('violations.update');
-
-
-
-
-        // // Violation CRUD
-        // Route::post('/violations', [ViolationRecordController::class, 'storeViolation'])->name('adviser.storeViolation');
-        // Route::put('/violations/{id}', [ViolationRecordController::class, 'updateViolation'])->name('adviser.violations.update');
-        // Route::delete('/violations/{id}', [ViolationRecordController::class, 'destroyViolation'])->name('adviser.violations.destroy');
-
-        // Violation Anecdotal
-        Route::get('/violationanecdotal', [AdviserController::class, 'violationanecdotal'])->name('violation.anecdotal');
-        Route::post('/violation-anecdotal', [ViolationAnecdotalController::class, 'anecdotalStore'])->name('violation.anecdotal.store');
-        Route::put('/violation-anecdotal/{id}', [ViolationAnecdotalController::class, 'anecdotalUpdate'])->name('violation.anecdotal.update');
-        Route::delete('/violation-anecdotal/{id}', [ViolationAnecdotalController::class, 'anecdotalDelete'])->name('violation.anecdotal.delete');
-
-
-
-
-
-        // Complaints
-        Route::get('/complaintsall', [AdviserController::class, 'complaintsall'])->name('complaints.all');
-        Route::get('/complaintsappointment', [AdviserController::class, 'complaintsappointment'])->name('complaints.appointment');
-        Route::post('/complaints/appointment/store', [ComplaintAppointmentController::class, 'storeComplaintsAppointment'])->name('complaints.appointment.store');
-        Route::get('/complaintsanecdotal', [AdviserController::class, 'complaintsanecdotal'])->name('complaints.anecdotal');
-
-        // Violation Appointment
-        Route::get('/violationappointment', [AdviserController::class, 'violationappointment'])->name('violation.appointment');
-        Route::post('/adviser/violation/appointment/store', [ViolationAppointmentController::class, 'storeViolationAppointment'])->name('violation.appointment.store');
-
-        // ARCHIVE
-        Route::put('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
-        Route::get('/students/archived', [StudentController::class, 'archived'])->name('students.archived');
-
-
-        //sms
-        Route::post('/send-sms-to-parent', [ParentController::class, 'sendSms'])
-     ->name('send.sms.to.parent');
-
-        // Offense & Sanction
-        Route::get('/offensesanction', [AdviserController::class, 'offensesanction'])->name('offense.sanction');
+        // Report Routes
+        Route::get('/adviserreports', [AReportController::class, 'reports'])->name('adviser.reports');
+        Route::get('/reports/data/{reportId}', [AReportController::class, 'getReportData'])->name('adviser.reports.data');
     });
 });

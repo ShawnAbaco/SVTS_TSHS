@@ -84,7 +84,7 @@
         <i class="fas fa-caret-down"></i>
       </div>
       <div class="profile-dropdown" id="profileDropdown">
-        <a href="{{ route('profile.settings') }}">Profile</a>
+        {{-- <a href="{{ route('profile.settings') }}">Profile</a> --}}
       </div>
     </div>
   </header>
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
     .then(response => {
-      if (response.ok) window.location.href = "{{ route('auth.login') }}";
+      if (response.ok) window.location.href = "{{ route('login') }}";
     })
     .catch(err => console.error('Logout failed:', err));
   };

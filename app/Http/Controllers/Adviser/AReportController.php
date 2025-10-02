@@ -1,21 +1,33 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Adviser;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Admin;
-use App\Models\Adviser;
-use App\Models\OffensesWithSanction;
-use App\Models\ParentModel;
+use App\Models\Student;
+use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Auth; // Assuming Prefect is authenticated
+use App\Models\OffensesWithSanction;
+use App\Models\ViolationRecord;
 
-class ReportController extends Controller
+class AReportController extends Controller
 {
 
 
+        public function reports()
+    {
+
+        $adviserId = Auth::guard('adviser')->id();
+        $students = Student::where('adviser_id', $adviserId)->with('violations')->get();
+
+        return view('adviser.reports', compact('students'));
+    }
+
+    
+    
 public function getReportData($reportId)
 {
 $data = collect();

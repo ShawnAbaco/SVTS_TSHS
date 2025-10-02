@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('adviser.login');
     }
 
     public function login(Request $request)

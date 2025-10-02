@@ -458,7 +458,7 @@
             <p>Sign in to access your dashboard</p>
         </div>
 
-        <form id="loginForm" action="{{ route('auth.login') }}" method="POST" novalidate>
+        <form id="loginForm" action="{{ route('login') }}" method="POST" novalidate>
             @csrf
             <div class="form-group">
                 <label for="email">Email Address</label>
@@ -645,7 +645,7 @@ loginForm.addEventListener('submit', function(e) {
     if (!valid) return; // stop if fields are invalid
 
     const formData = new FormData(loginForm);
-    fetch("{{ route('adviser.login') }}", {
+    fetch("{{ route('login') }}", {
         method: "POST",
         headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
         body: formData

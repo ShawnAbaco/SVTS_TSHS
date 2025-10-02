@@ -385,7 +385,7 @@
               yesText: 'OK',
               noText: null,
               onYes: () => {
-                window.location.href = "{{ route('auth.login') }}";
+                window.location.href = "{{ route('login') }}";
               }
             });
           }

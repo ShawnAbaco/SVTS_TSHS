@@ -26,7 +26,7 @@
         <i class="fas fa-caret-down"></i>
       </div>
       <div class="profile-dropdown" id="profileDropdown">
-        <a href="{{ route('profile.settings') }}">Profile</a>
+        {{-- <a href="{{ route('profile.settings') }}">Profile</a> --}}
       </div>
     </div>
   </header>
@@ -264,7 +264,7 @@
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
     })
-    .then(response => { if(response.ok){ window.location.href = "{{ route('auth.login') }}"; } })
+    .then(response => { if(response.ok){ window.location.href = "{{ route('login') }}"; } })
     .catch(error => console.error('Logout failed:', error));
   }
 

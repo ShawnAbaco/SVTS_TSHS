@@ -1,13 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Prefect;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Student;
+use App\Models\ParentModel;
 use Illuminate\Support\Facades\DB;
 
-class PrefectReportController extends Controller
+class PReportController extends Controller
 {
 
+public function reportgenerate()
+    {
+        return view('prefect.reportgenerate');
+    }
+
+    
 public function generateReportData($reportId)
 {
     $data = collect();
@@ -367,5 +376,4 @@ case 16: // Students with the Most Violation Records
 
     return response()->json($data);
 }
-
 }

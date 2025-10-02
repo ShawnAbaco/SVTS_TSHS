@@ -13,14 +13,14 @@ class Authenticate extends Middleware
     {
         if (! $request->expectsJson()) {
             if ($request->is('adviser/*')) {
-                return route('adviser.login');
+                return route('login');
             }
 
             if ($request->is('prefect/*')) {
-                return route('prefect.login');
+                return route('login');
             }
 
-            return route('auth.login'); // fallback
+            return route('login'); // fallback
         }
 
         return null;
