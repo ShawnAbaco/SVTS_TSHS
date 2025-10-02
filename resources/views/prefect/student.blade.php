@@ -79,10 +79,13 @@
           <td>{{ $student->student_fname }}</td>
           <td>{{ $student->student_lname }}</td>
           <td>{{ ucfirst($student->student_sex) }}</td>
-          <td>{{ \Carbon\Carbon::parse($student->student_birthdate)->format('Y-m-d') }}</td>
+          <td>{{ \Carbon\Carbon::parse($student->student_birthdate)->format('F j, Y') }}</td>
           <td>{{ $student->student_address }}</td>
           <td>{{ $student->student_contactinfo }}</td>
-          <td>{{ ucfirst($student->status) }}</td>
+          <td><span class="status-badge {{ $student->status === 'active' ? 'status-active' : 'status-inactive' }}">
+              {{ ucfirst($student->status) }}
+          </span>
+          </td>
           <td>
             <button class="btn-primary">✏️ Edit</button>
           </td>

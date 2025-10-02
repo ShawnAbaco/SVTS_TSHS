@@ -136,7 +136,7 @@ Route::post('/complaints/store', [PComplaintController::class, 'store'])->name('
         Route::get('/reportgenerate', [PrefectController::class, 'reportgenerate'])->name('report.generate');
         Route::get('/reports/data/{reportId}', [PrefectReportController::class, 'generateReportData'])->name('prefect.reports.data');;
 
-// diri ang bag o
+        // diri ang bag o
         Route::get('/create/parent', [ParentController::class, 'createParent'])->name('create.parent');
         Route::post('/parents/store', [PParentController::class, 'store'])->name('parents.store');
 
@@ -159,16 +159,21 @@ Route::get('/students/by-parent/{parentId}', [StudentController::class, 'getByPa
         // Route::put('/parents/{parent}', [PrefectController::class, 'parentUpdate'])->name('parent.update');
         Route::delete('/parents/{parent}', [PrefectController::class, 'parentDestroy'])->name('parent.destroy');
 
-// new parent crud
-Route::put('/parents/update/{id}', [PParentController::class, 'update'])->name('parents.update');
-
-
+        // new parent crud
+        Route::put('/parents/update/{id}', [PParentController::class, 'update'])->name('parents.update');
+        // Parent Archive Routes
+        Route::post('/parents/archive', [ParentController::class, 'archive'])->name('parents.archive');
+        Route::get('/parents/archived', [ParentController::class, 'archived'])->name('parents.archived');
+        Route::post('/parents/restore', [ParentController::class, 'restore'])->name('parents.restore');
+        Route::post('/parents/destroy-permanent', [ParentController::class, 'destroyPermanent'])->name('parents.destroy.permanent');
+        Route::get('/parents', [ParentController::class, 'parentList'])->name('parents.list');
+        Route::get('/parents/counts', [ParentController::class, 'archivedCount'])->name('parents.counts');
 
         // Students
         Route::delete('/students/{student}', [PrefectController::class, 'destroy'])->name('student.delete');
         Route::patch('/students/bulk-clear-status', [StudentController::class, 'bulkClearStatus'])
     ->name('prefect.students.bulkClearStatus');
-Route::patch('/students/bulk-update-status', [StudentController::class, 'restoreStudents'])
+    Route::patch('/students/bulk-update-status', [StudentController::class, 'restoreStudents'])
     ->name('prefect.students.bulkRestoreStatus');
     Route::put('/students/update/{id}', [PStudentController::class, 'update'])->name('students.update'); //NEW ROUTES
 
