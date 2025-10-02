@@ -77,8 +77,8 @@
       @php
         $activeParents = $parents->where('status', 'active');
       @endphp
-      
-      @forelse($activeParents as $parent)
+
+      @forelse($parents as $parent)
       <tr data-parent-id="{{ $parent->parent_id }}" data-details="{{ $parent->parent_fname }} {{ $parent->parent_lname }}|{{ $parent->parent_relationship ?? 'N/A' }}|{{ $parent->parent_contactinfo ?? 'N/A' }}|{{ $parent->parent_birthdate ?? 'N/A' }}|{{ $parent->parent_email ?? 'N/A' }}">
         <td><input type="checkbox" class="rowCheckbox" value="{{ $parent->parent_id }}"></td>
         <td>{{ $parent->parent_id }}</td>
@@ -107,11 +107,23 @@
   </table>
 
   <!-- Pagination -->
-  <div class="pagination-wrapper">
+  {{-- <div class="pagination-wrapper">
     <div class="pagination-summary">
       Showing {{ $activeParents->count() ? '1' : '0' }} to {{ $activeParents->count() }} of {{ $activeParents->count() }} results
     </div>
+  </div> --}}
+
+    <!-- Pagination -->
+  <div class="pagination-wrapper">
+    <div class="pagination-summary">
+      Showing {{ $parents->firstItem() }} to {{ $parents->lastItem() }} of {{ $parents->total() }} results
+    </div>
+    <div class="pagination-links">
+      {{ $parents->links() }}
+    </div>
   </div>
+
+
 </div>
 
   <!-- ✏️ Edit Parent Modal -->
@@ -328,14 +340,14 @@ document.getElementById('moveToTrashBtn').addEventListener('click', () => {
           const row = checkbox.closest('tr');
           row.remove();
         });
-        
+
         // Update the table if no rows left
         const tableBody = document.getElementById('tableBody');
         const remainingRows = tableBody.querySelectorAll('tr:not(.no-data-row)');
         if (remainingRows.length === 0) {
           tableBody.innerHTML = '<tr><td colspan="11" style="text-align:center;">No active parents found</td></tr>';
         }
-        
+
         // Update summary cards
         updateSummaryCards(-selectedIds.length);
       } else {
@@ -549,7 +561,7 @@ document.getElementById('restoreArchiveBtn').addEventListener('click', () => {
           const row = checkbox.closest('tr');
           row.remove();
         });
-        
+
         // Update archive table if no rows left
         const archiveTableBody = document.getElementById('archiveTableBody');
         const remainingRows = archiveTableBody.querySelectorAll('tr');
@@ -597,7 +609,7 @@ document.getElementById('deleteArchiveBtn').addEventListener('click', () => {
           const row = checkbox.closest('tr');
           row.remove();
         });
-        
+
         // Update archive table if no rows left
         const archiveTableBody = document.getElementById('archiveTableBody');
         const remainingRows = archiveTableBody.querySelectorAll('tr');

@@ -185,7 +185,13 @@ public function complaintDestroy($id)
 
 public function parentlists()
 {
-    $parents = ParentModel::paginate(10); // ✅ Use paginate for links()
+
+    // Get all parents with 'active' status and paginate
+        $parents = ParentModel::where('status', 'active')
+            ->orderBy('parent_lname', 'asc') // optional: order by last name
+            ->paginate(10); // change per-page count as needed
+
+    // $parents = ParentModel::paginate(10); // ✅ Use paginate for links()
     return view('prefect.parentlists', compact("parents"));
 }
 

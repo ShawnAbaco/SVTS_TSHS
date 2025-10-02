@@ -11,23 +11,23 @@ class ParentController extends Controller
     /**
      * Display parent list
      */
-    public function parentList()
-    {
-        // Get all parents with pagination
-        $parents = DB::table('tbl_parent')->paginate(10);
+    // public function parentList()
+    // {
+    //     // Get all parents with pagination
+    //     $parents = DB::table('tbl_parent')->paginate(10);
 
-        // Counts
-        $archivedCount = DB::table('tbl_parent')->where('status', 'inactive')->count();
-        $activeCount   = DB::table('tbl_parent')->where('status', 'active')->count();
-        $totalCount    = DB::table('tbl_parent')->count();
+    //     // Counts
+    //     $archivedCount = DB::table('tbl_parent')->where('status', 'inactive')->count();
+    //     $activeCount   = DB::table('tbl_parent')->where('status', 'active')->count();
+    //     $totalCount    = DB::table('tbl_parent')->count();
 
-        return view('prefect.parentlist', compact(
-            'parents',
-            'archivedCount',
-            'activeCount',
-            'totalCount'
-        ));
-    }
+    //     return view('prefect.parentlist', compact(
+    //         'parents',
+    //         'archivedCount',
+    //         'activeCount',
+    //         'totalCount'
+    //     ));
+    // }
 
     /**
      * Show create parent form
@@ -107,7 +107,7 @@ class ParentController extends Controller
         ]);
 
         $parentIds = $request->input('parent_ids');
-        
+
         // Update status to inactive (archive)
         DB::table('tbl_parent')->whereIn('parent_id', $parentIds)->update([
             'status' => 'inactive',
@@ -115,7 +115,7 @@ class ParentController extends Controller
         ]);
 
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'message' => count($parentIds) . ' parent(s) moved to archive successfully'
         ]);
     }
@@ -143,7 +143,7 @@ class ParentController extends Controller
         ]);
 
         $parentIds = $request->input('parent_ids');
-        
+
         // Update status to active (restore)
         DB::table('tbl_parent')->whereIn('parent_id', $parentIds)->update([
             'status' => 'active',
@@ -151,7 +151,7 @@ class ParentController extends Controller
         ]);
 
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'message' => count($parentIds) . ' parent(s) restored successfully'
         ]);
     }
@@ -167,12 +167,12 @@ class ParentController extends Controller
         ]);
 
         $parentIds = $request->input('parent_ids');
-        
+
         // Permanently delete
         DB::table('tbl_parent')->whereIn('parent_id', $parentIds)->delete();
 
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'message' => count($parentIds) . ' parent(s) deleted permanently'
         ]);
     }
@@ -221,6 +221,6 @@ class ParentController extends Controller
 
         return back()->with('success', 'SMS sent to ' . $parent->parent_fname);
     }
-    
-    
+
+
 }
