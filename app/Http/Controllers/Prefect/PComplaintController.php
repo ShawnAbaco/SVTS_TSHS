@@ -7,9 +7,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Complaints; // Make sure you have a Complaint model
+use App\Models\OffensesWithSanction; // Make sure you have a Complaint model
+
 
 class PComplaintController extends Controller
 {
+
+
+
+    public function index()
+{
+    $complaints = Complaints::with(['complainant', 'respondent', 'offense'])->paginate(10);
+        $offenses = OffensesWithSanction::all();
+
+    return view('prefect.complaint', compact('complaints','offenses'));
+}
+
     /**
      * Search students for complainant/respondent.
      */
@@ -72,21 +85,18 @@ class PComplaintController extends Controller
      */
 public function store(Request $request)
 {
-
-    dd($request->all());
+    // ✅ Remove or comment out the dd once tested
+    // dd($request->all());
 
     try {
-        // ✅ Debug helper (you can remove this once tested)
-        // dd($request->all());
-
-        // ✅ Loop through each group
+        // Loop through each group
         foreach ($request->complainant_id as $groupId => $complainants) {
             $respondents = $request->respondent_id[$groupId] ?? [];
             $offenseId   = $request->offense_sanc_id[$groupId] ?? null;
             $date        = $request->complaints_date[$groupId] ?? null;
             $time        = $request->complaints_time[$groupId] ?? null;
             $incident    = $request->complaints_incident[$groupId] ?? null;
-            $prefectId   = auth()->prefect_id ?? 1; // or get dynamically
+            $prefectId   = auth()->prefect_id ?? 1;
 
             foreach ($complainants as $compId) {
                 foreach ($respondents as $respId) {
@@ -104,11 +114,52 @@ public function store(Request $request)
             }
         }
 
-        return redirect()->back()->with('messages', ['✅ All complaints stored successfully!']);
+        return redirect()->route('prefect.complaints')
+                         ->with('messages', ['✅ All complaints stored successfully!']);
     } catch (\Exception $e) {
-        return redirect()->back()->with('messages', [
-            '❌ Error saving complaints: ' . $e->getMessage()
-        ]);
+        return redirect()->route('prefect.complaints')
+                         ->with('messages', ['❌ Error saving complaints: ' . $e->getMessage()]);
     }
 }
+
+
+   public function update(Request $request, $id)
+{
+
+            // dd($request->all());
+
+    $complaint = Complaints::findOrFail($id);
+
+    $request->validate([
+        'complainant_id'     => 'required|exists:tbl_student,student_id',
+        'respondent_id'      => 'required|exists:tbl_student,student_id',
+        'offense_sanc_id'    => 'required|exists:tbl_offenses_with_sanction,offense_sanc_id',
+        'complaints_incident'=> 'required|string',
+        'complaints_date'    => 'required|date',
+        'complaints_time'    => 'required',
+    ]);
+
+    $complaint->update([
+        'complainant_id'      => $request->complainant_id,
+        'respondent_id'       => $request->respondent_id,
+        'offense_sanc_id'     => $request->offense_sanc_id,
+        'complaints_incident' => $request->complaints_incident,
+        'complaints_date'     => $request->complaints_date,
+        'complaints_time'     => $request->complaints_time,
+    ]);
+
+    return redirect()->route('prefect.complaints')
+                     ->with('success', 'Complaint updated successfully.');
+}
+
+    // Delete complaint
+    public function destroy($id)
+    {
+        $complaint = Complaints::findOrFail($id);
+        $complaint->delete();
+
+        return redirect()->route('prefect.complaints')->with('success', 'Complaint deleted successfully.');
+    }
+
+
 }

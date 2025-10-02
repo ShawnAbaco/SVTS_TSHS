@@ -37,16 +37,16 @@
     <a href="{{ route('student.management') }}"><i class="fas fa-user-graduate"></i> Students</a>
   </li>
 
-  <li class="{{ request()->routeIs('user.management') ? 'active' : '' }}">
-    <a href="{{ route('user.management') }}"><i class="fas fa-users"></i> Advisers</a>
+  <li class="{{ request()->routeIs('prefect.adviser') ? 'active' : '' }}">
+    <a href="{{ route('prefect.adviser') }}"><i class="fas fa-users"></i> Advisers</a>
   </li>
 
-  <li class="{{ request()->routeIs('violation.records') ? 'active' : '' }}">
-    <a href="{{ route('violation.records') }}"><i class="fas fa-book"></i> Violations</a>
+  <li class="{{ request()->routeIs('prefect.violation') ? 'active' : '' }}">
+    <a href="{{ route('prefect.violation') }}"><i class="fas fa-book"></i> Violations</a>
   </li>
 
-  <li class="{{ request()->routeIs('people.complaints') ? 'active' : '' }}">
-    <a href="{{ route('people.complaints') }}"><i class="fas fa-comments"></i> Complaints</a>
+  <li class="{{ request()->routeIs('prefect.complaints') ? 'active' : '' }}">
+    <a href="{{ route('prefect.complaints') }}"><i class="fas fa-comments"></i> Complaints</a>
   </li>
 
   <li class="{{ request()->routeIs('offenses.sanctions') ? 'active' : '' }}">

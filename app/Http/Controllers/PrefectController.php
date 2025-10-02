@@ -134,16 +134,8 @@ public function studentmanagement()
 }
 
 
-     public function peoplecomplaints()
-    {
-    $complaints = Complaints::with([
-        'complainant',
-        'respondent',
-        'offense'
-    ])->get();
 
-    return view('prefect.peoplecomplaints', compact('complaints'));
-    }
+
     // Show the edit form
 public function complaintEdit($id)
 {
@@ -240,14 +232,14 @@ public function parentlists()
         $parent->delete();
         return redirect()->route('parent.index')->with('success', 'Parent deleted successfully.');
     }
- public function violationrecords()
-{
-    $violations = ViolationRecord::with(['student.parent', 'student.adviser', 'offense'])
-        ->where('status', 'active')
-        ->paginate(10); // show 10 records per page
+//  public function violationrecords()
+// {
+//     $violations = ViolationRecord::with(['student.parent', 'student.adviser', 'offense'])
+//         ->where('status', 'active')
+//         ->paginate(10); // show 10 records per page
 
-    return view('prefect.violationrecords', compact('violations'));
-}
+//     return view('prefect.violationrecords', compact('violations'));
+// }
 
 
 public function violationappointments()
@@ -308,11 +300,12 @@ public function reportgenerate()
 
 // adviserrrrr
 
-   public function usermanagement()
-{
-    $advisers = Adviser::all(); // Fetch all advisers
-    return view('prefect.usermanagement', compact('advisers'));
-}
+// unused now
+//    public function usermanagement()
+// {
+//     $advisers = Adviser::all(); // Fetch all advisers
+//     return view('prefect.usermanagement', compact('advisers'));
+// }
 
 
 ///////////////////
@@ -363,22 +356,22 @@ public function complaintAppointmentDestroy($id)
 
         return view('prefect.complaintsanecdotals', compact('complaint_anecdotals'));
     }
-public function offensesandsanctions()
-{
-    // Get all offenses grouped by offense_type, offense_description, ordered by offense_sanc_id
-    $offenses = DB::table('tbl_offenses_with_sanction')
-        ->select(
-            'offense_type',
-            'offense_description',
-            DB::raw('GROUP_CONCAT(sanction_consequences SEPARATOR ", ") as sanctions'),
-            DB::raw('MIN(offense_sanc_id) as min_id') // Use the smallest ID for sorting
-        )
-        ->groupBy('offense_type', 'offense_description')
-        ->orderBy('min_id', 'ASC') // Sort by the earliest offense_sanc_id
-        ->get();
+// public function offensesandsanctions()
+// {
+//     // Get all offenses grouped by offense_type, offense_description, ordered by offense_sanc_id
+//     $offenses = DB::table('tbl_offenses_with_sanction')
+//         ->select(
+//             'offense_type',
+//             'offense_description',
+//             DB::raw('GROUP_CONCAT(sanction_consequences SEPARATOR ", ") as sanctions'),
+//             DB::raw('MIN(offense_sanc_id) as min_id') // Use the smallest ID for sorting
+//         )
+//         ->groupBy('offense_type', 'offense_description')
+//         ->orderBy('min_id', 'ASC') // Sort by the earliest offense_sanc_id
+//         ->get();
 
-    return view('prefect.offensesandsanctions', compact('offenses'));
-}
+//     return view('prefect.offensesandsanctions', compact('offenses'));
+// }
 
  public function createAdviser()
     {

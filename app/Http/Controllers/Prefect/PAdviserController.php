@@ -12,6 +12,17 @@ use Illuminate\Support\Facades\Validator;
 
 class PAdviserController extends Controller
 {
+
+    // AdviserController.php (index)
+public function index(Request $request)
+{
+    $advisers = Adviser::orderBy('adviser_lname')
+                ->paginate(15)           // <-- paginate instead of get()/all()
+                ->appends($request->query()); // keep query string (useful if you later add server search)
+
+    return view('prefect.adviser', compact('advisers'));
+}
+
  public function store(Request $request)
     {
         // ✅ Validate the outer array
@@ -51,6 +62,22 @@ class PAdviserController extends Controller
 
         return redirect()->back()->with('messages', $messages);
     }
+
+    public function update(Request $request)
+{
+    $adviser = Adviser::findOrFail($request->adviser_id);
+
+    $adviser->update([
+        'adviser_fname' => $request->adviser_fname,
+        'adviser_lname' => $request->adviser_lname,
+        'adviser_section' => $request->adviser_section,
+        'adviser_gradelevel' => $request->adviser_gradelevel,
+        'adviser_email' => $request->adviser_email,
+        'adviser_contactinfo' => $request->adviser_contactinfo,
+    ]);
+
+    return redirect()->back()->with('success', 'Adviser updated successfully!');
+}
 
 
 }

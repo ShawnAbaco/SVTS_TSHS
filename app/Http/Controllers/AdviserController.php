@@ -13,6 +13,7 @@ use App\Models\ViolationAppointment;
 use App\Models\ViolationAnecdotal;
 use App\Models\Complaints;
 use App\Models\ComplaintsAppointment;
+
 use App\Models\ComplaintsAnecdotal;
 use App\Models\OffensesWithSanction;
 use Illuminate\Support\Facades\DB;
