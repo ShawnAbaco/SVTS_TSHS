@@ -242,20 +242,6 @@ th { background-color: #303032; color: #fff; cursor: pointer; }
 
 tr:nth-child(even){ background-color:#f9f9f9; }
 
-.status-badge.active {
-    background-color: #4CAF50;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-}
-.status-badge.inactive {
-    background-color: #f44336;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-}
 
 .alert {
   padding: 10px 15px;

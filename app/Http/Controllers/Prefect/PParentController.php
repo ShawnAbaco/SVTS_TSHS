@@ -4,88 +4,209 @@ namespace App\Http\Controllers\Prefect;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Student;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 use App\Models\ParentModel;
+
+
 
 class PParentController extends Controller
 {
+    /**
+     * Display parent list
+     */
+    public function parentlists()
+    {
+        $parents = ParentModel::where('status', 'active')->paginate(10);
+        $archivedParents = ParentModel::where('status', 'inactive')->get();
+        
+        return view('prefect.parentlists', compact('parents', 'archivedParents'));
+    }
+
+    /**
+     * Show create parent form
+     */
     public function createParent()
     {
         return view('prefect.create-parent');
     }
 
-    public function parentlists()
-{
-
-    // Get all parents with 'active' status and paginate
-        $parents = ParentModel::where('status', 'active')
-            ->orderBy('parent_lname', 'asc') // optional: order by last name
-            ->paginate(10); // change per-page count as needed
-
-    // $parents = ParentModel::paginate(10); // ✅ Use paginate for links()
-    return view('prefect.parentlists', compact("parents"));
-}
-
-
-
-    // public function parentList()
-    // {
-    //     // Get all parents with pagination
-    //     $parents = DB::table('tbl_parent')->paginate(10);
-
-    //     // Counts
-    //     $archivedCount = DB::table('tbl_parent')->where('status', 'inactive')->count();
-    //     $activeCount   = DB::table('tbl_parent')->where('status', 'active')->count();
-    //     $totalCount    = DB::table('tbl_parent')->count();
-
-    //     return view('prefect.parentlist', compact(
-    //         'parents',
-    //         'archivedCount',
-    //         'activeCount',
-    //         'totalCount'
-    //     ));
-    // }
-
-
-public function store(Request $request)
+    /**
+     * Store new parent
+     */
+    public function parentStore(Request $request)
     {
-        $parents = $request->input('parents', []);
+        $request->validate([
+            'parent_fname' => 'required|string',
+            'parent_lname' => 'required|string',
+            'parent_sex' => 'required|in:Male,Female',
+            'parent_relationship' => 'required|string',
+            'parent_birthdate' => 'required|date',
+            'parent_contactinfo' => 'required|string|size:11',
+            'status' => 'required|in:active,inactive',
+        ]);
 
-        foreach ($parents as $parentData) {
-            ParentModel::create([
-                'parent_fname'       => $parentData['parent_fname'],
-                'parent_lname'       => $parentData['parent_lname'],
-                'parent_sex'         => $parentData['parent_sex'] ?? null,
-                'parent_birthdate'   => $parentData['parent_birthdate'],
-                'parent_email'       => $parentData['parent_email'] ?? null,
-                'parent_contactinfo' => $parentData['parent_contactinfo'],
-                'parent_relationship'=> $parentData['parent_relationship'] ?? null,
+        DB::table('tbl_parent')->insert([
+            'parent_fname' => $request->parent_fname,
+            'parent_lname' => $request->parent_lname,
+            'parent_sex' => $request->parent_sex,
+            'parent_relationship' => $request->parent_relationship,
+            'parent_birthdate' => $request->parent_birthdate,
+            'parent_contactinfo' => $request->parent_contactinfo,
+            'status' => $request->status,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('parents.list')->with('success', 'Parent added successfully!');
+    }
+
+    /**
+     * Update parent
+     */
+    public function parentUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'parent_fname' => 'required|string',
+            'parent_lname' => 'required|string',
+            'parent_birthdate' => 'required|date',
+            'parent_contactinfo' => 'required|string',
+            'parent_sex' => 'required|in:Male,Female',
+            'parent_relationship' => 'required|string',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        DB::table('tbl_parent')->where('parent_id', $id)->update([
+            'parent_fname' => $request->parent_fname,
+            'parent_lname' => $request->parent_lname,
+            'parent_birthdate' => $request->parent_birthdate,
+            'parent_contactinfo' => $request->parent_contactinfo,
+            'parent_sex' => $request->parent_sex,
+            'parent_relationship' => $request->parent_relationship,
+            'status' => $request->status,
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('parents.list')->with('success', 'Parent updated successfully!');
+    }
+
+    /**
+     * Move parents to archive (set status to inactive)
+     */
+    public function archiveParents(Request $request)
+        {
+            $request->validate([
+                'parent_ids' => 'required|array',
+                'parent_ids.*' => 'exists:tbl_parent,parent_id'
+            ]);
+
+            ParentModel::whereIn('parent_id', $request->parent_ids)
+                ->update(['status' => 'inactive']);
+
+            return response()->json([
+                'success' => true,
+                'message' => count($request->parent_ids) . ' parent(s) moved to archive successfully!'
             ]);
         }
 
-        return redirect()->route('parent.lists')->with('success', 'Parents saved successfully!');
+    /**
+     * Get archived parents (status = inactive)
+     */
+    public function getArchivedParents()
+    {
+        $archivedParents = ParentModel::where('status', 'inactive')->get();
+        return response()->json($archivedParents);
     }
 
-public function update(Request $request)
-{
-    $parent = ParentModel::findOrFail($request->parent_id);
+    /**
+     * Restore parents from archive
+     */
+    public function restoreParents(Request $request)
+    {
+        $request->validate([
+            'parent_ids' => 'required|array',
+            'parent_ids.*' => 'exists:tbl_parent,parent_id'
+        ]);
 
-    $parent->update([
-        'parent_fname' => $request->parent_fname,
-        'parent_lname' => $request->parent_lname,
-        'parent_sex' => $request->parent_sex,
-        'parent_birthdate' => $request->parent_birthdate,
-        'parent_email' => $request->parent_email,
-        'parent_contactinfo' => $request->parent_contactinfo,
-        'parent_relationship' => $request->parent_relationship,
-        'status' => $request->status,
-    ]);
+        ParentModel::whereIn('parent_id', $request->parent_ids)
+            ->update(['status' => 'active']);
 
-    return redirect()->back()->with('success', 'Parent updated successfully!');
-}
+        return response()->json([
+            'success' => true,
+            'message' => count($request->parent_ids) . ' parent(s) restored successfully!'
+        ]);
+    }
+
+    /**
+     * Permanently delete parents
+     */
+    public function destroyParentsPermanent(Request $request)
+    {
+        $request->validate([
+            'parent_ids' => 'required|array',
+            'parent_ids.*' => 'exists:tbl_parent,parent_id'
+        ]);
+
+        ParentModel::whereIn('parent_id', $request->parent_ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => count($request->parent_ids) . ' parent(s) permanently deleted!'
+        ]);
+    }
 
 
+    /**
+     * Single parent destroy (for individual deletion)
+     */
+    public function destroyParent($id)
+    {
+        try {
+            $parent = DB::table('tbl_parent')->where('parent_id', $id)->first();
 
+            if (!$parent) {
+                return redirect()->back()->with('error', 'Parent not found.');
+            }
+
+            // Update status to inactive instead of deleting
+            DB::table('tbl_parent')->where('parent_id', $id)->update([
+                'status' => 'inactive',
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->route('parents.list')->with('success', 'Parent moved to archive successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error archiving parent: ' . $e->getMessage());
+        }
+    }
+
+    public function getArchivedParentsCount()
+    {
+        $count = ParentModel::where('status', 'inactive')->count();
+        return response()->json(['count' => $count]);
+    }
+
+    
+    /**
+     * Send SMS to parent
+     */
+    public function sendSms(Request $request)
+    {
+        $parentId = $request->parent_id;
+        $message = $request->message;
+
+        // Retrieve parent info
+        $parent = DB::table('tbl_parent')->where('parent_id', $parentId)->first();
+
+        if (!$parent) {
+            return back()->with('error', 'Parent not found.');
+        }
+
+        // Here you would integrate your SMS API
+        // Example: SmsService::send($parent->parent_contactinfo, $message);
+
+        return back()->with('success', 'SMS sent to ' . $parent->parent_fname);
+    }
+    
+    
 }

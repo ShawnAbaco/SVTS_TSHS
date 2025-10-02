@@ -420,16 +420,7 @@ table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
   cursor: pointer;
 }
 
-/* ======================= STATUS BADGES ======================= */
-.status-badge {
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  color: #fff;
-}
-.status-badge.active { background: #4CAF50; }
-.status-badge.inactive { background: #f44336; }
-.status-badge.completed { background: #FF9800; }
+
 
 /* ======================= MODAL BASE ======================= */
 .modal {

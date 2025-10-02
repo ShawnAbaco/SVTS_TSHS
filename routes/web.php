@@ -23,7 +23,7 @@ use App\Http\Controllers\Adviser\AViolationController;
 use App\Http\Controllers\Adviser\AComplaintController;
 use App\Http\Controllers\Adviser\AOffenseSanctionController;
 use App\Http\Controllers\Adviser\AReportController;
-
+use App\Http\Controllers\PParentController as ControllersPParentController;
 
 Route::get('/', function () {
     return view('adviser.login');
@@ -32,7 +32,7 @@ Route::get('/', function () {
 
 // ===================== Authentication Routes =====================
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 // ===================== Prefect Routes =====================
 Route::prefix('prefect')->group(function () {
@@ -56,6 +56,11 @@ Route::prefix('prefect')->group(function () {
         Route::post('/students/store', [PStudentController::class, 'store'])->name('students.store');
         Route::put('/students/update/{id}', [PStudentController::class, 'update'])->name('students.update');
         Route::get('/students/search', [PStudentController::class, 'search'])->name('students.search');
+        // Archive Routes
+        Route::post('/students/archive', [PStudentController::class, 'archive'])->name('students.archive');
+        Route::get('/students/archived', [PStudentController::class, 'getArchived'])->name('students.getArchived');
+        Route::post('/students/restore', [PStudentController::class, 'restore'])->name('students.restore');
+        Route::post('/students/destroy-multiple', [PStudentController::class, 'destroyMultiple'])->name('students.destroyMultiple');
 
         // Adviser Routes
         Route::get('/create/adviser', [PAdviserController::class, 'createAdviser'])->name('create.adviser');
@@ -63,16 +68,17 @@ Route::prefix('prefect')->group(function () {
         Route::put('/advisers/update', [PAdviserController::class, 'update'])->name('advisers.update');
 
         // Parent Routes
+        Route::get('/parentlists', [PParentController::class, 'parentlists'])->name('parent.lists');
         Route::get('/create/parent', [PParentController::class, 'createParent'])->name('create.parent');
-        Route::post('/parents/store', [PParentController::class, 'store'])->name('parents.store');
-        Route::put('/parents/update/{id}', [PParentController::class, 'update'])->name('parents.update');
+        Route::post('/parents/store', [PParentController::class, 'parentStore'])->name('parents.store');
+        Route::put('/parents/update/{id}', [PParentController::class, 'parentUpdate'])->name('parents.update');
         
         // Parent Archive Routes
-        Route::post('/parents/archive', [PParentController::class, 'archive'])->name('parents.archive');
-        Route::get('/parents/archived', [PParentController::class, 'archived'])->name('parents.archived');
-        Route::post('/parents/restore', [PParentController::class, 'restore'])->name('parents.restore');
-        Route::post('/parents/destroy-permanent', [PParentController::class, 'destroyPermanent'])->name('parents.destroy.permanent');
-        Route::get('/parents/counts', [PParentController::class, 'archivedCount'])->name('parents.counts');
+        Route::post('/parents/archive', [PParentController::class, 'archiveParents'])->name('parents.archive');
+        Route::get('/parents/archived', [PParentController::class, 'getArchivedParents'])->name('parents.archived');
+        Route::post('/parents/restore', [PParentController::class, 'restoreParents'])->name('parents.restore');
+        Route::post('/parents/destroy-permanent', [PParentController::class, 'destroyParentsPermanent'])->name('parents.destroy.permanent');
+        Route::get('/parents/archived/count', [PParentController::class, 'getArchivedParentsCount'])->name('parents.archived.count');
 
         // Violation Routes
         Route::get('/violations', [PViolationController::class, 'index'])->name('violations.index');
