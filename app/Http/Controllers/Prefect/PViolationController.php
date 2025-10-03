@@ -19,45 +19,48 @@ class PViolationController extends Controller
 
     public function index()
     {
-        // Get today's date for reference
-$today = Carbon::today();
+// Get the actual dates from your violation records
+$mostRecentViolationDate = DB::table('tbl_violation_record')->max('violation_date');
+$earliestViolationDate = DB::table('tbl_violation_record')->min('violation_date');
 
-// Calculate date ranges based on the violation_date field from the database
-$startOfWeek = DB::table('tbl_violation_record')->min('violation_date');
-$startOfWeek = $startOfWeek ? Carbon::parse($startOfWeek)->startOfWeek() : $today->startOfWeek();
-$endOfWeek = $startOfWeek->copy()->endOfWeek();
+// Use the most recent violation date for calculations, or today if no records exist
+$referenceDate = $mostRecentViolationDate ? Carbon::parse($mostRecentViolationDate) : Carbon::today();
 
-$startOfMonth = DB::table('tbl_violation_record')->min('violation_date');
-$startOfMonth = $startOfMonth ? Carbon::parse($startOfMonth)->startOfMonth() : $today->startOfMonth();
-$endOfMonth = $startOfMonth->copy()->endOfMonth();
+// Calculate date ranges based on the actual violation dates
+$today = $referenceDate->copy(); // This is the date from violation_date, not necessarily today
+$startOfWeek = $referenceDate->copy()->startOfWeek();
+$endOfWeek = $referenceDate->copy()->endOfWeek();
+$startOfMonth = $referenceDate->copy()->startOfMonth();
+$endOfMonth = $referenceDate->copy()->endOfMonth();
 
-// Daily violations (for today)
+// Daily violations - count violations that happened on the most recent violation date
 $dailyViolations = DB::table('tbl_violation_record')
     ->whereDate('violation_date', $today)
     ->count();
 
-// Weekly violations (for the week of the earliest violation)
+// Weekly violations - count violations in the week of the most recent violation
 $weeklyViolations = DB::table('tbl_violation_record')
     ->whereBetween('violation_date', [$startOfWeek, $endOfWeek])
     ->count();
 
-// Monthly violations (for the month of the earliest violation)
+// Monthly violations - count violations in the month of the most recent violation
 $monthlyViolations = DB::table('tbl_violation_record')
     ->whereBetween('violation_date', [$startOfMonth, $endOfMonth])
     ->count();
         // Other data
         $violations = ViolationRecord::with(['student', 'offense'])->paginate(10);
         $offenses = OffensesWithSanction::all();
-    
+
         // ✅ don’t overwrite $dailyViolations again
         return view('prefect.violation', compact(
             'violations',
             'offenses',
+            'mostRecentViolationDate',
+            'earliestViolationDate',
+            'referenceDate',
             'today',
             'startOfWeek',
-            'startOfWeek',
             'endOfWeek',
-            'startOfMonth',
             'startOfMonth',
             'endOfMonth',
             'dailyViolations',
@@ -65,7 +68,7 @@ $monthlyViolations = DB::table('tbl_violation_record')
             'monthlyViolations'
         ));
     }
-    
+
 
 // Store violations
 public function store(Request $request)

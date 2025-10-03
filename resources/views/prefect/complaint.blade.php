@@ -39,7 +39,7 @@
       <p>Completed</p>
     </div>
     </div>
-  </div>
+
 
   <!-- Bulk Action / Select Options -->
   <div class="select-options">

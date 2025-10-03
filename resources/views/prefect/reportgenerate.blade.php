@@ -501,7 +501,7 @@ tr:nth-child(even) {
     grid-template-columns: 1fr;
     padding: 15px;
   }
-  
+
   .toolbar input {
     width: 100%;
     margin-bottom: 5px;
@@ -531,11 +531,10 @@ tr:nth-child(even) {
 
 /* Logo */
 .sidebar img {
-  width: 150px;
+  width: 100px;
   height: auto;
   margin: 0 auto 0.5rem;
   display: block;
-  transition: transform 0.3s ease;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
@@ -598,7 +597,7 @@ tr:nth-child(even) {
     <div class="header-left">
       <h2>Student Violation Tracking System</h2>
     </div>
-    
+
     <div class="header-right">
       <div class="user-info" onclick="toggleProfileDropdown()">
         <img src="/images/user.jpg" alt="User">
@@ -612,10 +611,10 @@ tr:nth-child(even) {
   </header>
 
     @yield('content')
-    
+
     <!-- Simple Reports Title (no container, no line) -->
     <h3 class="reports-title">REPORTS</h3>
-    
+
     <!-- Report Boxes Grid (EXACTLY AS BEFORE) -->
     <div class="reports-grid">
       <div class="report-box" data-modal="modal1"><i class="fas fa-book-open"></i><h3>Anecdotal Records per Complaint Case</h3></div>
@@ -1264,7 +1263,7 @@ function toggleProfileDropdown() {
 document.addEventListener('click', function(event) {
   const dropdown = document.getElementById('profileDropdown');
   const userInfo = document.querySelector('.user-info');
-  
+
   if (!userInfo.contains(event.target) && !dropdown.contains(event.target)) {
     dropdown.classList.remove('active');
   }

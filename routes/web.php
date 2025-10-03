@@ -32,7 +32,7 @@ Route::get('/', function () {
 
 // ===================== Authentication Routes =====================
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/', [AuthController::class, 'login'])->name('login');
 
 // ===================== Prefect Routes =====================
 Route::prefix('prefect')->group(function () {
@@ -72,7 +72,7 @@ Route::prefix('prefect')->group(function () {
         Route::get('/create/parent', [PParentController::class, 'createParent'])->name('create.parent');
         Route::post('/parents/store', [PParentController::class, 'parentStore'])->name('parents.store');
         Route::put('/parents/update/{id}', [PParentController::class, 'parentUpdate'])->name('parents.update');
-        
+
         // Parent Archive Routes
         Route::post('/parents/archive', [PParentController::class, 'archiveParents'])->name('parents.archive');
         Route::get('/parents/archived', [PParentController::class, 'getArchivedParents'])->name('parents.archived');
@@ -85,7 +85,7 @@ Route::prefix('prefect')->group(function () {
         Route::get('/violations/create', [PViolationController::class, 'create'])->name('violations.create');
         Route::post('/violations/store', [PViolationController::class, 'store'])->name('violations.store');
         Route::put('/violations/update/{violationId}', [PViolationController::class, 'update'])->name('violations.update');
-        
+
         // Violation AJAX Routes
         Route::post('/violations/search-students', [PViolationController::class, 'searchStudents'])->name('violations.search-students');
         Route::post('/violations/search-offenses', [PViolationController::class, 'searchOffenses'])->name('violations.search-offenses');
@@ -95,7 +95,7 @@ Route::prefix('prefect')->group(function () {
         Route::get('/complaints/create', [PComplaintController::class, 'create'])->name('complaints.create');
         Route::post('/complaints/store', [PComplaintController::class, 'store'])->name('complaints.store');
         Route::put('/complaints/{id}', [PComplaintController::class, 'update'])->name('complaints.update');
-        
+
         // Complaint AJAX Routes
         Route::post('/complaints/search-students', [PComplaintController::class, 'searchStudents'])->name('complaints.search-students');
         Route::get('/complaints/search-students1', [PComplaintController::class, 'searchStudents'])->name('prefect.students.search');
@@ -136,7 +136,7 @@ Route::prefix('adviser')->group(function () {
         // Violation Routes
         Route::get('/violations/create', [AViolationController::class, 'Acreate'])->name('Aviolations.create');
         Route::post('/violations', [AViolationController::class, 'Astore'])->name('Aviolations.store');
-        
+
         // Violation AJAX Routes
         Route::post('/violations/search-students', [AViolationController::class, 'AsearchStudents'])->name('Aviolations.search-students');
         Route::post('/violations/search-offenses', [AViolationController::class, 'AsearchOffenses'])->name('Aviolations.search-offenses');
