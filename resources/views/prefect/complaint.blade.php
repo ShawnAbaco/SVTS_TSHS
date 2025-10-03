@@ -20,15 +20,24 @@
   <div class="summary">
     <div class="card">
       <h2>55</h2>
-      <p>Total Students</p>
+      <p>Monthly Complaints</p>
     </div>
     <div class="card">
       <h2>12</h2>
-      <p>Violations Today</p>
+      <p>Weekly Complaints</p>
     </div>
     <div class="card">
       <h2>11</h2>
-      <p>Pending Appointments</p>
+      <p> Daily Complaints</p>
+    </div>
+    <div class="card">
+      <h2>11</h2>
+      <p>Scheduled</p>
+    </div>
+    <div class="card">
+      <h2>11</h2>
+      <p>Completed</p>
+    </div>
     </div>
   </div>
 

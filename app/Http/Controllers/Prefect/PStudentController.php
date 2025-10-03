@@ -9,9 +9,12 @@ use App\Models\Adviser;
 use App\Models\ParentModel;
 use App\Models\ViolationRecord;
 use App\Models\ViolationAppointment;
+use Illuminate\Support\Facades\DB;
 
 class PStudentController extends Controller
 {
+
+    
     public function createStudent(Request $request){
         $parents = ParentModel::with('students')->get();
         $advisers = Adviser::all();
@@ -24,6 +27,21 @@ class PStudentController extends Controller
 
     public function studentmanagement()
     {
+
+        $totalStudents = DB::table('tbl_student')->count();
+
+        // Grade 11 students (join adviser to check gradelevel)
+        $grade11Students = DB::table('tbl_student')
+            ->join('tbl_adviser', 'tbl_student.adviser_id', '=', 'tbl_adviser.adviser_id')
+            ->where('tbl_adviser.adviser_gradelevel', '11')
+            ->count();
+
+        // Grade 12 students
+        $grade12Students = DB::table('tbl_student')
+            ->join('tbl_adviser', 'tbl_student.adviser_id', '=', 'tbl_adviser.adviser_id')
+            ->where('tbl_adviser.adviser_gradelevel', '12')
+            ->count();
+
         // Only show active students in main table
         $students = Student::where('status', 'active')->paginate(10);
         $sections = Adviser::select('adviser_section')->distinct()->pluck('adviser_section');
@@ -38,7 +56,7 @@ class PStudentController extends Controller
         $violationsToday = ViolationRecord::whereDate('violation_date', now())->count();
         $pendingAppointments = ViolationAppointment::where('violation_app_status', 'Pending')->count();
 
-        return view('prefect.student', compact(
+        return view('prefect.student', compact('totalStudents','grade11Students','grade12Students',
             'students',
             'sections',
             'totalStudents',

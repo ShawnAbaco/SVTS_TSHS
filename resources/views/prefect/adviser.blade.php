@@ -18,18 +18,19 @@
   <!-- Summary Cards -->
   <div class="summary">
     <div class="card">
-      <h2>55</h2>
-      <p>Total Students</p>
+        <h2>{{ $totalAdvisers }}</h2>
+        <p>Total Adviser</p>
     </div>
     <div class="card">
-      <h2>12</h2>
-      <p>Violations Today</p>
+        <h2>{{ $grade11Advisers }}</h2>
+        <p>Grade 11 Advisers</p>
     </div>
     <div class="card">
-      <h2>11</h2>
-      <p>Pending Appointments</p>
+        <h2>{{ $grade12Advisers }}</h2>
+        <p>Grade 12 Advisers</p>
     </div>
-  </div>
+</div>
+
 
   <!-- Bulk Action / Select Options -->
   <div class="select-options">

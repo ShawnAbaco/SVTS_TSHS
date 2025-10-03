@@ -9,6 +9,7 @@ use App\Models\ParentModel;
 use App\Models\Adviser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class PAdviserController extends Controller
 {
@@ -16,11 +17,23 @@ class PAdviserController extends Controller
     // AdviserController.php (index)
 public function index(Request $request)
 {
+
+    $totalAdvisers = DB::table('tbl_adviser')->count();
+
+        // Count advisers per grade level
+        $grade11Advisers = DB::table('tbl_adviser')
+            ->where('adviser_gradelevel', '11')
+            ->count();
+
+        $grade12Advisers = DB::table('tbl_adviser')
+            ->where('adviser_gradelevel', '12')
+            ->count();
     $advisers = Adviser::orderBy('updated_at')
                 ->paginate(15)           // <-- paginate instead of get()/all()
                 ->appends($request->query()); // keep query string (useful if you later add server search)
 
-    return view('prefect.adviser', compact('advisers'));
+    return view('prefect.adviser', compact('advisers', 'totalAdvisers', 'grade11Advisers', 'grade12Advisers'));
+
 }
  public function createAdviser()
     {

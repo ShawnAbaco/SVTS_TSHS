@@ -8,6 +8,7 @@ use App\Models\Student;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Auth; // Assuming Prefect is authenticated
 use App\Models\OffensesWithSanction;
@@ -16,13 +17,55 @@ use App\Models\ViolationRecord;
 class PViolationController extends Controller
 {
 
-public function index()
-{
-    $violations = ViolationRecord::with(['student', 'offense'])->paginate(10);
-    $offenses = OffensesWithSanction::all();
-    return view('prefect.violation', compact('violations', 'offenses'));
-}
+    public function index()
+    {
+        // Get today's date for reference
+$today = Carbon::today();
 
+// Calculate date ranges based on the violation_date field from the database
+$startOfWeek = DB::table('tbl_violation_record')->min('violation_date');
+$startOfWeek = $startOfWeek ? Carbon::parse($startOfWeek)->startOfWeek() : $today->startOfWeek();
+$endOfWeek = $startOfWeek->copy()->endOfWeek();
+
+$startOfMonth = DB::table('tbl_violation_record')->min('violation_date');
+$startOfMonth = $startOfMonth ? Carbon::parse($startOfMonth)->startOfMonth() : $today->startOfMonth();
+$endOfMonth = $startOfMonth->copy()->endOfMonth();
+
+// Daily violations (for today)
+$dailyViolations = DB::table('tbl_violation_record')
+    ->whereDate('violation_date', $today)
+    ->count();
+
+// Weekly violations (for the week of the earliest violation)
+$weeklyViolations = DB::table('tbl_violation_record')
+    ->whereBetween('violation_date', [$startOfWeek, $endOfWeek])
+    ->count();
+
+// Monthly violations (for the month of the earliest violation)
+$monthlyViolations = DB::table('tbl_violation_record')
+    ->whereBetween('violation_date', [$startOfMonth, $endOfMonth])
+    ->count();
+        // Other data
+        $violations = ViolationRecord::with(['student', 'offense'])->paginate(10);
+        $offenses = OffensesWithSanction::all();
+    
+        // ✅ don’t overwrite $dailyViolations again
+        return view('prefect.violation', compact(
+            'violations',
+            'offenses',
+            'today',
+            'startOfWeek',
+            'startOfWeek',
+            'endOfWeek',
+            'startOfMonth',
+            'startOfMonth',
+            'endOfMonth',
+            'dailyViolations',
+            'weeklyViolations',
+            'monthlyViolations'
+        ));
+    }
+    
 
 // Store violations
 public function store(Request $request)

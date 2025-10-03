@@ -19,18 +19,19 @@
   <!-- Summary Cards -->
   <div class="summary">
     <div class="card">
-      <h2>{{ $parents->total() }}</h2>
-      <p>Total Parents</p>
+        <h2>{{ $totalParents }}</h2>
+        <p>Total Parents</p>
     </div>
     <div class="card">
-      <h2>{{ $parents->where('status', 'active')->count() }}</h2>
-      <p>Active Parents</p>
+        <h2>{{ $activeParents }}</h2>
+        <p>Active Parents</p>
     </div>
     <div class="card">
-      <h2 id="archivedCount">{{ $archivedParents->count() }}</h2>
-      <p>Archived Parents</p>
+        <h2 id="archivedCount">{{ $archivedParents }}</h2>
+        <p>Archived Parents</p>
     </div>
-  </div>
+</div>
+
 
   <!-- Bulk Action / Select Options -->
   <div class="select-options">

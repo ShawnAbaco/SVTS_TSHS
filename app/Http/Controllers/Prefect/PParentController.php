@@ -10,6 +10,7 @@ use App\Models\ParentModel;
 
 
 
+
 class PParentController extends Controller
 {
     /**
@@ -17,10 +18,22 @@ class PParentController extends Controller
      */
     public function parentlists()
     {
+
+        $totalParents = DB::table('tbl_parent')->count();
+
+        // Get active parents
+        $activeParents = DB::table('tbl_parent')
+            ->where('status', 'active')
+            ->count();
+
+        // Get archived parents
+        $archivedParents = DB::table('tbl_parent')
+            ->where('status', 'archived')
+            ->count();
         $parents = ParentModel::where('status', 'active')->paginate(10);
         $archivedParents = ParentModel::where('status', 'inactive')->get();
         
-        return view('prefect.parentlists', compact('parents', 'archivedParents'));
+        return view('prefect.parentlists', compact('parents', 'archivedParents','totalParents','activeParents','archivedParents'));
     }
 
     /**
