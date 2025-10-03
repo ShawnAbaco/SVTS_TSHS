@@ -103,6 +103,57 @@
 .btn-danger:hover {
     background: #a71d2a;
 }
+.btn-print, .btn-export {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  min-width: 100px;
+}
+
+.btn-print {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.btn-print:hover {
+  background-color: #152a64;
+  transform: translateY(-1px);
+}
+
+.btn-print:active {
+  transform: translateY(0);
+}
+
+.btn-export {
+  background-color: #256d1b;
+  color: white;
+}
+
+.btn-export:hover {
+  background-color: #1b5214;
+  transform: translateY(-1px);
+}
+
+.btn-export:active {
+  transform: translateY(0);
+}
+
+/* Optional: Add focus states for accessibility */
+.btn-print:focus, .btn-export:focus {
+  outline: 2px solid rgba(0, 123, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Optional: Add disabled state styling */
+.btn-print:disabled, .btn-export:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
 
 /* ===========================
    Summary Cards

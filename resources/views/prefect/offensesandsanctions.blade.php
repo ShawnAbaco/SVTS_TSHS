@@ -8,73 +8,32 @@
     <h2>Offense and Sanctions</h2>
     <div class="actions">
       <input type="search" placeholder="🔍 Search by offense type or description..." id="searchInput">
-      <button class="btn-primary" id="createBtn">➕ Add Offense with sanction</button>
-      <button class="btn-info" id="archiveBtn">🗃️ Archive</button>
+      <button class="btn-print" id="printBtn">🖨️ Print</button>
+      <button class="btn-export" id="exportBtn">📤 Export</button>
     </div>
   </div>
 
-  <!-- Summary Cards -->
-  <div class="summary">
-    <div class="card">
-      <h2>55</h2>
-      <p>Total Students</p>
-    </div>
-    <div class="card">
-      <h2>12</h2>
-      <p>Violations Today</p>
-    </div>
-    <div class="card">
-      <h2>11</h2>
-      <p>Pending Appointments</p>
-    </div>
-  </div>
 
-  <!-- Bulk Action / Select Options -->
-  <div class="select-options">
-    <div class="left-controls">
-      <label for="selectAll" class="select-label">
-        <input type="checkbox" id="selectAll">
-        <span>Select All</span>
-      </label>
-
-      <!-- Dropdown Button -->
-      <div class="dropdown">
-        <button class="btn-info dropdown-btn">⬇️ View Records</button>
-        <div class="dropdown-content">
-          <a href="#" id="violationRecords">Violation Records</a>
-          <a href="#" id="violationAppointments">Violation Appointments</a>
-          <a href="#" id="violationAnecdotals">Violation Anecdotals</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="right-controls">
-      <button class="btn-danger" id="moveToTrashBtn">🗑️ Move Selected to Trash</button>
-    </div>
-  </div>
 
   <!-- Offense & Sanction Table -->
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th></th>
+
           <th>#</th>
           <th>Offense Type</th>
           <th>Offense Description</th>
           <th>Sanction(s)</th>
-          <th>Action</th>
         </tr>
       </thead>
       <tbody id="tableBody">
         @forelse ($offenses as $offense)
           <tr data-details="{{ $offense->offense_type }}|{{ $offense->offense_description }}|{{ $offense->sanctions }}">
-            <td><input type="checkbox" class="rowCheckbox"></td>
             <td>{{ $loop->iteration }}</td>
             <td><span title="{{ $offense->offense_type }}">{{ $offense->offense_type }}</span></td>
             <td>{{ $offense->offense_description }}</td>
             <td>{{ $offense->sanctions }}</td>
-            <td><button class="btn-primary editBtn">✏️ Edit</button></td>
           </tr>
         @empty
           <tr>
@@ -514,6 +473,169 @@ function showNotification(title, message, type = 'info', options = {}) {
 document.getElementById('notificationCloseBtn').addEventListener('click', () => {
   document.getElementById('notificationModal').style.display = 'none';
 });
+
+
+
+// ================= BEAUTIFUL PRINT & EXPORT =================
+
+// 🖨️ Print Table
+document.getElementById('printBtn')?.addEventListener('click', () => {
+  const table = document.querySelector('.table-container table');
+  if (!table) return;
+
+  const currentDate = new Date().toLocaleDateString('en-PH', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+
+  const newWindow = window.open('', '', 'width=900,height=700');
+  newWindow.document.write(`
+    <html>
+      <head>
+        <title>Offense and Sanctions Report</title>
+        <style>
+          body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            padding: 40px;
+            color: #333;
+            background: #fff;
+          }
+          .header {
+            text-align: center;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+          }
+          .header img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 10px;
+          }
+          .header h2 {
+            margin: 5px 0;
+            color: #1e3a8a;
+          }
+          .header h4 {
+            margin: 0;
+            color: #666;
+          }
+          .date {
+            text-align: right;
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #555;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+          }
+          th, td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+          }
+          th {
+            background: #1e3a8a;
+            color: white;
+          }
+          tr:nth-child(even) td {
+            background: #f8fafc;
+          }
+          tr:hover td {
+            background: #e0e7ff;
+          }
+          .footer {
+            margin-top: 50px;
+            text-align: left;
+            font-size: 14px;
+            color: #333;
+          }
+          .footer .line {
+            border-top: 1px solid #444;
+            width: 200px;
+            margin-top: 40px;
+          }
+          .footer span {
+            display: block;
+            margin-top: 5px;
+            color: #555;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <img src="/images/school-logo.png" alt="School Logo" />
+          <h2>Tagoloan Senior High School</h2>
+          <h4>Student Violation Tracking System</h4>
+        </div>
+        <div class="date">📅 Date Generated: <strong>${currentDate}</strong></div>
+        <h3 style="text-align:center; margin-bottom:10px;">Offense and Sanctions Report</h3>
+        ${table.outerHTML}
+        <div class="footer">
+          <div class="line"></div>
+          <span>Authorized Signature</span>
+        </div>
+      </body>
+    </html>
+  `);
+
+  newWindow.document.close();
+  newWindow.focus();
+  newWindow.print();
+});
+
+
+// 📤 Export Table to Excel
+document.getElementById('exportBtn')?.addEventListener('click', () => {
+  const table = document.querySelector('.table-container table');
+  if (!table) return;
+
+  const currentDate = new Date().toLocaleDateString('en-PH', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+
+  const header = `
+    <table style="width:100%; border-collapse:collapse; text-align:center; margin-bottom:20px;">
+      <tr>
+        <td colspan="4">
+          <h2 style="margin:0; color:#1e3a8a;">Tagoloan Senior High School</h2>
+          <h4 style="margin:0; color:#666;">Student Violation Tracking System</h4>
+          <p style="margin:5px 0;">📅 Date Generated: ${currentDate}</p>
+        </td>
+      </tr>
+    </table>
+  `;
+
+  const footer = `
+    <table style="margin-top:40px;">
+      <tr>
+        <td style="border-top:1px solid #444; width:200px; padding-top:10px;">Authorized Signature</td>
+      </tr>
+    </table>
+  `;
+
+  const tableHTML = header + table.outerHTML + footer;
+  const filename = `Offense_and_Sanctions_${new Date().toISOString().slice(0,10)}.xls`;
+
+  const downloadLink = document.createElement('a');
+  document.body.appendChild(downloadLink);
+  downloadLink.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML);
+  downloadLink.download = filename;
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+
+  // Success feedback
+  showNotification('✅ Exported', 'Table exported beautifully to Excel.', 'success', {
+    yesText: 'OK',
+    noText: null,
+    onYes: () => {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+  });
+});
+
 </script>
 
 @endsection
