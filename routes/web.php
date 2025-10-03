@@ -13,6 +13,8 @@ use App\Http\Controllers\Prefect\PViolationController;
 use App\Http\Controllers\Prefect\PComplaintController;
 use App\Http\Controllers\Prefect\POffenseSanctionController;
 use App\Http\Controllers\Prefect\PReportController;
+use App\Http\Controllers\Prefect\PViolationAnecdotalController;
+
 
 // Adviser Controllers
 use App\Http\Controllers\Adviser\ADashboardController;
@@ -56,6 +58,9 @@ Route::prefix('prefect')->group(function () {
         Route::post('/students/store', [PStudentController::class, 'store'])->name('students.store');
         Route::put('/students/update/{id}', [PStudentController::class, 'update'])->name('students.update');
         Route::get('/students/search', [PStudentController::class, 'search'])->name('students.search');
+        // 🔍 Live search routes
+        Route::post('/students/search-parents', [PStudentController::class, 'searchParents'])->name('students.search-parents');
+        Route::post('/students/search-advisers', [PStudentController::class, 'searchAdvisers'])->name('students.search-advisers');
         // Archive Routes
         Route::post('/students/archive', [PStudentController::class, 'archive'])->name('students.archive');
         Route::get('/students/archived', [PStudentController::class, 'getArchived'])->name('students.getArchived');
@@ -85,6 +90,25 @@ Route::prefix('prefect')->group(function () {
         Route::get('/violations/create', [PViolationController::class, 'create'])->name('violations.create');
         Route::post('/violations/store', [PViolationController::class, 'store'])->name('violations.store');
         Route::put('/violations/update/{violationId}', [PViolationController::class, 'update'])->name('violations.update');
+
+
+        // Violation Anecdotal Routes
+        // Display the create anecdotal form
+        Route::get('/violation-anecdotal/create', [PViolationAnecdotalController::class, 'createVAnecdotal'])
+         ->name('violation-anecdotal.create');
+
+        // Search for violation records (for live search)
+        Route::post('/violation-anecdotal/search-violations', [PViolationAnecdotalController::class, 'searchViolations'])
+         ->name('violation-anecdotal.search-violations');
+
+        // Store anecdotal records
+        Route::post('/violation-anecdotal', [PViolationAnecdotalController::class, 'store'])
+         ->name('violation-anecdotal.store');
+
+
+
+
+
 
         // Violation AJAX Routes
         Route::post('/violations/search-students', [PViolationController::class, 'searchStudents'])->name('violations.search-students');
