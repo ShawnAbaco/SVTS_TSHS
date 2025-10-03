@@ -64,11 +64,20 @@
 
 .btn-primary {
     text-decoration: none; /* ensure no underline */
-    background: #4b0000;
+    background: #218838;
     color: #fff;
 }
 .btn-primary:hover {
-    background: #2b0000;
+    background: #1c7430;
+}
+
+.btn-edit {
+    text-decoration: none; /* ensure no underline */
+    background: #4b0082;
+    color: #fff;
+}
+.btn-edit:hover {
+    background: #3d006b;
 }
 
 .btn-secondary {
@@ -80,19 +89,19 @@
 }
 
 .btn-info {
-    background: #007bff;
+    background: #e05a00;
     color: #fff;
 }
 .btn-info:hover {
-    background: #0056b3;
+    background: #b84a00;
 }
 
 .btn-danger {
-    background: #e53935;
+    background: #c82333;
     color: #fff;
 }
 .btn-danger:hover {
-    background: #b71c1c;
+    background: #a71d2a;
 }
 
 /* ===========================

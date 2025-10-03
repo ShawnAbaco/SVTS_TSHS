@@ -16,7 +16,7 @@ class PAdviserController extends Controller
     // AdviserController.php (index)
 public function index(Request $request)
 {
-    $advisers = Adviser::orderBy('adviser_lname')
+    $advisers = Adviser::orderBy('updated_at')
                 ->paginate(15)           // <-- paginate instead of get()/all()
                 ->appends($request->query()); // keep query string (useful if you later add server search)
 

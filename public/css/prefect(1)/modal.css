@@ -180,13 +180,13 @@
 }
 
 .btn-secondary {
-  background: #007bff;
+  background: #5a6268;
   color: #fff;
   border: none;
 }
 
 .btn-secondary:hover {
-  background: #0056b3;
+  background: #4e555b;
 }
 
 .btn-danger {
