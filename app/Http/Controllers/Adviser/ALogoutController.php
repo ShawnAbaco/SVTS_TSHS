@@ -21,6 +21,6 @@ public function logout(Request $request)
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('adviser.login');
+        return redirect()->route('login');
     }
 }

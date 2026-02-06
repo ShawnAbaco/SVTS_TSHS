@@ -1,0 +1,98 @@
+/* Settlement modal specific styles - scoped to #settlementModal */
+#settlementModal {
+  display: none; /* shown via inline style in JS */
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 99999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#settlementModal .modal-content {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#settlementModal .edit-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid #eef2f6;
+  background: #fbfbfd;
+}
+
+#settlementModal .edit-modal-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #263238;
+}
+
+#settlementModal .close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+#settlementModal .edit-modal-body {
+  padding: 16px 18px;
+}
+
+#settlementModal .edit-form-group {
+  margin-bottom: 12px;
+}
+
+#settlementModal .edit-form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #2b2b2b;
+  font-size: 0.95rem;
+}
+
+#settlementModal .edit-form-group select,
+#settlementModal .edit-form-group input[type="text"],
+#settlementModal .edit-form-group input[type="date"],
+#settlementModal .edit-form-group input[type="time"] {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #ccd6dd;
+  border-radius: 6px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+#settlementModal .btn-primary {
+  background: #2e86de;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#settlementModal .btn-secondary {
+  background: #eef2f6;
+  color: #263238;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* small screens */
+@media (max-width: 520px) {
+  #settlementModal .modal-content { max-width: 96%; }
+  #settlementModal .edit-modal-header h3 { font-size: 1rem; }
+}

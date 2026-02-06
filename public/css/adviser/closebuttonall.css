@@ -1,0 +1,22 @@
+
+        /* Add some styling for the cls-buttn */
+        .cls-buttn {
+background-color: #d60404;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .cls-buttn:hover {
+background-color: #d60404;        }
+
+        /* Remove old info-modal-actions styling since we're replacing it */
+        .info-modal-actions {
+            display: none;
+        }
+   

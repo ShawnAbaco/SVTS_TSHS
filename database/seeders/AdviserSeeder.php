@@ -10,8 +10,8 @@ class AdviserSeeder extends Seeder
     public function run(): void
     {
         $advisers = [
-            ['Luis', 'Torres', 'male', 'luis.torres@gmail.com', '09171239876', 'Eureka', 11, '09171234568'],
-            ['Clara', 'Velasco', 'female', 'clara.velasco@gmail.com', '09281239876', 'Formidable', 12, '09281234569'],
+            ['Adviser', '', 'male', 'tshssvts@gmail.com', '09171239876', 'Eureka', 11, '09171234568'],
+            ['Junald', 'Gonzaga', 'male', 'junaldadviser@gmail.com', '09281239876', 'Formidable', 12, '09281234569'],
         ];
 
         foreach ($advisers as $a) {
@@ -20,10 +20,11 @@ class AdviserSeeder extends Seeder
                 'adviser_lname' => $a[1],
                 'adviser_sex' => $a[2],
                 'adviser_email' => $a[3],
-                'adviser_password' => bcrypt('password123'),
+                'adviser_password' => bcrypt('adviser'),
+                'adviser_contactinfo' => $a[4],
                 'adviser_section' => $a[5],
                 'adviser_gradelevel' => $a[6],
-                'adviser_contactinfo' => $a[7],
+                'status' => 'active', // UPDATED: changed from 'adviser_status' to 'status'
             ]);
         }
     }

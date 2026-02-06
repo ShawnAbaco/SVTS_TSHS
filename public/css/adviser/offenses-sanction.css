@@ -1,0 +1,1966 @@
+/* ===========================
+   OFFENSES & SANCTIONS CSS - MINIMAL
+   =========================== */
+
+/* ===== Main Container ===== */
+.offenses-sanctions-container {
+    padding: 20px;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== Toolbar Styles ===== */
+.offenses-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.offenses-toolbar h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.offenses-toolbar .offenses-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.offenses-search-input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    min-width: 250px;
+}
+
+.offenses-search-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.offenses-btn-print,
+.offenses-btn-export {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.offenses-btn-print {
+    background: #3498db;
+    color: white;
+}
+
+.offenses-btn-export {
+    background: #27ae60;
+    color: white;
+}
+
+.offenses-btn-print:hover,
+.offenses-btn-export:hover {
+    opacity: 0.9;
+}
+
+/* ===== Summary Dashboard ===== */
+.offenses-summary-dashboard {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.offenses-summary-title {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Stats Grid */
+.offenses-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.offenses-stat-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    transition: all 0.2s ease;
+}
+
+.offenses-stat-item:hover {
+    border-color: #3498db;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.offenses-stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.offenses-stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1;
+}
+
+.offenses-stat-subtext {
+    font-size: 0.8rem;
+    color: #95a5a6;
+    margin-top: 5px;
+}
+
+/* Statistics Tabs */
+.offenses-stats-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    padding: 5px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.offenses-stats-tab {
+    padding: 10px 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #666;
+    border-radius: 4px;
+    flex: 1;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.offenses-stats-tab:hover {
+    color: #3498db;
+    background: rgba(52, 152, 219, 0.05);
+}
+
+.offenses-stats-tab.active {
+    background: white;
+    color: #2c3e50;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Tab Panels */
+.offenses-tab-panel {
+    display: none;
+}
+
+.offenses-tab-panel.active {
+    display: block;
+}
+
+/* Chart Container */
+.offenses-chart-container {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+}
+
+.offenses-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.offenses-chart-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.offenses-chart-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Top Offenses List */
+.offenses-top-offenses-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.offenses-top-offense-card {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    transition: all 0.2s ease;
+}
+
+.offenses-top-offense-card:hover {
+    border-color: #3498db;
+    background: white;
+}
+
+.offenses-top-offense-rank {
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.offenses-rank-number {
+    background: #3498db;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.offenses-top-offense-content {
+    flex: 1;
+}
+
+.offenses-top-offense-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.offenses-top-offense-stats {
+    display: flex;
+    gap: 15px;
+}
+
+.offenses-stat-item-sm {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.offenses-top-offense-action {
+    flex-shrink: 0;
+}
+
+.offenses-btn-view-details {
+    padding: 8px 15px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.offenses-btn-view-details:hover {
+    background: #2980b9;
+}
+
+/* Offense Statistics Table */
+.offenses-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.offenses-stats-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #2c3e50;
+    border-bottom: 2px solid #eee;
+    background: #f8f9fa;
+}
+
+.offenses-stats-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #4a5568;
+}
+
+.offenses-stats-table tr:hover td {
+    background-color: #f8f9fa;
+}
+
+/* Select Wrapper */
+.offenses-select-wrapper {
+    position: relative;
+    min-width: 200px;
+}
+
+.offenses-custom-select {
+    padding: 10px 35px 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: white;
+    width: 100%;
+    appearance: none;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.offenses-custom-select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.offenses-select-wrapper i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+}
+
+/* Search Box */
+.offenses-search-box {
+    position: relative;
+    min-width: 200px;
+}
+
+.offenses-search-input-sm {
+    padding: 10px 35px 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    width: 100%;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.offenses-search-input-sm:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Table Responsive */
+.offenses-table-responsive {
+    overflow-x: auto;
+    border-radius: 6px;
+}
+
+/* Empty States */
+.offenses-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #e2e8f0;
+}
+
+.offenses-empty-state i {
+    margin-bottom: 15px;
+    color: #cbd5e1;
+    font-size: 2.5rem;
+}
+
+.offenses-empty-state h4 {
+    margin: 10px 0 10px;
+    color: #64748b;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.offenses-empty-state p {
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.5;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.offenses-empty-state-sm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    color: #94a3b8;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.offenses-empty-state-sm i {
+    font-size: 1.2rem;
+}
+
+.offenses-empty-state-sm span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Loading State */
+.offenses-loading-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.offenses-loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f4f6;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.offenses-loading-state h4 {
+    margin: 0 0 10px;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.offenses-loading-state p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Error State */
+.offenses-error-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fee;
+    border-radius: 8px;
+    border: 2px solid #fcc;
+}
+
+.offenses-error-state i {
+    margin-bottom: 15px;
+    color: #f56565;
+    font-size: 2.5rem;
+}
+
+.offenses-error-state h4 {
+    margin: 10px 0 10px;
+    color: #c53030;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.offenses-error-state p {
+    max-width: 400px;
+    margin: 0 auto 15px;
+    line-height: 1.5;
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.offenses-btn-retry {
+    padding: 10px 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.offenses-btn-retry:hover {
+    background: #2980b9;
+}
+
+/* Action Buttons */
+.offenses-action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.offenses-btn-action {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.offenses-btn-action:hover {
+    opacity: 0.9;
+}
+
+.offenses-btn-view {
+    background: #3498db;
+    color: white;
+}
+
+.offenses-btn-analyze {
+    background: #27ae60;
+    color: white;
+}
+
+/* Section Styles */
+.offenses-table-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.offenses-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.offenses-section-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.offenses-section-info {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+/* Table Enhancements */
+.offenses-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.offenses-table thead {
+    background: #2c3e50;
+}
+
+.offenses-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: white;
+    border-bottom: 2px solid #1a252f;
+    font-size: 0.85rem;
+}
+
+.offenses-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    color: #4a5568;
+    vertical-align: middle;
+}
+
+.offenses-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.offenses-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.offenses-table tbody tr:nth-child(even):hover {
+    background-color: #f0f0f0;
+}
+
+/* No Data */
+.offenses-no-data {
+    text-align: center !important;
+    color: #666;
+    font-style: italic;
+    padding: 40px 20px !important;
+    background: #f8f9fa !important;
+    font-size: 1rem;
+}
+
+/* Sanctions List */
+.offenses-sanctions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+}
+
+.offenses-sanction-tag {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #7dd3fc;
+}
+
+/* Offense Type Cell */
+.offenses-type-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.offenses-type-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 2px;
+}
+
+.offenses-type-desc {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.3;
+}
+
+/* Frequency Badge */
+.offenses-frequency-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 10px;
+    background: #e0f2fe;
+    border-radius: 6px;
+    border: 1px solid #bae6fd;
+}
+
+.offenses-badge-count {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0369a1;
+    line-height: 1;
+}
+
+.offenses-badge-label {
+    font-size: 0.7rem;
+    color: #38bdf8;
+    margin-top: 2px;
+}
+
+/* Student Count */
+.offenses-student-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: #dcfce7;
+    border-radius: 6px;
+    border: 1px solid #bbf7d0;
+}
+
+.offenses-student-count i {
+    color: #16a34a;
+    font-size: 1rem;
+}
+
+.offenses-student-count span {
+    font-weight: 500;
+    color: #166534;
+    font-size: 0.9rem;
+}
+
+/* Date Cell */
+.offenses-date-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.offenses-date-value {
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 2px;
+}
+
+.offenses-date-diff {
+    font-size: 0.75rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* NA Text */
+.offenses-na-text {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+/* ===== Pagination ===== */
+.offenses-pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.offenses-pagination-info {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+    background: #f8f9fa;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.offenses-pagination-nav {
+    display: flex;
+}
+
+.offenses-pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 8px;
+}
+
+.offenses-page-item {
+    margin: 0;
+}
+
+.offenses-page-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #4a5568;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.offenses-page-link:hover {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.offenses-page-item.disabled .offenses-page-link {
+    color: #a0aec0;
+    pointer-events: none;
+    background: #f7fafc;
+    border-color: #e2e8f0;
+}
+
+/* ===== Modal Styles ===== */
+.offenses-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow-y: hidden; 
+}
+
+.offenses-modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 90%;
+    width: 1200px;
+    max-height: 90vh;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto; /* Center with margins */
+    position: relative;
+}
+
+.offenses-info-modal-header {
+    padding: 20px 30px;
+    background: #2c3e50;
+    color: white;
+    border-radius: 12px 12px 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.offenses-info-content {
+    padding: 25px 30px;
+    overflow-y: auto;
+    flex: 1;
+    max-height: calc(90vh - 140px); /* Account for header and footer */
+}
+
+.offenses-modal-footer {
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.offenses-btn-close {
+    padding: 8px 16px;
+    background: #666;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.offenses-btn-close:hover {
+    background: #555;
+}
+
+/* ===== Details Section CSS ===== */
+.offenses-details-container {
+    padding: 10px 0;
+}
+
+.offenses-details-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.offenses-details-title h4 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.offenses-details-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.offenses-details-meta {
+    margin-top: 10px;
+}
+
+.offenses-meta-item {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Stats Cards Grid */
+.offenses-stats-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.offenses-stat-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.offenses-stat-card-primary {
+    border-left: 4px solid #3498db;
+}
+
+.offenses-stat-card-success {
+    border-left: 4px solid #27ae60;
+}
+
+.offenses-stat-card-warning {
+    border-left: 4px solid #f39c12;
+}
+
+.offenses-stat-card-info {
+    border-left: 4px solid #17a2b8;
+}
+
+.offenses-stat-card-icon {
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.offenses-stat-card-content {
+    flex: 1;
+}
+
+.offenses-stat-card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1;
+}
+
+.offenses-stat-card-label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 4px;
+}
+
+.offenses-stat-card-subtext {
+    font-size: 0.75rem;
+    color: #95a5a6;
+    margin-top: 2px;
+}
+
+/* Timeline */
+.offenses-timeline-container {
+    padding: 15px 0;
+}
+
+.offenses-timeline-item {
+    display: flex;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.offenses-timeline-item:last-child {
+    border-bottom: none;
+}
+
+.offenses-timeline-date {
+    min-width: 100px;
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.offenses-timeline-content {
+    flex: 1;
+}
+
+.offenses-timeline-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 3px;
+}
+
+.offenses-timeline-description {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Details Section */
+.offenses-details-section {
+    margin-bottom: 25px;
+}
+
+.offenses-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.offenses-section-header h5 {
+    margin: 0;
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.offenses-section-badge {
+    background: #3498db;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Details Table */
+.offenses-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.offenses-details-table th {
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    color: #2c3e50;
+    border-bottom: 2px solid #eee;
+    background: #f8f9fa;
+}
+
+.offenses-details-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    color: #4a5568;
+}
+
+.offenses-details-table tr:hover td {
+    background-color: #f8f9fa;
+}
+
+/* Student Cell */
+.offenses-student-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.offenses-student-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+/* Sanction Badge */
+.offenses-sanction-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #7dd3fc;
+}
+
+/* Status Badge */
+.offenses-status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.offenses-status-pending {
+    background: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fbbf24;
+}
+
+.offenses-status-resolved {
+    background: #d1fae5;
+    color: #059669;
+    border: 1px solid #34d399;
+}
+
+/* Distribution List */
+.offenses-distribution-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.offenses-distribution-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 8px 0;
+}
+
+.offenses-distribution-name {
+    min-width: 150px;
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.offenses-distribution-bar {
+    flex: 1;
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+.offenses-bar-fill {
+    height: 100%;
+    background: #3498db;
+    border-radius: 4px;
+}
+
+.offenses-distribution-stats {
+    min-width: 80px;
+    text-align: right;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Repeat Offenders Grid */
+.offenses-repeat-offenders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.offenses-offender-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    transition: all 0.2s ease;
+}
+
+.offenses-offender-card:hover {
+    border-color: #3498db;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.offenses-offender-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.offenses-offender-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95rem;
+}
+
+.offenses-violation-count {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.offenses-offender-details {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.offenses-offender-info {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.offenses-offender-last {
+    font-size: 0.8rem;
+    color: #95a5a6;
+}
+
+/* Trend Chart */
+.offenses-trend-chart {
+    padding: 15px 0;
+}
+
+.offenses-trend-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 200px;
+    padding: 0 10px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+
+.offenses-trend-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.offenses-bar-value {
+    width: 20px;
+    background: #3498db;
+    border-radius: 3px 3px 0 0;
+    transition: height 0.3s ease;
+}
+
+.offenses-bar-label {
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+    transform: rotate(-45deg);
+    white-space: nowrap;
+    margin-top: 5px;
+}
+
+.offenses-bar-count {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+/* Additional CSS for Modal Content */
+.offense-modal-content {
+    padding: 10px;
+}
+
+.offense-modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.offense-modal-header h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.offense-modal-subtitle {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+}
+
+.modal-detail-item {
+    margin-bottom: 20px;
+}
+
+.modal-detail-item label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.modal-detail-item label i {
+    color: #3498db;
+    width: 16px;
+}
+
+.modal-detail-item p {
+    margin: 0;
+    color: #666;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    padding-left: 24px;
+}
+
+.modal-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding-left: 24px;
+}
+
+.modal-stat {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.modal-stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1;
+}
+
+.modal-stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 4px;
+}
+
+.modal-timeline {
+    padding-left: 24px;
+}
+
+.modal-timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-timeline-item i {
+    color: #3498db;
+    margin-top: 2px;
+}
+
+.modal-timeline-content {
+    flex: 1;
+}
+
+.modal-timeline-content strong {
+    display: block;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.modal-timeline-content span {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.modal-status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding-left: 24px;
+}
+
+.modal-status {
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    border: 2px solid;
+}
+
+.modal-status.pending {
+    border-color: #f39c12;
+    background: #fef9e7;
+}
+
+.modal-status.resolved {
+    border-color: #27ae60;
+    background: #eafaf1;
+}
+
+.modal-status-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.modal-status.pending .modal-status-value {
+    color: #d35400;
+}
+
+.modal-status.resolved .modal-status-value {
+    color: #229954;
+}
+
+.modal-status-label {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+.modal-status.pending .modal-status-label {
+    color: #e67e22;
+}
+
+.modal-status.resolved .modal-status-label {
+    color: #27ae60;
+}
+
+.modal-actions {
+    padding-left: 24px;
+    margin-top: 25px;
+}
+
+.modal-actions .offenses-btn-action {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Add these styles to your existing CSS */
+.offenses-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.offenses-btn-export {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.offenses-btn-export:hover {
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.offenses-section-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.offenses-btn-export-table {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.offenses-btn-export-table:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-1px);
+}
+
+.offenses-top-offense-action {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.offenses-loading-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.offenses-loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Tab Styles */
+.offenses-stats-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 10px;
+}
+
+.offenses-stats-tab {
+    background: #f3f4f6;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    color: #6b7280;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.offenses-stats-tab:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.offenses-stats-tab.active {
+    background: #3b82f6;
+    color: white;
+}
+
+.offenses-tab-panel {
+    display: none;
+}
+
+.offenses-tab-panel.active {
+    display: block;
+}
+
+/* Button Styles */
+.offenses-btn-action {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.offenses-btn-view {
+    background: #3b82f6;
+    color: white;
+}
+
+.offenses-btn-view:hover {
+    background: #2563eb;
+}
+
+.offenses-btn-analyze {
+    background: #10b981;
+    color: white;
+}
+
+.offenses-btn-analyze:hover {
+    background: #059669;
+}
+
+.offenses-btn-view-details {
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.offenses-btn-view-details:hover {
+    background: #7c3aed;
+}
+
+/* Summary Header Styles */
+.offenses-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.offenses-summary-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.offenses-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.offenses-section-title {
+    flex: 1;
+}
+
+.offenses-section-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.offenses-export-btn {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(229, 62, 62, 0.2);
+}
+
+.offenses-export-btn:hover {
+    background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(229, 62, 62, 0.3);
+}
+
+.offenses-export-btn:active {
+    transform: translateY(0);
+}
+
+.offenses-export-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.offenses-export-btn i {
+    font-size: 16px;
+}
+
+/* Add Code of Conduct button style */
+.offenses-code-conduct-btn {
+    background: linear-gradient(135deg, #2980b9 0%, #1c5a7c 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(41, 128, 185, 0.2);
+    margin-right: 10px;
+}
+
+.offenses-code-conduct-btn:hover {
+    background: linear-gradient(135deg, #1c5a7c 0%, #154360 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(41, 128, 185, 0.3);
+}
+
+.offenses-code-conduct-btn:active {
+    transform: translateY(0);
+}
+
+.offenses-code-conduct-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.offenses-code-conduct-btn i {
+    font-size: 16px;
+}
+
+/* ===== MODAL SCROLL FIXES ===== */
+/* These are the crucial fixes for modal scrolling */
+
+/* Custom scrollbar for modal content */
+.offenses-info-content {
+    scrollbar-width: thin;
+    scrollbar-color: #3498db #f1f1f1;
+}
+
+.offenses-info-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.offenses-info-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.offenses-info-content::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 5px;
+    border: 2px solid #f1f1f1;
+}
+
+.offenses-info-content::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
+
+/* Ensure body scrolls normally when modal is open */
+body {
+    overflow-y: auto !important;
+    height: auto !important;
+}
+
+/* Specifically for the full offense modal */
+#offenseFullModal .offenses-modal-content {
+    max-height: 90vh;
+    width: 1200px;
+    max-width: 90%;
+    margin: 20px auto;
+}
+
+#offenseFullModal .offenses-info-content {
+    max-height: calc(90vh - 140px);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Make sure all modal content areas are scrollable */
+.offenses-modal .offenses-info-content {
+    max-height: calc(90vh - 140px);
+    overflow-y: auto;
+}
+
+/* For smaller modals */
+#offenseDetailsModal .offenses-modal-content,
+#studentViolationsModal .offenses-modal-content {
+    max-width: 700px;
+    max-height: 90vh;
+}
+
+#offenseDetailsModal .offenses-info-content,
+#studentViolationsModal .offenses-info-content {
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+}
+
+/* ===== Responsive Design ===== */
+@media screen and (max-width: 768px) {
+    .offenses-sanctions-container {
+        padding: 15px;
+    }
+    
+    .offenses-toolbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .offenses-toolbar .offenses-actions {
+        width: 100%;
+    }
+    
+    .offenses-search-input {
+        min-width: unset;
+        width: 100%;
+    }
+    
+    .offenses-btn-print,
+    .offenses-btn-export {
+        width: 100%;
+    }
+    
+    .offenses-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .offenses-stats-tabs {
+        flex-direction: column;
+    }
+    
+    .offenses-stats-tab {
+        width: 100%;
+    }
+    
+    .offenses-chart-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .offenses-chart-actions {
+        width: 100%;
+    }
+    
+    .offenses-select-wrapper,
+    .offenses-search-box {
+        min-width: unset;
+        width: 100%;
+    }
+    
+    .offenses-section-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .offenses-section-info {
+        align-self: center;
+    }
+    
+    .offenses-action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .offenses-btn-action {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .offenses-pagination-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .offenses-pagination-info {
+        order: 1;
+    }
+    
+    .offenses-pagination-links {
+        order: 2;
+    }
+    
+    .offenses-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .offenses-stats-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .offenses-repeat-offenders-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Responsive modal fixes */
+    .offenses-modal {
+        padding: 20px 10px;
+    }
+    
+    .offenses-modal-content {
+        max-width: 95%;
+        width: 100%;
+    }
+    
+    #offenseFullModal .offenses-modal-content {
+        width: 95%;
+        max-width: 95%;
+    }
+    
+    .offenses-info-content {
+        max-height: calc(90vh - 120px);
+    }
+    
+    .modal-stats-grid,
+    .modal-status-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .offenses-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .offenses-stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .offenses-top-offense-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .offenses-top-offense-rank {
+        margin-right: 0;
+    }
+    
+    .offenses-top-offense-action {
+        align-self: stretch;
+    }
+    
+    .offenses-btn-view-details {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .offenses-modal-footer {
+        flex-direction: column;
+    }
+    
+    .offenses-btn-close {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .offenses-stats-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}

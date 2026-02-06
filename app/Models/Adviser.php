@@ -17,13 +17,11 @@ class Adviser extends Authenticatable
         'adviser_email',
         'adviser_password',
         'adviser_contactinfo',
+        'profile_image',
         'adviser_section',
         'adviser_gradelevel',
         'status',
-
     ];
-
-
 
     protected $hidden = [
         'adviser_password',
@@ -38,7 +36,8 @@ class Adviser extends Authenticatable
     {
         return $this->hasMany(Student::class, 'adviser_id');
     }
-     /** 🔎 Local Scopes for Status Filtering */
+
+    /** 🔎 Local Scopes for Status Filtering */
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

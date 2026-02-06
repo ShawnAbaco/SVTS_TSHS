@@ -17,10 +17,9 @@ class PrefectOfDiscipline extends Authenticatable
         'prefect_email',
         'prefect_password',
         'prefect_contactinfo',
+        'profile_image',
         'status',
     ];
-
-
 
     protected $hidden = [
         'prefect_password',
@@ -40,7 +39,8 @@ class PrefectOfDiscipline extends Authenticatable
     {
         return $this->hasMany(Complaints::class, 'prefect_id');
     }
-     /** 🔎 Local Scopes for Status Filtering */
+
+    /** 🔎 Local Scopes for Status Filtering */
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

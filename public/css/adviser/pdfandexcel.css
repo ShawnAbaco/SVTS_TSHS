@@ -1,0 +1,41 @@
+
+        .btn-export {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .btn-export:hover {
+            background-color: #218838;
+        }
+
+        .btn-export.excel {
+            background-color: #007bff;
+        }
+
+        .btn-export.excel:hover {
+            background-color: #0056b3;
+        }
+
+        .info-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .export-buttons-container {
+            display: flex;
+            justify-content: flex-end;
+            margin: 20px 0;
+        }
+  

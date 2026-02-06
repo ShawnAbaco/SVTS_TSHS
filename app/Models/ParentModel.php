@@ -21,13 +21,12 @@ class ParentModel extends Model
         'status',
     ];
 
-
-
     public function students()
     {
-        return $this->hasMany(Student::class, 'parent_id');
+        return $this->hasMany(Student::class, 'parent_id', 'parent_id');
     }
-     /** 🔎 Local Scopes for Status Filtering */
+
+    /** 🔎 Local Scopes for Status Filtering */
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

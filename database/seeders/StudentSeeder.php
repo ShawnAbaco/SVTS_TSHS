@@ -45,6 +45,7 @@ class StudentSeeder extends Seeder
                 'student_birthdate' => $s[3],
                 'student_address' => 'Brgy. ' . ($i+1) . ', Tagoloan, Misamis Oriental',
                 'student_contactinfo' => '0917' . str_pad($i+1000, 7, '0', STR_PAD_LEFT),
+                'status' => 'active', // UPDATED: changed from 'student_status' to 'status'
             ]);
         }
     }

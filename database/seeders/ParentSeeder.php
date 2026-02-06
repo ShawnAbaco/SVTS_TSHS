@@ -25,6 +25,7 @@ class ParentSeeder extends Seeder
                 'parent_email' => $p[4],
                 'parent_contactinfo' => $p[5],
                 'parent_relationship' => $p[6],
+                'status' => 'active', // UPDATED: changed from 'parent_status' to 'status'
             ]);
         }
     }

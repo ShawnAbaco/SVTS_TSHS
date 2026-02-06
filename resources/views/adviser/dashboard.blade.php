@@ -2,237 +2,241 @@
 
 @section('content')
 <div class="main-container">
+    <style>
+    .toolbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80px;
+    }
 
-<style>
-
-.toolbar {
-    display: flex;             /* make it a flex container */
-    justify-content: center;   /* horizontal center */
-    align-items: center;       /* vertical center */
-    height: 80px;              /* adjust as needed */
-}
-
-.toolbar h3 {
-    font-size: 2rem;
-    color: #4b0000;
-    font-weight: 600;
-    text-align: center;        /* centers text inside h3 if needed */
-}
-</style>
-
+    .toolbar h3 {
+        font-size: 2rem;
+        color: #4b0000;
+        font-weight: 600;
+        text-align: center;
+    }
     </style>
-  <!-- Toolbar -->
-  <div class="toolbar">
-        <h3>Dashboard Overview</h3>
-  </div>
 
-<br>
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <h3>Dashboard Overview</h3>
+    </div>
+
     <!-- Stats Cards -->
     <div class="cards">
-      <div class="card">
-        <div>
-          <h3>Total Students</h3>
-          <p>1,248</p>
+        <div class="card">
+            <div>
+                <h3>Total Students</h3>
+                <p>{{ $totalStudents ?? 0 }}</p>
+            </div>
+            <i class="fas fa-user-graduate"></i>
         </div>
-        <i class="fas fa-user-graduate"></i>
-      </div>
-      <div class="card">
-        <div>
-          <h3>Violations</h3>
-          <p>42</p>
+        <div class="card">
+            <div>
+                <h3>Violations</h3>
+                <p>{{ $totalViolations ?? 0 }}</p>
+            </div>
+            <i class="fas fa-exclamation-circle"></i>
         </div>
-        <i class="fas fa-exclamation-circle"></i>
-      </div>
-      <div class="card">
-        <div>
-          <h3>Complaints</h3>
-          <p>18</p>
+        <div class="card">
+            <div>
+                <h3>Complaints</h3>
+                <p>{{ $totalComplaints ?? 0 }}</p>
+            </div>
+            <i class="fas fa-comments"></i>
         </div>
-        <i class="fas fa-comments"></i>
-      </div>
     </div>
 
     <!-- Chart + Table -->
     <div class="grid">
-      <div class="card">
-        <div class="card-header">
-          <h3>Violation Types</h3>
+        <div class="card">
+            <div class="card-header">
+                <h3>Violation Types</h3>
+            </div>
+            <div class="chart-container">
+                @if(isset($violationTypes) && $violationTypes->where('count', '>', 0)->count() > 0)
+                <canvas id="violationChart"></canvas>
+                @else
+                <div class="no-data-message">
+                    <i class="fas fa-chart-pie" style="font-size: 48px; color: #bdc3c7; margin-bottom: 15px;"></i>
+                    <p style="color: #7f8c8d; font-size: 16px; text-align: center;">No violation data available</p>
+                </div>
+                @endif
+            </div>
         </div>
-        <canvas id="violationChart"></canvas>
-      </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h3>Recent Violations & Complaints</h3>
-          <a href="#">View All</a>
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Activity (Last 7 Days)</h3>
+                <a href="#">View All</a>
+            </div>
+            <div class="chart-container">
+                <canvas id="recentChart"></canvas>
+            </div>
         </div>
-        <canvas id="recentChart" style="width:100%; max-width: 100%; height: 250px;"></canvas>
-      </div>
     </div>
-
-    <!-- Upcoming Appointments BELOW charts -->
-    <h2 style="margin:20px 0; margin-left:20px; font-size:18px; color:#111;">Upcoming Appointments</h2>
-    <div class="cards upcoming">
-      <div class="card" style="background-color:#00aaff;">
-        <div><h3>John Doe</h3><p>Sep 25, 10:00 AM</p></div>
-        <i class="fas fa-calendar-alt"></i>
-      </div>
-      <div class="card" style="background-color:#ff9900;">
-        <div><h3>Jane Smith</h3><p>Sep 26, 1:30 PM</p></div>
-        <i class="fas fa-calendar-alt"></i>
-      </div>
-      <div class="card" style="background-color:#ff3366;">
-        <div><h3>Michael Lee</h3><p>Sep 27, 9:00 AM</p></div>
-        <i class="fas fa-calendar-alt"></i>
-      </div>
-      <div class="card" style="background-color:#33cc33;">
-        <div><h3>Sarah Brown</h3><p>Sep 28, 11:00 AM</p></div>
-        <i class="fas fa-calendar-alt"></i>
-      </div>
-    </div>
-  </div>
-
-  <!-- Info Modal -->
-  <div id="infoModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 id="modalTitle">Title</h2>
-      <div id="modalBody">Details go here...</div>
-    </div>
-  </div>
+</div>
 
 <script>
-  // Chart.js Doughnut
-  const ctx = document.getElementById('violationChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Attendance', 'Behavior', 'Dress Code', 'Other'],
-      datasets: [{
-        data: [40, 25, 20, 15],
-        backgroundColor: ['#00ff00', '#ff0000', '#0000ff', '#ffff00'],
-        borderWidth: 1
-      }]
-    },
-    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-  });
+    // Chart.js Doughnut - Violation Types (only if there's data)
+    @if(isset($violationTypes) && $violationTypes->where('count', '>', 0)->count() > 0)
+    const ctx = document.getElementById('violationChart').getContext('2d');
 
-  // Recent Violations Line Chart
-  const recentCtx = document.getElementById('recentChart').getContext('2d');
-  new Chart(recentCtx, {
-    type: 'line',
-    data: {
-        labels: ['Jan 1','Jan 5','Jan 10','Jan 15','Jan 20','Jan 25','Jan 30'],
-        datasets: [
-            { label: 'Violations', data: [5,8,6,10,7,9,12], borderColor: '#FF0000', backgroundColor: 'rgba(255,0,0,0.2)', fill: true, tension: 0.3 },
-            { label: 'Complaints', data: [2,3,4,3,5,4,6], borderColor: '#0000FF', backgroundColor: 'rgba(0,0,255,0.2)', fill: true, tension: 0.3 }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' }, tooltip: { mode: 'index', intersect: false } },
-        interaction: { mode: 'nearest', axis: 'x', intersect: false },
-        scales: {
-            x: { display: true, title: { display: true, text: 'Date' } },
-            y: { display: true, title: { display: true, text: 'Count' }, beginAtZero: true }
-        }
-    }
-  });
+    const violationLabels = {!! json_encode($violationTypes->where('count', '>', 0)->pluck('offense_type')) !!};
+    const violationData = {!! json_encode($violationTypes->where('count', '>', 0)->pluck('count')) !!};
 
-  // Dropdown
-  const dropdowns = document.querySelectorAll('.dropdown-btn');
-  dropdowns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling;
-      dropdowns.forEach(otherBtn => {
-        const otherContainer = otherBtn.nextElementSibling;
-        if (otherBtn !== btn) {
-          otherBtn.classList.remove('active');
-          otherContainer.style.display = 'none';
-        }
-      });
-      btn.classList.toggle('active');
-      container.style.display = container.style.display === 'block' ? 'none' : 'block';
-    });
-  });
-
-  // Profile image & name
-  function changeProfileImage() { document.getElementById('imageInput').click(); }
-  document.getElementById('imageInput').addEventListener('change', function(e){
-    const file = e.target.files[0];
-    if(file){
-      const reader = new FileReader();
-      reader.onload = function(ev){ document.getElementById('profileImage').src = ev.target.result; }
-      reader.readAsDataURL(file);
-    }
-  });
-  function changeProfileName() {
-    const newName = prompt("Enter new name:");
-    if(newName) document.querySelector('.user-info span').innerText = newName;
-  }
-
-  // Logout
-  function logout() {
-    const confirmLogout = confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-    fetch("{{ route('adviser.logout') }}", {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
-    })
-    .then(response => { if(response.ok){ window.location.href = "{{ route('login') }}"; } })
-    .catch(error => console.error('Logout failed:', error));
-  }
-
-  // Info modal logic
-  const modal = document.getElementById("infoModal");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalBody = document.getElementById("modalBody");
-  const closeBtn = document.querySelector(".close");
-  closeBtn.onclick = () => modal.style.display = "none";
-  window.onclick = (event) => { if(event.target === modal) modal.style.display = "none"; }
-
-
-// Logout - Now using modal notification
-  function logout() {
-    showNotification('🚪 Logout', 'Are you sure you want to logout?', 'confirm', {
-      yesText: 'Yes, Logout',
-      noText: 'Cancel',
-      onYes: () => {
-        fetch("{{ route('adviser.logout') }}", {
-          method: 'POST',
-          headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-          }
-        })
-        .then(response => {
-          if(response.ok){
-            showNotification('👋 Goodbye', 'Logging out...', 'success', {
-              yesText: 'OK',
-              noText: null,
-              onYes: () => {
-                window.location.href = "{{ route('login') }}";
-              }
-            });
-          }
-        })
-        .catch(error => {
-          console.error('Logout failed:', error);
-          showNotification('❌ Error', 'Logout failed. Please try again.', 'danger', {
-            yesText: 'OK',
-            noText: null,
-            onYes: () => {
-              document.getElementById('notificationModal').style.display = 'none';
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: violationLabels,
+            datasets: [{
+                data: violationData,
+                backgroundColor: [
+                    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
+                    '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
+                    '#BB8FCE', '#85C1E9', '#F8C471', '#82E0AA'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '50%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        font: {
+                            size: 10,
+                            weight: '200'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                    titleFont: { size: 12, weight: 'normal' },
+                    bodyFont: { size: 13, weight: '600' },
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                            return `${label}: ${value} violations (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
             }
-          });
-        });
-      },
-      onNo: () => {
-        document.getElementById('notificationModal').style.display = 'none';
-      }
+        }
     });
-  }
-</script>
+    @endif
 
+    // Recent Violations Line Chart
+    const recentCtx = document.getElementById('recentChart').getContext('2d');
+
+    // Safe data access with defaults
+    const recentDates = {!! isset($recentActivity['dates']) ? json_encode($recentActivity['dates']) : '[]' !!};
+    const violationData = {!! isset($recentActivity['violations']) ? json_encode($recentActivity['violations']) : '[]' !!};
+    const complaintData = {!! isset($recentActivity['complaints']) ? json_encode($recentActivity['complaints']) : '[]' !!};
+
+    new Chart(recentCtx, {
+        type: 'line',
+        data: {
+            labels: recentDates,
+            datasets: [
+                {
+                    label: 'Violations',
+                    data: violationData,
+                    borderColor: '#FF6B6B',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#FF6B6B',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: 'Complaints',
+                    data: complaintData,
+                    borderColor: '#4ECDC4',
+                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#4ECDC4',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true,
+                        font: {
+                            size: 11,
+                            weight: '500'
+                        }
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                    titleFont: { size: 12 },
+                    bodyFont: { size: 13, weight: '600' },
+                    padding: 12
+                }
+            },
+            interaction: { mode: 'nearest', axis: 'x', intersect: false },
+            scales: {
+                x: {
+                    display: true,
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                y: {
+                    display: true,
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+</script>
 @endsection

@@ -22,22 +22,49 @@ return new class extends Migration
             $table->string('prefect_email', 255);
             $table->string('prefect_password', 255);
             $table->string('prefect_contactinfo', 255);
-            $table->string('status', 50)->default('active');
+            $table->string('profile_image')->nullable();
+            $table->string('status', 100);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // =========================
-        // Offenses with Sanction
+        // Offense
         // =========================
-        Schema::create('tbl_offenses_with_sanction', function (Blueprint $table) {
-    $table->bigIncrements('offense_sanc_id');
-    $table->string('offense_type', 255);
-    $table->text('offense_description');
-    $table->text('sanction_consequences');
-    $table->integer('group_number')->default(1);  // 👈 Add this
-    $table->integer('stage_number')->default(1);  // 👈 Add this
-    $table->timestamps();
-});
+        Schema::create('tbl_offense', function (Blueprint $table) {
+            $table->bigIncrements('offense_id');
+            $table->string('offense_type', 255);
+            $table->text('offense_description');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        // =========================
+        // Sanction
+        // =========================
+        Schema::create('tbl_sanction', function (Blueprint $table) {
+            $table->bigIncrements('sanction_id');
+            $table->text('sanction_consequences');
+            $table->text('sanction_description');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+
+        // =========================
+        // Sanction Stages
+        // =========================
+        Schema::create('tbl_offense_with_sanction_stages', function (Blueprint $table) {
+            $table->bigIncrements('owss_id');
+            $table->unsignedBigInteger('offense_id');
+            $table->unsignedBigInteger('sanction_id');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('offense_id')->references('offense_id')->on('tbl_offense')->onDelete('cascade');
+            $table->foreign('sanction_id')->references('sanction_id')->on('tbl_sanction')->onDelete('cascade');
+        });
+
         // =========================
         // Adviser
         // =========================
@@ -49,10 +76,12 @@ return new class extends Migration
             $table->string('adviser_email', 255);
             $table->string('adviser_password', 255);
             $table->string('adviser_contactinfo', 255);
+            $table->string('profile_image')->nullable();
             $table->string('adviser_section', 255);
             $table->string('adviser_gradelevel', 50);
-            $table->string('status', 50)->default('active');
+            $table->string('status', 100);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // =========================
@@ -67,8 +96,9 @@ return new class extends Migration
             $table->string('parent_email', 255)->nullable();
             $table->string('parent_contactinfo', 255);
             $table->string('parent_relationship', 50)->nullable();
-            $table->string('status', 50)->default('active');
+            $table->string('status', 100);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         // =========================
@@ -84,8 +114,9 @@ return new class extends Migration
             $table->date('student_birthdate');
             $table->string('student_address', 255);
             $table->string('student_contactinfo', 255);
-            $table->string('status', 50)->default('active');
+            $table->string('status', 100);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('parent_id')->references('parent_id')->on('tbl_parent')->onDelete('cascade');
             $table->foreign('adviser_id')->references('adviser_id')->on('tbl_adviser')->onDelete('cascade');
@@ -98,16 +129,35 @@ return new class extends Migration
             $table->bigIncrements('violation_id');
             $table->unsignedBigInteger('violator_id');
             $table->unsignedBigInteger('prefect_id');
-            $table->unsignedBigInteger('offense_sanc_id');
+            $table->unsignedBigInteger('offense_id');
+            $table->unsignedBigInteger('sanction_id');
             $table->text('violation_incident');
             $table->date('violation_date');
             $table->time('violation_time');
-            $table->string('status', 50)->default('active');
+            $table->string('status', 100);
+            $table->enum('handled_by', ['adviser', 'prefect'])->default('adviser'); // ← NEW COLUMN
+            $table->timestamp('escalated_at')->nullable(); // ← When escalated to prefect
+
+            // Witness and Evidence columns
+            $table->text('witnesses')->nullable(); // JSON or comma-separated witness names
+            $table->text('complainant')->nullable(); // JSON or comma-separated complainant names ← NEW
+
+            // Evidence columns
+            $table->text('evidence_description')->nullable(); // Description of evidence
+            $table->json('evidence_files')->nullable(); // JSON array of file paths
+
+            // Sanction timing columns (using datetime)
+            $table->datetime('sanction_start_at')->nullable(); // When sanction begins
+            $table->datetime('sanction_end_at')->nullable(); // When sanction ends/fulfilled
+// In your create_tbl_violation_record_table migration
+$table->enum('sanction_status', ['pending', 'ongoing', 'neglected', 'completed', 'dismissed'])->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('violator_id')->references('student_id')->on('tbl_student')->onDelete('cascade');
             $table->foreign('prefect_id')->references('prefect_id')->on('tbl_prefect_of_discipline')->onDelete('cascade');
-            $table->foreign('offense_sanc_id')->references('offense_sanc_id')->on('tbl_offenses_with_sanction')->onDelete('cascade');
+            $table->foreign('offense_id')->references('offense_id')->on('tbl_offense')->onDelete('cascade');
+            $table->foreign('sanction_id')->references('sanction_id')->on('tbl_sanction')->onDelete('cascade');
         });
 
         // =========================
@@ -116,11 +166,13 @@ return new class extends Migration
         Schema::create('tbl_violation_appointment', function (Blueprint $table) {
             $table->bigIncrements('violation_app_id');
             $table->unsignedBigInteger('violation_id');
+            $table->enum('handled_by', ['adviser', 'prefect'])->default('adviser');
             $table->date('violation_app_date');
             $table->time('violation_app_time');
+            $table->text('violation_app_notes')->nullable();
             $table->string('violation_app_status', 100);
-            $table->string('status', 50)->default('active');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('violation_id')->references('violation_id')->on('tbl_violation_record')->onDelete('cascade');
         });
@@ -131,66 +183,16 @@ return new class extends Migration
         Schema::create('tbl_violation_anecdotal', function (Blueprint $table) {
             $table->bigIncrements('violation_anec_id');
             $table->unsignedBigInteger('violation_id');
+            $table->enum('handled_by', ['adviser', 'prefect'])->default('adviser'); // ← ADD THIS
             $table->text('violation_anec_solution');
             $table->text('violation_anec_recommendation');
             $table->date('violation_anec_date');
             $table->time('violation_anec_time');
-            $table->string('status', 50)->default('active');
+            $table->string('status', 100);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('violation_id')->references('violation_id')->on('tbl_violation_record')->onDelete('cascade');
-        });
-
-        // =========================
-        // Complaints
-        // =========================
-        Schema::create('tbl_complaints', function (Blueprint $table) {
-            $table->bigIncrements('complaints_id');
-            $table->unsignedBigInteger('complainant_id');
-            $table->unsignedBigInteger('respondent_id');
-            $table->unsignedBigInteger('prefect_id');
-            $table->unsignedBigInteger('offense_sanc_id');
-            $table->text('complaints_incident');
-            $table->date('complaints_date');
-            $table->time('complaints_time');
-            $table->string('status', 50)->default('active');
-            $table->timestamps();
-
-            $table->foreign('complainant_id')->references('student_id')->on('tbl_student')->onDelete('cascade');
-            $table->foreign('respondent_id')->references('student_id')->on('tbl_student')->onDelete('cascade');
-            $table->foreign('prefect_id')->references('prefect_id')->on('tbl_prefect_of_discipline')->onDelete('cascade');
-            $table->foreign('offense_sanc_id')->references('offense_sanc_id')->on('tbl_offenses_with_sanction')->onDelete('cascade');
-        });
-
-        // =========================
-        // Complaints Appointment
-        // =========================
-        Schema::create('tbl_complaints_appointment', function (Blueprint $table) {
-            $table->bigIncrements('comp_app_id');
-            $table->unsignedBigInteger('complaints_id');
-            $table->date('comp_app_date');
-            $table->time('comp_app_time');
-            $table->string('comp_app_status', 100);
-            $table->string('status', 50)->default('active');
-            $table->timestamps();
-
-            $table->foreign('complaints_id')->references('complaints_id')->on('tbl_complaints')->onDelete('cascade');
-        });
-
-        // =========================
-        // Complaints Anecdotal
-        // =========================
-        Schema::create('tbl_complaints_anecdotal', function (Blueprint $table) {
-            $table->bigIncrements('comp_anec_id');
-            $table->unsignedBigInteger('complaints_id');
-            $table->text('comp_anec_solution');
-            $table->text('comp_anec_recommendation');
-            $table->date('comp_anec_date');
-            $table->time('comp_anec_time');
-            $table->string('status', 50)->default('active');
-            $table->timestamps();
-
-            $table->foreign('complaints_id')->references('complaints_id')->on('tbl_complaints')->onDelete('cascade');
         });
     }
 
@@ -199,16 +201,16 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbl_complaints_anecdotal');
-        Schema::dropIfExists('tbl_complaints_appointment');
-        Schema::dropIfExists('tbl_complaints');
+        // Drop tables in REVERSE order - children first, then parents
         Schema::dropIfExists('tbl_violation_anecdotal');
         Schema::dropIfExists('tbl_violation_appointment');
         Schema::dropIfExists('tbl_violation_record');
         Schema::dropIfExists('tbl_student');
         Schema::dropIfExists('tbl_parent');
         Schema::dropIfExists('tbl_adviser');
-        Schema::dropIfExists('tbl_offenses_with_sanction');
+        Schema::dropIfExists('tbl_offense_with_sanction_stages');
+        Schema::dropIfExists('tbl_sanction');
+        Schema::dropIfExists('tbl_offense');
         Schema::dropIfExists('tbl_prefect_of_discipline');
     }
 };

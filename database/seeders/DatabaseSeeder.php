@@ -15,11 +15,14 @@ class DatabaseSeeder extends Seeder
 {
     $this->call([
         PrefectOfDisciplineSeeder::class,
-        OffensesWithSanctionSeeder::class,
+        OffenseSeeder::class,
+        SanctionSeeder::class,
+        SanctionStagesSeeder::class,
         AdviserSeeder::class,
         ParentSeeder::class,
         StudentSeeder::class,
-        ViolationAndComplaintsSeeder::class,
+        ViolationAndComplaintSeeder::class,
+
     ]);
 }
 }

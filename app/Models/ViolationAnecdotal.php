@@ -18,8 +18,6 @@ class ViolationAnecdotal extends Model
         'status',
     ];
 
-
-
     // Cast dates/times to Carbon instances
     protected $dates = ['violation_anec_date', 'violation_anec_time', 'created_at', 'updated_at'];
 
@@ -27,7 +25,8 @@ class ViolationAnecdotal extends Model
     {
         return $this->belongsTo(ViolationRecord::class, 'violation_id');
     }
-     /** 🔎 Local Scopes for Status Filtering */
+
+    /** 🔎 Local Scopes for Status Filtering */
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
